@@ -1,7 +1,9 @@
 import React from 'react';
 
-export const App = (): React.ReactElement => (
-  <div>
-    test app
+import './App.css';
+
+export const App = () => (
+  <div className="App">
+    <button type="button" className="App__Button">i am button</button>
   </div>
 );
