@@ -12,9 +12,13 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --progress",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --mode development",
-    "test": "jest --runInBand",
-    "test:watch": "jest --runInBand -w",
+    "test": "jest",
+    "test:watch": "jest -w",
     "coverage": "jest --all --coverage"
+  },
+  "dependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -22,9 +26,7 @@
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
     "babel-loader": "^8.1.0",   
-    "react": "^16.13.1",
     "clean-webpack-plugin": "^3.0.0",
-    "react-dom": "^16.13.1",
     "typescript": "^3.9.2",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
@@ -43,7 +45,7 @@
     "postcss-loader": "^3.0.0",
     "postcss-nested": "^4.2.1",
     "regenerator-runtime": "^0.13.5",
-    "ts-jest": "^26.0.1",
+    "ts-jest": "^25.5.1",
     "ttypescript": "^1.5.10",
     "ts-loader": "^7.0.1",
     "jest": "^26.0.1",
