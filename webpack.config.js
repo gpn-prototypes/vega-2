@@ -7,6 +7,7 @@ const root = path.resolve(__dirname);
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const TerserPlugin = require('terser-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const styleLoader = isProduction ? MiniCssExtractPlugin.loader : 'style-loader';
 
