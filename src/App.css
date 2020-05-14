@@ -1,7 +1,3 @@
 .App {
   display: flex;
-
-  &__Button {
-    width: 100%;
-  }
 }
