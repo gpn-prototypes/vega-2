@@ -6,12 +6,17 @@ const root = path.resolve(__dirname);
 
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const TerserPlugin = require('terser-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const styleLoader = isProduction ? MiniCssExtractPlugin.loader : 'style-loader';
 
 module.exports = {
   mode: isProduction ? 'production' : 'development',
 
+  entry: __dirname + '/src/index.tsx',
+
   output: {
-    publicPath: process.env.PUBLIC_PATH || '/dist',
+    publicPath: process.env.PUBLIC_PATH || '',
   },
 
   optimization: isProduction
@@ -33,12 +38,10 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
+          styleLoader,
           {
             loader: 'css-loader',
             options: {
-              modules: {
-                localIdentName: '[name]__[local]__[hash:base64:5]',
-              },
               importLoaders: 1,
               localsConvention: 'camelCase',
             },
@@ -113,13 +116,24 @@ module.exports = {
     tls: 'empty',
   },
 
+  devServer: { 
+    contentBase: './public',
+    port: 3000,
+  }, 
+
   plugins: [
     isProduction && new CleanWebpackPlugin(),
     new webpack.ProvidePlugin({ React: 'react' }),
     process.env.ANALYZE && new BundleAnalyzerPlugin(),
     new MiniCssExtractPlugin({
-      chunkFilename: `assets/css/[id]${isProduction ? '.[contenthash]' : ''}.css`,
-      filename: `assets/css/[name]${isProduction ? '.[contenthash]' : ''}.css`,
+      filename: '[name].css',
+      chunkFilename: '[id].css',
+      // chunkFilename: `assets/css/[id]${isProduction ? '.[contenthash]' : ''}.css`,
+      // filename: `assets/css/[name]${isProduction ? '.[contenthash]' : ''}.css`,
+    }),
+    new HtmlWebpackPlugin({
+      template: __dirname + '/public/index.html',
+      inject: 'body',
     }),
   ].filter(Boolean),
 };
