@@ -1,6 +1,3 @@
-const nested = require('postcss-nested');
-
-module.exports =  {
-  modules: false,
-  plugins: [nested()],
-};
+module.exports = {
+  ...require('@ttteam-org/frontend-configs/postcss.config')
+}

@@ -1138,6 +1138,11 @@
     "@testing-library/dom" "^7.2.2"
     "@types/testing-library__react" "^10.0.1"
 
+"@ttteam-org/frontend-configs@0.0.8":
+  version "0.0.8"
+  resolved "https://npm.pkg.github.com/download/@ttteam-org/frontend-configs/0.0.8/c9b73912d47475514bda53d8cbe0c96af1e46c4a8d3ff21bdc8451d3a12dda2f#97beaa1ec3d745b8a8b3274d77bcc91c8de1605f"
+  integrity sha512-ZhhHsmzYn/wup9Wie4/R/GmjYcv4sfVYINnZVl0VSKoIhmQN/fPNpBIPagQI0ohQqygCwqmIEjAtsW3hig33SA==
+
 "@types/anymatch@*":
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/@types/anymatch/-/anymatch-1.3.1.tgz#336badc1beecb9dacc38bea2cf32adf627a8421a"

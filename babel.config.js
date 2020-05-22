@@ -1,3 +1,3 @@
 module.exports = {
-  presets: ['@babel/preset-env', '@babel/preset-react', '@babel/preset-typescript'],
-};
+  ...require('@ttteam-org/frontend-configs/babel.config')
+}
