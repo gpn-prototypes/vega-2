@@ -1368,10 +1368,10 @@
     "@testing-library/dom" "^7.2.2"
     "@types/testing-library__react" "^10.0.1"
 
-"@ttteam-org/frontend-configs@0.3.1":
-  version "0.3.1"
-  resolved "https://npm.pkg.github.com/download/@ttteam-org/frontend-configs/0.3.1/c1e103971ea2fba5de795b179cf004a73a6bcd8fc95ac52aed1985c99ae0f872#3343118437652cc35af1789cfdd562e678477f52"
-  integrity sha512-fyqRqGtJeXoRdTMjgWmmcADxLXOiF1hPpESl5fZO2T1PwqNtJjB7cEb8fCLOaiORW9Dy6tHClHBMPP2R1rM+Hw==
+"@ttteam-org/frontend-configs@0.3.2":
+  version "0.3.2"
+  resolved "https://npm.pkg.github.com/download/@ttteam-org/frontend-configs/0.3.2/fad2a4f345d2b4aefea4fe4b97867cad2cd1df8fa7ca2175475dbc9924425760#5dfdb0079124385c133678eb2d9390c098272e39"
+  integrity sha512-3prmwkMXwdHXsVucsrEU2rudL/QuwaFd5/SKObVkVqf5Z2+xP/Qx8DHCGQ/LchrHyVFgXMox6TY68TIJElaPDA==
   dependencies:
     "@babel/core" "^7.9.0"
     "@babel/preset-env" "^7.9.5"
@@ -3772,6 +3772,11 @@ dot-case@^3.0.3:
   dependencies:
     no-case "^3.0.3"
     tslib "^1.10.0"
+
+dotenv@^8.2.0:
+  version "8.2.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
+  integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
 
 duplexer@^0.1.1:
   version "0.1.1"
@@ -10851,6 +10856,13 @@ webpack-log@^2.0.0:
   dependencies:
     ansi-colors "^3.0.0"
     uuid "^3.3.2"
+
+webpack-merge@^4.2.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/webpack-merge/-/webpack-merge-4.2.2.tgz#a27c52ea783d1398afd2087f547d7b9d2f43634d"
+  integrity sha512-TUE1UGoTX2Cd42j3krGYqObZbOD+xF7u28WB7tfUordytSjbWTIjK/8V0amkBfTYN4/pB/GIDlJZZ657BGG19g==
+  dependencies:
+    lodash "^4.17.15"
 
 webpack-sources@^1.1.0, webpack-sources@^1.4.0, webpack-sources@^1.4.1, webpack-sources@^1.4.3:
   version "1.4.3"
