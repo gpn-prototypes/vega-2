@@ -20,7 +20,7 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack --progress",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --mode development",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:watch": "jest -w",
     "format": "prettier --write '{src,types,scripts}/**/*.{json,{j,t}s{,x},css,}'",
     "coverage": "jest --all --coverage",
