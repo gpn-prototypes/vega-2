@@ -1,0 +1,29 @@
+name: CI
+on:
+  push:
+    branches: [master]
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  checks:
+    name: Проверки
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Скачивание репозитория
+        uses: actions/checkout@v2
+
+      - name: Установка ноды
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: Установка зависимостей
+        run: yarn install --frozen-lockfile
+
+      - run: yarn test
+        if: always()
+
+      - run: yarn lint
+        if: always()

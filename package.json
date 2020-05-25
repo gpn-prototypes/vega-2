@@ -24,6 +24,7 @@
     "test:watch": "jest --watch",
     "format": "prettier --write '{src,types,scripts}/**/*.{json,{j,t}s{,x},css,}'",
     "coverage": "jest --all --coverage",
+    "lint": "npm-run-all lint:*",
     "lint-fix": "npm-run-all format lint-fix:*",
     "lint:ts": "eslint '{src,types}/**/*.ts{,x}'",
     "lint-fix:ts": "eslint '{src,types}/**/*.ts{,x}' --fix",
