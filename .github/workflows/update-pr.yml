@@ -2,6 +2,7 @@ name: Добавление описания в Pull Request
 
 on:
   pull_request:
+    types: [opened]
 
 jobs:
   update_pr:
@@ -17,6 +18,7 @@ jobs:
           body-template: |
             ## Задача
             Cсылка в jira на задачу: https://jira.csssr.io/browse/%branch%
+        
           replace-body: false
           body-prefix-newline-count: 1
           uppercase-body: true
