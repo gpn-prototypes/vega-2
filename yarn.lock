@@ -1368,10 +1368,10 @@
     "@testing-library/dom" "^7.2.2"
     "@types/testing-library__react" "^10.0.1"
 
-"@ttteam-org/frontend-configs@0.3.2":
-  version "0.3.2"
-  resolved "https://npm.pkg.github.com/download/@ttteam-org/frontend-configs/0.3.2/fad2a4f345d2b4aefea4fe4b97867cad2cd1df8fa7ca2175475dbc9924425760#5dfdb0079124385c133678eb2d9390c098272e39"
-  integrity sha512-3prmwkMXwdHXsVucsrEU2rudL/QuwaFd5/SKObVkVqf5Z2+xP/Qx8DHCGQ/LchrHyVFgXMox6TY68TIJElaPDA==
+"@ttteam-org/frontend-configs@0.3.3":
+  version "0.3.3"
+  resolved "https://npm.pkg.github.com/download/@ttteam-org/frontend-configs/0.3.3/5173f7638b2fcf06f53ed94f15dd7a5ca4f130942c07788365c1fc423a6a8dd1#6b160e07df995bad178fa5c3e8fb39701862a527"
+  integrity sha512-EyiYax3j+nWZ7a/6RJg2QciGXuKZm3KFve2I8PYek9M3lhbpkDxTli79ovCHS3ntGjeVnGSl4da0bTusJEo7Tg==
   dependencies:
     "@babel/core" "^7.9.0"
     "@babel/preset-env" "^7.9.5"
