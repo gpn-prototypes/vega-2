@@ -28,8 +28,6 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
 
       - run: yarn install --frozen-lockfile
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_GITHUB_REGISTRY_TOKEN }}
         working-directory: ./vega-2
 
       - run: yarn build
