@@ -1,3 +1,4 @@
 module.exports = {
-  ...require('@ttteam-org/frontend-configs/postcss.config')
-}
+  // eslint-disable-next-line global-require
+  ...require('@gpn-prototypes/frontend-configs/postcss.config'),
+};

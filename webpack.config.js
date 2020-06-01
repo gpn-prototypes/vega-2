@@ -4,7 +4,7 @@ const webpack = require('webpack');
 
 const appConfig = require('./app-config')();
 
-const gpnWebpack = require('@ttteam-org/frontend-configs/webpack.config')({
+const gpnWebpack = require('@gpn-prototypes/frontend-configs/webpack.config')({
   appConfig,
   // eslint-disable-next-line global-require
   postCssConfig: require('./postcss.config'),
