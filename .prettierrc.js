@@ -1,3 +1,3 @@
 module.exports = {
-  ...require('@ttteam-org/frontend-configs/prettierrc'),
+  ...require('@gpn-prototypes/frontend-configs/prettierrc'),
 };

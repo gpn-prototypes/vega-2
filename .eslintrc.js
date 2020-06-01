@@ -1,6 +1,6 @@
 module.exports = {
   extends: [
-    require.resolve('@ttteam-org/frontend-configs/eslintrc')
+    require.resolve('@gpn-prototypes/frontend-configs/eslintrc')
   ],
   overrides: [
     {
