@@ -4,7 +4,7 @@ const webpack = require('webpack');
 
 const appConfig = require('./app-config')();
 
-const mainWebpack = require('@ttteam-org/frontend-configs/webpack.config')({
+const gpnWebpack = require('@ttteam-org/frontend-configs/webpack.config')({
   appConfig,
   // eslint-disable-next-line global-require
   postCssConfig: require('./postcss.config'),
@@ -26,4 +26,4 @@ const commonWebpack = () => {
   };
 };
 
-module.exports = merge(commonWebpack(), mainWebpack);
+module.exports = merge(commonWebpack(), gpnWebpack);
