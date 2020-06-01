@@ -17,8 +17,9 @@ jobs:
           uppercase-title: true
           body-template: |
             ## Задача
-            Cсылка в jira на задачу: https://jira.csssr.io/browse/%branch%
-        
+            Задача в Jira: https://jira.csssr.io/browse/%branch%
+            Ссылка на стенд: https://%branch%.vega-2.csssr.cloud
+
           replace-body: false
           body-prefix-newline-count: 1
           uppercase-body: true
