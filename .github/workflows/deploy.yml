@@ -1,4 +1,4 @@
-name: Сборка VEGA-2
+name: Сборка и деплой VEGA-2
 on:
   push:
     branches: master
@@ -6,7 +6,7 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  build:
+  deploy:
     name: Сборка
     runs-on: ubuntu-latest
 

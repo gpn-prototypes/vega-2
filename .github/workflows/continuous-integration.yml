@@ -1,13 +1,12 @@
-name: CI
+name: Continuous-integration
 on:
   push:
     branches: [master]
   pull_request:
-    types: [opened, synchronize, reopened]
 
 jobs:
   checks:
-    name: Проверки
+    name: Проверки кода
     runs-on: ubuntu-latest
 
     steps:
