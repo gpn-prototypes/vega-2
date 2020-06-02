@@ -1,6 +1,3 @@
-build
-scripts
-types
-webpack
-jest.config.js
-*.css.d.ts
+dist
+node_modules
+!.storybook

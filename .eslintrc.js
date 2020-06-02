@@ -13,7 +13,7 @@ module.exports = {
           "error",
           {
             patterns: [
-              "@/*",
+              "@vega/*",
               "**/components/**/*",
               "**/contexts/**/*",
               "**/dashboard/**/*",
