@@ -1,0 +1,15 @@
+.cnAuthPage {
+  display: flex;
+
+  height: 100%;
+
+  &-FormSection {
+    width: 40%;
+
+    background-color: var(--color-bg-secondary);
+  }
+
+  &-Teaser {
+    width: 60%;
+  }
+}
