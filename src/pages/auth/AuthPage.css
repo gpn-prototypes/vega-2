@@ -1,15 +1,44 @@
-.cnAuthPage {
+.VegaAuthPage {
   display: flex;
 
+  width: 100%;
   height: 100%;
 
-  &-FormSection {
+  background-color: var(--color-bg-default);
+
+  &__FormSection {
+    display: flex;
+
+    justify-content: center;
+
     width: 40%;
 
     background-color: var(--color-bg-secondary);
   }
 
-  &-Teaser {
+  &__Form {
+    width: 320px;
+    align-self: center;
+  }
+
+  &__FieldWrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__Teaser {
     width: 60%;
+  }
+
+  &__FormDesc {
+    margin-top: var(--space-4xl);
+
+    text-align: center;
+  }
+
+  &__GPNLogo {
+    margin: 0 auto var(--space-5xl);
+
+    width: 237px;
   }
 }
