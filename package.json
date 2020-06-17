@@ -33,13 +33,11 @@
   },
   "dependencies": {
     "@gpn-design/uikit": "^1.1.1",
-    "@gpn-prototypes/vega-ui": "^0.10.2",
-    "add": "^2.0.6",
+    "@gpn-prototypes/vega-ui": "^0.10.4",
     "bem-cn": "^3.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-textarea-autosize": "^8.0.1",
-    "yarn": "^1.22.4"
+    "react-textarea-autosize": "^8.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
