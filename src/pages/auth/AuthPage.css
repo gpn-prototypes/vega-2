@@ -7,17 +7,33 @@
   background-color: var(--color-bg-default);
 
   &__FormSection {
-    display: flex;
+    display: grid;
+    grid-template-rows: min-content 2fr 1fr;
 
-    justify-content: center;
-
-    width: 40%;
+    width: 100%;
 
     background-color: var(--color-bg-secondary);
+
+    @media (min-width: 1200px) {
+      width: 40%;
+    }
+  }
+
+  &__GPNLogo {
+    margin: 0 auto;
+
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
+
+    width: 237px;
+    grid-row: 1;
   }
 
   &__Form {
+    margin: 0 auto;
+
     width: 320px;
+    grid-row: 2;
     align-self: center;
   }
 
@@ -27,7 +43,40 @@
   }
 
   &__Teaser {
-    width: 60%;
+    padding: 50px var(--space-5xl);
+
+    display: none;
+    overflow: hidden;
+    align-items: center;
+
+    @media (min-width: 1200px) {
+      display: flex;
+
+      width: 60%;
+    }
+  }
+
+  &__TeaserCarousel {
+    max-width: calc(900px + calc(2 * (var(--control-height-l))));
+  }
+
+  &__Slide {
+    position: relative;
+
+    padding-top: 54%;
+
+    max-width: 900px;
+
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
   }
 
   &__FormDesc {
@@ -36,9 +85,9 @@
     text-align: center;
   }
 
-  &__GPNLogo {
-    margin: 0 auto var(--space-5xl);
+  &__Logo {
+    margin: 0 auto var(--space-3xl);
 
-    width: 237px;
+    display: block;
   }
 }
