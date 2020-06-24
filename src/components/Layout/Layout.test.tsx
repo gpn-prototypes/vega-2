@@ -17,8 +17,8 @@ describe('Layout', () => {
     expect(renderComponent).not.toThrow();
   });
 
-  test('рендерится содержимое body', async () => {
-    const component = await renderComponent().findByTestId(testId);
-    expect(component).toBeInTheDocument();
+  test('рендерится содержимое body', () => {
+    const { getByTestId } = renderComponent();
+    expect(getByTestId(testId)).toBeInTheDocument();
   });
 });
