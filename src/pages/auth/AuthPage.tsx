@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { TextFieldOnChangeArguments } from '@gpn-design/uikit/TextField';
 import { Button, Carousel, Checkbox, Form, Logo, Text, TextField } from '@gpn-prototypes/vega-ui';
 
 import { cnAuthPage } from './cn-auth-page';
@@ -14,6 +13,13 @@ type State = {
 
 type Value = string | null | undefined;
 
+type TextFieldOnChangeArgs = {
+  value: string | null;
+  name?: string;
+  e: React.ChangeEvent;
+  id?: string | number;
+};
+
 const initialState = {
   email: null,
   password: null,
@@ -24,7 +30,7 @@ export const AuthPage: React.FC = () => {
   const [state, setState] = React.useState<State>(initialState);
   const [idx, setIdx] = React.useState(0);
 
-  const handleChange = ({ value, name }: TextFieldOnChangeArguments): void => {
+  const handleChange = ({ value, name }: TextFieldOnChangeArgs): void => {
     if (name) {
       setState({
         ...state,

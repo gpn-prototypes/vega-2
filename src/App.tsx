@@ -1,5 +1,5 @@
 import React from 'react';
-import { presetGpnDark, Theme } from '@gpn-design/uikit/Theme';
+import { presetGpnDark, Theme } from '@gpn-prototypes/vega-ui';
 
 import { AuthPage } from './pages/auth';
 
