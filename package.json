@@ -32,17 +32,13 @@
     "lint-fix:css": "stylelint 'src/**/*.css' --fix"
   },
   "dependencies": {
-    "@gpn-design/uikit": "^1.1.1",
-    "@gpn-prototypes/vega-ui": "^0.10.4",
+    "@gpn-prototypes/vega-ui": "^2.0.0",
     "bem-cn": "^3.0.1",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-textarea-autosize": "^8.0.1"
+    "react-dom": "^16.13.1"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
-    "@bem-react/classname": "^1.5.8",
-    "@bem-react/classnames": "^1.3.9",
     "@gpn-prototypes/frontend-configs": "0.1.0",
     "@testing-library/jest-dom": "^5.5.0",
     "@testing-library/react": "^10.0.3",
