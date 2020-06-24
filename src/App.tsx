@@ -8,7 +8,7 @@ import './App.css';
 
 export const App = (): React.ReactElement => (
   <Theme className="App" preset={presetGpnDark}>
-    <AuthPage />
     <Layout>{/* insert your code here */}</Layout>
+    <AuthPage />
   </Theme>
 );
