@@ -1,18 +1,18 @@
 import React from 'react';
 import * as tl from '@testing-library/react';
 
-import { Layout } from './Layout';
+import { PageLayout } from './PageLayout';
 
 const testId = 'test-id';
 function renderComponent(): tl.RenderResult {
   return tl.render(
-    <Layout>
+    <PageLayout>
       <div data-testid={testId}>тело</div>
-    </Layout>,
+    </PageLayout>,
   );
 }
 
-describe('Layout', () => {
+describe('PageLayout', () => {
   test('рендерится без ошибок', () => {
     expect(renderComponent).not.toThrow();
   });
