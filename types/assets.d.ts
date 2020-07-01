@@ -3,7 +3,7 @@ declare module '*.css' {
     [className: string]: string;
   }
   const classNames: ClassNames;
-  export = classNames;
+  export default classNames;
 }
 
 declare module '*.svg' {
