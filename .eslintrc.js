@@ -14,13 +14,6 @@ module.exports = {
           {
             patterns: [
               "@vega/*",
-              "**/components/**/*",
-              "**/contexts/**/*",
-              "**/dashboard/**/*",
-              "**/ui/**/*",
-              "**/utils/**/*",
-              "**/widget-helpers/**/*",
-              "**/widgets/**/*"
             ]
           }
         ]
