@@ -23,6 +23,10 @@ const commonWebpack = () => {
 
   return {
     plugins: [new webpack.DefinePlugin(envKeys)],
+    devServer: {
+      ...gpnWebpack.devServer,
+      historyApiFallback: true,
+    },
   };
 };
 
