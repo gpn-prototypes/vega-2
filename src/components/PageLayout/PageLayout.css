@@ -26,12 +26,4 @@
     padding: 0 var(--space-xl);
     flex-grow: 1;
   }
-
-  &__Footer {
-    padding: 0 var(--space-xl);
-
-    height: 64px;
-
-    color: var(--color-typo-primary);
-  }
 }
