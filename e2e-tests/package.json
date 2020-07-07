@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "prettier": "@csssr/e2e-tools/prettier",
+  "devDependencies": {
+    "@csssr/e2e-tools": "~1.3.3",
+    "@csssr/e2e-tools-nightwatch": "~1.10.2"
+  }
+}
