@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button, Carousel, Checkbox, Form, Logo, Text, TextField } from '@gpn-prototypes/vega-ui';
 
 import { cnAuthPage } from './cn-auth-page';
-import { VegaLogo } from './VegaLogo';
+import { GazpromLogo } from './GazpromLogo';
 
 import './AuthPage.css';
 
@@ -47,13 +47,13 @@ export const AuthPage: React.FC = () => {
   return (
     <div className={cnAuthPage()}>
       <div className={cnAuthPage('FormSection')}>
-        <div className={cnAuthPage('GPNLogo')}>
-          <VegaLogo />
+        <div className={cnAuthPage('GazpromLogo')}>
+          <GazpromLogo />
         </div>
         <Form className={cnAuthPage('Form')}>
           <Logo className={cnAuthPage('Logo')} />
           <Form.Row>
-            <Form.Field className={cnAuthPage('FieldWrap')}>
+            <Form.Field>
               <Form.Label htmlFor="email">
                 <Text size="l" lineHeight="s" view="secondary">
                   E-mail
@@ -66,11 +66,12 @@ export const AuthPage: React.FC = () => {
                 value={state?.email}
                 onChange={handleChange}
                 size="l"
+                width="full"
               />
             </Form.Field>
           </Form.Row>
           <Form.Row space="m">
-            <Form.Field className={cnAuthPage('FieldWrap')}>
+            <Form.Field>
               <Form.Label htmlFor="password" size="l">
                 <Text size="l" lineHeight="s" view="secondary">
                   Пароль
@@ -83,6 +84,7 @@ export const AuthPage: React.FC = () => {
                 value={state?.password}
                 onChange={handleChange}
                 size="l"
+                width="full"
               />
             </Form.Field>
           </Form.Row>

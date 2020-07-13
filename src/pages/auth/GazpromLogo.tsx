@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export const VegaLogo: React.FC = () => (
+export const GazpromLogo: React.FC = () => (
   <svg width="238" height="54" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       fillRule="evenodd"
