@@ -30,4 +30,8 @@ const commonWebpack = () => {
   };
 };
 
-module.exports = merge(commonWebpack(), gpnWebpack);
+module.exports = merge(commonWebpack(), gpnWebpack, {
+  output: {
+    publicPath: '/',
+  },
+});
