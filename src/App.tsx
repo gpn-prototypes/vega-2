@@ -4,6 +4,7 @@ import { presetGpnDark, Theme } from '@gpn-prototypes/vega-ui';
 
 import { PageLayout } from './components/PageLayout';
 import { AuthPage } from './pages/auth';
+import { ProjectsPage } from './pages/projects';
 
 import './App.css';
 
@@ -13,6 +14,11 @@ export const App = (): React.ReactElement => (
       <Switch>
         <Route exact path="/auth">
           <AuthPage />
+        </Route>
+        <Route exact path="/projects">
+          <PageLayout>
+            <ProjectsPage />
+          </PageLayout>
         </Route>
         <Route exact path="/">
           <PageLayout>{/* insert your code here */}</PageLayout>
