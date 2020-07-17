@@ -1,0 +1,67 @@
+.VegaProjectsPage {
+  display: flex;
+  flex-direction: column;
+
+  box-sizing: border-box;
+
+  width: 100%;
+  height: 100%;
+
+  background-color: var(--color-bg-secondary);
+
+  &__Container {
+    padding: var(--space-xl);
+
+    display: flex;
+    flex-direction: column;
+
+    box-sizing: border-box;
+
+    width: 100%;
+
+    background-color: var(--color-bg-default);
+    flex-grow: 1;
+
+    @media (min-width: 1280px) {
+      width: 1320px;
+    }
+  }
+
+  &__Header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__Heading {
+    display: flex;
+  }
+
+  &__Title {
+    margin: 0;
+  }
+
+  &__SearchResult {
+    margin: var(--space-xs);
+  }
+
+  &__Filter {
+    margin-top: var(--space-s);
+
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__FilterField {
+    box-sizing: border-box;
+    width: 360px;
+  }
+
+  &__Table {
+    margin-top: var(--space-xl);
+  }
+
+  &__LoadMore {
+    margin-top: var(--space-m);
+  }
+}
