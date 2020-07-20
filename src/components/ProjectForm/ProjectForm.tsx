@@ -33,6 +33,7 @@ export const ProjectForm: React.FC<FormProps> = () => {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
 
   const onSubmit = (values: Partial<FormValues>): void => {
+    // eslint-disable-next-line no-console
     console.log(values);
   };
 

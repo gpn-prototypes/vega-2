@@ -4,8 +4,8 @@ import { presetGpnDark, Theme } from '@gpn-prototypes/vega-ui';
 
 import { PageLayout } from './components/PageLayout';
 import { AuthPage } from './pages/auth';
-import { ProjectsPage } from './pages/projects';
 import { CreateProjectPage } from './pages/create-project';
+import { ProjectsPage } from './pages/projects';
 
 import './App.css';
 
