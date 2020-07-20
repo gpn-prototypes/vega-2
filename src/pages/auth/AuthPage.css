@@ -1,4 +1,5 @@
 .VegaAuthPage {
+  --gpn-logo-height: 54px;
   display: flex;
 
   min-height: 100vh;
@@ -8,7 +9,7 @@
   &__FormSection {
     position: relative;
 
-    padding: 124px 0;
+    padding: calc(var(--space-2xl) + var(--gpn-logo-height) + var(--space-3xl)) 0;
 
     display: flex;
     justify-content: center;
