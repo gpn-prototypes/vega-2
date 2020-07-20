@@ -35,6 +35,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ name }) => {
         buttonTitle="Удалить"
         onButtonClick={(e): void => {
           e.stopPropagation();
+          // eslint-disable-next-line no-console
           console.log('onButtonClick');
         }}
       />
@@ -71,6 +72,7 @@ export const Step3: React.FC<StepProps> = () => {
   const [fileList, setFileList] = useState<File[]>([]);
 
   const handleDrop = (files: FileList | null): void => {
+    // eslint-disable-next-line no-console
     console.log(files);
 
     if (files === null) {
