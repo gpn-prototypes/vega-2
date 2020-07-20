@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { BaseCheckGroupFieldOnChangeArguments } from '@gpn-design/uikit/__internal__/src/components/BaseCheckGroupField/BaseCheckGroupField';
-import { IIcon } from '@gpn-design/uikit/Icon';
+import { IconProps } from '@gpn-design/uikit/Icon';
 import { Button, ChoiceGroup, IconBookmarkFilled, Text, TextField } from '@gpn-prototypes/vega-ui';
 
 import { cnProjectsPage as cn } from './cn-projects-page';
@@ -9,7 +9,7 @@ import './ProjectsPage.css';
 
 type Item = {
   name: string;
-  icon?: React.FC<IIcon>;
+  icon?: React.FC<IconProps>;
 };
 
 const filterItems = [
@@ -56,7 +56,7 @@ const ProjectFilter: React.FC<ProjectFilterType> = ({ onInputSearch, onChangeFil
         items={filterItems}
         getItemKey={(item): string => item.name}
         getItemLabel={(item): string => item.name}
-        getItemIcon={(item): React.FC<IIcon> | undefined => item.icon}
+        getItemIcon={(item): React.FC<IconProps> | undefined => item.icon}
         onChange={handleFilter}
       />
       <div className={cn('FilterField')}>
