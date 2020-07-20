@@ -1,0 +1,56 @@
+.ProjectForm {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+
+  &__Content {
+    padding: var(--space-2xl) var(--space-xl);
+
+    display: flex;
+    flex: 1 0 auto;
+  }
+
+  &__NavigationList {
+    width: 302px;
+  }
+
+  &__Fields {
+    margin-left: calc(var(--space-xl) + var(--space-2xl));
+
+    width: 480px;
+
+    color: var(--color-typo-primary);
+  }
+
+  &__Step3-title {
+    margin-bottom: var(--space-xs);
+  }
+
+  &__Step3-description {
+    margin-bottom: var(--space-xl);
+  }
+
+  &__Step3-status {
+    margin-bottom: var(--space-s);
+  }
+
+  &__Step3-SidebarForm-Row {
+    grid-column-gap: var(--space-xs);
+    grid-row-gap: var(--space-xs);
+  }
+
+  &__Step3-SidebarForm-Footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__Step3-SidebarForm-Footer-Button:not(:first-of-type) {
+    margin-left: var(--space-xs);
+  }
+
+  &__Footer {
+    display: flex;
+    justify-content: space-between;
+    flex: none;
+  }
+}

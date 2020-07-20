@@ -3,38 +3,4 @@
   flex-direction: column;
 
   height: 100%;
-
-  &__Form {
-    display: flex;
-    flex-direction: column;
-    flex: 1 0 auto;
-  }
-
-  &__Content {
-    padding: var(--space-2xl) var(--space-xl);
-
-    display: flex;
-    flex: 1 0 auto;
-  }
-
-  &__NavigationList {
-    width: 302px;
-  }
-
-  &__Fields {
-    margin-left: calc(var(--space-xl) + var(--space-2xl));
-
-    width: 480px;
-
-    color: var(--color-typo-primary);
-  }
-
-  &__Footer {
-    display: flex;
-    justify-content: space-between;
-    flex: none;
-
-    /* Удалить после того как в PageFooter добавят background */
-    background: var(--color-bg-default);
-  }
 }
