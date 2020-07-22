@@ -1,6 +1,7 @@
 const merge = require('webpack-merge');
 const dotenv = require('dotenv');
 const webpack = require('webpack');
+const path = require('path');
 
 const appConfig = require('./app-config')();
 
@@ -26,6 +27,11 @@ const commonWebpack = () => {
     devServer: {
       ...gpnWebpack.devServer,
       historyApiFallback: true,
+    },
+    resolve: {
+      alias: {
+        '@vega': path.resolve(__dirname, 'src'),
+      },
     },
   };
 };
