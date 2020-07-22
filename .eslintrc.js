@@ -14,6 +14,9 @@ module.exports = {
       },
     },
   ],
+  rules: {
+    '@typescript-eslint/no-empty-function': 'off',
+  },
   settings: {
     'import/resolver': {
       alias: {

@@ -1,5 +1,4 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import Cookie from 'universal-cookie';
 
 export type ApiNoContent = void;
 
@@ -12,14 +11,14 @@ export type ApiSuccessResponse<T = ApiNoContent> = T extends ApiNoContent
   : ApiContent<T>;
 
 export type BaseUrlInterceptorParams = {
-  baseUrl: string;
-  apiUrl?: string;
-  useProxy?: boolean;
+  baseApiUrl: string;
+  apiPath?: string;
+  useApiProxy?: boolean;
 };
 
 export type HTTPClientParams = {
   urlParams: BaseUrlInterceptorParams;
-  cookies: Cookie;
+  token: string;
 };
 
 export type ConfigWithAuth = AxiosRequestConfig & {

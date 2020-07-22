@@ -1,29 +1,30 @@
-import { useCallback, useReducer } from 'react';
+import { useCallback, useMemo, useReducer } from 'react';
 import { useHttpClient } from '@vega/platform/http-client';
 
-import { auth as authRequest } from './api';
+import { login as loginRequest } from './api';
 import { reducer } from './reducer';
 import { initialState, State } from './state';
 import { AuthData } from './types';
 
-type AuthAPI = {
+export type AuthAPI = {
   isFetching: boolean;
   error: State['error'];
   login(data: AuthData): void;
   logout(): void;
+  authorized?: boolean;
 };
 
 export const useAuth = (): AuthAPI => {
   const httpClient = useHttpClient();
   const [authData, updateAuthData] = useReducer(reducer, initialState);
 
-  const isFetching = authData.status === 'fetching';
+  const isFetching = useMemo(() => authData.status === 'fetching', [authData]);
 
   const login = useCallback(
     async (data: AuthData) => {
       try {
         updateAuthData({ type: 'login' });
-        const result = await authRequest(httpClient, data);
+        const result = await loginRequest(httpClient, data);
         httpClient.setToken(result.token);
         updateAuthData({ type: 'success' });
       } catch (error) {
@@ -43,5 +44,6 @@ export const useAuth = (): AuthAPI => {
     error: authData.error,
     login,
     logout,
+    authorized: authData.authorized,
   };
 };
