@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Button, Carousel, Checkbox, Form, Logo, Text, TextField } from '@gpn-prototypes/vega-ui';
+import { useAppContext } from '@vega/platform/app-context';
 
 import { cnAuthPage } from './cn-auth-page';
 import { GazpromLogo } from './GazpromLogo';
@@ -7,7 +8,7 @@ import { GazpromLogo } from './GazpromLogo';
 import './AuthPage.css';
 
 type State = {
-  email: Value;
+  login: Value;
   password: Value;
   remember?: boolean;
 };
@@ -22,14 +23,24 @@ type TextFieldOnChangeArgs = {
 };
 
 const initialState = {
-  email: null,
-  password: null,
+  login: '',
+  password: '',
   remember: false,
 };
 
 export const AuthPage: React.FC = () => {
   const [state, setState] = React.useState<State>(initialState);
   const [idx, setIdx] = React.useState(0);
+  const { authAPI } = useAppContext();
+  const { login } = authAPI;
+  const { isFetching } = authAPI;
+
+  const handleSubmit = (event: React.FormEvent<Element>): void => {
+    event.preventDefault();
+    if (typeof state.login === 'string' && typeof state.password === 'string') {
+      login({ login: state.login, password: state.password });
+    }
+  };
 
   const handleChange = ({ value, name }: TextFieldOnChangeArgs): void => {
     if (name) {
@@ -55,20 +66,20 @@ export const AuthPage: React.FC = () => {
         <div className={cnAuthPage('GazpromLogo')}>
           <GazpromLogo />
         </div>
-        <Form className={cnAuthPage('Form')}>
+        <Form onSubmit={handleSubmit} className={cnAuthPage('Form')}>
           <Logo className={cnAuthPage('Logo')} />
           <Form.Row>
             <Form.Field>
-              <Form.Label htmlFor="email">
+              <Form.Label htmlFor="login">
                 <Text size="l" lineHeight="s" view="secondary">
                   E-mail
                 </Text>
               </Form.Label>
               <TextField
-                id="email"
-                name="email"
+                id="login"
+                name="login"
                 type="email"
-                value={state?.email}
+                value={state.login}
                 onChange={handleChange}
                 size="l"
                 width="full"
@@ -86,7 +97,7 @@ export const AuthPage: React.FC = () => {
                 id="password"
                 name="password"
                 type="password"
-                value={state?.password}
+                value={state.password}
                 onChange={handleChange}
                 size="l"
                 width="full"
@@ -95,14 +106,14 @@ export const AuthPage: React.FC = () => {
           </Form.Row>
           <Form.Row space="l">
             <Checkbox
-              checked={state?.remember}
+              checked={state.remember}
               size="m"
               onChange={handleChangeCheckbox}
               label="Запомнить меня"
             />
           </Form.Row>
           <Form.Row space="xl">
-            <Button label="Войти" size="l" width="full" />
+            <Button loading={isFetching} label="Войти" size="l" width="full" />
           </Form.Row>
           <Form.Row className={cnAuthPage('FormDesc')}>
             <Text size="s" lineHeight="xs" view="secondary">
