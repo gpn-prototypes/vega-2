@@ -14,12 +14,12 @@ const baseUrlInterceptor = (params: BaseUrlInterceptorParams) => (
   config: ConfigWithAuth,
 ): AxiosRequestConfig => {
   const axiosConfig = { ...config };
-  const { baseUrl, apiUrl = '/', useProxy = false } = params;
+  const { baseApiUrl, apiPath = '/', useApiProxy = false } = params;
 
-  if (useProxy) {
-    axiosConfig.baseURL = apiUrl;
+  if (useApiProxy) {
+    axiosConfig.baseURL = apiPath;
   } else {
-    axiosConfig.baseURL = `${baseUrl}${apiUrl}`;
+    axiosConfig.baseURL = `${baseApiUrl}${apiPath}`;
   }
 
   return axiosConfig;
@@ -46,10 +46,10 @@ const authInterceptor = (token?: string) => (config: ConfigWithAuth): ConfigWith
 
 export const createClient = (params: HTTPClientParams): AxiosInstance => {
   const client = axios.create();
-  const { cookies } = params;
+  const { token, urlParams } = params;
 
-  client.interceptors.request.use(authInterceptor(cookies.get(COOKIES_KEYS.AUTH_TOKEN)));
-  client.interceptors.request.use(baseUrlInterceptor(params.urlParams));
+  client.interceptors.request.use(authInterceptor(token));
+  client.interceptors.request.use(baseUrlInterceptor(urlParams));
 
   return client;
 };
@@ -60,8 +60,8 @@ export class HTTPClient {
   private cookies: Cookie;
 
   public constructor(cookies: Cookie, urlParams: BaseUrlInterceptorParams) {
-    this.client = createClient({ cookies, urlParams });
     this.cookies = cookies;
+    this.client = createClient({ token: this.getToken(), urlParams });
   }
 
   public request<Response>(config: ConfigWithAuth): Promise<ApiClientSuccess<Response>> {
@@ -78,5 +78,9 @@ export class HTTPClient {
 
   public removeToken(): void {
     this.cookies.remove(COOKIES_KEYS.AUTH_TOKEN, { path: '/' });
+  }
+
+  public getToken(): string {
+    return this.cookies.get(COOKIES_KEYS.AUTH_TOKEN);
   }
 }

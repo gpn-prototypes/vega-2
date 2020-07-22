@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 
 export type State = {
-  auth?: boolean;
+  authorized?: boolean;
   status: 'fetching' | 'success' | 'error';
   error: AxiosError | null;
 };
@@ -13,7 +13,7 @@ export type Action =
   | { type: 'success' };
 
 export const initialState: State = {
-  auth: undefined,
+  authorized: undefined,
   status: 'success',
   error: null,
 };
