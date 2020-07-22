@@ -4,6 +4,9 @@ export type AppConfig = {
   buildDirPath: string;
   mode: 'development' | 'production';
   env: 'development' | 'testing' | 'production';
+  baseApiUrl: string;
+  useApiProxy: boolean;
+  apiPath: string;
   assetsPath: string;
   port: string | number;
   apiURL: string;
