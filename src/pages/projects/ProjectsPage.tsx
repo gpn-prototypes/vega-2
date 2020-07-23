@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import { BaseCheckGroupFieldOnChangeArguments } from '@gpn-design/uikit/__internal__/src/components/BaseCheckGroupField/BaseCheckGroupField';
 import { IconProps } from '@gpn-design/uikit/Icon';
 import { Button, ChoiceGroup, IconBookmarkFilled, Text, TextField } from '@gpn-prototypes/vega-ui';
@@ -87,7 +88,9 @@ export const ProjectsPage: React.FC = (props) => {
               6 из 12
             </Text>
           </div>
-          <Button label="Создать проект" />
+          <Link to="/projects/create">
+            <Button label="Создать проект" />
+          </Link>
         </div>
         <div className={cn('Projects')}>
           <ProjectFilter

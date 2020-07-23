@@ -10,6 +10,7 @@ export type AuthAPI = {
   isFetching: boolean;
   error: State['error'];
   login(data: AuthData): void;
+  getCurrentUser(): void;
   logout(): void;
   authorized?: boolean;
 };
@@ -34,6 +35,14 @@ export const useAuth = (): AuthAPI => {
     [httpClient],
   );
 
+  const getCurrentUser = useCallback(() => {
+    if (httpClient.getToken()) {
+      updateAuthData({ type: 'success' });
+    } else {
+      updateAuthData({ type: 'logout' });
+    }
+  }, [httpClient]);
+
   const logout = useCallback(() => {
     updateAuthData({ type: 'logout' });
     httpClient.removeToken();
@@ -45,5 +54,6 @@ export const useAuth = (): AuthAPI => {
     login,
     logout,
     authorized: authData.authorized,
+    getCurrentUser,
   };
 };
