@@ -12,7 +12,7 @@ type PageProps = {};
 export const CreateProjectPage: React.FC<PageProps> = () => {
   return (
     <div className={cnPage()}>
-      <PageBanner title="Усть-Енисей" description="Россия, Ямало-Ненецкий АО, Усть-Енисей" />
+      <PageBanner title="Новый проект" description="Россия, Регион" />
       <ProjectForm />
     </div>
   );

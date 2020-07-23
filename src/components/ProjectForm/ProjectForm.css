@@ -48,6 +48,10 @@
     margin-left: var(--space-xs);
   }
 
+  &__Informer {
+    background: var(--color-bg-warning);
+  }
+
   &__Footer {
     display: flex;
     justify-content: space-between;
