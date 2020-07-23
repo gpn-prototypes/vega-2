@@ -34,6 +34,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "@gpn-prototypes/vega-ui": "^2.6.2",
+    "http-proxy-middleware": "^1.0.5",
     "bem-cn": "^3.0.1",
     "final-form": "^4.20.1",
     "ramda": "^0.27.0",

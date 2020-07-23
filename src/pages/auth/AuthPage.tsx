@@ -32,8 +32,7 @@ export const AuthPage: React.FC = () => {
   const [state, setState] = React.useState<State>(initialState);
   const [idx, setIdx] = React.useState(0);
   const { authAPI } = useAppContext();
-  const { login } = authAPI;
-  const { isFetching } = authAPI;
+  const { isFetching, login } = authAPI;
 
   const handleSubmit = (event: React.FormEvent<Element>): void => {
     event.preventDefault();

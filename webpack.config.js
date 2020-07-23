@@ -26,12 +26,25 @@ const commonWebpack = () => {
     return prev;
   }, {});
 
+  const devServer = {
+    ...gpnWebpack.devServer,
+    historyApiFallback: true,
+  };
+
+  if (appConfig.useApiProxy) {
+    devServer.proxy = {
+      [appConfig.apiPath]: {
+        target: appConfig.baseApiUrl,
+        pathRewrite: {
+          [`^${appConfig.apiPath}`]: '',
+        },
+      },
+    };
+  }
+
   return {
     plugins: [new webpack.DefinePlugin(envKeys)],
-    devServer: {
-      ...gpnWebpack.devServer,
-      historyApiFallback: true,
-    },
+    devServer,
     resolve: {
       alias: {
         '@vega': path.resolve(__dirname, 'src'),

@@ -11,6 +11,7 @@ export const AppContext = createContext<AppContext>({
     error: null,
     login: (): void => {},
     logout: (): void => {},
+    getCurrentUser: (): void => {},
   },
 });
 

@@ -1,52 +1,14 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Root } from '@gpn-prototypes/vega-ui';
 
-import { PageLayout } from './components/PageLayout';
-import { AuthPage } from './pages/auth';
-import { CreateProjectPage } from './pages/create-project';
-import { ProjectsPage } from './pages/projects';
 import { AppProvider } from './platform/app-context';
+import { AppView } from './AppView';
 
 import './App.css';
 
 export const App = (): React.ReactElement => {
   return (
     <AppProvider>
-      <div className="App">
-        <Root defaultTheme="dark">
-          <Router>
-            <Switch>
-              <Route exact path="/auth">
-                <AuthPage />
-              </Route>
-              <Route exact path="/projects">
-                <PageLayout>
-                  <ProjectsPage />
-                </PageLayout>
-              </Route>
-              <Route exact path="/projects/create">
-                <PageLayout>
-                  <CreateProjectPage />
-                </PageLayout>
-              </Route>
-              <Route exact path="/">
-                <PageLayout>{/* insert your code here */}</PageLayout>
-              </Route>
-              <Route path="/about">
-                <PageLayout>
-                  <div style={{ color: '#fff' }}>About</div>
-                </PageLayout>
-              </Route>
-              <Route path="*">
-                <PageLayout>
-                  <div>404</div>
-                </PageLayout>
-              </Route>
-            </Switch>
-          </Router>
-        </Root>
-      </div>
+      <AppView />
     </AppProvider>
   );
 };

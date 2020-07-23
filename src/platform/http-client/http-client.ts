@@ -68,7 +68,7 @@ export class HTTPClient {
     return this.client(config)
       .then((response: AxiosResponse<Response>) => response.data)
       .catch((error: AxiosError) => {
-        throw error.response;
+        return Promise.reject(error);
       });
   }
 

@@ -1,12 +1,11 @@
 import React from 'react';
-import { useAuth } from '@vega/data/auth';
 import { CookiesContext } from '@vega/platform/cookies';
 import { HTTPClient, HTTPClientContext } from '@vega/platform/http-client';
 import Cookie from 'universal-cookie';
 
 import { AppConfig } from '../../../app-config';
 
-import { AppContext } from './AppContext';
+import { AppStoreProvider } from './AppStoreProvider';
 
 const cookies = new Cookie();
 
@@ -16,15 +15,9 @@ declare global {
   }
 }
 
-const { appConfig } = window;
+const { baseApiUrl, apiPath, useApiProxy } = window.appConfig;
 
-const { baseApiUrl, apiPath, useApiProxy } = appConfig;
-
-const httpClient = new HTTPClient(cookies, {
-  baseApiUrl,
-  apiPath,
-  useApiProxy,
-});
+const httpClient = new HTTPClient(cookies, { baseApiUrl, apiPath, useApiProxy });
 
 type AppProviderProps = {
   children: React.ReactNode;
@@ -32,12 +25,11 @@ type AppProviderProps = {
 
 export const AppProvider: React.FC<AppProviderProps> = (props) => {
   const { children } = props;
-  const authAPI = useAuth();
 
   return (
     <CookiesContext.Provider value={cookies}>
       <HTTPClientContext.Provider value={httpClient}>
-        <AppContext.Provider value={{ authAPI }}>{children}</AppContext.Provider>
+        <AppStoreProvider>{children}</AppStoreProvider>
       </HTTPClientContext.Provider>
     </CookiesContext.Provider>
   );
