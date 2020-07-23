@@ -69,9 +69,16 @@
   &__Slide {
     position: relative;
 
-    padding-top: 54%;
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
 
     max-width: 900px;
+    min-height: 400px;
+
+    background: var(--color-bg-system);
+    align-content: center;
 
     img {
       position: absolute;

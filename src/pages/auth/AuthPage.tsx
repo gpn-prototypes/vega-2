@@ -44,6 +44,11 @@ export const AuthPage: React.FC = () => {
     setState({ ...state, remember: !state.remember });
   };
 
+  const firstSlideCaption = 'Какой-то текст про Вега 2.0.';
+
+  const secondSlideCaption =
+    'Какой-то текст про то, какие задачи можно очень круто и быстро решать с помощью Веги 2.0.';
+
   return (
     <div className={cnAuthPage()}>
       <div className={cnAuthPage('FormSection')}>
@@ -108,11 +113,11 @@ export const AuthPage: React.FC = () => {
       </div>
       <div className={cnAuthPage('Teaser')}>
         <Carousel currentIdx={idx} onChange={setIdx} className={cnAuthPage('TeaserCarousel')}>
-          <Carousel.Slide caption="caption 1" className={cnAuthPage('Slide')}>
-            <img src="https://picsum.photos/1000/560" alt="" />
+          <Carousel.Slide caption={firstSlideCaption} className={cnAuthPage('Slide')}>
+            <Text size="xl">Ведутся работы...</Text>
           </Carousel.Slide>
-          <Carousel.Slide caption="caption 2" className={cnAuthPage('Slide')}>
-            <img src="https://picsum.photos/seed/picsum/1000/560" alt="" />
+          <Carousel.Slide caption={secondSlideCaption} className={cnAuthPage('Slide')}>
+            <Text size="xl">А здесь мы вам расскажем о возможностях системы</Text>
           </Carousel.Slide>
         </Carousel>
       </div>
