@@ -1,7 +1,6 @@
 import React from 'react';
 import { PageBanner } from '@gpn-prototypes/vega-ui';
-
-import { ProjectForm } from '../../components/ProjectForm';
+import { ProjectForm } from '@vega/ui/features/projects';
 
 import { cnPage } from './cn-page';
 

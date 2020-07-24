@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Loader, Root, useMount } from '@gpn-prototypes/vega-ui';
 
-import { PageLayout } from './components/PageLayout';
+import { PageLayout } from './layouts/PageLayout';
 import { AuthPage } from './pages/auth';
 import { CreateProjectPage } from './pages/create-project';
 import { ProjectsPage } from './pages/projects';
