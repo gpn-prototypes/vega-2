@@ -6,48 +6,6 @@
 
   background-color: var(--color-bg-default);
 
-  &__FormSection {
-    position: relative;
-
-    padding: calc(var(--space-2xl) + var(--gpn-logo-height) + var(--space-3xl)) 0;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    width: 100%;
-
-    background-color: var(--color-bg-secondary);
-
-    @media (min-width: 1200px) {
-      width: 40%;
-    }
-  }
-
-  &__GazpromLogo {
-    position: absolute;
-    top: var(--space-2xl);
-    left: 50%;
-
-    transform: translateX(-50%);
-  }
-
-  &__Form {
-    width: 320px;
-  }
-
-  &__FormDesc {
-    margin-top: var(--space-4xl);
-
-    text-align: center;
-  }
-
-  &__Logo {
-    margin: 0 auto var(--space-3xl);
-
-    display: block;
-  }
-
   &__Teaser {
     padding: 50px var(--space-5xl);
 
@@ -59,6 +17,16 @@
       align-items: center;
 
       width: 60%;
+    }
+  }
+
+  &__Form {
+    @media (min-width: 1200px) {
+      width: 40%;
+    }
+
+    .VegaForm {
+      width: 320px;
     }
   }
 
