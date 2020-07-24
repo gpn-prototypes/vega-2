@@ -35,6 +35,7 @@ export const useAuth = (): AuthAPI => {
     [httpClient],
   );
 
+  // TODO: Добавить запрос на получение данных пользователя, когда его починят (сейчас редирект возвращает)
   const getCurrentUser = useCallback(() => {
     if (httpClient.getToken()) {
       updateAuthData({ type: 'success' });
@@ -43,6 +44,7 @@ export const useAuth = (): AuthAPI => {
     }
   }, [httpClient]);
 
+  // TODO: Добавить запрос нв logout, когда он появится
   const logout = useCallback(() => {
     updateAuthData({ type: 'logout' });
     httpClient.removeToken();
