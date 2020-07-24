@@ -10,3 +10,7 @@
 .App {
   background: var(--color-bg-default);
 }
+
+.Button {
+  z-index: unset;
+}
