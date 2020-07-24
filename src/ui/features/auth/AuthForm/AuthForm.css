@@ -1,0 +1,37 @@
+.VegaAuthForm {
+  --gpn-logo-height: 54px;
+  display: flex;
+
+  min-height: 100vh;
+
+  background-color: var(--color-bg-default);
+
+  position: relative;
+
+  padding: calc(var(--space-2xl) + var(--gpn-logo-height) + var(--space-3xl)) 0;
+
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+
+  &__GazpromLogo {
+    position: absolute;
+    top: var(--space-2xl);
+    left: 50%;
+
+    transform: translateX(-50%);
+  }
+
+  &__FormDesc {
+    margin-top: var(--space-4xl);
+
+    text-align: center;
+  }
+
+  &__Logo {
+    margin: 0 auto var(--space-3xl);
+
+    display: block;
+  }
+}
