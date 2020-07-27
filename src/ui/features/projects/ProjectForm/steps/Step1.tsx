@@ -26,10 +26,10 @@ export const Step1: React.FC<StepProps> = () => {
                   /* onChange из TextField возвращает не стандартный формат: e, id, name, value  */
                   onChange={({ e }): void => input.onChange(e)}
                   /*
-                        TextField ожидает функцию (event: React.FocusEvent<Element>) => void
-                        input.onBlur имеет формат (event?: React.FocusEvent<HTMLElement> | undefined) => void
-                        как итог, ошибка: Type 'FocusEvent<Element>' is not assignable to type 'FocusEvent<HTMLElement>'
-                      */
+                    TextField ожидает функцию (event: React.FocusEvent<Element>) => void
+                    input.onBlur имеет формат (event?: React.FocusEvent<HTMLElement> | undefined) => void
+                    как итог, ошибка: Type 'FocusEvent<Element>' is not assignable to type 'FocusEvent<HTMLElement>'
+                  */
                   onBlur={input.onBlur as React.FocusEventHandler}
                   onFocus={input.onFocus as React.FocusEventHandler}
                 />

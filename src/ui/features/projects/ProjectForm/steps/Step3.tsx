@@ -5,6 +5,7 @@ import {
   FileDropzone,
   Form as VegaForm,
   IconTrash,
+  ProgressSpin,
   Sidebar,
   Text,
   TextField,
@@ -57,12 +58,14 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ name }) => {
   );
 };
 
+/* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
+
 export const Step3: React.FC<StepProps> = () => {
   const {
     state: { isOpen, isMinimized },
     close: handleClose,
     open: handleOpen,
-    // maximize: handleMaximize,
+    maximize: handleMaximize,
     minimize: handleMinimize,
   } = useSidebar({
     isOpen: false,
@@ -106,11 +109,27 @@ export const Step3: React.FC<StepProps> = () => {
         onOverlayClick={handleClose}
         onMinimize={handleMinimize}
         onClose={handleClose}
+        className={isMinimized ? cnForm('Step3-SidebarForm-minimized') : undefined}
       >
         {isMinimized ? (
           <>
             <Sidebar.Header hasMinimizeButton={false}>Загрузка файлов</Sidebar.Header>
-            <Sidebar.Body>Minimized body</Sidebar.Body>
+            <Sidebar.Body>
+              <div
+                className={cnForm('Step3-SidebarForm-minimized-container')}
+                onClick={handleMaximize}
+              >
+                <ProgressSpin size="m" progress={66} />
+                <div className={cnForm('Step3-SidebarForm-minimized-text-block')}>
+                  <Text size="s" view="primary">
+                    Загружается 10 файлов
+                  </Text>
+                  <Text size="xs" view="ghost">
+                    Осталось ориентировочно 2 минуты
+                  </Text>
+                </div>
+              </div>
+            </Sidebar.Body>
           </>
         ) : (
           <>
