@@ -1,8 +1,17 @@
 import React from 'react';
 import { Field, Form as FinalForm } from 'react-final-form';
 import { Button, Checkbox, Form, Logo, Text } from '@gpn-prototypes/vega-ui';
-import { emailInput } from '@vega/platform/validation';
+import {
+  emailInput,
+  minPasswordLength,
+  multipleValidation,
+  passwordInput,
+  required,
+  validateForm,
+  ValidationScheme,
+} from '@vega/platform/validation';
 import { TextField } from '@vega/ui/core';
+import { Dictionary } from 'ramda';
 
 import { cnAuthForm } from './cn-auth-form';
 import { GazpromLogo } from './GazpromLogo';
@@ -22,12 +31,6 @@ type AuthFormProps = {
   formClassName?: string;
 };
 
-const initialState: State = {
-  username: '',
-  password: '',
-  remember: false,
-};
-
 export const AuthForm: React.FC<AuthFormProps> = (props) => {
   const { onLogin, isFetching, containerClassName, formClassName } = props;
 
@@ -40,7 +43,15 @@ export const AuthForm: React.FC<AuthFormProps> = (props) => {
       <div className={cnAuthForm('GazpromLogo')}>
         <GazpromLogo />
       </div>
-      <FinalForm onSubmit={handleAuthSubmit} initialValues={initialState}>
+      <FinalForm
+        onSubmit={handleAuthSubmit}
+        validate={(values): Dictionary<ValidationScheme> => {
+          return validateForm<State>({
+            login: multipleValidation([required, emailInput]),
+            password: multipleValidation([passwordInput, minPasswordLength, required]),
+          })(values);
+        }}
+      >
         {({ handleSubmit }): React.ReactNode => (
           <Form onSubmit={handleSubmit} className={cnAuthForm('Form').mix(formClassName)}>
             <Logo className={cnAuthForm('Logo')} />
