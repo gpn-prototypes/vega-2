@@ -1,6 +1,7 @@
 import React from 'react';
 import { Field, Form as FinalForm } from 'react-final-form';
 import { Button, Checkbox, Form, Logo, Text } from '@gpn-prototypes/vega-ui';
+import { emailInput } from '@vega/platform/validation';
 import { TextField } from '@vega/ui/core';
 
 import { cnAuthForm } from './cn-auth-form';
@@ -50,7 +51,14 @@ export const AuthForm: React.FC<AuthFormProps> = (props) => {
                     E-mail
                   </Text>
                 </Form.Label>
-                <TextField name="username" id="username" type="email" size="l" width="full" />
+                <TextField
+                  name="username"
+                  id="username"
+                  type="email"
+                  size="l"
+                  width="full"
+                  validate={emailInput}
+                />
               </Form.Field>
             </Form.Row>
             <Form.Row space="m">
