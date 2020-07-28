@@ -47,7 +47,7 @@ export const AuthForm: React.FC<AuthFormProps> = (props) => {
         onSubmit={handleAuthSubmit}
         validate={(values): Dictionary<ValidationScheme> => {
           return validateForm<State>({
-            login: multipleValidation([required, emailInput]),
+            username: multipleValidation([required, emailInput]),
             password: multipleValidation([passwordInput, minPasswordLength, required]),
           })(values);
         }}
@@ -62,14 +62,7 @@ export const AuthForm: React.FC<AuthFormProps> = (props) => {
                     E-mail
                   </Text>
                 </Form.Label>
-                <TextField
-                  name="username"
-                  id="username"
-                  type="email"
-                  size="l"
-                  width="full"
-                  validate={emailInput}
-                />
+                <TextField name="username" id="username" type="email" size="l" width="full" />
               </Form.Field>
             </Form.Row>
             <Form.Row space="m">
