@@ -15,7 +15,7 @@ export type State = {
   remember: boolean;
 };
 
-type AuthFormProps = {
+export type AuthFormProps = {
   onLogin: (state: State) => void;
   isFetching: boolean;
   containerClassName?: string;
@@ -35,7 +35,11 @@ const testId = {
   submit: 'AuthForm:submit',
 };
 
-export const AuthForm: React.FC<AuthFormProps> = (props) => {
+type AuthFormComponent = React.FC<AuthFormProps> & {
+  testID: typeof testId;
+};
+
+export const AuthForm: AuthFormComponent = (props) => {
   const { onLogin, isFetching, containerClassName, formClassName } = props;
 
   const handleAuthSubmit = (values: State): void => {
@@ -129,3 +133,5 @@ export const AuthForm: React.FC<AuthFormProps> = (props) => {
     </div>
   );
 };
+
+AuthForm.testID = testId;
