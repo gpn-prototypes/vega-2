@@ -72,7 +72,14 @@ export const AuthForm: React.FC<AuthFormProps> = (props) => {
                     Пароль
                   </Text>
                 </Form.Label>
-                <TextField id="password" type="password" name="password" size="l" width="full" />
+                <TextField
+                  id="password"
+                  type="password"
+                  name="password"
+                  size="l"
+                  width="full"
+                  maxLength={200}
+                />
               </Form.Field>
             </Form.Row>
             <Form.Row space="l">
