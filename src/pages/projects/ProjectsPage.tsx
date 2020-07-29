@@ -41,6 +41,10 @@ type ProjectFilterType = {
   onChangeFilter(value: Item[] | null): void;
 };
 
+const testId = {
+  root: 'ProjectsPage:root',
+};
+
 const ProjectFilter: React.FC<ProjectFilterType> = ({ onInputSearch, onChangeFilter }) => {
   const [searchValue, setSearchValue] = React.useState<string | null>(null);
   const [filterValue, setFilterValue] = React.useState<Item[] | null>(null);
@@ -77,7 +81,7 @@ const ProjectFilter: React.FC<ProjectFilterType> = ({ onInputSearch, onChangeFil
 
 export const ProjectsPage: React.FC = (props) => {
   return (
-    <div className={cn()} {...props}>
+    <div data-testid={testId.root} className={cn()} {...props}>
       <div className={cn('Container')}>
         <div className={cn('Header')}>
           <div className={cn('Heading')}>
