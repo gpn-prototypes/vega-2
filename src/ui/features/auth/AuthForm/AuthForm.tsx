@@ -28,6 +28,12 @@ const validator = createValidate<Partial<State>>({
 });
 
 type ValidateMap = ReturnType<typeof validator>;
+const testId = {
+  form: 'AuthForm:form',
+  loginInput: 'AuthForm:loginInput',
+  passwordInput: 'AuthForm:passwordInput',
+  submit: 'AuthForm:submit',
+};
 
 export const AuthForm: React.FC<AuthFormProps> = (props) => {
   const { onLogin, isFetching, containerClassName, formClassName } = props;
@@ -45,7 +51,12 @@ export const AuthForm: React.FC<AuthFormProps> = (props) => {
       </div>
       <FinalForm onSubmit={handleAuthSubmit} validate={validate}>
         {({ handleSubmit }): React.ReactNode => (
-          <Form onSubmit={handleSubmit} className={cnAuthForm('Form').mix(formClassName)}>
+          <Form
+            noValidate
+            onSubmit={handleSubmit}
+            data-testid={testId.form}
+            className={cnAuthForm('Form').mix(formClassName)}
+          >
             <Logo className={cnAuthForm('Logo')} />
             <Form.Row>
               <Form.Field>
@@ -55,11 +66,13 @@ export const AuthForm: React.FC<AuthFormProps> = (props) => {
                   </Text>
                 </Form.Label>
                 <TextField
-                  name="username"
-                  id="username"
+                  name="login"
+                  id="login"
                   type="email"
                   size="l"
+                  data-testid={testId.loginInput}
                   width="full"
+                  maxLength={128}
                   validateOnTouched
                 />
               </Form.Field>
@@ -77,6 +90,7 @@ export const AuthForm: React.FC<AuthFormProps> = (props) => {
                   name="password"
                   size="l"
                   width="full"
+                  data-testid={testId.passwordInput}
                   maxLength={200}
                   validateOnTouched
                 />
@@ -96,7 +110,13 @@ export const AuthForm: React.FC<AuthFormProps> = (props) => {
               </Field>
             </Form.Row>
             <Form.Row space="xl">
-              <Button loading={isFetching} label="Войти" size="l" width="full" />
+              <Button
+                data-testid={testId.submit}
+                loading={isFetching}
+                label="Войти"
+                size="l"
+                width="full"
+              />
             </Form.Row>
             <Form.Row className={cnAuthForm('Desc')}>
               <Text size="s" lineHeight="xs" view="secondary">
