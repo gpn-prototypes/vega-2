@@ -11,6 +11,10 @@ import { useAppContext } from './platform/app-context';
 
 import './App.css';
 
+const testId = {
+  loader: 'App:loader',
+};
+
 export const AppView = (): React.ReactElement => {
   const {
     authAPI: { isAuthorized, getCurrentUser, isFetching },
@@ -51,7 +55,13 @@ export const AppView = (): React.ReactElement => {
 
   return (
     <Root defaultTheme="dark">
-      <div className="App">{isAuthorized === undefined || isFetching ? <Loader /> : content}</div>
+      <div className="App">
+        {isAuthorized === undefined ? (
+          <Loader className="App__Loader" data-testid={testId.loader} />
+        ) : (
+          content
+        )}
+      </div>
     </Root>
   );
 };

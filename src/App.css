@@ -8,7 +8,14 @@
 }
 
 .App {
+  min-width: 100vw;
+  min-height: 100vh;
+
   background: var(--color-bg-default);
+
+  &__Loader {
+    position: absolute;
+  }
 }
 
 .Button {
