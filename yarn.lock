@@ -1148,10 +1148,10 @@
     react-transition-group "^4.4.1"
     tslib "^1.11.1"
 
-"@gpn-prototypes/frontend-configs@^1.0.0":
-  version "1.0.0"
-  resolved "https://npm.pkg.github.com/download/@gpn-prototypes/frontend-configs/1.0.0/a2dfefbc0b1f2ddbb43ec9096092404cfbd6c259afb6440eb810b43758d90c9a#f16757794b130eaec63cdb2539b567ee45e1f72e"
-  integrity sha512-25G8UcauXVOLrSkNuep+7MxWbJwxhWCe9shSbj7+zpmq8yQb9Br7wtIo1SpDvPy5iy/Gt5Y29WK9NxVaudr3hA==
+"@gpn-prototypes/frontend-configs@^1.2.1":
+  version "1.2.1"
+  resolved "https://npm.pkg.github.com/download/@gpn-prototypes/frontend-configs/1.2.1/ef95f8d12110697f1ea3f645c8cee83eaab313be6562e8bd7db2b59de34ea0c8#37b8b786ac87bbda914fb1043d1ef4832b5461d9"
+  integrity sha512-C47e31jT7IM9Vk/JNhPgVcyl8Au69IOOEvBB2h8H2cwuWIJjcPgVxHHKBuRQpsegMOWPzaN0OK/TaP4WZnTo1Q==
   dependencies:
     "@babel/core" "^7.9.0"
     "@babel/plugin-transform-runtime" "^7.10.1"
@@ -1179,6 +1179,7 @@
     html-webpack-plugin "^4.3.0"
     jest "^25.4.0"
     mini-css-extract-plugin "^0.9.0"
+    path.join "^1.0.0"
     postcss-loader "^3.0.0"
     postcss-nested "^4.2.1"
     prettier "^2.0.5"
@@ -8868,6 +8869,11 @@ path-type@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/path-type/-/path-type-4.0.0.tgz#84ed01c0a7ba380afe09d90a8c180dcd9d03043b"
   integrity sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==
+
+path.join@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/path.join/-/path.join-1.0.0.tgz#0b402092bd81128b2819e780570c49de3ddf19de"
+  integrity sha1-C0Agkr2BEosoGeeAVwxJ3j3fGd4=
 
 pbkdf2@^3.0.3:
   version "3.1.1"

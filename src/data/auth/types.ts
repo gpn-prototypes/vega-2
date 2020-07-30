@@ -2,7 +2,7 @@ export type AuthResponse = {
   token: string;
 };
 
-export type AuthData = {
-  login: string;
+export type Credentials = {
+  username: string;
   password: string;
 };

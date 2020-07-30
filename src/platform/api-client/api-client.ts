@@ -4,10 +4,10 @@ import Cookie from 'universal-cookie';
 import { COOKIES_KEYS } from '../cookies';
 
 import {
+  APIClientParams,
   ApiClientSuccess,
   BaseUrlInterceptorParams,
   ConfigWithAuth,
-  HTTPClientParams,
 } from './types';
 
 const baseUrlInterceptor = (params: BaseUrlInterceptorParams) => (
@@ -44,7 +44,7 @@ const authInterceptor = (token?: string) => (config: ConfigWithAuth): ConfigWith
   return axiosConfig;
 };
 
-export const createClient = (params: HTTPClientParams): AxiosInstance => {
+export const createClient = (params: APIClientParams): AxiosInstance => {
   const client = axios.create();
   const { token, urlParams } = params;
 
@@ -54,7 +54,7 @@ export const createClient = (params: HTTPClientParams): AxiosInstance => {
   return client;
 };
 
-export class HTTPClient {
+export class APIClient {
   private client: AxiosInstance;
 
   private cookies: Cookie;
