@@ -7,7 +7,7 @@ import { GazpromLogo } from './GazpromLogo';
 import './AuthForm.css';
 
 export type State = {
-  login: string;
+  username: string;
   password: string;
   remember: boolean;
 };
@@ -22,17 +22,18 @@ type TextFieldOnChangeArgs = {
 type AuthFormProps = {
   onLogin: (state: State) => void;
   isFetching: boolean;
-  className?: string;
+  containerClassName?: string;
+  formClassName?: string;
 };
 
 const initialState: State = {
-  login: '',
+  username: '',
   password: '',
   remember: false,
 };
 
 export const AuthForm: React.FC<AuthFormProps> = (props) => {
-  const { onLogin, isFetching, className } = props;
+  const { onLogin, isFetching, containerClassName, formClassName } = props;
 
   const [state, setState] = React.useState<State>(initialState);
 
@@ -55,24 +56,24 @@ export const AuthForm: React.FC<AuthFormProps> = (props) => {
   };
 
   return (
-    <div className={cnAuthForm.mix(className)}>
+    <div className={cnAuthForm.mix(containerClassName)}>
       <div className={cnAuthForm('GazpromLogo')}>
         <GazpromLogo />
       </div>
-      <Form onSubmit={handleSubmit} className={cnAuthForm('Form')}>
+      <Form onSubmit={handleSubmit} className={cnAuthForm('Form').mix(formClassName)}>
         <Logo className={cnAuthForm('Logo')} />
         <Form.Row>
           <Form.Field>
-            <Form.Label htmlFor="login">
+            <Form.Label htmlFor="username">
               <Text size="l" lineHeight="s" view="secondary">
                 E-mail
               </Text>
             </Form.Label>
             <TextField
-              id="login"
-              name="login"
+              id="username"
+              name="username"
               type="email"
-              value={state.login}
+              value={state.username}
               onChange={handleChange}
               size="l"
               width="full"

@@ -1,61 +1,61 @@
 import { useCallback, useMemo, useReducer } from 'react';
-import { useHttpClient } from '@vega/platform/http-client';
+import { useAPIClient } from '@vega/platform/api-client';
 
 import { login as loginRequest } from './api';
 import { reducer } from './reducer';
 import { initialState, State } from './state';
-import { AuthData } from './types';
+import { Credentials } from './types';
 
 export type AuthAPI = {
   isFetching: boolean;
   error: State['error'];
-  login(data: AuthData): void;
+  login(data: Credentials): void;
   getCurrentUser(): void;
   logout(): void;
-  authorized?: boolean;
+  isAuthorized?: boolean;
 };
 
 export const useAuth = (): AuthAPI => {
-  const httpClient = useHttpClient();
+  const APIClient = useAPIClient();
   const [authData, updateAuthData] = useReducer(reducer, initialState);
 
   const isFetching = useMemo(() => authData.status === 'fetching', [authData]);
 
   const login = useCallback(
-    async (data: AuthData) => {
+    async (data: Credentials) => {
       try {
         updateAuthData({ type: 'login' });
-        const result = await loginRequest(httpClient, data);
-        httpClient.setToken(result.token);
+        const result = await loginRequest(APIClient, data);
+        APIClient.setToken(result.token);
         updateAuthData({ type: 'success' });
       } catch (error) {
         updateAuthData({ type: 'error', payload: { error } });
       }
     },
-    [httpClient],
+    [APIClient],
   );
 
   // TODO: Добавить запрос на получение данных пользователя, когда его починят (сейчас редирект возвращает)
   const getCurrentUser = useCallback(() => {
-    if (httpClient.getToken()) {
+    if (APIClient.getToken()) {
       updateAuthData({ type: 'success' });
     } else {
       updateAuthData({ type: 'logout' });
     }
-  }, [httpClient]);
+  }, [APIClient]);
 
   // TODO: Добавить запрос нв logout, когда он появится
   const logout = useCallback(() => {
     updateAuthData({ type: 'logout' });
-    httpClient.removeToken();
-  }, [httpClient]);
+    APIClient.removeToken();
+  }, [APIClient]);
 
   return {
     isFetching,
     error: authData.error,
     login,
     logout,
-    authorized: authData.authorized,
+    isAuthorized: authData.isAuthorized,
     getCurrentUser,
   };
 };

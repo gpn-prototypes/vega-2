@@ -16,7 +16,7 @@ export type BaseUrlInterceptorParams = {
   useApiProxy?: boolean;
 };
 
-export type HTTPClientParams = {
+export type APIClientParams = {
   urlParams: BaseUrlInterceptorParams;
   token: string;
 };

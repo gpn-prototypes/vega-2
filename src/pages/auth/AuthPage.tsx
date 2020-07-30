@@ -19,7 +19,12 @@ export const AuthPage: React.FC = () => {
 
   return (
     <div className={cnAuthPage()}>
-      <AuthForm isFetching={isFetching} onLogin={login} className={cnAuthPage('Form')} />
+      <AuthForm
+        isFetching={isFetching}
+        onLogin={login}
+        containerClassName={cnAuthPage('FormContainer')}
+        formClassName={cnAuthPage('Form')}
+      />
       <div className={cnAuthPage('Teaser')}>
         <Carousel currentIdx={idx} onChange={setIdx} className={cnAuthPage('TeaserCarousel')}>
           <Carousel.Slide caption={firstSlideCaption} className={cnAuthPage('Slide')}>

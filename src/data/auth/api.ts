@@ -1,9 +1,9 @@
-import { HTTPClient } from '@vega/platform/http-client';
+import { APIClient } from '@vega/platform/api-client';
 
-import { AuthData, AuthResponse } from './types';
+import { AuthResponse, Credentials } from './types';
 
-export const login = (client: HTTPClient, data: AuthData): Promise<AuthResponse> =>
-  client.request({ url: '/auth', method: 'post', data });
+export const login = (client: APIClient, params: Credentials): Promise<AuthResponse> =>
+  client.request({ url: '/krb', method: 'post', params });
 
-export const getCurrentUser = (client: HTTPClient): Promise<void> =>
+export const getCurrentUser = (client: APIClient): Promise<void> =>
   client.request({ url: '/krb-user', method: 'get', withAuth: true });

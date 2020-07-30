@@ -40,7 +40,7 @@ const menuItems = [
   { name: 'Помощь', url: '' },
 ];
 
-// TODO: Доделать хедер, когда появится окончательный дизайн и ссылки
+// TODO: Доделать хедер, когда появится окончательный дизайн
 export const Header: React.FC<HeaderProps> = (props) => {
   const { onLogout } = props;
 
