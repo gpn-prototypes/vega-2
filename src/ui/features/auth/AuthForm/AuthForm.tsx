@@ -38,20 +38,18 @@ export const AuthForm: React.FC<AuthFormProps> = (props) => {
     onLogin(values);
   };
 
+  const validate = (values: State): Dictionary<ValidationScheme> =>
+    validateForm<State>({
+      username: multipleValidation([required, emailInput]),
+      password: multipleValidation([passwordInput, minPasswordLength, required]),
+    })(values);
+
   return (
     <div className={cnAuthForm.mix(containerClassName)}>
       <div className={cnAuthForm('GazpromLogo')}>
         <GazpromLogo />
       </div>
-      <FinalForm
-        onSubmit={handleAuthSubmit}
-        validate={(values): Dictionary<ValidationScheme> => {
-          return validateForm<State>({
-            username: multipleValidation([required, emailInput]),
-            password: multipleValidation([passwordInput, minPasswordLength, required]),
-          })(values);
-        }}
-      >
+      <FinalForm onSubmit={handleAuthSubmit} validate={validate}>
         {({ handleSubmit }): React.ReactNode => (
           <Form onSubmit={handleSubmit} className={cnAuthForm('Form').mix(formClassName)}>
             <Logo className={cnAuthForm('Logo')} />
