@@ -1,7 +1,6 @@
 import React from 'react';
 import { Redirect, useLocation } from 'react-router-dom';
-
-import { useAppContext } from '../app-context';
+import { useAppContext } from '@vega/platform/app-context';
 
 type AuthGuardProps = {
   authRoute: string;
@@ -15,12 +14,12 @@ export const AuthGuard: React.FC<AuthGuardProps> = (props) => {
 
   const location = useLocation();
 
-  const { authorized } = authAPI;
+  const { isAuthorized } = authAPI;
 
   const isAuthPage = location.pathname === authRoute;
 
   const getRedirectUrl = (): string => {
-    if (authorized) {
+    if (isAuthorized) {
       return isAuthPage ? routeAfterAuth : location.pathname;
     }
 

@@ -20,14 +20,14 @@
     }
   }
 
-  &__Form {
+  &__FormContainer {
     @media (min-width: 1200px) {
       width: 40%;
     }
+  }
 
-    .VegaForm {
-      width: 320px;
-    }
+  &__Form {
+    width: 320px;
   }
 
   &__TeaserCarousel {

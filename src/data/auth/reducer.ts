@@ -14,7 +14,7 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         status: 'success',
         error: null,
-        authorized: false,
+        isAuthorized: false,
       };
 
     case 'error':
@@ -22,7 +22,7 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         status: 'error',
         error: action.payload.error,
-        authorized: false,
+        isAuthorized: false,
       };
 
     case 'success':
@@ -30,7 +30,7 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         status: 'success',
         error: null,
-        authorized: true,
+        isAuthorized: true,
       };
 
     default:

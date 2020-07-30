@@ -1,12 +1,6 @@
 module.exports = {
-  extends: [require.resolve('@gpn-prototypes/frontend-configs/eslintrc')],
+  extends: [require.resolve('@gpn-prototypes/frontend-configs/.eslintrc')],
   overrides: [
-    {
-      files: ['./src/**/*.ts'],
-      rules: {
-        'ordered-imports': 'off',
-      },
-    },
     {
       files: ['./src/**/index.stories.tsx'],
       rules: {
