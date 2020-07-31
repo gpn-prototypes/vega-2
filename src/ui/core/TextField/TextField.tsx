@@ -18,7 +18,7 @@ type TextFieldState = React.ComponentProps<typeof VegaTextField>['state'];
 type TextFieldMeta = FieldMetaState<string>;
 
 export const TextField: React.FC<TextFieldProps> = (props) => {
-  const { validateOnTouched = false } = props;
+  const { validateOnTouched = false, ...restProps } = props;
 
   const getFieldState = (meta: TextFieldMeta): TextFieldState => {
     const { error, touched, submitFailed } = meta;
@@ -32,7 +32,7 @@ export const TextField: React.FC<TextFieldProps> = (props) => {
 
   return (
     <Field
-      {...props}
+      {...restProps}
       render={({ input, meta, ...rest }): React.ReactNode => (
         <VegaTextField
           {...rest}
