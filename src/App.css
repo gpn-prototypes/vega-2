@@ -8,16 +8,19 @@
 }
 
 .App {
-  min-width: 100vw;
-  min-height: 100vh;
-
   background: var(--color-bg-default);
 
   &__Loader {
     position: absolute;
+
+    /* Иначе сверху появляется очень тонкая белая полоска, возможно, проблема в дс */
+    height: calc(100% + 1%);
+
+    background: var(--color-bg-default);
   }
 }
 
+/* TODO: Удалить после фикса дс */
 .Button {
   z-index: unset;
 }
