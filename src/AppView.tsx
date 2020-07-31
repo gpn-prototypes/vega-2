@@ -56,7 +56,7 @@ export const AppView = (): React.ReactElement => {
   return (
     <Root defaultTheme="dark">
       <div className="App">
-        {isAuthorized === undefined ? (
+        {isAuthorized === undefined || isFetching ? (
           <Loader className="App__Loader" data-testid={testId.loader} />
         ) : (
           content
