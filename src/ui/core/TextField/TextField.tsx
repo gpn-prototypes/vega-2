@@ -1,11 +1,35 @@
 import React from 'react';
-import { Field, FieldProps, FieldRenderProps } from 'react-final-form';
+import { Field, FieldMetaState, FieldProps, FieldRenderProps } from 'react-final-form';
 import { TextField as VegaTextField } from '@gpn-prototypes/vega-ui';
 
-type TextFieldProps = Omit<React.ComponentProps<typeof VegaTextField>, 'defaultValue'> &
-  FieldProps<string, FieldRenderProps<string>>;
+type VegaTextFieldProps = Omit<
+  React.ComponentProps<typeof VegaTextField>,
+  'defaultValue' | 'value' | 'state'
+>;
+type FinalFormFieldProps = Pick<FieldProps<string, FieldRenderProps<string>>, 'validate' | 'value'>;
+
+interface TextFieldProps extends VegaTextFieldProps, FinalFormFieldProps {
+  name: string;
+  validateOnTouched?: boolean;
+}
+
+type TextFieldState = React.ComponentProps<typeof VegaTextField>['state'];
+
+type TextFieldMeta = FieldMetaState<string>;
 
 export const TextField: React.FC<TextFieldProps> = (props) => {
+  const { validateOnTouched = false } = props;
+
+  const getFieldState = (meta: TextFieldMeta): TextFieldState => {
+    const { error, touched, submitFailed } = meta;
+    if (error) {
+      if ((validateOnTouched && touched) || submitFailed) {
+        return 'alert';
+      }
+    }
+    return undefined;
+  };
+
   return (
     <Field
       {...props}
@@ -16,7 +40,7 @@ export const TextField: React.FC<TextFieldProps> = (props) => {
           name={input.name}
           type={input.type}
           onChange={({ e }): void => input.onChange(e)}
-          state={meta.error && meta.touched ? 'alert' : undefined}
+          state={getFieldState(meta)}
           // @ts-expect-error
           onBlur={input.onBlur}
           // @ts-expect-error

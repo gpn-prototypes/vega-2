@@ -1,17 +1,8 @@
 import React from 'react';
 import { Field, Form as FinalForm } from 'react-final-form';
 import { Button, Checkbox, Form, Logo, Text } from '@gpn-prototypes/vega-ui';
-import {
-  emailInput,
-  minPasswordLength,
-  multipleValidation,
-  passwordInput,
-  required,
-  validateForm,
-  ValidationScheme,
-} from '@vega/platform/validation';
 import { TextField } from '@vega/ui/core';
-import { Dictionary } from 'ramda';
+import { createValidate, validators } from '@vega/ui/forms/validation';
 
 import { cnAuthForm } from './cn-auth-form';
 import { GazpromLogo } from './GazpromLogo';
@@ -31,6 +22,13 @@ type AuthFormProps = {
   formClassName?: string;
 };
 
+const validator = createValidate<Partial<State>>({
+  username: [validators.required(), validators.email()],
+  password: [validators.required()],
+});
+
+type ValidateMap = ReturnType<typeof validator>;
+
 export const AuthForm: React.FC<AuthFormProps> = (props) => {
   const { onLogin, isFetching, containerClassName, formClassName } = props;
 
@@ -38,11 +36,7 @@ export const AuthForm: React.FC<AuthFormProps> = (props) => {
     onLogin(values);
   };
 
-  const validate = (values: State): Dictionary<ValidationScheme> =>
-    validateForm<State>({
-      username: multipleValidation([required, emailInput]),
-      password: multipleValidation([passwordInput, minPasswordLength, required]),
-    })(values);
+  const validate = (values: State): ValidateMap => validator(values);
 
   return (
     <div className={cnAuthForm.mix(containerClassName)}>
@@ -60,7 +54,14 @@ export const AuthForm: React.FC<AuthFormProps> = (props) => {
                     E-mail
                   </Text>
                 </Form.Label>
-                <TextField name="username" id="username" type="email" size="l" width="full" />
+                <TextField
+                  name="username"
+                  id="username"
+                  type="email"
+                  size="l"
+                  width="full"
+                  validateOnTouched
+                />
               </Form.Field>
             </Form.Row>
             <Form.Row space="m">
@@ -77,6 +78,7 @@ export const AuthForm: React.FC<AuthFormProps> = (props) => {
                   size="l"
                   width="full"
                   maxLength={200}
+                  validateOnTouched
                 />
               </Form.Field>
             </Form.Row>
