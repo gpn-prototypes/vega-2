@@ -84,10 +84,9 @@ export const AuthForm: React.FC<AuthFormProps> = (props) => {
             </Form.Row>
             <Form.Row space="l">
               <Field id="remember" name="remember" type="checkbox">
-                {({ input, ...rest }): React.ReactNode => (
+                {({ input }): React.ReactNode => (
                   <Checkbox
                     {...input}
-                    {...rest}
                     checked={Boolean(input.checked)}
                     onChange={({ e }): void => input.onChange(e)}
                     size="m"
