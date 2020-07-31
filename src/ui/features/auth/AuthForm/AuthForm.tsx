@@ -17,7 +17,7 @@ export type State = {
 
 export type AuthFormProps = {
   onLogin: (state: State) => void;
-  isFetching: boolean;
+  isFetching?: boolean;
   containerClassName?: string;
   formClassName?: string;
 };
@@ -70,8 +70,8 @@ export const AuthForm: AuthFormComponent = (props) => {
                   </Text>
                 </Form.Label>
                 <TextField
-                  name="login"
-                  id="login"
+                  name="username"
+                  id="username"
                   type="email"
                   size="l"
                   data-testid={testId.loginInput}

@@ -76,24 +76,4 @@ testcase('Ошибки при валидации', () => {
   step('обновляем браузер', () => {
     browser.refresh();
   });
-
-  step('вводим корректный логин', () => {
-    browser.setValue('[data-testid="AuthForm:loginInput"] > input', admin.login);
-  });
-
-  step('вводим некорректный пароль', () => {
-    browser.setValue('[data-testid="AuthForm:passwordInput"] > input', '{{{[[]]}}}');
-  });
-
-  step('нажимаем на кнопку Войти', () => {
-    browser.click('[data-testid="AuthForm:submit"]');
-  });
-
-  expected('отобразилась ошибка для пароля', () => {
-    browser.waitForElementPresent('[data-testid="AuthForm:passwordInput"].TextField_state_alert', 2000);
-    browser.assert.screenshotElement(
-      '[data-test-id="AuthPage:form"]',
-      'ошибка авторизации при некорректном пароле'
-    );
-  });
 });

@@ -80,6 +80,22 @@ describe('AuthForm', () => {
     submitIncorrectData();
 
     expect(findLoginInput().classList.contains('TextField_state_alert')).toBe(true);
+  });
+
+  test('если не ввести данные и засабмитить форму, то сработает ошибка валидации', () => {
+    renderComponent({ onLogin });
+
+    fireEvent.click(findSubmitButton());
+
+    expect(findLoginInput().classList.contains('TextField_state_alert')).toBe(true);
     expect(findPasswordInput().classList.contains('TextField_state_alert')).toBe(true);
+  });
+
+  test('если isFetching = true, то в кнопке рендерится лоадер', () => {
+    renderComponent({ onLogin, isFetching: true });
+
+    const submitButton = findSubmitButton();
+
+    expect(submitButton.classList.contains('Button_loading')).toBe(true);
   });
 });
