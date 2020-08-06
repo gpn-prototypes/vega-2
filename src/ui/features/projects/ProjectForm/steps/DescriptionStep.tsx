@@ -2,11 +2,13 @@ import React from 'react';
 import { Field } from 'react-final-form';
 import { Form as VegaForm, TextField } from '@gpn-prototypes/vega-ui';
 
+import { cnDescriptionStep, cnProjectForm } from '../cn-form';
+
 type StepProps = {};
 
-export const Step1: React.FC<StepProps> = () => {
+export const DescriptionStep: React.FC<StepProps> = () => {
   return (
-    <>
+    <div className={cnProjectForm('Step').mix(cnDescriptionStep())}>
       <VegaForm.Row space="m">
         <VegaForm.Field>
           <VegaForm.Label htmlFor="name" space="2xs">
@@ -15,25 +17,18 @@ export const Step1: React.FC<StepProps> = () => {
           <Field
             name="name"
             render={({ input }): React.ReactNode => (
-              <>
-                <TextField
-                  id="name"
-                  size="s"
-                  width="full"
-                  placeholder="Придумайте название проекта"
-                  name={input.name}
-                  value={input.value}
-                  /* onChange из TextField возвращает не стандартный формат: e, id, name, value  */
-                  onChange={({ e }): void => input.onChange(e)}
-                  /*
-                    TextField ожидает функцию (event: React.FocusEvent<Element>) => void
-                    input.onBlur имеет формат (event?: React.FocusEvent<HTMLElement> | undefined) => void
-                    как итог, ошибка: Type 'FocusEvent<Element>' is not assignable to type 'FocusEvent<HTMLElement>'
-                  */
-                  onBlur={input.onBlur as React.FocusEventHandler}
-                  onFocus={input.onFocus as React.FocusEventHandler}
-                />
-              </>
+              <TextField
+                id="name"
+                size="s"
+                width="full"
+                placeholder="Придумайте название проекта"
+                name={input.name}
+                value={input.value}
+                /* onChange из TextField возвращает не стандартный формат: e, id, name, value  */
+                onChange={({ e }): void => input.onChange(e)}
+                onBlur={input.onBlur}
+                onFocus={input.onFocus}
+              />
             )}
           />
         </VegaForm.Field>
@@ -54,8 +49,8 @@ export const Step1: React.FC<StepProps> = () => {
                 name={input.name}
                 value={input.value}
                 onChange={({ e }): void => input.onChange(e)}
-                onBlur={input.onBlur as React.FocusEventHandler}
-                onFocus={input.onFocus as React.FocusEventHandler}
+                onBlur={input.onBlur}
+                onFocus={input.onFocus}
               />
             )}
           />
@@ -77,8 +72,8 @@ export const Step1: React.FC<StepProps> = () => {
                 name={input.name}
                 value={input.value}
                 onChange={({ e }): void => input.onChange(e)}
-                onBlur={input.onBlur as React.FocusEventHandler}
-                onFocus={input.onFocus as React.FocusEventHandler}
+                onBlur={input.onBlur}
+                onFocus={input.onFocus}
               />
             )}
           />
@@ -100,8 +95,8 @@ export const Step1: React.FC<StepProps> = () => {
                 name={input.name}
                 value={input.value}
                 onChange={({ e }): void => input.onChange(e)}
-                onBlur={input.onBlur as React.FocusEventHandler}
-                onFocus={input.onFocus as React.FocusEventHandler}
+                onBlur={input.onBlur}
+                onFocus={input.onFocus}
               />
             )}
           />
@@ -125,13 +120,13 @@ export const Step1: React.FC<StepProps> = () => {
                 name={input.name}
                 value={input.value}
                 onChange={({ e }): void => input.onChange(e)}
-                onBlur={input.onBlur as React.FocusEventHandler}
-                onFocus={input.onFocus as React.FocusEventHandler}
+                onBlur={input.onBlur}
+                onFocus={input.onFocus}
               />
             )}
           />
         </VegaForm.Field>
       </VegaForm.Row>
-    </>
+    </div>
   );
 };

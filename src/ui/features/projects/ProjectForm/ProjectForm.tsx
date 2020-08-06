@@ -3,13 +3,14 @@ import { Form } from 'react-final-form';
 import {
   Button,
   Form as VegaForm,
+  IconBackward,
   IconForward,
   NavigationList,
   PageFooter,
 } from '@gpn-prototypes/vega-ui';
 
-import { cnForm } from './cn-form';
-import { Step1, Step2, Step3 } from './steps';
+import { cnProjectForm } from './cn-form';
+import { DescriptionStep, DocumentStep, ParticipantStep } from './steps';
 
 import './ProjectForm.css';
 
@@ -24,9 +25,9 @@ type FormValues = {
 };
 
 const steps = [
-  { title: 'Описание проекта', content: Step1 },
-  { title: 'Участники', content: Step2 },
-  { title: 'Связанные документы и файлы', content: Step3 },
+  { title: 'Описание проекта', content: DescriptionStep },
+  { title: 'Участники', content: ParticipantStep },
+  { title: 'Связанные документы и файлы', content: DocumentStep },
 ];
 
 export const ProjectForm: React.FC<FormProps> = () => {
@@ -34,18 +35,32 @@ export const ProjectForm: React.FC<FormProps> = () => {
 
   const onSubmit = (values: Partial<FormValues>): void => {
     // eslint-disable-next-line no-console
-    console.log(values);
+    console.log('ProjectForm, onSubmit:', values);
   };
 
   const Step = steps[activeStepIndex].content;
+  const isFirstStep = activeStepIndex === 0;
+  const isLastStep = activeStepIndex === steps.length - 1;
+
+  const handleNextStep = (): void => {
+    if (!isLastStep) {
+      setActiveStepIndex(activeStepIndex + 1);
+    }
+  };
+
+  const handlePrevStep = (): void => {
+    if (!isFirstStep) {
+      setActiveStepIndex(activeStepIndex - 1);
+    }
+  };
 
   return (
     <Form
       onSubmit={onSubmit}
       render={({ handleSubmit }): React.ReactNode => (
-        <VegaForm onSubmit={handleSubmit} className={cnForm()}>
-          <div className={cnForm('Content')}>
-            <NavigationList className={cnForm('NavigationList')} ordered>
+        <VegaForm onSubmit={handleSubmit} className={cnProjectForm()}>
+          <div className={cnProjectForm('Content')}>
+            <NavigationList className={cnProjectForm('Navigation')} ordered>
               {steps.map(({ title }, index) => (
                 <NavigationList.Item key={title} active={index === activeStepIndex}>
                   {(props): React.ReactNode => (
@@ -60,13 +75,51 @@ export const ProjectForm: React.FC<FormProps> = () => {
                 </NavigationList.Item>
               ))}
             </NavigationList>
-            <div className={cnForm('Fields')}>
-              <Step />
-            </div>
+            <Step />
           </div>
-          <PageFooter className={cnForm('Footer')}>
-            <Button size="s" view="ghost" label="Отмена" />
-            <Button size="s" view="primary" label="Далее" iconRight={IconForward} />
+          <PageFooter className={cnProjectForm('Footer')}>
+            <Button
+              size="s"
+              view="ghost"
+              label="Отмена"
+              // @ts-expect-error
+              type="button"
+            />
+            <div className={cnProjectForm('Footer-buttons-block')}>
+              {!isFirstStep && (
+                <Button
+                  size="s"
+                  view="ghost"
+                  label="Назад"
+                  iconLeft={IconBackward}
+                  // @ts-expect-error
+                  type="button"
+                  onClick={handlePrevStep}
+                />
+              )}
+              {!isLastStep && (
+                <Button
+                  size="s"
+                  view="primary"
+                  label="Далее"
+                  iconRight={IconForward}
+                  // @ts-expect-error
+                  type="button"
+                  className={cnProjectForm('Footer-rightmost-button').toString()}
+                  onClick={handleNextStep}
+                />
+              )}
+              {isLastStep && (
+                <Button
+                  size="s"
+                  view="primary"
+                  label="Создать проект"
+                  // @ts-expect-error
+                  type="submit"
+                  className={cnProjectForm('Footer-rightmost-button').toString()}
+                />
+              )}
+            </div>
           </PageFooter>
         </VegaForm>
       )}
