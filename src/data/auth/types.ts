@@ -3,6 +3,6 @@ export type AuthResponse = {
 };
 
 export type Credentials = {
-  username: string;
+  login: string;
   password: string;
 };

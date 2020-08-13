@@ -10,7 +10,7 @@ import { GazpromLogo } from './GazpromLogo';
 import './AuthForm.css';
 
 export type State = {
-  username: string;
+  login: string;
   password: string;
   remember: boolean;
 };
@@ -23,7 +23,7 @@ export type AuthFormProps = {
 };
 
 const validator = createValidate<Partial<State>>({
-  username: [validators.required(), validators.email()],
+  login: [validators.required(), validators.email()],
   password: [validators.required()],
 });
 
@@ -64,14 +64,14 @@ export const AuthForm: AuthFormComponent = (props) => {
             <Logo className={cnAuthForm('Logo')} />
             <Form.Row>
               <Form.Field>
-                <Form.Label htmlFor="username">
+                <Form.Label htmlFor="login">
                   <Text size="l" lineHeight="s" view="secondary">
                     E-mail
                   </Text>
                 </Form.Label>
                 <TextField
-                  name="username"
-                  id="username"
+                  name="login"
+                  id="login"
                   type="email"
                   size="l"
                   data-testid={testId.loginInput}
