@@ -3,7 +3,7 @@ import { Field, useForm } from 'react-final-form';
 import { Attach, Form as VegaForm, IconTrash, TextField } from '@gpn-prototypes/vega-ui';
 
 import { cnSidebarForm } from './cn-form';
-import { formatBytes } from './utils';
+import { formatBytes, getExtension } from './utils';
 
 type SidebarItemProps = {
   name: string;
@@ -12,8 +12,8 @@ type SidebarItemProps = {
   onRemove: () => void;
 };
 
-const EXCLUDED_FILE_EXTENSIONS = ['exe'];
-const FILE_SIZE_LIMIT = 100 * 1024 * 1024; // 100 Мб
+const EXCLUDED_EXTENSIONS = ['', 'exe'];
+const SIZE_LIMIT = 100 * 1024 * 1024; // 100 Мб
 
 export const SidebarItem: React.FC<SidebarItemProps> = ({ name, size, timestamp, onRemove }) => {
   const formatedSize = formatBytes(size, 1);
@@ -25,18 +25,18 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({ name, size, timestamp,
     minute: 'numeric',
   });
   const description = `${formatedSize} ${formatedDate}`;
-  const extension = name.split('.').pop();
+  const extension = getExtension(name);
 
   const form = useForm();
   const nameWithoutDots = name.replace('.', '');
 
   let errorText;
 
-  if (!extension || (extension && EXCLUDED_FILE_EXTENSIONS.includes(extension.toLowerCase()))) {
+  if (EXCLUDED_EXTENSIONS.includes(extension)) {
     errorText = 'Загружаемый файл имеет недопустимый формат.';
   }
 
-  if (size > FILE_SIZE_LIMIT) {
+  if (size > SIZE_LIMIT) {
     errorText = 'Загружаемый файл превышает допустимый лимит 100 Мб.';
   }
 

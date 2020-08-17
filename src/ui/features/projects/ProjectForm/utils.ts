@@ -35,3 +35,21 @@ export const formatBytes = (bytes: number, decimal: number): string => {
 
   return `${(bytes / gigaBytes).toFixed(decimal)} Гб`;
 };
+
+/*
+
+  ""                            -->   ""
+  "name"                        -->   ""
+  "name.txt"                    -->   "txt"
+  ".htpasswd"                   -->   ""
+  "name.with.many.dots.ext"     -->   "ext"
+
+*/
+
+export const getExtension = (name: string): string => {
+  const index = name.lastIndexOf('.');
+
+  if (name === '' || index < 1) return '';
+
+  return name.slice(index + 1).toLowerCase();
+};

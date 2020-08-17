@@ -41,6 +41,7 @@ export const DocumentStep: React.FC<StepProps> = () => {
     if (files !== null) {
       addFiles(Array.from(files));
       openSidebar();
+      maximizeSidebar();
     }
   };
 
