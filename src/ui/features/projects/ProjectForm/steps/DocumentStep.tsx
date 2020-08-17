@@ -16,9 +16,6 @@ import { useFileList } from '../use-file-list';
 
 type StepProps = {};
 
-// добавить portal в FileDropzone.Fullscreen
-// обработать удаление последнего файла из Сайдбара
-
 export const DocumentStep: React.FC<StepProps> = () => {
   const {
     state: { isOpen, isMinimized },
@@ -32,6 +29,10 @@ export const DocumentStep: React.FC<StepProps> = () => {
   });
 
   const { fileList, addFiles, removeFile } = useFileList();
+
+  if (fileList.length === 0 && isOpen) {
+    closeSidebar();
+  }
 
   const handleDrop = (files: FileList | null): void => {
     // eslint-disable-next-line no-console
@@ -50,7 +51,7 @@ export const DocumentStep: React.FC<StepProps> = () => {
       </Text>
       <Text view="secondary" size="s" className={cnDocumentStep('Description').toString()}>
         Здесь будут лежать связанные с проектом файлы и документы. Добавить их можно загрузкой
-        нового, либо выбором из существующих в общем пространстве.
+        нового либо выбором из существующих в общем пространстве.
       </Text>
       <FileDropzone fullscreen onDrop={handleDrop} className={cnDocumentStep('FileDropzone')}>
         <Text view="secondary" size="s" className={cnDocumentStep('FileDropzone-title').toString()}>

@@ -114,6 +114,7 @@ export const DescriptionStep: React.FC<StepProps> = () => {
                 id="description"
                 type="textarea"
                 minRows={3}
+                maxRows={9}
                 size="s"
                 width="full"
                 placeholder="Краткое описание проекта поможет отличать ваши проекты среди остальных и находить похожие"

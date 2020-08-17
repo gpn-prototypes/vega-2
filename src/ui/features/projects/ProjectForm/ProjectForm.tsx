@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form } from 'react-final-form';
+import { Form, FormSpy } from 'react-final-form';
 import {
   Button,
   Form as VegaForm,
@@ -9,12 +9,17 @@ import {
   PageFooter,
 } from '@gpn-prototypes/vega-ui';
 
+import { BannerInfoProps } from '../../pages/create-project/CreateProjectPage';
+
 import { cnProjectForm } from './cn-form';
 import { DescriptionStep, DocumentStep, ParticipantStep } from './steps';
 
 import './ProjectForm.css';
 
-type FormProps = {};
+type FormProps = {
+  bannerInfo: BannerInfoProps;
+  setBannerInfo: React.Dispatch<React.SetStateAction<BannerInfoProps>>;
+};
 
 type FormValues = {
   name: string;
@@ -30,7 +35,9 @@ const steps = [
   { title: 'Связанные документы и файлы', content: DocumentStep },
 ];
 
-export const ProjectForm: React.FC<FormProps> = () => {
+export const ProjectForm: React.FC<FormProps> = (formProps) => {
+  const { bannerInfo, setBannerInfo } = formProps;
+
   const [activeStepIndex, setActiveStepIndex] = useState(0);
 
   const onSubmit = (values: Partial<FormValues>): void => {
@@ -121,6 +128,18 @@ export const ProjectForm: React.FC<FormProps> = () => {
               )}
             </div>
           </PageFooter>
+          <FormSpy
+            subscription={{ values: true }}
+            onChange={(formState): void => {
+              const { values } = formState;
+              if (values.name !== bannerInfo.title || values.region !== bannerInfo.description) {
+                setBannerInfo({
+                  title: values.name,
+                  description: values.region,
+                });
+              }
+            }}
+          />
         </VegaForm>
       )}
     />

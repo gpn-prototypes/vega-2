@@ -7,6 +7,7 @@ import {
   ProgressSpin,
   Sidebar,
   Text,
+  usePortalRender,
 } from '@gpn-prototypes/vega-ui';
 
 import { cnSidebarForm } from './cn-form';
@@ -53,9 +54,9 @@ export const SidebarForm: React.FC<SidebarFormProps> = (props) => {
     console.log('SidebarForm, onSubmit:', values);
   };
 
-  // usePortalRender
+  const { renderPortalWithTheme } = usePortalRender();
 
-  return (
+  return renderPortalWithTheme(
     <Form
       onSubmit={onSubmit}
       mutators={{
@@ -143,6 +144,7 @@ export const SidebarForm: React.FC<SidebarFormProps> = (props) => {
           </Sidebar>
         </VegaForm>
       )}
-    />
+    />,
+    document.body,
   );
 };

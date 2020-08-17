@@ -12,6 +12,9 @@ type SidebarItemProps = {
   onRemove: () => void;
 };
 
+const EXCLUDED_FILE_EXTENSIONS = ['exe'];
+const FILE_SIZE_LIMIT = 100 * 1024 * 1024; // 100 Мб
+
 export const SidebarItem: React.FC<SidebarItemProps> = ({ name, size, timestamp, onRemove }) => {
   const formatedSize = formatBytes(size, 1);
   const formatedDate = new Date(timestamp).toLocaleString('ru-RU', {
@@ -27,12 +30,23 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({ name, size, timestamp,
   const form = useForm();
   const nameWithoutDots = name.replace('.', '');
 
+  let errorText;
+
+  if (!extension || (extension && EXCLUDED_FILE_EXTENSIONS.includes(extension.toLowerCase()))) {
+    errorText = 'Загружаемый файл имеет недопустимый формат.';
+  }
+
+  if (size > FILE_SIZE_LIMIT) {
+    errorText = 'Загружаемый файл превышает допустимый лимит 100 Мб.';
+  }
+
   return (
     <VegaForm.Row space="xl" className={cnSidebarForm('Row')}>
       <Attach
         fileName={name}
         fileDescription={description}
         fileExtension={extension}
+        errorText={errorText}
         withAction
         buttonIcon={IconTrash}
         buttonTitle="Удалить"
