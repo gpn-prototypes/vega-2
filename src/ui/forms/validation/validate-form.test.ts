@@ -26,11 +26,11 @@ describe('Валидация полей по схеме', () => {
       count: [validators.min(1), validators.max(10)],
     });
 
-    it('при валидных данных возвращает пустой объект', () => {
+    test('при валидных данных возвращает пустой объект', () => {
       expect(validate(validForm)).toStrictEqual({});
     });
 
-    it('если поле не валидно, выводит объект с текстом ошибки', () => {
+    test('если поле не валидно, выводит объект с текстом ошибки', () => {
       const error = {
         email: 'Обязательное поле',
       };
@@ -38,7 +38,7 @@ describe('Валидация полей по схеме', () => {
       expect(validate({ ...validForm, email: '' })).toStrictEqual(error);
     });
 
-    it('если поле не обязательное и отсутствует, выводится пустой объект', () => {
+    test('если поле не обязательное и отсутствует, выводится пустой объект', () => {
       expect(validate({ ...validForm, optionalText: '' })).toStrictEqual({});
       expect(validate({ ...validForm, optionalText: ' ' })).toStrictEqual({});
       expect(validate({ ...validForm, optionalText: undefined })).toStrictEqual({});
@@ -46,14 +46,14 @@ describe('Валидация полей по схеме', () => {
   });
 
   describe('isEmptyInputValue', () => {
-    it('должен считать значения пустыми', () => {
+    test('должен считать значения пустыми', () => {
       expect(isEmptyInputValue('')).toBe(true);
       expect(isEmptyInputValue([])).toBe(true);
       expect(isEmptyInputValue(null)).toBe(true);
       expect(isEmptyInputValue(undefined)).toBe(true);
     });
 
-    it('не должен считать значения пустыми', () => {
+    test('не должен считать значения пустыми', () => {
       expect(isEmptyInputValue(' ')).toBe(false);
       expect(isEmptyInputValue(true)).toBe(false);
       expect(isEmptyInputValue(false)).toBe(false);
@@ -65,7 +65,7 @@ describe('Валидация полей по схеме', () => {
   });
 
   describe('createValidator', () => {
-    it('должен выдать ошибку, если не передан validate и strictValidate', () => {
+    test('должен выдать ошибку, если не передан validate и strictValidate', () => {
       const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
       const createBrokenValidator = (): Validator<void, string> =>
         createValidator<void, string>({
@@ -76,7 +76,7 @@ describe('Валидация полей по схеме', () => {
       consoleErrorSpy.mockRestore();
     });
 
-    it('должен вызвать функцию сообщения об ошибке', () => {
+    test('должен вызвать функцию сообщения об ошибке', () => {
       const messageFnImplementation = (config: string, value: Value<string>): string =>
         `config: ${config}, value: ${value}`;
 
@@ -97,7 +97,7 @@ describe('Валидация полей по схеме', () => {
       expect(validateMock).toBeCalledWith(testValue, testConfig);
     });
 
-    it('должен заменить дефолтную функцию сообщения об ошибке', () => {
+    test('должен заменить дефолтную функцию сообщения об ошибке', () => {
       const messageFnImplementation = (config: string, value: Value<string>): string =>
         `config: ${config}, value: ${value}`;
 
@@ -120,7 +120,7 @@ describe('Валидация полей по схеме', () => {
       expect(validateMock).toBeCalledWith(testValue, testConfig);
     });
 
-    it('должен вызвать strictValidate, если передан validate', () => {
+    test('должен вызвать strictValidate, если передан validate', () => {
       const errorMessage = '';
       const messageFnMock = jest.fn(() => errorMessage);
       const strictValidateMock = jest.fn(() => false);
@@ -142,7 +142,7 @@ describe('Валидация полей по схеме', () => {
       expect(strictValidateMock).toBeCalledWith(testValue, testConfig);
     });
 
-    it('не должен вызывать validate, если поле пустое', () => {
+    test('не должен вызывать validate, если поле пустое', () => {
       const messageFnMock = jest.fn();
       const validateMock = jest.fn(() => false);
 
@@ -162,7 +162,7 @@ describe('Валидация полей по схеме', () => {
       expect(messageFnMock).not.toBeCalled();
     });
 
-    it('должен вызывать strictValidate, даже если поле пустое', () => {
+    test('должен вызывать strictValidate, даже если поле пустое', () => {
       const errorMessage = '';
       const messageFnMock = jest.fn(() => errorMessage);
       const strictValidateMock = jest.fn(() => true);
@@ -185,7 +185,7 @@ describe('Валидация полей по схеме', () => {
   });
 
   describe('validators', () => {
-    it('required', () => {
+    test('required', () => {
       const validate = validators.required();
       expect(validate('')).not.toBe(null);
       expect(validate(' ')).not.toBe(null);
@@ -196,13 +196,13 @@ describe('Валидация полей по схеме', () => {
       expect(validate(NaN)).not.toBe(null);
     });
 
-    it('pattern', () => {
+    test('pattern', () => {
       const validate = validators.pattern(/test/);
       expect(validate('test')).toBe(null);
       expect(validate(' ')).not.toBe(null);
     });
 
-    it('min', () => {
+    test('min', () => {
       const validate = validators.min(1);
       expect(validate('0')).not.toBe(null);
       expect(validate(0)).not.toBe(null);
@@ -211,7 +211,7 @@ describe('Валидация полей по схеме', () => {
       expect(validate('')).toBe(null);
     });
 
-    it('max', () => {
+    test('max', () => {
       const validate = validators.max(1);
       expect(validate('2')).not.toBe(null);
       expect(validate(2)).not.toBe(null);
@@ -220,7 +220,7 @@ describe('Валидация полей по схеме', () => {
       expect(validate('')).toBe(null);
     });
 
-    it('minLength', () => {
+    test('minLength', () => {
       const validate = validators.minLength(2);
       expect(validate(' ')).not.toBe(null);
       expect(validate('1')).not.toBe(null);
@@ -229,7 +229,7 @@ describe('Валидация полей по схеме', () => {
       expect(validate('')).toBe(null);
     });
 
-    it('maxLength', () => {
+    test('maxLength', () => {
       const validate = validators.maxLength(2);
       expect(validate('   ')).not.toBe(null);
       expect(validate('123')).not.toBe(null);
@@ -241,49 +241,49 @@ describe('Валидация полей по схеме', () => {
 });
 
 describe('Регулярные выражения для валидации', () => {
-  it('проверка регулярного выражения для email на корректность', () => {
+  test('проверка регулярного выражения для email на корректность', () => {
     const value = 'email@test.ru';
 
     expect(emailPattern.test(value)).toBe(true);
   });
 
-  it('проверка регулярного выражения для email с плюсом на корректность', () => {
+  test('проверка регулярного выражения для email с плюсом на корректность', () => {
     const value = 'email+npm@test.ru';
 
     expect(emailPattern.test(value)).toBe(true);
   });
 
-  it('проверка регулярного выражения для email с дефисоминусом на корректность', () => {
+  test('проверка регулярного выражения для email с дефисоминусом на корректность', () => {
     const value = 'my-email@test.ru';
 
     expect(emailPattern.test(value)).toBe(true);
   });
 
-  it('проверить поле email - некоректное значение', () => {
+  test('проверить поле email - некоректное значение', () => {
     const value = 'sdgsdfg';
 
     expect(emailPattern.test(value)).toBe(false);
   });
 
-  it('проверить поле email - символ @', () => {
+  test('проверить поле email - символ @', () => {
     const value = 'sdgsdfg@';
 
     expect(emailPattern.test(value)).toBe(false);
   });
 
-  it('проверить поле email - отсутствует домен верхнего уровня', () => {
+  test('проверить поле email - отсутствует домен верхнего уровня', () => {
     const value = 'sdgsdfg@mail';
 
     expect(emailPattern.test(value)).toBe(false);
   });
 
-  it('проверить поле email - корректное значение, проверка субдомена', () => {
+  test('проверить поле email - корректное значение, проверка субдомена', () => {
     const value = 'test@test.aldamics.ru';
 
     expect(emailPattern.test(value)).toBe(true);
   });
 
-  it('проверить поле email - отсутствует домен верхнего уровня', () => {
+  test('проверить поле email - отсутствует домен верхнего уровня', () => {
     const value = 'sdgsdfg@mail';
 
     expect(emailPattern.test(value)).toBe(false);
