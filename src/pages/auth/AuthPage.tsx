@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Carousel, Text } from '@gpn-prototypes/vega-ui';
+import { Carousel } from '@gpn-prototypes/vega-ui';
 import { useAppContext } from '@vega/platform/app-context';
 import { AuthForm } from '@vega/ui/features/auth';
 
@@ -28,10 +28,10 @@ export const AuthPage: React.FC = () => {
       <div className={cnAuthPage('Teaser')}>
         <Carousel currentIdx={idx} onChange={setIdx} className={cnAuthPage('TeaserCarousel')}>
           <Carousel.Slide caption={firstSlideCaption} className={cnAuthPage('Slide')}>
-            <Text size="xl">Ведутся работы...</Text>
+            <div />
           </Carousel.Slide>
           <Carousel.Slide caption={secondSlideCaption} className={cnAuthPage('Slide')}>
-            <Text size="xl">А здесь мы вам расскажем о возможностях системы</Text>
+            <div />
           </Carousel.Slide>
         </Carousel>
       </div>
