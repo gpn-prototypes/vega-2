@@ -23,7 +23,7 @@
     transform: translateX(-50%);
   }
 
-  &__FormDesc {
+  &__Desc {
     margin-top: var(--space-4xl);
 
     text-align: center;
