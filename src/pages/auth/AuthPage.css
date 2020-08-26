@@ -37,16 +37,11 @@
   &__Slide {
     position: relative;
 
-    display: flex;
-
-    justify-content: center;
-    align-items: center;
+    padding-bottom: 56.2223%;
 
     max-width: 900px;
-    min-height: 400px;
 
     background: var(--color-bg-system);
-    align-content: center;
 
     img {
       position: absolute;
@@ -58,5 +53,9 @@
       object-fit: cover;
       object-position: center;
     }
+  }
+
+  .VegaCarousel__Caption {
+    min-height: calc(var(--line-height-text-xs) * 2);
   }
 }

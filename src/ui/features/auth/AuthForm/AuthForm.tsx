@@ -64,7 +64,7 @@ export const AuthForm: AuthFormComponent = (props) => {
             <Logo className={cnAuthForm('Logo')} />
             <Form.Row>
               <Form.Field>
-                <Form.Label htmlFor="login">
+                <Form.Label htmlFor="login" space="xs">
                   <Text size="l" lineHeight="s" view="secondary">
                     E-mail
                   </Text>
@@ -83,7 +83,7 @@ export const AuthForm: AuthFormComponent = (props) => {
             </Form.Row>
             <Form.Row space="m">
               <Form.Field>
-                <Form.Label htmlFor="password" size="l">
+                <Form.Label htmlFor="password" space="xs">
                   <Text size="l" lineHeight="s" view="secondary">
                     Пароль
                   </Text>
