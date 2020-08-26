@@ -52,7 +52,7 @@ export const Header: React.FC<HeaderProps> = (props) => {
 
   return (
     <VegaHeader>
-      <VegaHeader.Menu title="Очень-очень длинное длинное название проекта">
+      <VegaHeader.Menu title="Заголовок">
         {menuItems.map((menuItem) => (
           <VegaHeader.Menu.Item key={menuItem.name}>
             {(menuItemProps): React.ReactNode => (

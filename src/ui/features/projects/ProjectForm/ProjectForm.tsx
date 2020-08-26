@@ -9,7 +9,7 @@ import {
   PageFooter,
 } from '@gpn-prototypes/vega-ui';
 
-import { BannerInfoProps } from '../../pages/create-project/CreateProjectPage';
+import { BannerInfoProps } from '../../../../pages/create-project/CreateProjectPage';
 
 import { cnProjectForm } from './cn-form';
 import { DescriptionStep, DocumentStep, ParticipantStep } from './steps';
