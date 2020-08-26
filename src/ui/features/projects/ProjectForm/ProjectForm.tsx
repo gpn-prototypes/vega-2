@@ -9,12 +9,15 @@ import {
   PageFooter,
 } from '@gpn-prototypes/vega-ui';
 
-import { BannerInfoProps } from '../../../../pages/create-project/CreateProjectPage';
-
 import { cnProjectForm } from './cn-form';
 import { DescriptionStep, DocumentStep, ParticipantStep } from './steps';
 
 import './ProjectForm.css';
+
+type BannerInfoProps = {
+  title?: string;
+  description?: string;
+};
 
 type FormProps = {
   bannerInfo: BannerInfoProps;

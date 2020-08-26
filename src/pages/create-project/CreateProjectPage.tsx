@@ -8,7 +8,7 @@ import './CreateProjectPage.css';
 
 type PageProps = {};
 
-export type BannerInfoProps = {
+type BannerInfoProps = {
   title?: string;
   description?: string;
 };
