@@ -124,7 +124,7 @@ export const AuthForm: AuthFormComponent = (props) => {
             </Form.Row>
             <Form.Row className={cnAuthForm('Desc')}>
               <Text size="s" lineHeight="xs" view="secondary">
-                Если вы забыли пароль, обратитесь в&nbsp;Службу технической поддержки
+                Если вы забыли пароль, обратитесь в&nbsp;Службу&nbsp;технической поддержки
               </Text>
             </Form.Row>
           </Form>
