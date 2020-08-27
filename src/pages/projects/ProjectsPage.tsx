@@ -57,6 +57,7 @@ const ProjectFilter: React.FC<ProjectFilterType> = ({ onInputSearch, onChangeFil
   return (
     <div className={cn('Filter')}>
       <ChoiceGroup
+        size="s"
         value={filterValue}
         items={filterItems}
         getItemKey={(item): string => item.name}

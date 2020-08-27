@@ -17,10 +17,10 @@ import { getUploadStatistics } from './utils';
 type SidebarFormProps = {
   isOpen: boolean;
   isMinimized: boolean;
-  openSidebar: () => void;
-  closeSidebar: () => void;
-  maximizeSidebar: () => void;
-  minimizeSidebar: () => void;
+  onOpenSidebar: () => void;
+  onCloseSidebar: () => void;
+  onMaximizeSidebar: () => void;
+  onMinimizeSidebar: () => void;
   fileList: File[];
   addFiles: (files: File[]) => void;
   removeFile: (name: string) => void;
@@ -39,9 +39,9 @@ export const SidebarForm: React.FC<SidebarFormProps> = (props) => {
   const {
     isOpen,
     isMinimized,
-    closeSidebar,
-    maximizeSidebar,
-    minimizeSidebar,
+    onCloseSidebar,
+    onMaximizeSidebar,
+    onMinimizeSidebar,
     fileList,
     addFiles,
     removeFile,
@@ -64,21 +64,21 @@ export const SidebarForm: React.FC<SidebarFormProps> = (props) => {
           changeValue(state, name, () => undefined);
         },
       }}
-      render={({ handleSubmit }): React.ReactNode => (
+      render={({ handleSubmit, form }): React.ReactNode => (
         <VegaForm onSubmit={handleSubmit}>
           <Sidebar
             isOpen={isOpen}
             isMinimized={isMinimized}
-            onOverlayClick={minimizeSidebar}
-            onMinimize={minimizeSidebar}
-            onClose={closeSidebar}
+            onOverlayClick={onMinimizeSidebar}
+            onMinimize={onMinimizeSidebar}
+            onClose={onCloseSidebar}
             className={isMinimized ? cnSidebarForm('Minimized') : undefined}
           >
             {isMinimized ? (
               <>
                 <Sidebar.Header hasMinimizeButton={false}>Загрузка файлов</Sidebar.Header>
                 <Sidebar.Body>
-                  <div className={cnSidebarForm('Minimized-container')} onClick={maximizeSidebar}>
+                  <div className={cnSidebarForm('Minimized-container')} onClick={onMaximizeSidebar}>
                     <ProgressSpin size="m" progress={progressPercent} />
                     <div className={cnSidebarForm('Minimized-statistics')}>
                       <Text size="s" view="primary">
@@ -101,7 +101,10 @@ export const SidebarForm: React.FC<SidebarFormProps> = (props) => {
                       name={name}
                       size={size}
                       timestamp={lastModified}
-                      onRemove={(): void => removeFile(name)}
+                      onRemove={(nameWithoutDots): void => {
+                        form.mutators.clear(nameWithoutDots);
+                        removeFile(name);
+                      }}
                     />
                   ))}
                 </Sidebar.Body>

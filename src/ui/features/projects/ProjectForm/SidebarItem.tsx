@@ -9,7 +9,7 @@ type SidebarItemProps = {
   name: string;
   size: number;
   timestamp: number;
-  onRemove: () => void;
+  onRemove: (nameWithoutDots: string) => void;
 };
 
 const EXCLUDED_EXTENSIONS = ['', 'exe'];
@@ -27,7 +27,6 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({ name, size, timestamp,
   const description = `${formatedSize} ${formatedDate}`;
   const extension = getExtension(name);
 
-  const form = useForm();
   const nameWithoutDots = name.replace('.', '');
 
   let errorText;
@@ -52,8 +51,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({ name, size, timestamp,
         buttonTitle="Удалить"
         onButtonClick={(e): void => {
           e.stopPropagation();
-          onRemove();
-          form.mutators.clear(nameWithoutDots);
+          onRemove(nameWithoutDots);
         }}
       />
       <Field

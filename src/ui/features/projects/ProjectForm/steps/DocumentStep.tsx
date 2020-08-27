@@ -14,15 +14,17 @@ import { cnDocumentStep, cnProjectForm } from '../cn-form';
 import { SidebarForm } from '../SidebarForm';
 import { useFileList } from '../use-file-list';
 
+const fileIcons = [FileIconDoc, FileIconXls, FileIconPtt, FileIconPdf, FileIconMp4];
+
 type StepProps = {};
 
 export const DocumentStep: React.FC<StepProps> = () => {
   const {
     state: { isOpen, isMinimized },
-    open: openSidebar,
-    close: closeSidebar,
-    maximize: maximizeSidebar,
-    minimize: minimizeSidebar,
+    open: onOpenSidebar,
+    close: onCloseSidebar,
+    maximize: onMaximizeSidebar,
+    minimize: onMinimizeSidebar,
   } = useSidebar({
     isOpen: false,
     isMinimized: false,
@@ -31,7 +33,7 @@ export const DocumentStep: React.FC<StepProps> = () => {
   const { fileList, addFiles, removeFile } = useFileList();
 
   if (fileList.length === 0 && isOpen) {
-    closeSidebar();
+    onCloseSidebar();
   }
 
   const handleDrop = (files: FileList | null): void => {
@@ -40,8 +42,8 @@ export const DocumentStep: React.FC<StepProps> = () => {
 
     if (files !== null) {
       addFiles(Array.from(files));
-      openSidebar();
-      maximizeSidebar();
+      onOpenSidebar();
+      onMaximizeSidebar();
     }
   };
 
@@ -54,7 +56,11 @@ export const DocumentStep: React.FC<StepProps> = () => {
         Здесь будут лежать связанные с проектом файлы и документы. Добавить их можно загрузкой
         нового либо выбором из существующих в общем пространстве.
       </Text>
-      <FileDropzone fullscreen onDrop={handleDrop} className={cnDocumentStep('FileDropzone')}>
+      <FileDropzone
+        fullscreen={!isOpen}
+        onDrop={handleDrop}
+        className={cnDocumentStep('FileDropzone')}
+      >
         <Text view="secondary" size="s" className={cnDocumentStep('FileDropzone-title').toString()}>
           Загрузите файлы простым переносом или&nbsp;по кнопке ниже.
         </Text>
@@ -62,11 +68,14 @@ export const DocumentStep: React.FC<StepProps> = () => {
         <FileDropzone.Fullscreen>
           <div className={cnDocumentStep('FileDropzone-fullscreen')}>
             <div className={cnDocumentStep('FileDropzone-icons-block')}>
-              <FileIconDoc size="m" className={cnDocumentStep('FileDropzone-icon').toString()} />
-              <FileIconXls size="m" className={cnDocumentStep('FileDropzone-icon').toString()} />
-              <FileIconPtt size="m" className={cnDocumentStep('FileDropzone-icon').toString()} />
-              <FileIconPdf size="m" className={cnDocumentStep('FileDropzone-icon').toString()} />
-              <FileIconMp4 size="m" className={cnDocumentStep('FileDropzone-icon').toString()} />
+              {fileIcons.map((Icon, index) => (
+                <Icon
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={index}
+                  size="m"
+                  className={cnDocumentStep('FileDropzone-icon').toString()}
+                />
+              ))}
             </div>
             <Text view="secondary" size="3xl">
               Загрузите документы
@@ -77,10 +86,10 @@ export const DocumentStep: React.FC<StepProps> = () => {
       <SidebarForm
         isOpen={isOpen}
         isMinimized={isMinimized}
-        openSidebar={openSidebar}
-        closeSidebar={closeSidebar}
-        maximizeSidebar={maximizeSidebar}
-        minimizeSidebar={minimizeSidebar}
+        onOpenSidebar={onOpenSidebar}
+        onCloseSidebar={onCloseSidebar}
+        onMaximizeSidebar={onMaximizeSidebar}
+        onMinimizeSidebar={onMinimizeSidebar}
         fileList={fileList}
         addFiles={addFiles}
         removeFile={removeFile}

@@ -35,7 +35,7 @@ const navItems = [
 ];
 
 const menuItems = [
-  { name: 'Проекты', url: '' },
+  { name: 'Проекты', url: '/projects' },
   { name: 'Обучение', url: '' },
   { name: 'Помощь', url: '' },
 ];

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, FormSpy } from 'react-final-form';
+import { useHistory } from 'react-router-dom';
 import {
   Button,
   Form as VegaForm,
@@ -9,15 +10,12 @@ import {
   PageFooter,
 } from '@gpn-prototypes/vega-ui';
 
+import { BannerInfoProps } from '../../../../pages/create-project/types';
+
 import { cnProjectForm } from './cn-form';
 import { DescriptionStep, DocumentStep, ParticipantStep } from './steps';
 
 import './ProjectForm.css';
-
-type BannerInfoProps = {
-  title?: string;
-  description?: string;
-};
 
 type FormProps = {
   bannerInfo: BannerInfoProps;
@@ -41,11 +39,16 @@ const steps = [
 export const ProjectForm: React.FC<FormProps> = (formProps) => {
   const { bannerInfo, setBannerInfo } = formProps;
 
+  const history = useHistory();
+
   const [activeStepIndex, setActiveStepIndex] = useState(0);
 
   const onSubmit = (values: Partial<FormValues>): void => {
     // eslint-disable-next-line no-console
     console.log('ProjectForm, onSubmit:', values);
+
+    // Временная заглушка
+    history.push('/projects');
   };
 
   const Step = steps[activeStepIndex].content;
@@ -53,15 +56,11 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
   const isLastStep = activeStepIndex === steps.length - 1;
 
   const handleNextStep = (): void => {
-    if (!isLastStep) {
-      setActiveStepIndex(activeStepIndex + 1);
-    }
+    setActiveStepIndex(activeStepIndex + 1);
   };
 
   const handlePrevStep = (): void => {
-    if (!isFirstStep) {
-      setActiveStepIndex(activeStepIndex - 1);
-    }
+    setActiveStepIndex(activeStepIndex - 1);
   };
 
   return (
