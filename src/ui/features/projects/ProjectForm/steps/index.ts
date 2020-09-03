@@ -1,3 +1,3 @@
-export { Step1 } from './Step1';
-export { Step2 } from './Step2';
-export { Step3 } from './Step3';
+export { DescriptionStep } from './DescriptionStep';
+export { ParticipantStep } from './ParticipantStep';
+export { DocumentStep } from './DocumentStep';

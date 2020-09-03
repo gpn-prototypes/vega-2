@@ -11,6 +11,9 @@ type Props = {
   children?: React.ReactNode;
 };
 
+/* TODO: добавить привязку заголовка в меню к текущей странице */
+/* Заголовок может отображать название открытого проекта */
+
 export const PageLayout: React.FC<Props> = (props) => {
   const { authAPI } = useAppContext();
   return (

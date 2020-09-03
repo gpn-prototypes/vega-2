@@ -1,3 +1,6 @@
 import { block } from 'bem-cn';
 
-export const cnForm = block('ProjectForm');
+export const cnProjectForm = block('ProjectForm');
+export const cnDescriptionStep = block('ProjectForm-DescriptionStep');
+export const cnDocumentStep = block('ProjectForm-DocumentStep');
+export const cnSidebarForm = block('ProjectForm-SidebarForm');

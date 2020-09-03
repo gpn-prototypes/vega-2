@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { BaseCheckGroupFieldOnChangeArguments } from '@gpn-design/uikit/__internal__/src/components/BaseCheckGroupField/BaseCheckGroupField';
 import { IconProps } from '@gpn-design/uikit/Icon';
 import { Button, ChoiceGroup, IconBookmarkFilled, Text, TextField } from '@gpn-prototypes/vega-ui';
 
@@ -27,7 +26,7 @@ const filterItems = [
   {
     name: 'Все',
   },
-];
+] as Item[];
 
 type TextFieldOnChangeArgs = {
   value: string | null;
@@ -38,7 +37,7 @@ type TextFieldOnChangeArgs = {
 
 type ProjectFilterType = {
   onInputSearch(value: string | null): void;
-  onChangeFilter(value: Item[] | null): void;
+  onChangeFilter(value: Item | null): void;
 };
 
 const testId = {
@@ -47,22 +46,24 @@ const testId = {
 
 const ProjectFilter: React.FC<ProjectFilterType> = ({ onInputSearch, onChangeFilter }) => {
   const [searchValue, setSearchValue] = React.useState<string | null>(null);
-  const [filterValue, setFilterValue] = React.useState<Item[] | null>(null);
+  const [filterValue, setFilterValue] = React.useState<Item | null>(null);
 
-  const handleFilter = ({ value }: BaseCheckGroupFieldOnChangeArguments<Item>): void => {
+  const handleFilter = ({ value }: { value: Item | null }): void => {
     setFilterValue(value);
     onChangeFilter(value);
   };
 
   return (
     <div className={cn('Filter')}>
-      <ChoiceGroup
+      <ChoiceGroup<Item>
+        size="s"
         value={filterValue}
         items={filterItems}
-        getItemKey={(item): string => item.name}
-        getItemLabel={(item): string => item.name}
-        getItemIcon={(item): React.FC<IconProps> | undefined => item.icon}
+        getLabel={(item): string => item.name}
+        getIcon={(item): React.FC<IconProps> | undefined => item.icon}
         onChange={handleFilter}
+        name="ChoiceGroup"
+        multiple={false}
       />
       <div className={cn('FilterField')}>
         <TextField
@@ -101,7 +102,7 @@ export const ProjectsPage: React.FC = (props) => {
             // eslint-disable-next-line no-console
             onInputSearch={(value: string): void => console.log(`InputSearch: ${value}`)}
             // eslint-disable-next-line no-console
-            onChangeFilter={(value: Item[]): void => console.log(`Filter: ${value[0].name}`)}
+            onChangeFilter={(value: Item): void => console.log(`Filter: ${value.name}`)}
           />
           <div className={cn('Table')}>
             <Text as="span" size="m">

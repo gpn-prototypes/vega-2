@@ -35,7 +35,7 @@ const navItems = [
 ];
 
 const menuItems = [
-  { name: 'Проекты', url: '' },
+  { name: 'Проекты', url: '/projects' },
   { name: 'Обучение', url: '' },
   { name: 'Помощь', url: '' },
 ];
@@ -44,7 +44,7 @@ const menuItems = [
 export const Header: React.FC<HeaderProps> = (props) => {
   const { onLogout } = props;
 
-  const [activeItem, setActiveItem] = React.useState(navItems.filter((ni) => ni.isActive));
+  const [activeItem, setActiveItem] = React.useState(navItems.find((item) => item.isActive));
 
   const handleChangeActive = (item: typeof activeItem): void => {
     setActiveItem(item);
@@ -52,7 +52,7 @@ export const Header: React.FC<HeaderProps> = (props) => {
 
   return (
     <VegaHeader>
-      <VegaHeader.Menu title="Очень-очень длинное длинное название проекта">
+      <VegaHeader.Menu title="Заголовок">
         {menuItems.map((menuItem) => (
           <VegaHeader.Menu.Item key={menuItem.name}>
             {(menuItemProps): React.ReactNode => (
