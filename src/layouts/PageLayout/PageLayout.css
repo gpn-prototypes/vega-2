@@ -13,18 +13,7 @@
   background-color: var(--color-bg-default);
 
   &__Header {
-    padding: 0 var(--space-xl);
-
     grid-area: header;
-
-    display: flex;
-    align-items: center;
-
-    height: 40px;
-
-    color: var(--color-typo-primary);
-
-    background-color: var(--color-bg-secondary);
 
     border-bottom: 1px solid var(--color-control-bg-border-default);
   }

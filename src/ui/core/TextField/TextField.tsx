@@ -41,9 +41,7 @@ export const TextField: React.FC<TextFieldProps> = (props) => {
           type={input.type}
           onChange={({ e }): void => input.onChange(e)}
           state={getFieldState(meta)}
-          // @ts-expect-error
           onBlur={input.onBlur}
-          // @ts-expect-error
           onFocus={input.onFocus}
         />
       )}
