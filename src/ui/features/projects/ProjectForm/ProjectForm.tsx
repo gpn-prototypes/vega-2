@@ -44,9 +44,6 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
   const [activeStepIndex, setActiveStepIndex] = useState(0);
 
   const onSubmit = (values: Partial<FormValues>): void => {
-    // eslint-disable-next-line no-console
-    console.log('ProjectForm, onSubmit:', values);
-
     // Временная заглушка
     history.push('/projects');
   };
@@ -87,13 +84,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
             <Step />
           </div>
           <PageFooter className={cnProjectForm('Footer')}>
-            <Button
-              size="s"
-              view="ghost"
-              label="Отмена"
-              // @ts-expect-error
-              type="button"
-            />
+            <Button size="s" view="ghost" label="Отмена" type="button" />
             <div className={cnProjectForm('Footer-buttons-block')}>
               {!isFirstStep && (
                 <Button
@@ -101,7 +92,6 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
                   view="ghost"
                   label="Назад"
                   iconLeft={IconBackward}
-                  // @ts-expect-error
                   type="button"
                   onClick={handlePrevStep}
                 />
@@ -112,7 +102,6 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
                   view="primary"
                   label="Далее"
                   iconRight={IconForward}
-                  // @ts-expect-error
                   type="button"
                   className={cnProjectForm('Footer-rightmost-button').toString()}
                   onClick={handleNextStep}
@@ -123,7 +112,6 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
                   size="s"
                   view="primary"
                   label="Создать проект"
-                  // @ts-expect-error
                   type="submit"
                   className={cnProjectForm('Footer-rightmost-button').toString()}
                 />

@@ -26,12 +26,14 @@ type SidebarFormProps = {
   removeFile: (name: string) => void;
 };
 
-type FormValues = {
-  [key: string]: {
-    category: string;
-    comment: string;
-  };
-};
+// Понадобится в onSubmit
+
+// type FormValues = {
+//   [key: string]: {
+//     category: string;
+//     comment: string;
+//   };
+// };
 
 /* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
 
@@ -49,9 +51,8 @@ export const SidebarForm: React.FC<SidebarFormProps> = (props) => {
 
   const { filesLeftMessage, timeLeftMessage, progressPercent } = getUploadStatistics(fileList);
 
-  const onSubmit = (values: FormValues): void => {
-    // eslint-disable-next-line no-console
-    console.log('SidebarForm, onSubmit:', values);
+  const onSubmit = (): void => {
+    onMinimizeSidebar();
   };
 
   const { renderPortalWithTheme } = usePortalRender();
@@ -112,16 +113,13 @@ export const SidebarForm: React.FC<SidebarFormProps> = (props) => {
                   {/*
                     Заменить на компонент FileField из ui-kit:
                     https://github.com/gpn-prototypes/ui-kit/tree/master/src/components/FileField
-                    https://ui-kit.gpn.vercel.app/?path=/story/components-filefield--playground
+                    https://consta-uikit.vercel.app/?path=/story/components-filefield--playground
                   */}
                   <FileInput
                     id="SidebarForm-input"
                     className={cnSidebarForm('Footer-Button').toString()}
                     onChange={(e: DragEvent | ChangeEvent): void => {
                       if (e.target instanceof HTMLInputElement) {
-                        // eslint-disable-next-line no-console
-                        console.log(e.target.files);
-
                         if (e.target.files !== null) {
                           addFiles(Array.from(e.target.files));
                         }
@@ -137,7 +135,6 @@ export const SidebarForm: React.FC<SidebarFormProps> = (props) => {
                     size="s"
                     view="primary"
                     label="Сохранить"
-                    // @ts-expect-error
                     type="submit"
                     className={cnSidebarForm('Footer-Button').toString()}
                   />

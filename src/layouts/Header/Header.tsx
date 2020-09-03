@@ -44,7 +44,7 @@ const menuItems = [
 export const Header: React.FC<HeaderProps> = (props) => {
   const { onLogout } = props;
 
-  const [activeItem, setActiveItem] = React.useState(navItems.filter((ni) => ni.isActive));
+  const [activeItem, setActiveItem] = React.useState(navItems.find((item) => item.isActive));
 
   const handleChangeActive = (item: typeof activeItem): void => {
     setActiveItem(item);

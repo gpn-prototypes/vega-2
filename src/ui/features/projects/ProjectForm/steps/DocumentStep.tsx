@@ -37,9 +37,6 @@ export const DocumentStep: React.FC<StepProps> = () => {
   }
 
   const handleDrop = (files: FileList | null): void => {
-    // eslint-disable-next-line no-console
-    console.log('handleDrop', files);
-
     if (files !== null) {
       addFiles(Array.from(files));
       onOpenSidebar();
