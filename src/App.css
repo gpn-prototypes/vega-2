@@ -19,8 +19,3 @@
     background: var(--color-bg-default);
   }
 }
-
-/* TODO: Удалить после фикса дс */
-.Button {
-  z-index: unset;
-}

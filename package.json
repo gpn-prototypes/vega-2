@@ -1,5 +1,5 @@
 {
-  "name": "vega-2",
+  "name": "vega-sp",
   "version": "0.0.1",
   "description": "Проект VEGA 2.0",
   "repository": "git@github.com:gpn-prototypes/vega-2.git",
@@ -33,16 +33,13 @@
   },
   "dependencies": {
     "@gpn-prototypes/vega-ui": "^2.12.3",
-    "axios": "^0.19.2",
     "bem-cn": "^3.0.1",
     "final-form": "^4.20.1",
-    "http-proxy-middleware": "^1.0.5",
     "ramda": "^0.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-final-form": "^6.5.1",
-    "react-router-dom": "^5.2.0",
-    "universal-cookie": "^4.0.3"
+    "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
