@@ -7,7 +7,7 @@ import { BannerInfoProps } from './types';
 
 import './CreateProjectPage.css';
 
-type PageProps = {};
+type PageProps = Record<string, unknown>;
 
 export const CreateProjectPage: React.FC<PageProps> = () => {
   const [bannerInfo, setBannerInfo] = useState<BannerInfoProps>({});
