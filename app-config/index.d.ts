@@ -1,4 +1,5 @@
 export type AppConfig = {
+  projectName: string;
   root: string;
   entry: string;
   buildDirPath: string;
