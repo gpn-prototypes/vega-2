@@ -9,6 +9,7 @@ declare global {
 }
 
 global.window.appConfig = {
+  projectName: 'settlement-platform',
   root: '',
   entry: '',
   buildDirPath: '',
