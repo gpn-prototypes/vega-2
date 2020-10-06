@@ -1,8 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
 
 import { App } from './App';
 
 import './App.css';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: new HttpLink({
+    uri: 'http://outsourcing.nat.tepkom.ru:38080/graphql',
+    headers: {
+      Authorization: localStorage.getItem('auth-token')
+        ? `Bearer ${localStorage.getItem('auth-token')}`
+        : undefined,
+    },
+  }),
+});
+
+ReactDOM.render(<App client={client} />, document.getElementById('root'));
