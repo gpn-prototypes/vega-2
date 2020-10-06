@@ -33,9 +33,11 @@
     "lint:fix": "yarn run lint:ts:fix && yarn run lint:css:fix"
   },
   "dependencies": {
+    "@apollo/client": "^3.2.2",
     "@gpn-prototypes/vega-ui": "^2.12.3",
     "bem-cn": "^3.0.1",
     "final-form": "^4.20.1",
+    "graphql": "^15.3.0",
     "ramda": "^0.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
