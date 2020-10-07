@@ -24,14 +24,14 @@ module.exports = (webpackConfigEnv) => {
             },
           ],
         },
-        // {
-        //   test: /\.css$/,
-        //   use: [
-        //     {
-        //       loader: 'postcss-loader',
-        //     },
-        //   ],
-        // },
+        {
+          test: /\.css$/,
+          use: [
+            {
+              loader: 'postcss-loader',
+            },
+          ],
+        },
       ],
     },
   });
