@@ -30,7 +30,9 @@
     "lint:css": "stylelint ./src/**/*.css",
     "lint:css:fix": "stylelint ./src/**/*.css --fix",
     "lint": "yarn run lint:ts && yarn run lint:css",
-    "lint:fix": "yarn run lint:ts:fix && yarn run lint:css:fix"
+    "lint:fix": "yarn run lint:ts:fix && yarn run lint:css:fix",
+    "generate:types": "graphql-codegen --config codegen.yml",
+    "generate:types:watch": "graphql-codegen --watch --config codegen.yml"
   },
   "dependencies": {
     "@apollo/client": "^3.2.2",
@@ -46,6 +48,8 @@
   },
   "devDependencies": {
     "@gpn-prototypes/frontend-configs": "^1.2.12",
+    "@graphql-codegen/cli": "1.17.10",
+    "@graphql-codegen/typescript": "1.17.10",
     "@testing-library/jest-dom": "^5.5.0",
     "@testing-library/react": "^10.0.3",
     "@types/jest": "^25.2.1",
@@ -76,7 +80,10 @@
     "webpack-config-single-spa-react-ts": "^1.12.0",
     "webpack-config-single-spa-ts": "^1.12.0",
     "webpack-dev-server": "^3.11.0",
-    "webpack-merge": "^4.2.2"
+    "webpack-merge": "^4.2.2",
+    "@graphql-codegen/typescript-react-apollo": "2.0.7",
+    "@graphql-codegen/typescript-operations": "1.17.8",
+    "@graphql-codegen/introspection": "1.18.0"
   },
   "resolutions": {
     "tslib": "1.13.0"

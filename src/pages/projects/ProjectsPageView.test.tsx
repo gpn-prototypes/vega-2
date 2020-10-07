@@ -2,12 +2,12 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import * as tl from '@testing-library/react';
 
-import { ProjectsPage } from './ProjectsPage';
+import { ProjectsPageView } from './ProjectsPageView';
 
 function renderComponent(): tl.RenderResult {
   return tl.render(
     <Router>
-      <ProjectsPage />
+      <ProjectsPageView />
     </Router>,
   );
 }
