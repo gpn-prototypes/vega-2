@@ -3,7 +3,7 @@ import { Informer } from '@gpn-prototypes/vega-ui';
 
 import { cnProjectForm } from '../cn-form';
 
-type StepProps = {};
+type StepProps = Record<string, unknown>;
 
 export const ParticipantStep: React.FC<StepProps> = () => {
   return (

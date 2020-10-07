@@ -4,7 +4,7 @@ import { Form as VegaForm, TextField } from '@gpn-prototypes/vega-ui';
 
 import { cnDescriptionStep, cnProjectForm } from '../cn-form';
 
-type StepProps = {};
+type StepProps = Record<string, unknown>;
 
 export const DescriptionStep: React.FC<StepProps> = () => {
   return (
