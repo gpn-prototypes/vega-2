@@ -6,13 +6,13 @@ import { AppView } from './AppView';
 import './App.css';
 
 type AppProps = {
-  client: ApolloClient<NormalizedCacheObject>;
+  graphqlClient: ApolloClient<NormalizedCacheObject>;
 };
 
 export const App = (props: AppProps): React.ReactElement => {
-  const { client } = props;
+  const { graphqlClient } = props;
   return (
-    <ApolloProvider client={client}>
+    <ApolloProvider client={graphqlClient}>
       <AppView />
     </ApolloProvider>
   );

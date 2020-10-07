@@ -18,4 +18,4 @@ const client = new ApolloClient({
   }),
 });
 
-ReactDOM.render(<App client={client} />, document.getElementById('root'));
+ReactDOM.render(<App graphqlClient={client} />, document.getElementById('root'));

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { PageBanner } from '@gpn-prototypes/vega-ui';
-import { ProjectForm } from '@vega/ui/features/projects';
+
+import { ProjectForm } from '../../ui/features/projects';
 
 import { cnPage } from './cn-page';
 import { BannerInfoProps } from './types';
