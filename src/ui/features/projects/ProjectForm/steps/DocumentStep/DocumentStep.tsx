@@ -10,9 +10,9 @@ import {
   useSidebar,
 } from '@gpn-prototypes/vega-ui';
 
-import { cnDocumentStep, cnProjectForm } from '../cn-form';
-import { SidebarForm } from '../SidebarForm';
-import { useFileList } from '../use-file-list';
+import { cnDocumentStep, cnProjectForm } from '../../cn-form';
+
+import { SidebarForm, useFileList } from './SidebarForm';
 
 const fileIcons = [FileIconDoc, FileIconXls, FileIconPtt, FileIconPdf, FileIconMp4];
 

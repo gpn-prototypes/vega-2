@@ -10,7 +10,8 @@ import {
   usePortalRender,
 } from '@gpn-prototypes/vega-ui';
 
-import { cnSidebarForm } from './cn-form';
+import { cnSidebarForm } from '../../../cn-form';
+
 import { SidebarItem } from './SidebarItem';
 import { getUploadStatistics } from './utils';
 

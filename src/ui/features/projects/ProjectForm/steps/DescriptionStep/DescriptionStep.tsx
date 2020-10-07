@@ -2,7 +2,7 @@ import React from 'react';
 import { Field } from 'react-final-form';
 import { Form as VegaForm, TextField } from '@gpn-prototypes/vega-ui';
 
-import { cnDescriptionStep, cnProjectForm } from '../cn-form';
+import { cnDescriptionStep, cnProjectForm } from '../../cn-form';
 
 type StepProps = Record<string, unknown>;
 
