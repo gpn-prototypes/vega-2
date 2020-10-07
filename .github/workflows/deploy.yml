@@ -1,4 +1,4 @@
-name: Сборка и деплой VEGA-2
+name: Сборка и деплой VEGA-SP
 on:
   push:
     branches: master
@@ -20,7 +20,7 @@ jobs:
 
       - uses: actions/checkout@v2
         with:
-          path: vega-2
+          path: vega-sp
 
       - uses: actions/setup-node@v1
         with:
@@ -30,14 +30,14 @@ jobs:
       - run: yarn install --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        working-directory: ./vega-2
+        working-directory: ./vega-sp
 
       - run: yarn build
-        working-directory: ./vega-2
+        working-directory: ./vega-sp
 
       - uses: ./actions/deploy-static-site/v1beta1
         with:
-          project-id: vega-2
-          files: ./vega-2/dist
+          project-id: vega-sp
+          files: ./vega-sp/dist
           auth: ${{ secrets.CSSSR_AUTH }}
           token: ${{ secrets.GITHUB_TOKEN }}
