@@ -43,6 +43,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
 
   const [activeStepIndex, setActiveStepIndex] = useState(0);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onSubmit = (values: Partial<FormValues>): void => {
     // Временная заглушка
     history.push('/projects');

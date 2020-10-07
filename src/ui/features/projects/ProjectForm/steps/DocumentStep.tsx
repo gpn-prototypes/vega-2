@@ -16,7 +16,7 @@ import { useFileList } from '../use-file-list';
 
 const fileIcons = [FileIconDoc, FileIconXls, FileIconPtt, FileIconPdf, FileIconMp4];
 
-type StepProps = {};
+type StepProps = Record<string, unknown>;
 
 export const DocumentStep: React.FC<StepProps> = () => {
   const {

@@ -1,7 +1,4 @@
 import * as React from 'react';
-import { useAppContext } from '@vega/platform/app-context';
-
-import { Header } from '../Header';
 
 import { cnLayout } from './cn-layout';
 
@@ -15,10 +12,8 @@ type Props = {
 /* Заголовок может отображать название открытого проекта */
 
 export const PageLayout: React.FC<Props> = (props) => {
-  const { authAPI } = useAppContext();
   return (
     <div className={cnLayout()}>
-      <Header onLogout={authAPI.logout} />
       <div className={cnLayout('Body')}>{props.children}</div>
     </div>
   );
