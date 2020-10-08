@@ -55,7 +55,8 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
         description: data.regionList[0].name?.toString(),
       });
     }
-  }, [data, bannerInfo, setBannerInfo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
 
   const onSubmit = (values: Partial<FormValues>): void => {
     if (!values.name) {

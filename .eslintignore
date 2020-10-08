@@ -1,5 +1,4 @@
 dist
 node_modules
-!.storybook
 e2e-tests/
 src/generated/graphql.tsx

@@ -2,12 +2,7 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Loader, PageBanner } from '@gpn-prototypes/vega-ui';
 
-import { GET_PROJECTS_QUERY } from '../../data/projects';
-import {
-  CreateProjectMutationVariables,
-  GetProjectsQuery,
-  useCreateProjectMutation,
-} from '../../generated/graphql';
+import { CreateProjectMutationVariables, useCreateProjectMutation } from '../../generated/graphql';
 import { ProjectForm } from '../../ui/features/projects';
 
 import { cnPage } from './cn-page';
@@ -23,23 +18,16 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   const [createProject, { data, loading }] = useCreateProjectMutation({
     update(cache, { data: newData }) {
       if (newData?.createProject?.result?.__typename === 'Project') {
-        try {
-          const prev = cache.readQuery({
-            query: GET_PROJECTS_QUERY,
-          }) as GetProjectsQuery;
-
-          if (prev.projectList?.__typename === 'ProjectList' && prev.projectList.projectList) {
-            cache.writeQuery({
-              data: {
-                ...prev,
-                projectList: [...prev.projectList.projectList, newData.createProject?.result],
-              },
-              query: GET_PROJECTS_QUERY,
-            });
-          }
-        } catch {
-          return;
-        }
+        cache.modify({
+          fields: {
+            projectList(existingProjects = { projectList: [] }) {
+              return {
+                ...existingProjects,
+                projectList: [...existingProjects.projectList, newData.createProject?.result],
+              };
+            },
+          },
+        });
       }
     },
   });
