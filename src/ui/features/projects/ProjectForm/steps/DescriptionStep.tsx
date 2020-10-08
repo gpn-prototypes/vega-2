@@ -1,12 +1,19 @@
 import React from 'react';
 import { Field } from 'react-final-form';
 import { Form as VegaForm, TextField } from '@gpn-prototypes/vega-ui';
+import { GetProjectCreateDataQuery } from '@vega/generated/graphql';
 
 import { cnDescriptionStep, cnProjectForm } from '../cn-form';
 
-type StepProps = Record<string, unknown>;
+type StepProps = {
+  data?: GetProjectCreateDataQuery;
+};
 
-export const DescriptionStep: React.FC<StepProps> = () => {
+export const DescriptionStep: React.FC<StepProps> = (props) => {
+  const { data = {} } = props;
+
+  const { regionList, coordinateSystemList } = data;
+
   return (
     <div className={cnProjectForm('Step').mix(cnDescriptionStep())}>
       <VegaForm.Row space="m">
@@ -45,9 +52,10 @@ export const DescriptionStep: React.FC<StepProps> = () => {
                 id="region"
                 size="s"
                 width="full"
+                disabled
                 placeholder="Выберите регион"
                 name={input.name}
-                value={input.value}
+                value={regionList && regionList[0]?.name}
                 onChange={({ e }): void => input.onChange(e)}
                 onBlur={input.onBlur}
                 onFocus={input.onFocus}
@@ -90,10 +98,11 @@ export const DescriptionStep: React.FC<StepProps> = () => {
               <TextField
                 id="coordinates"
                 size="s"
+                disabled
                 width="full"
                 placeholder="Укажите значения и систему координат"
                 name={input.name}
-                value={input.value}
+                value={coordinateSystemList && coordinateSystemList[0]?.name}
                 onChange={({ e }): void => input.onChange(e)}
                 onBlur={input.onBlur}
                 onFocus={input.onFocus}

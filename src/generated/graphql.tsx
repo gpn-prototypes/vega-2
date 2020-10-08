@@ -1,7 +1,6 @@
-/* eslint-disable */
-
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 /** All built-in and custom scalars, mapped to their actual values */
@@ -327,7 +326,6 @@ export type CreateUserGroup = {
   result?: Maybe<UserGroup>;
 };
 
-
 export type DeleteActivity = {
   __typename?: 'DeleteActivity';
   result?: Maybe<Scalars['Boolean']>;
@@ -448,7 +446,6 @@ export type DeleteUserGroup = {
   result?: Maybe<Scalars['Boolean']>;
 };
 
-
 export type Domain = {
   __typename?: 'Domain';
   category?: Maybe<DomainLibraryCategory>;
@@ -524,7 +521,7 @@ export enum ErrorCodes {
   ReferenceItemNotFound = 'REFERENCE_ITEM_NOT_FOUND',
   Error = 'ERROR',
   IncorrectProjectVersion = 'INCORRECT_PROJECT_VERSION',
-  ProjectVersionDiffError = 'PROJECT_VERSION_DIFF_ERROR'
+  ProjectVersionDiffError = 'PROJECT_VERSION_DIFF_ERROR',
 }
 
 export type ErrorInterface = {
@@ -655,7 +652,6 @@ export type Mutation = {
   removeAttendees?: Maybe<RemoveAttendees>;
 };
 
-
 export type MutationCreateProjectLibraryArgs = {
   category?: Maybe<Scalars['UUID']>;
   code?: Maybe<Scalars['String']>;
@@ -668,11 +664,9 @@ export type MutationCreateProjectLibraryArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteProjectLibraryArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateProjectLibraryArgs = {
   category?: Maybe<Scalars['UUID']>;
@@ -686,7 +680,6 @@ export type MutationUpdateProjectLibraryArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationCreateProjectLibraryCategoriesArgs = {
   code?: Maybe<Scalars['String']>;
   isDeleted?: Maybe<Scalars['Boolean']>;
@@ -695,11 +688,9 @@ export type MutationCreateProjectLibraryCategoriesArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteProjectLibraryCategoriesArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateProjectLibraryCategoriesArgs = {
   code?: Maybe<Scalars['String']>;
@@ -708,7 +699,6 @@ export type MutationUpdateProjectLibraryCategoriesArgs = {
   parent?: Maybe<Scalars['UUID']>;
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationCreateDomainArgs = {
   category?: Maybe<Scalars['UUID']>;
@@ -722,11 +712,9 @@ export type MutationCreateDomainArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteDomainArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateDomainArgs = {
   category?: Maybe<Scalars['UUID']>;
@@ -740,7 +728,6 @@ export type MutationUpdateDomainArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationCreateDomainCategoriesArgs = {
   code?: Maybe<Scalars['String']>;
   isDeleted?: Maybe<Scalars['Boolean']>;
@@ -749,11 +736,9 @@ export type MutationCreateDomainCategoriesArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteDomainCategoriesArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateDomainCategoriesArgs = {
   code?: Maybe<Scalars['String']>;
@@ -762,7 +747,6 @@ export type MutationUpdateDomainCategoriesArgs = {
   parent?: Maybe<Scalars['UUID']>;
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationCreateComponentArgs = {
   category?: Maybe<Scalars['UUID']>;
@@ -776,11 +760,9 @@ export type MutationCreateComponentArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteComponentArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateComponentArgs = {
   category?: Maybe<Scalars['UUID']>;
@@ -794,7 +776,6 @@ export type MutationUpdateComponentArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationCreateComponentCategoriesArgs = {
   code?: Maybe<Scalars['String']>;
   isDeleted?: Maybe<Scalars['Boolean']>;
@@ -803,11 +784,9 @@ export type MutationCreateComponentCategoriesArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteComponentCategoriesArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateComponentCategoriesArgs = {
   code?: Maybe<Scalars['String']>;
@@ -816,7 +795,6 @@ export type MutationUpdateComponentCategoriesArgs = {
   parent?: Maybe<Scalars['UUID']>;
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationCreateAssemblyArgs = {
   category?: Maybe<Scalars['UUID']>;
@@ -830,11 +808,9 @@ export type MutationCreateAssemblyArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteAssemblyArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateAssemblyArgs = {
   category?: Maybe<Scalars['UUID']>;
@@ -848,7 +824,6 @@ export type MutationUpdateAssemblyArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationCreateAssemblyCategoriesArgs = {
   code?: Maybe<Scalars['String']>;
   isDeleted?: Maybe<Scalars['Boolean']>;
@@ -857,11 +832,9 @@ export type MutationCreateAssemblyCategoriesArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteAssemblyCategoriesArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateAssemblyCategoriesArgs = {
   code?: Maybe<Scalars['String']>;
@@ -870,7 +843,6 @@ export type MutationUpdateAssemblyCategoriesArgs = {
   parent?: Maybe<Scalars['UUID']>;
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationCreateActivityArgs = {
   category?: Maybe<Scalars['UUID']>;
@@ -884,11 +856,9 @@ export type MutationCreateActivityArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteActivityArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateActivityArgs = {
   category?: Maybe<Scalars['UUID']>;
@@ -902,7 +872,6 @@ export type MutationUpdateActivityArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationCreateActivityCategoriesArgs = {
   code?: Maybe<Scalars['String']>;
   isDeleted?: Maybe<Scalars['Boolean']>;
@@ -911,11 +880,9 @@ export type MutationCreateActivityCategoriesArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteActivityCategoriesArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateActivityCategoriesArgs = {
   code?: Maybe<Scalars['String']>;
@@ -924,7 +891,6 @@ export type MutationUpdateActivityCategoriesArgs = {
   parent?: Maybe<Scalars['UUID']>;
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationCreateDomainTemplateArgs = {
   attributes?: Maybe<Array<Maybe<PropertyMetaInputType>>>;
@@ -940,11 +906,9 @@ export type MutationCreateDomainTemplateArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteDomainTemplateArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateDomainTemplateArgs = {
   attributes?: Maybe<Array<Maybe<PropertyMetaInputType>>>;
@@ -960,7 +924,6 @@ export type MutationUpdateDomainTemplateArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationCreateDomainTemplateCategoriesArgs = {
   code?: Maybe<Scalars['String']>;
   isDeleted?: Maybe<Scalars['Boolean']>;
@@ -969,11 +932,9 @@ export type MutationCreateDomainTemplateCategoriesArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteDomainTemplateCategoriesArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateDomainTemplateCategoriesArgs = {
   code?: Maybe<Scalars['String']>;
@@ -982,7 +943,6 @@ export type MutationUpdateDomainTemplateCategoriesArgs = {
   parent?: Maybe<Scalars['UUID']>;
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationCreateUserArgs = {
   adId?: Maybe<Scalars['String']>;
@@ -1001,11 +961,9 @@ export type MutationCreateUserArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteUserArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateUserArgs = {
   adId?: Maybe<Scalars['String']>;
@@ -1024,7 +982,6 @@ export type MutationUpdateUserArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationCreateProjectRoleArgs = {
   code?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -1035,11 +992,9 @@ export type MutationCreateProjectRoleArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteProjectRoleArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateProjectRoleArgs = {
   code?: Maybe<Scalars['String']>;
@@ -1051,7 +1006,6 @@ export type MutationUpdateProjectRoleArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationCreateAttachmentTypeArgs = {
   code?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -1061,11 +1015,9 @@ export type MutationCreateAttachmentTypeArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteAttachmentTypeArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateAttachmentTypeArgs = {
   code?: Maybe<Scalars['String']>;
@@ -1076,7 +1028,6 @@ export type MutationUpdateAttachmentTypeArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationCreateUserGroupArgs = {
   code?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -1086,11 +1037,9 @@ export type MutationCreateUserGroupArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteUserGroupArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateUserGroupArgs = {
   code?: Maybe<Scalars['String']>;
@@ -1101,7 +1050,6 @@ export type MutationUpdateUserGroupArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationCreateOrganizationArgs = {
   code?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -1111,11 +1059,9 @@ export type MutationCreateOrganizationArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteOrganizationArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateOrganizationArgs = {
   code?: Maybe<Scalars['String']>;
@@ -1126,7 +1072,6 @@ export type MutationUpdateOrganizationArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationCreateCountryArgs = {
   code?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -1136,11 +1081,9 @@ export type MutationCreateCountryArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteCountryArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateCountryArgs = {
   code?: Maybe<Scalars['String']>;
@@ -1150,7 +1093,6 @@ export type MutationUpdateCountryArgs = {
   name?: Maybe<Scalars['String']>;
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationCreateRegionArgs = {
   code?: Maybe<Scalars['String']>;
@@ -1163,11 +1105,9 @@ export type MutationCreateRegionArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteRegionArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateRegionArgs = {
   code?: Maybe<Scalars['String']>;
@@ -1180,7 +1120,6 @@ export type MutationUpdateRegionArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationCreateCoordinateSystemArgs = {
   code?: Maybe<Scalars['String']>;
   coordsNumber?: Maybe<Scalars['Int']>;
@@ -1191,11 +1130,9 @@ export type MutationCreateCoordinateSystemArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteCoordinateSystemArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateCoordinateSystemArgs = {
   code?: Maybe<Scalars['String']>;
@@ -1206,7 +1143,6 @@ export type MutationUpdateCoordinateSystemArgs = {
   name?: Maybe<Scalars['String']>;
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationCreateAttachmentArgs = {
   category?: Maybe<Scalars['UUID']>;
@@ -1225,11 +1161,9 @@ export type MutationCreateAttachmentArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteAttachmentArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateAttachmentArgs = {
   category?: Maybe<Scalars['UUID']>;
@@ -1248,7 +1182,6 @@ export type MutationUpdateAttachmentArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationCreateProjectFileArgs = {
   category?: Maybe<Scalars['String']>;
   code?: Maybe<Scalars['String']>;
@@ -1263,11 +1196,9 @@ export type MutationCreateProjectFileArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteProjectFileArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateProjectFileArgs = {
   category?: Maybe<Scalars['String']>;
@@ -1283,7 +1214,6 @@ export type MutationUpdateProjectFileArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationCreateDomainEntityArgs = {
   code?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
@@ -1293,11 +1223,9 @@ export type MutationCreateDomainEntityArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationDeleteDomainEntityArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateDomainEntityArgs = {
   code?: Maybe<Scalars['String']>;
@@ -1308,28 +1236,23 @@ export type MutationUpdateDomainEntityArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationCreateProjectArgs = {
   data?: Maybe<ProjectInputType>;
 };
 
-
 export type MutationDeleteProjectArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type MutationUpdateProjectArgs = {
   data?: Maybe<ProjectUpdateType>;
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type MutationAddAttendeesArgs = {
   attendees: Array<Maybe<AttendeeInputType>>;
   projectId: Scalars['UUID'];
 };
-
 
 export type MutationRemoveAttendeesArgs = {
   attendees: Array<Maybe<Scalars['UUID']>>;
@@ -1505,7 +1428,7 @@ export enum ProjectStatus {
   InProgress = 'IN_PROGRESS',
   Completed = 'COMPLETED',
   Paused = 'PAUSED',
-  Removed = 'REMOVED'
+  Removed = 'REMOVED',
 }
 
 export type ProjectUpdateType = {
@@ -1599,121 +1522,97 @@ export type Query = {
   me?: Maybe<User>;
 };
 
-
 export type QueryProjectLibraryArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type QueryProjectLibraryCategoriesArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type QueryDomainArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type QueryDomainCategoriesArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type QueryComponentArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type QueryComponentCategoriesArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type QueryAssemblyArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type QueryAssemblyCategoriesArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type QueryActivityArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type QueryActivityCategoriesArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type QueryDomainTemplateArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type QueryDomainTemplateCategoriesArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type QueryUserArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type QueryProjectRoleArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type QueryAttachmentTypeArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type QueryUserGroupArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type QueryOrganizationArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type QueryCountryArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type QueryRegionArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type QueryCoordinateSystemArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type QueryAttachmentArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type QueryProjectFileArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
 
-
 export type QueryDomainEntityArgs = {
   vid?: Maybe<Scalars['UUID']>;
 };
-
 
 export type QueryProjectArgs = {
   vid?: Maybe<Scalars['UUID']>;
@@ -1753,7 +1652,6 @@ export type SingleValue = {
   type?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['Float']>;
 };
-
 
 export type UpdateActivity = {
   __typename?: 'UpdateActivity';
@@ -1924,74 +1822,193 @@ export type YearValue = {
   type?: Maybe<Scalars['String']>;
 };
 
-export type GetProjectsQueryVariables = Exact<{ [key: string]: never; }>;
+export type CoordinateSystemsFragment = { __typename?: 'CoordinateSystem' } & Pick<
+  CoordinateSystem,
+  'name' | 'vid'
+>;
 
+export type ProjectDataFragment = { __typename?: 'Project' } & Pick<
+  Project,
+  'vid' | 'name' | 'editedAt' | 'createdAt'
+> & {
+    attendees?: Maybe<
+      Array<
+        Maybe<
+          { __typename?: 'Attendee' } & {
+            user?: Maybe<{ __typename?: 'User' } & Pick<User, 'role'>>;
+            roles?: Maybe<Array<Maybe<{ __typename?: 'ProjectRole' } & Pick<ProjectRole, 'name'>>>>;
+          }
+        >
+      >
+    >;
+    region?: Maybe<{ __typename?: 'Region' } & Pick<Region, 'name'>>;
+    createdBy?: Maybe<{ __typename?: 'User' } & Pick<User, 'name' | 'vid'>>;
+  };
 
-export type GetProjectsQuery = (
-  { __typename?: 'Query' }
-  & { projectList?: Maybe<(
-    { __typename?: 'ProjectList' }
-    & { projectList?: Maybe<Array<Maybe<(
-      { __typename?: 'Project' }
-      & Pick<Project, 'vid' | 'name' | 'editedAt' | 'createdAt'>
-      & { attendees?: Maybe<Array<Maybe<(
-        { __typename?: 'Attendee' }
-        & { user?: Maybe<(
-          { __typename?: 'User' }
-          & Pick<User, 'role'>
-        )>, roles?: Maybe<Array<Maybe<(
-          { __typename?: 'ProjectRole' }
-          & Pick<ProjectRole, 'name'>
-        )>>> }
-      )>>>, region?: Maybe<(
-        { __typename?: 'Region' }
-        & Pick<Region, 'name'>
-      )>, createdBy?: Maybe<(
-        { __typename?: 'User' }
-        & Pick<User, 'name' | 'vid'>
-      )> }
-    )>>> }
-  ) | (
-    { __typename?: 'Error' }
-    & Pick<Error, 'code' | 'message' | 'details'>
-  )> }
-);
+export type CreateProjectMutationVariables = Exact<{
+  name: Scalars['String'];
+  type?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  region?: Maybe<Scalars['ID']>;
+  coordinateSystem?: Maybe<Scalars['ID']>;
+}>;
 
+export type CreateProjectMutation = { __typename?: 'Mutation' } & {
+  createProject?: Maybe<
+    { __typename?: 'CreateProject' } & {
+      result?: Maybe<
+        | ({ __typename?: 'Project' } & ProjectDataFragment)
+        | ({ __typename?: 'Error' } & Pick<Error, 'code' | 'details' | 'payload'>)
+      >;
+    }
+  >;
+};
 
-export const GetProjectsDocument = gql`
-    query getProjects {
-  projectList {
-    ... on ProjectList {
-      projectList {
-        vid
+export type GetProjectsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetProjectsQuery = { __typename?: 'Query' } & {
+  projectList?: Maybe<
+    | ({ __typename?: 'ProjectList' } & {
+        projectList?: Maybe<Array<Maybe<{ __typename?: 'Project' } & ProjectDataFragment>>>;
+      })
+    | ({ __typename?: 'Error' } & Pick<Error, 'code' | 'message' | 'details'>)
+  >;
+};
+
+export type GetProjectCreateDataQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetProjectCreateDataQuery = { __typename?: 'Query' } & {
+  regionList?: Maybe<Array<Maybe<{ __typename?: 'Region' } & RegionsFragment>>>;
+  coordinateSystemList?: Maybe<
+    Array<Maybe<{ __typename?: 'CoordinateSystem' } & CoordinateSystemsFragment>>
+  >;
+};
+
+export type RegionsFragment = { __typename?: 'Region' } & Pick<Region, 'name' | 'vid'>;
+
+export const CoordinateSystemsFragmentDoc = gql`
+  fragment CoordinateSystems on CoordinateSystem {
+    name
+    vid
+  }
+`;
+export const ProjectDataFragmentDoc = gql`
+  fragment ProjectData on Project {
+    vid
+    name
+    attendees {
+      user {
+        role
+      }
+      roles {
         name
-        attendees {
-          user {
-            role
-          }
-          roles {
-            name
-          }
+      }
+    }
+    region {
+      name
+    }
+    editedAt
+    createdAt
+    createdBy {
+      name
+      vid
+    }
+  }
+`;
+export const RegionsFragmentDoc = gql`
+  fragment Regions on Region {
+    name
+    vid
+  }
+`;
+export const CreateProjectDocument = gql`
+  mutation CreateProject(
+    $name: String!
+    $type: String
+    $description: String
+    $region: ID
+    $coordinateSystem: ID
+  ) {
+    createProject(
+      data: {
+        name: $name
+        region: $region
+        type: $type
+        description: $description
+        coordinateSystem: $coordinateSystem
+      }
+    ) {
+      result {
+        ... on Project {
+          ...ProjectData
         }
-        region {
-          name
-        }
-        editedAt
-        createdAt
-        createdBy {
-          name
-          vid
+        ... on Error {
+          code
+          details
+          payload
         }
       }
     }
-    ... on Error {
-      code
-      message
-      details
+  }
+  ${ProjectDataFragmentDoc}
+`;
+export type CreateProjectMutationFn = Apollo.MutationFunction<
+  CreateProjectMutation,
+  CreateProjectMutationVariables
+>;
+
+/**
+ * __useCreateProjectMutation__
+ *
+ * To run a mutation, you first call `useCreateProjectMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateProjectMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createProjectMutation, { data, loading, error }] = useCreateProjectMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      type: // value for 'type'
+ *      description: // value for 'description'
+ *      region: // value for 'region'
+ *      coordinateSystem: // value for 'coordinateSystem'
+ *   },
+ * });
+ */
+export function useCreateProjectMutation(
+  baseOptions?: Apollo.MutationHookOptions<CreateProjectMutation, CreateProjectMutationVariables>,
+) {
+  return Apollo.useMutation<CreateProjectMutation, CreateProjectMutationVariables>(
+    CreateProjectDocument,
+    baseOptions,
+  );
+}
+export type CreateProjectMutationHookResult = ReturnType<typeof useCreateProjectMutation>;
+export type CreateProjectMutationResult = Apollo.MutationResult<CreateProjectMutation>;
+export type CreateProjectMutationOptions = Apollo.BaseMutationOptions<
+  CreateProjectMutation,
+  CreateProjectMutationVariables
+>;
+export const GetProjectsDocument = gql`
+  query GetProjects {
+    projectList {
+      ... on ProjectList {
+        projectList {
+          ...ProjectData
+        }
+      }
+      ... on Error {
+        code
+        message
+        details
+      }
     }
   }
-}
-    `;
+  ${ProjectDataFragmentDoc}
+`;
 
 /**
  * __useGetProjectsQuery__
@@ -2008,14 +2025,83 @@ export const GetProjectsDocument = gql`
  *   },
  * });
  */
-export function useGetProjectsQuery(baseOptions?: Apollo.QueryHookOptions<GetProjectsQuery, GetProjectsQueryVariables>) {
-        return Apollo.useQuery<GetProjectsQuery, GetProjectsQueryVariables>(GetProjectsDocument, baseOptions);
-      }
-export function useGetProjectsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetProjectsQuery, GetProjectsQueryVariables>) {
-          return Apollo.useLazyQuery<GetProjectsQuery, GetProjectsQueryVariables>(GetProjectsDocument, baseOptions);
-        }
+export function useGetProjectsQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetProjectsQuery, GetProjectsQueryVariables>,
+) {
+  return Apollo.useQuery<GetProjectsQuery, GetProjectsQueryVariables>(
+    GetProjectsDocument,
+    baseOptions,
+  );
+}
+export function useGetProjectsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetProjectsQuery, GetProjectsQueryVariables>,
+) {
+  return Apollo.useLazyQuery<GetProjectsQuery, GetProjectsQueryVariables>(
+    GetProjectsDocument,
+    baseOptions,
+  );
+}
 export type GetProjectsQueryHookResult = ReturnType<typeof useGetProjectsQuery>;
 export type GetProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectsLazyQuery>;
-export type GetProjectsQueryResult = Apollo.QueryResult<GetProjectsQuery, GetProjectsQueryVariables>;
+export type GetProjectsQueryResult = Apollo.QueryResult<
+  GetProjectsQuery,
+  GetProjectsQueryVariables
+>;
+export const GetProjectCreateDataDocument = gql`
+  query GetProjectCreateData {
+    regionList {
+      ...Regions
+    }
+    coordinateSystemList {
+      ...CoordinateSystems
+    }
+  }
+  ${RegionsFragmentDoc}
+  ${CoordinateSystemsFragmentDoc}
+`;
 
-/* eslint-enable */
+/**
+ * __useGetProjectCreateDataQuery__
+ *
+ * To run a query within a React component, call `useGetProjectCreateDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectCreateDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectCreateDataQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetProjectCreateDataQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetProjectCreateDataQuery,
+    GetProjectCreateDataQueryVariables
+  >,
+) {
+  return Apollo.useQuery<GetProjectCreateDataQuery, GetProjectCreateDataQueryVariables>(
+    GetProjectCreateDataDocument,
+    baseOptions,
+  );
+}
+export function useGetProjectCreateDataLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetProjectCreateDataQuery,
+    GetProjectCreateDataQueryVariables
+  >,
+) {
+  return Apollo.useLazyQuery<GetProjectCreateDataQuery, GetProjectCreateDataQueryVariables>(
+    GetProjectCreateDataDocument,
+    baseOptions,
+  );
+}
+export type GetProjectCreateDataQueryHookResult = ReturnType<typeof useGetProjectCreateDataQuery>;
+export type GetProjectCreateDataLazyQueryHookResult = ReturnType<
+  typeof useGetProjectCreateDataLazyQuery
+>;
+export type GetProjectCreateDataQueryResult = Apollo.QueryResult<
+  GetProjectCreateDataQuery,
+  GetProjectCreateDataQueryVariables
+>;
