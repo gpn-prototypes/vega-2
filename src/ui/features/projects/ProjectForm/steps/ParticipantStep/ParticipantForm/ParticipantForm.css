@@ -1,0 +1,18 @@
+.ParticipantForm {
+  width: 480px;
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+
+    width: 100%;
+  }
+
+  &__footerItem {
+    margin-right: var(--space-s);
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
