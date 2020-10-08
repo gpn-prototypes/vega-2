@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Form, FormSpy } from 'react-final-form';
-import { Redirect, useHistory } from 'react-router-dom';
 import {
   Button,
   Form as VegaForm,
@@ -56,7 +55,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
         description: data.regionList[0].name?.toString(),
       });
     }
-  }, [data]);
+  }, [data, bannerInfo, setBannerInfo]);
 
   const onSubmit = (values: Partial<FormValues>): void => {
     if (!values.name) {

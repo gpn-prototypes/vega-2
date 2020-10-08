@@ -23,18 +23,22 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   const [createProject, { data, loading }] = useCreateProjectMutation({
     update(cache, { data: newData }) {
       if (newData?.createProject?.result?.__typename === 'Project') {
-        const prev = cache.readQuery({
-          query: GET_PROJECTS_QUERY,
-        }) as GetProjectsQuery;
-
-        if (prev.projectList?.__typename === 'ProjectList' && prev.projectList.projectList) {
-          cache.writeQuery({
-            data: {
-              ...prev,
-              projectList: [...prev.projectList.projectList, newData.createProject?.result],
-            },
+        try {
+          const prev = cache.readQuery({
             query: GET_PROJECTS_QUERY,
-          });
+          }) as GetProjectsQuery;
+
+          if (prev.projectList?.__typename === 'ProjectList' && prev.projectList.projectList) {
+            cache.writeQuery({
+              data: {
+                ...prev,
+                projectList: [...prev.projectList.projectList, newData.createProject?.result],
+              },
+              query: GET_PROJECTS_QUERY,
+            });
+          }
+        } catch {
+          return;
         }
       }
     },

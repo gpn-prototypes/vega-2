@@ -11,6 +11,7 @@ type AppProps = {
 
 export const App = (props: AppProps): React.ReactElement => {
   const { graphqlClient } = props;
+
   return (
     <ApolloProvider client={graphqlClient}>
       <AppView />
