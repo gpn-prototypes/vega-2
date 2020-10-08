@@ -1,0 +1,20 @@
+.ParticipantStep {
+  &__table {
+    width: 768px;
+  }
+
+  &__footer {
+    margin-top: var(--space-xl);
+
+    display: flex;
+  }
+
+  &__rowName {
+    display: flex;
+    align-items: center;
+  }
+
+  &__rowAvatar {
+    margin-right: var(--space-s);
+  }
+}
