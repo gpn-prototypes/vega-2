@@ -1,16 +1,18 @@
 import React from 'react';
 import { Field } from 'react-final-form';
-import { Form as VegaForm, TextField } from '@gpn-prototypes/vega-ui';
+import { Form as VegaForm, TextField as VegaTextField } from '@gpn-prototypes/vega-ui';
 import { GetProjectCreateDataQuery } from '@vega/generated/graphql';
 
+import { TextField } from '../../../../core';
 import { cnDescriptionStep, cnProjectForm } from '../cn-form';
 
-type StepProps = {
+export type StepProps = {
   data?: GetProjectCreateDataQuery;
+  hasSubmitAttempt?: boolean;
 };
 
 export const DescriptionStep: React.FC<StepProps> = (props) => {
-  const { data = {} } = props;
+  const { data = {}, hasSubmitAttempt } = props;
 
   const { regionList, coordinateSystemList } = data;
 
@@ -21,22 +23,14 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           <VegaForm.Label htmlFor="name" space="2xs">
             Название проекта
           </VegaForm.Label>
-          <Field
+          <TextField
             name="name"
-            render={({ input }): React.ReactNode => (
-              <TextField
-                id="name"
-                size="s"
-                width="full"
-                placeholder="Придумайте название проекта"
-                name={input.name}
-                value={input.value}
-                /* onChange из TextField возвращает не стандартный формат: e, id, name, value  */
-                onChange={({ e }): void => input.onChange(e)}
-                onBlur={input.onBlur}
-                onFocus={input.onFocus}
-              />
-            )}
+            id="name"
+            size="s"
+            width="full"
+            placeholder="Придумайте название проекта"
+            validateOnTouched
+            permanentValidation={hasSubmitAttempt}
           />
         </VegaForm.Field>
       </VegaForm.Row>
@@ -48,7 +42,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           <Field
             name="region"
             render={({ input }): React.ReactNode => (
-              <TextField
+              <VegaTextField
                 id="region"
                 size="s"
                 width="full"
@@ -72,7 +66,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           <Field
             name="type"
             render={({ input }): React.ReactNode => (
-              <TextField
+              <VegaTextField
                 id="type"
                 size="s"
                 width="full"
@@ -95,7 +89,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           <Field
             name="coordinates"
             render={({ input }): React.ReactNode => (
-              <TextField
+              <VegaTextField
                 id="coordinates"
                 size="s"
                 disabled
@@ -119,7 +113,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           <Field
             name="description"
             render={({ input }): React.ReactNode => (
-              <TextField
+              <VegaTextField
                 id="description"
                 type="textarea"
                 minRows={3}

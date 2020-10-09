@@ -11,6 +11,7 @@ type FinalFormFieldProps = Pick<FieldProps<string, FieldRenderProps<string>>, 'v
 interface TextFieldProps extends VegaTextFieldProps, FinalFormFieldProps {
   name: string;
   validateOnTouched?: boolean;
+  permanentValidation?: boolean;
 }
 
 type TextFieldState = React.ComponentProps<typeof VegaTextField>['state'];
@@ -18,12 +19,12 @@ type TextFieldState = React.ComponentProps<typeof VegaTextField>['state'];
 type TextFieldMeta = FieldMetaState<string>;
 
 export const TextField: React.FC<TextFieldProps> = (props) => {
-  const { validateOnTouched = false, ...restProps } = props;
+  const { validateOnTouched = false, permanentValidation, ...restProps } = props;
 
   const getFieldState = (meta: TextFieldMeta): TextFieldState => {
     const { error, touched, submitFailed } = meta;
     if (error) {
-      if ((validateOnTouched && touched) || submitFailed) {
+      if ((validateOnTouched && touched) || submitFailed || permanentValidation) {
         return 'alert';
       }
     }

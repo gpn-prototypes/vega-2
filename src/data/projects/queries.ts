@@ -11,7 +11,7 @@ export const GET_PROJECTS_QUERY = gql`
     projectList {
       ... on ProjectList {
         projectList {
-          ...ProjectData
+          ...projectFragment
         }
       }
       ... on Error {
@@ -28,10 +28,10 @@ export const GET_PROJECT_CREATE_DATA_QUERY = gql`
   ${COORDINATE_SYSTEMS_DATA_FRAGMENT}
   query GetProjectCreateData {
     regionList {
-      ...Regions
+      ...regionFragment
     }
     coordinateSystemList {
-      ...CoordinateSystems
+      ...coordinateSystemFragment
     }
   }
 `;

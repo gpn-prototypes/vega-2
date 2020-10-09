@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Loader, PageBanner } from '@gpn-prototypes/vega-ui';
 
-import { CreateProjectMutationVariables, useCreateProjectMutation } from '../../generated/graphql';
+import {
+  CreateProjectMutationVariables,
+  useCreateProjectMutation,
+  useGetProjectCreateDataQuery,
+} from '../../generated/graphql';
 import { ProjectForm } from '../../ui/features/projects';
 
 import { cnPage } from './cn-page';
@@ -14,6 +18,7 @@ type PageProps = Record<string, unknown>;
 
 export const CreateProjectPage: React.FC<PageProps> = () => {
   const [bannerInfo, setBannerInfo] = useState<BannerInfoProps>({});
+  const projectCreateData = useGetProjectCreateDataQuery();
 
   const [createProject, { data, loading }] = useCreateProjectMutation({
     update(cache, { data: newData }) {
@@ -50,6 +55,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     <div className={cnPage()}>
       <PageBanner title={title} description={description} />
       <ProjectForm
+        projectCreateData={projectCreateData}
         onSubmit={handleSubmitForm}
         bannerInfo={bannerInfo}
         setBannerInfo={setBannerInfo}

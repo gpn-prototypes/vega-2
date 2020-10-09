@@ -11,13 +11,14 @@ import {
 
 import {
   CreateProjectMutationVariables,
-  useGetProjectCreateDataQuery,
+  GetProjectCreateDataQueryHookResult,
 } from '../../../../generated/graphql';
 import { DataLayout } from '../../../../layouts/DataLayout';
 import { BannerInfoProps } from '../../../../pages/create-project/types';
+import { createValidate, validators } from '../../../forms/validation';
 
 import { cnProjectForm } from './cn-form';
-import { DescriptionStep, DocumentStep, ParticipantStep } from './steps';
+import { DescriptionStep, DocumentStep, ParticipantStep, StepProps } from './steps';
 
 import './ProjectForm.css';
 
@@ -25,6 +26,7 @@ type FormProps = {
   bannerInfo: BannerInfoProps;
   setBannerInfo: React.Dispatch<React.SetStateAction<BannerInfoProps>>;
   onSubmit: (values: CreateProjectMutationVariables) => void;
+  projectCreateData: GetProjectCreateDataQueryHookResult;
 };
 
 export type FormValues = {
@@ -35,18 +37,40 @@ export type FormValues = {
   description: string;
 };
 
-const steps = [
-  { title: 'Описание проекта', content: DescriptionStep },
-  { title: 'Участники', content: ParticipantStep },
-  { title: 'Связанные документы и файлы', content: DocumentStep },
+type Step = {
+  title: string;
+  content: React.FC<StepProps>;
+  fields: string[];
+};
+
+const steps: Step[] = [
+  {
+    title: 'Описание проекта',
+    content: DescriptionStep,
+    fields: ['name', 'description', 'type', 'coordinateSystem', 'region'],
+  },
+  { title: 'Участники', content: ParticipantStep, fields: [] },
+  { title: 'Связанные документы и файлы', content: DocumentStep, fields: [] },
 ];
 
-export const ProjectForm: React.FC<FormProps> = (formProps) => {
-  const { bannerInfo, setBannerInfo, onSubmit: onSubmitForm } = formProps;
+const validator = createValidate<Partial<FormValues>>({
+  name: [validators.required()],
+});
 
-  const { loading, data, error } = useGetProjectCreateDataQuery();
+export const ProjectForm: React.FC<FormProps> = (formProps) => {
+  const { bannerInfo, setBannerInfo, onSubmit: onSubmitForm, projectCreateData } = formProps;
+
+  const { loading, data, error } = projectCreateData;
+
+  const [hasSubmitAttempt, setSubmitAttempt] = useState(false);
 
   const [activeStepIndex, setActiveStepIndex] = useState(0);
+
+  const validate = (values: FormValues): ReturnType<typeof validator> => {
+    const errors = validator(values);
+
+    return errors;
+  };
 
   useEffect(() => {
     if (data?.regionList && data.regionList[0]) {
@@ -59,11 +83,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
   }, [data]);
 
   const onSubmit = (values: Partial<FormValues>): void => {
-    if (!values.name) {
-      return;
-    }
-
-    if (data?.coordinateSystemList && data.regionList) {
+    if (data?.coordinateSystemList && data.regionList && values.name) {
       onSubmitForm({
         name: values.name,
         description: values.description,
@@ -71,6 +91,18 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
         coordinateSystem: data.coordinateSystemList[0]?.vid,
         region: data.regionList[0]?.vid,
       });
+    }
+  };
+
+  const handleClickOnSubmit = (values: FormValues): void => {
+    const errors = validate(values);
+    const errorStepIndex = steps.findIndex((step) => {
+      return Object.keys(errors).some((key) => step.fields.includes(key));
+    });
+
+    if (errorStepIndex !== -1) {
+      setActiveStepIndex(errorStepIndex);
+      setSubmitAttempt(true);
     }
   };
 
@@ -89,9 +121,10 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
   return (
     <DataLayout data={data} error={error} loading={loading}>
       <Form
+        validate={validate}
         onSubmit={onSubmit}
-        render={({ handleSubmit }): React.ReactNode => (
-          <VegaForm onSubmit={handleSubmit} className={cnProjectForm()}>
+        render={({ handleSubmit, values: formValues }): React.ReactNode => (
+          <VegaForm noValidate onSubmit={handleSubmit} className={cnProjectForm()}>
             <div className={cnProjectForm('Content')}>
               <NavigationList className={cnProjectForm('Navigation')} ordered>
                 {steps.map(({ title }, index) => (
@@ -108,7 +141,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
                   </NavigationList.Item>
                 ))}
               </NavigationList>
-              <Step data={data} />
+              <Step data={data} hasSubmitAttempt={hasSubmitAttempt} />
             </div>
             <PageFooter className={cnProjectForm('Footer')}>
               <Button size="s" view="ghost" label="Отмена" type="button" />
@@ -140,6 +173,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
                     view="primary"
                     label="Создать проект"
                     type="submit"
+                    onClick={(): void => handleClickOnSubmit(formValues)}
                     className={cnProjectForm('Footer-rightmost-button').toString()}
                   />
                 )}
