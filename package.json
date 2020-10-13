@@ -40,6 +40,7 @@
     "bem-cn": "^3.0.1",
     "final-form": "^4.20.1",
     "graphql": "^15.3.0",
+    "jsondiffpatch": "^0.4.1",
     "ramda": "^0.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -49,7 +50,10 @@
   "devDependencies": {
     "@gpn-prototypes/frontend-configs": "^1.2.12",
     "@graphql-codegen/cli": "1.17.10",
+    "@graphql-codegen/introspection": "1.18.0",
     "@graphql-codegen/typescript": "1.17.10",
+    "@graphql-codegen/typescript-operations": "1.17.8",
+    "@graphql-codegen/typescript-react-apollo": "2.0.7",
     "@testing-library/jest-dom": "^5.5.0",
     "@testing-library/react": "^10.0.3",
     "@types/jest": "^25.2.1",
@@ -60,6 +64,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/single-spa-react": "^2.12.0",
     "babel-loader": "^8.1.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "commitizen": "^4.1.2",
     "cross-env": "^7.0.2",
     "cz-customizable": "^6.2.0",
@@ -80,10 +85,7 @@
     "webpack-config-single-spa-react-ts": "^1.12.0",
     "webpack-config-single-spa-ts": "^1.12.0",
     "webpack-dev-server": "^3.11.0",
-    "webpack-merge": "^4.2.2",
-    "@graphql-codegen/typescript-react-apollo": "2.0.7",
-    "@graphql-codegen/typescript-operations": "1.17.8",
-    "@graphql-codegen/introspection": "1.18.0"
+    "webpack-merge": "^4.2.2"
   },
   "resolutions": {
     "tslib": "1.13.0"
