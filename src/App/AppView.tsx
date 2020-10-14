@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 import { Root as VegaRoot } from '@gpn-prototypes/vega-ui';
 
 import { PageLayout } from '../layouts/PageLayout';
@@ -22,14 +22,7 @@ export const AppView = (): React.ReactElement => {
             <CreateProjectPage />
           </PageLayout>
         </Route>
-        <Route exact path="/">
-          <PageLayout>{/* insert your code here */}</PageLayout>
-        </Route>
-        <Route path="*">
-          <PageLayout>
-            <div>404</div>
-          </PageLayout>
-        </Route>
+        <Redirect to="/projects" />
       </Switch>
     </Router>
   );
