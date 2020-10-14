@@ -17,12 +17,4 @@ module.exports = {
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': ['error'],
   },
-  settings: {
-    'import/resolver': {
-      alias: {
-        map: [['@vega', './src/']],
-        extensions: ['.ts', '.tsx', '.json'],
-      },
-    },
-  },
 };
