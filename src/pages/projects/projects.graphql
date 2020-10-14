@@ -1,0 +1,29 @@
+query GetProjects {
+  projects: projectList {
+    ... on ProjectList {
+      data: projectList {
+        vid
+        name
+        attendees {
+          roles {
+            name
+          }
+        }
+        region {
+          name
+        }
+        editedAt
+        createdAt
+        createdBy {
+          name
+          vid
+        }
+      }
+    }
+    ... on Error {
+      code
+      message
+      details
+    }
+  }
+}
