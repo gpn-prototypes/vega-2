@@ -1,5 +1,6 @@
 const webpackMerge = require('webpack-merge');
 const singleSpaDefaults = require('webpack-config-single-spa-react-ts');
+const ImportMapPlugin = require('webpack-import-map-plugin');
 const { getAppConfig } = require('./app-config');
 
 const { projectName } = getAppConfig();
@@ -34,5 +35,21 @@ module.exports = (webpackConfigEnv) => {
         },
       ],
     },
+    plugins: [
+      new ImportMapPlugin({
+        fileName: 'import-map.json',
+        baseUrl: process.env.BASE_URL,
+        filter(x) {
+          return ['main.js'].includes(x.name);
+        },
+        transformKeys(filename) {
+          if (filename === 'main.js') {
+            return `@vega/${projectName}`;
+          }
+
+          return undefined;
+        },
+      }),
+    ],
   });
 };
