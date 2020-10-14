@@ -1,8 +1,8 @@
 {
   "name": "vega-sp",
   "version": "0.0.1",
-  "description": "Проект VEGA 2.0",
-  "repository": "git@github.com:gpn-prototypes/vega-2.git",
+  "description": "Проект VEGA расчётная платформа",
+  "repository": "git@github.com:gpn-prototypes/vega-sp.git",
   "author": "csssr",
   "license": "UNLICENSED",
   "engines": {
@@ -18,9 +18,9 @@
     }
   },
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --progress",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --mode development",
-    "dev:shell": "cross-env NODE_ENV=development webpack-dev-server --open --mode development --port 9003 --config ./webpack.forShellConfig.js",
+    "build": "yarn generate:types && cross-env NODE_ENV=production webpack --progress --config ./webpack.forShellConfig.js",
+    "dev": "yarn generate:types && cross-env NODE_ENV=development webpack-dev-server --mode development",
+    "dev:shell": "cross-env NODE_ENV=development webpack-dev-server --mode development --port 9003 --config ./webpack.forShellConfig.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "format": "prettier --write '{src,types,scripts}/**/*.{json,{j,t}s{,x},css,}'",
@@ -83,7 +83,8 @@
     "webpack-merge": "^4.2.2",
     "@graphql-codegen/typescript-react-apollo": "2.0.7",
     "@graphql-codegen/typescript-operations": "1.17.8",
-    "@graphql-codegen/introspection": "1.18.0"
+    "@graphql-codegen/introspection": "1.18.0",
+    "@graphql-codegen/near-operation-file-preset": "1.13.3"
   },
   "resolutions": {
     "tslib": "1.13.0"

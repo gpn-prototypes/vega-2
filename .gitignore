@@ -26,4 +26,4 @@ yarn-error.log*
 # IDE
 /.idea
 
-storybook-static/
+__generated__

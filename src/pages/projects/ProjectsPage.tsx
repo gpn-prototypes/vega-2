@@ -1,16 +1,10 @@
 import React from 'react';
 
-import { useGetProjectsQuery } from '../../generated/graphql';
-import { DataLayout } from '../../layouts/DataLayout';
-
+import { useGetProjects } from './__generated__/projects';
 import { ProjectsPageView } from './ProjectsPageView';
 
 export const ProjectsPage = (): React.ReactElement => {
-  const getProjectsQuery = useGetProjectsQuery();
+  const getProjectsQuery = useGetProjects();
 
-  return (
-    <DataLayout<typeof getProjectsQuery['data']> {...getProjectsQuery}>
-      <ProjectsPageView data={getProjectsQuery.data} />
-    </DataLayout>
-  );
+  return <ProjectsPageView data={getProjectsQuery.data} />;
 };

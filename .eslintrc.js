@@ -20,8 +20,8 @@ module.exports = {
   settings: {
     'import/resolver': {
       alias: {
-        map: [['@vega', './src/']],
-        extensions: ['.ts', '.tsx', '.json'],
+        map: [['@/', './src/']],
+        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
       },
     },
   },

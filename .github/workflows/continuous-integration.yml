@@ -24,6 +24,9 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - run: yarn generate:types
+        if: always()
+
       - run: yarn test
         if: always()
 

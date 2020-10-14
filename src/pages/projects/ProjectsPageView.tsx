@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import { IconProps } from '@gpn-design/uikit/Icon';
 import { Button, ChoiceGroup, IconBookmarkFilled, Text, TextField } from '@gpn-prototypes/vega-ui';
 
-import { GetProjectsQuery } from '../../generated/graphql';
-
+import { GetProjects } from './__generated__/projects';
 import { cnProjectsPage as cn } from './cn-projects-page';
 
 import './ProjectsPage.css';
@@ -83,7 +82,7 @@ const ProjectFilter: React.FC<ProjectFilterType> = ({ onInputSearch, onChangeFil
 };
 
 type Props = {
-  data?: GetProjectsQuery;
+  data?: GetProjects;
 };
 
 export const ProjectsPageView: React.FC<Props> = (props) => {

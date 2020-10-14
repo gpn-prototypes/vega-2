@@ -1,15 +1,30 @@
 overwrite: true
 schema:
-  - "schema.graphql":
-      headers:
-        Authorization: Bearer ${AUTH_TOKEN}
-documents: "src/**/*.ts"
+  - "schema.graphql"
+documents: 'src/**/*.graphql'
 generates:
-  src/generated/graphql.tsx:
+  src/__generated__/types.ts:
     plugins:
       - "typescript"
-      - "typescript-operations"
-      - "typescript-react-apollo"
   ./graphql.schema.json:
     plugins:
       - "introspection"
+  src/:
+    preset: near-operation-file
+    presetConfig:
+      folder: __generated__
+      extension: .tsx
+      baseTypesPath: __generated__/types.ts
+    plugins:
+      - typescript-operations
+      - typescript-react-apollo
+    config:
+      documentMode: 'documentNodeImportFragments'
+      namingConvention: keep
+      nonOptionalTypename: true
+      dedupeOperationSuffix: true
+      omitOperationSuffix: true
+      withComponent: false
+      withHooks: true
+      withHOC: false
+      reactApolloVersion: 3
