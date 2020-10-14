@@ -18,7 +18,7 @@
     }
   },
   "scripts": {
-    "build": "yarn generate:types && cross-env NODE_ENV=production webpack --progress",
+    "build": "yarn generate:types && cross-env NODE_ENV=production webpack --progress --config ./webpack.forShellConfig.js",
     "dev": "yarn generate:types && cross-env NODE_ENV=development webpack-dev-server --mode development",
     "dev:shell": "cross-env NODE_ENV=development webpack-dev-server --mode development --port 9003 --config ./webpack.forShellConfig.js",
     "test": "jest",
@@ -84,7 +84,6 @@
     "@graphql-codegen/typescript-react-apollo": "2.0.7",
     "@graphql-codegen/typescript-operations": "1.17.8",
     "@graphql-codegen/introspection": "1.18.0",
-    "@graphql-codegen/add": "^1.13.3",
     "@graphql-codegen/near-operation-file-preset": "1.13.3"
   },
   "resolutions": {
