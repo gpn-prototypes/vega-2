@@ -7,6 +7,9 @@ releases:
     chart: csssr/static-site@~1.0.0
     static-params:
       projectID: vega-sp
+      ingress:
+        annotations:
+          nginx.ingress.kubernetes.io/enable-cors: "true"
     builds:
       - workflow: build-static.yaml
         values:
