@@ -1,0 +1,111 @@
+.ProjectForm {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 auto;
+
+  &__Content {
+    padding: var(--space-2xl) var(--space-xl);
+
+    display: flex;
+    flex: 1 0 auto;
+  }
+
+  &__Navigation {
+    width: 302px;
+  }
+
+  &__Step {
+    margin-left: calc(var(--space-xl) + var(--space-2xl));
+  }
+
+  &__Footer {
+    display: flex;
+    justify-content: space-between;
+    flex: none;
+  }
+
+  &__Footer-buttons-block {
+    display: flex;
+  }
+
+  &__Footer-rightmost-button:not(:first-child) {
+    margin-left: var(--space-xs);
+  }
+
+  &__Informer {
+    background: var(--color-bg-warning);
+  }
+}
+
+.ProjectForm-DescriptionStep {
+  width: 480px;
+}
+
+.ProjectForm-DocumentStep {
+  width: 600px;
+
+  &__Status {
+    margin-bottom: var(--space-xs);
+  }
+
+  &__Description {
+    margin-bottom: var(--space-xl);
+  }
+
+  &__FileDropzone {
+    width: 444px;
+  }
+
+  &__FileDropzone-title {
+    margin-bottom: var(--space-s);
+  }
+
+  &__FileDropzone-fullscreen {
+    margin-top: calc(var(--space-3xl) * 3);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__FileDropzone-icons-block {
+    margin-bottom: var(--space-3xl);
+  }
+
+  &__FileDropzone-icon:not(:first-of-type) {
+    margin-left: var(--space-xl);
+  }
+}
+
+.ProjectForm-SidebarForm {
+  &__Row {
+    grid-column-gap: var(--space-xs);
+    grid-row-gap: var(--space-xs);
+  }
+
+  &__Footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__Footer-Button:not(:first-child) {
+    margin-left: var(--space-xs);
+  }
+
+  &__Minimized {
+    bottom: 65px;
+  }
+
+  &__Minimized-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+
+    cursor: pointer;
+  }
+
+  &__Minimized-statistics {
+    margin-left: var(--space-m);
+  }
+}

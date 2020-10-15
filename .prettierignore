@@ -1,1 +1,5 @@
 e2e-tests/
+codegen.yml
+graphql.schema.json
+schema.graphql
+__generated__

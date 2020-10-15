@@ -1,13 +1,18 @@
 const merge = require('webpack-merge');
 const dotenv = require('dotenv');
 const webpack = require('webpack');
+const path = require('path');
 
-const appConfig = require('./app-config')();
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const { getAppConfig } = require('./app-config');
+
+const appConfig = getAppConfig();
 
 const gpnWebpack = require('@gpn-prototypes/frontend-configs/webpack.config')({
   appConfig,
   // eslint-disable-next-line global-require
-  postCssConfig: require('./postcss.config'),
+  postCssConfig: { postcssOptions: { ...require('./postcss.config') } },
 });
 
 const commonWebpack = () => {
@@ -21,11 +26,29 @@ const commonWebpack = () => {
     return prev;
   }, {});
 
+  const devServer = {
+    ...gpnWebpack.devServer,
+    historyApiFallback: true,
+  };
+
+  if (appConfig.useApiProxy) {
+    devServer.proxy = {
+      [appConfig.apiPath]: {
+        target: appConfig.baseApiUrl,
+        pathRewrite: {
+          [`^${appConfig.apiPath}`]: '',
+        },
+      },
+    };
+  }
+
   return {
     plugins: [new webpack.DefinePlugin(envKeys)],
-    devServer: {
-      ...gpnWebpack.devServer,
-      historyApiFallback: true,
+    devServer,
+    resolve: {
+      alias: {
+        '@vega': path.resolve(__dirname, 'src'),
+      },
     },
   };
 };
