@@ -33,6 +33,8 @@ jobs:
         working-directory: ./vega-sp
 
       - run: yarn build
+        env:
+          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
         working-directory: ./vega-sp
 
       - uses: ./actions/deploy-static-site/v1beta1
