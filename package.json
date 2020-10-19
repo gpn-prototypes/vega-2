@@ -38,6 +38,7 @@
     "@apollo/client": "^3.2.2",
     "@gpn-prototypes/vega-ui": "^2.12.3",
     "bem-cn": "^3.0.1",
+    "dayjs": "^1.9.3",
     "final-form": "^4.20.1",
     "graphql": "^15.3.0",
     "ramda": "^0.27.0",
@@ -49,7 +50,11 @@
   "devDependencies": {
     "@gpn-prototypes/frontend-configs": "^1.2.12",
     "@graphql-codegen/cli": "1.17.10",
+    "@graphql-codegen/introspection": "1.18.0",
+    "@graphql-codegen/near-operation-file-preset": "1.13.3",
     "@graphql-codegen/typescript": "1.17.10",
+    "@graphql-codegen/typescript-operations": "1.17.8",
+    "@graphql-codegen/typescript-react-apollo": "2.0.7",
     "@testing-library/jest-dom": "^5.5.0",
     "@testing-library/react": "^10.0.3",
     "@types/jest": "^25.2.1",
@@ -81,11 +86,7 @@
     "webpack-config-single-spa-ts": "^1.12.0",
     "webpack-dev-server": "^3.11.0",
     "webpack-merge": "^4.2.2",
-    "webpack-import-map-plugin": "^1.0.0-alpha0",
-    "@graphql-codegen/typescript-react-apollo": "2.0.7",
-    "@graphql-codegen/typescript-operations": "1.17.8",
-    "@graphql-codegen/introspection": "1.18.0",
-    "@graphql-codegen/near-operation-file-preset": "1.13.3"
+    "webpack-import-map-plugin": "^1.0.0-alpha0"
   },
   "resolutions": {
     "tslib": "1.13.0"
