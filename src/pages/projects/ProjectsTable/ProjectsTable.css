@@ -1,0 +1,12 @@
+.ProjectsTable {
+  padding-right: var(--space-s);
+
+  &__editedAt {
+    display: flex;
+    align-items: center;
+  }
+
+  &__editedTime {
+    flex-grow: 1;
+  }
+}

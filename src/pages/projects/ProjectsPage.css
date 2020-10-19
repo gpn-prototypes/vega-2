@@ -10,6 +10,8 @@
   background-color: var(--color-bg-secondary);
 
   &__Container {
+    position: relative;
+
     padding: var(--space-xl);
 
     display: flex;
@@ -60,9 +62,22 @@
 
   &__Table {
     margin-top: var(--space-xl);
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__Loader {
+    display: flex;
+
+    height: 100%;
   }
 
   &__LoadMore {
     margin-top: var(--space-m);
+  }
+
+  &__EditedAt {
+    display: flex;
   }
 }
