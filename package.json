@@ -31,8 +31,8 @@
     "lint:css:fix": "stylelint ./src/**/*.css --fix",
     "lint": "yarn run lint:ts && yarn run lint:css",
     "lint:fix": "yarn run lint:ts:fix && yarn run lint:css:fix",
-    "generate:types": "graphql-codegen --config codegen.yml",
-    "generate:types:watch": "graphql-codegen --watch --config codegen.yml"
+    "generate:types": "graphql-codegen --require dotenv/config --config codegen.yml",
+    "generate:types:watch": "yarn generate:types --watch"
   },
   "dependencies": {
     "@apollo/client": "^3.2.2",
