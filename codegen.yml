@@ -1,14 +1,16 @@
 overwrite: true
 schema:
-  - "schema.graphql"
+  - http://outsourcing.nat.tepkom.ru:38080/graphql:
+      headers:
+        Authorization: Bearer ${AUTH_TOKEN}
 documents: 'src/**/*.graphql'
 generates:
   src/__generated__/types.ts:
     plugins:
-      - "typescript"
+      - 'typescript'
   ./graphql.schema.json:
     plugins:
-      - "introspection"
+      - 'introspection'
   src/:
     preset: near-operation-file
     presetConfig:

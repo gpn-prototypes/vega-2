@@ -26,4 +26,6 @@ yarn-error.log*
 # IDE
 /.idea
 
+# graphql-codegen files
+graphql.schema.json
 __generated__

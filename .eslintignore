@@ -1,5 +1,5 @@
 dist
 node_modules
-!.storybook
 e2e-tests/
+graphql.schema.json
 __generated__

@@ -19,8 +19,8 @@
   },
   "scripts": {
     "build": "yarn generate:types && cross-env NODE_ENV=production webpack --progress --config ./webpack.forShellConfig.js",
-    "dev": "yarn generate:types && cross-env NODE_ENV=development webpack-dev-server --open --mode development",
-    "dev:shell": "cross-env NODE_ENV=development webpack-dev-server --open --mode development --port 9003 --config ./webpack.forShellConfig.js",
+    "dev": "yarn generate:dev:types && cross-env NODE_ENV=development webpack-dev-server --open --mode development",
+    "dev:shell": "yarn generate:dev:types && cross-env NODE_ENV=development webpack-dev-server --open --mode development --port 9003 --config ./webpack.forShellConfig.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "format": "prettier --write '{src,types,scripts}/**/*.{json,{j,t}s{,x},css,}'",
@@ -32,7 +32,8 @@
     "lint": "yarn run lint:ts && yarn run lint:css",
     "lint:fix": "yarn run lint:ts:fix && yarn run lint:css:fix",
     "generate:types": "graphql-codegen --config codegen.yml",
-    "generate:types:watch": "graphql-codegen --watch --config codegen.yml"
+    "generate:dev:types": "yarn generate:types --require dotenv/config",
+    "generate:dev:types:watch": "yarn generate:dev:types --watch"
   },
   "dependencies": {
     "@apollo/client": "^3.2.2",
