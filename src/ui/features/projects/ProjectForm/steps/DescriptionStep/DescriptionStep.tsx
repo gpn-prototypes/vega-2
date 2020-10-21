@@ -106,7 +106,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
       <VegaForm.Row space="m">
         <VegaForm.Field>
           <VegaForm.Label htmlFor="coordinates" space="2xs">
-            Координаты
+            Система координат
           </VegaForm.Label>
           <Field
             name="description.coordinates"
@@ -115,7 +115,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 id="coordinates"
                 size="s"
                 width="full"
-                placeholder="Укажите значения и систему координат"
+                placeholder="Укажите систему координат"
                 name={input.name}
                 value={input.value}
                 onChange={({ e }): void => input.onChange(e)}
