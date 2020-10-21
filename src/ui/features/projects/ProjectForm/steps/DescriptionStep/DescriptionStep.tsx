@@ -2,11 +2,34 @@ import React from 'react';
 import { Field } from 'react-final-form';
 import { Form as VegaForm, TextField } from '@gpn-prototypes/vega-ui';
 
+import { ReferenceDataType } from '../../../../../../pages/create-project/types';
 import { cnDescriptionStep, cnProjectForm } from '../../cn-form';
 
-type StepProps = Record<string, unknown>;
+type StepProps = {
+  referenceData: ReferenceDataType;
+};
 
-export const DescriptionStep: React.FC<StepProps> = () => {
+export const DescriptionStep: React.FC<StepProps> = (props) => {
+  const { referenceData } = props;
+
+  /* Это временное решение */
+  /* На данный момент на сервере доступен только один регион */
+  /* Поле региона - обычное текстовое поле, его нужно переделать в селектор */
+  /* Добавление селектора будет сделано в отдельной задаче */
+
+  let oneExistingRegionName = '';
+
+  if (
+    referenceData &&
+    referenceData.regionList &&
+    Array.isArray(referenceData.regionList) &&
+    referenceData.regionList[0]
+  ) {
+    oneExistingRegionName = referenceData.regionList[0].name
+      ? referenceData.regionList[0].name
+      : '';
+  }
+
   return (
     <div className={cnProjectForm('Step').mix(cnDescriptionStep())}>
       <VegaForm.Row space="m">
@@ -45,9 +68,10 @@ export const DescriptionStep: React.FC<StepProps> = () => {
                 id="region"
                 size="s"
                 width="full"
+                disabled
                 placeholder="Выберите регион"
                 name={input.name}
-                value={input.value}
+                value={oneExistingRegionName}
                 onChange={({ e }): void => input.onChange(e)}
                 onBlur={input.onBlur}
                 onFocus={input.onFocus}

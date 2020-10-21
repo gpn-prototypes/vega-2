@@ -1,0 +1,44 @@
+mutation CreateProject(
+  $name: String!
+  $type: String
+  $region: ID
+  $coordinates: String
+  $description: String
+) {
+  createProject(
+    data: {
+      name: $name
+      type: $type
+      region: $region
+      coordinates: $coordinates
+      description: $description
+    }
+  ) {
+    result {
+      ... on Project {
+        vid
+        name
+        type
+        region {
+          vid
+          name
+        }
+        coordinates
+        description
+      }
+      ... on Error {
+        code
+        message
+        details
+        payload
+      }
+    }
+  }
+}
+
+query QueryRegionList {
+  regionList {
+    vid
+    name
+  }
+}
