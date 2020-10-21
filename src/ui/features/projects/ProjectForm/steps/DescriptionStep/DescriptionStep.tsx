@@ -2,7 +2,7 @@ import React from 'react';
 import { Field } from 'react-final-form';
 import { Form as VegaForm, TextField } from '@gpn-prototypes/vega-ui';
 
-import { cnDescriptionStep, cnProjectForm } from '../cn-form';
+import { cnDescriptionStep, cnProjectForm } from '../../cn-form';
 
 type StepProps = Record<string, unknown>;
 
@@ -15,7 +15,7 @@ export const DescriptionStep: React.FC<StepProps> = () => {
             Название проекта
           </VegaForm.Label>
           <Field
-            name="name"
+            name="description.name"
             render={({ input }): React.ReactNode => (
               <TextField
                 id="name"
@@ -39,7 +39,7 @@ export const DescriptionStep: React.FC<StepProps> = () => {
             Регион
           </VegaForm.Label>
           <Field
-            name="region"
+            name="description.region"
             render={({ input }): React.ReactNode => (
               <TextField
                 id="region"
@@ -62,7 +62,7 @@ export const DescriptionStep: React.FC<StepProps> = () => {
             Тип проекта
           </VegaForm.Label>
           <Field
-            name="type"
+            name="description.type"
             render={({ input }): React.ReactNode => (
               <TextField
                 id="type"
@@ -85,7 +85,7 @@ export const DescriptionStep: React.FC<StepProps> = () => {
             Координаты
           </VegaForm.Label>
           <Field
-            name="coordinates"
+            name="description.coordinates"
             render={({ input }): React.ReactNode => (
               <TextField
                 id="coordinates"
@@ -108,7 +108,7 @@ export const DescriptionStep: React.FC<StepProps> = () => {
             Описание проекта
           </VegaForm.Label>
           <Field
-            name="description"
+            name="description.description"
             render={({ input }): React.ReactNode => (
               <TextField
                 id="description"

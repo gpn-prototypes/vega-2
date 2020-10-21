@@ -23,11 +23,13 @@ type FormProps = {
 };
 
 type FormValues = {
-  name: string;
-  region: string;
-  type: string;
-  coordinates: string;
-  description: string;
+  description: {
+    name: string;
+    region: string;
+    type: string;
+    coordinates: string;
+    description: string;
+  };
 };
 
 const steps = [
@@ -123,10 +125,15 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
             subscription={{ values: true }}
             onChange={(formState): void => {
               const { values } = formState;
-              if (values.name !== bannerInfo.title || values.region !== bannerInfo.description) {
+              const { description = {} } = values;
+
+              if (
+                description.name !== bannerInfo.title ||
+                description.region !== bannerInfo.description
+              ) {
                 setBannerInfo({
-                  title: values.name,
-                  description: values.region,
+                  title: description.name,
+                  description: description.region,
                 });
               }
             }}

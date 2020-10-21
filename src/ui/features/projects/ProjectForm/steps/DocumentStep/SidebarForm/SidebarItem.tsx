@@ -2,7 +2,8 @@ import React from 'react';
 import { Field } from 'react-final-form';
 import { Attach, Form as VegaForm, IconTrash, TextField } from '@gpn-prototypes/vega-ui';
 
-import { cnSidebarForm } from './cn-form';
+import { cnSidebarForm } from '../../../cn-form';
+
 import { formatBytes, getExtension } from './utils';
 
 type SidebarItemProps = {

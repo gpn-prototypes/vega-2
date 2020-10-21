@@ -1,4 +1,4 @@
-import { getPluralForm } from '../../../../utils/getPluralForm';
+import { getPluralForm } from '../../../../../../../utils/getPluralForm';
 
 type UploadStatisticsType = {
   filesLeftMessage: string;
