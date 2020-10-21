@@ -9,7 +9,6 @@ import {
   NavigationList,
   PageFooter,
 } from '@gpn-prototypes/vega-ui';
-import arrayMutators from 'final-form-arrays';
 
 import { BannerInfoProps } from '../../../../pages/create-project/types';
 
@@ -67,10 +66,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
   return (
     <Form
       onSubmit={onSubmit}
-      mutators={{
-        ...arrayMutators,
-      }}
-      render={({ handleSubmit, form: { mutators } }): React.ReactNode => (
+      render={({ handleSubmit }): React.ReactNode => (
         <VegaForm onSubmit={handleSubmit} className={cnProjectForm()}>
           <div className={cnProjectForm('Content')}>
             <NavigationList className={cnProjectForm('Navigation')} ordered>
