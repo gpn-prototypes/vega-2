@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, FormSpy } from 'react-final-form';
-import { useHistory } from 'react-router-dom';
 import {
   Button,
   Form as VegaForm,
@@ -10,7 +9,8 @@ import {
   PageFooter,
 } from '@gpn-prototypes/vega-ui';
 
-import { BannerInfoProps } from '../../../../pages/create-project/types';
+import { CreateProjectVariables } from '../../../../pages/create-project/__generated__/create-project';
+import { BannerInfoProps, ReferenceDataType } from '../../../../pages/create-project/types';
 
 import { cnProjectForm } from './cn-form';
 import { DescriptionStep, DocumentStep, ParticipantStep } from './steps';
@@ -20,6 +20,8 @@ import './ProjectForm.css';
 type FormProps = {
   bannerInfo: BannerInfoProps;
   setBannerInfo: React.Dispatch<React.SetStateAction<BannerInfoProps>>;
+  referenceData: ReferenceDataType;
+  onSubmit: (values: CreateProjectVariables) => void;
 };
 
 type FormValues = {
@@ -39,16 +41,44 @@ const steps = [
 ];
 
 export const ProjectForm: React.FC<FormProps> = (formProps) => {
-  const { bannerInfo, setBannerInfo } = formProps;
-
-  const history = useHistory();
+  const { bannerInfo, setBannerInfo, onSubmit, referenceData } = formProps;
 
   const [activeStepIndex, setActiveStepIndex] = useState(0);
 
+  /* смотрите комментарий к oneExistingRegion в DescriptionStep */
+
+  let oneExistingRegionId: string | undefined;
+  let oneExistingRegionName: string | undefined;
+
+  if (
+    referenceData &&
+    referenceData.regionList &&
+    Array.isArray(referenceData.regionList) &&
+    referenceData.regionList[0]
+  ) {
+    oneExistingRegionId = referenceData.regionList[0].vid ? referenceData.regionList[0].vid : '';
+    oneExistingRegionName = referenceData.regionList[0].name
+      ? referenceData.regionList[0].name
+      : '';
+  }
+
+  useEffect(() => {
+    setBannerInfo({
+      ...bannerInfo,
+      description: oneExistingRegionName,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [oneExistingRegionName]);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onSubmit = (values: Partial<FormValues>): void => {
-    // Временная заглушка
-    history.push('/projects');
+  const handleFormSubmit = (values: FormValues): void => {
+    onSubmit({
+      name: values.description.name,
+      type: values.description.type,
+      region: oneExistingRegionId,
+      coordinates: values.description.coordinates,
+      description: values.description.description,
+    });
   };
 
   const Step = steps[activeStepIndex].content;
@@ -65,7 +95,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
 
   return (
     <Form
-      onSubmit={onSubmit}
+      onSubmit={handleFormSubmit}
       render={({ handleSubmit }): React.ReactNode => (
         <VegaForm onSubmit={handleSubmit} className={cnProjectForm()}>
           <div className={cnProjectForm('Content')}>
@@ -84,7 +114,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
                 </NavigationList.Item>
               ))}
             </NavigationList>
-            <Step />
+            <Step referenceData={referenceData} />
           </div>
           <PageFooter className={cnProjectForm('Footer')}>
             <Button size="s" view="ghost" label="Отмена" type="button" />
@@ -127,13 +157,10 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
               const { values } = formState;
               const { description = {} } = values;
 
-              if (
-                description.name !== bannerInfo.title ||
-                description.region !== bannerInfo.description
-              ) {
+              if (description.name !== bannerInfo.title) {
                 setBannerInfo({
+                  ...bannerInfo,
                   title: description.name,
-                  description: description.region,
                 });
               }
             }}
