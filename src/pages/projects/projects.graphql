@@ -3,8 +3,13 @@ query GetProjects {
     ... on ProjectList {
       data: projectList {
         vid
+        isFavorite
         name
         attendees {
+          user {
+            name
+            role
+          }
           roles {
             name
           }

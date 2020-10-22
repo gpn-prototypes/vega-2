@@ -1,12 +1,27 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { IconProps } from '@gpn-design/uikit/Icon';
-import { Button, ChoiceGroup, IconBookmarkFilled, Text, TextField } from '@gpn-prototypes/vega-ui';
+import {
+  Button,
+  ChoiceGroup,
+  IconBookmarkFilled,
+  Loader,
+  Text,
+  TextField,
+} from '@gpn-prototypes/vega-ui';
+import dayjs from 'dayjs';
+
+import 'dayjs/locale/ru';
 
 import { GetProjects } from './__generated__/projects';
 import { cnProjectsPage as cn } from './cn-projects-page';
+import { ProjectsTable, ProjectsTableRow } from './ProjectsTable';
 
 import './ProjectsPage.css';
+
+import { Project } from '@/__generated__/types';
+
+dayjs.locale('ru');
 
 type Item = {
   name: string;
@@ -83,11 +98,80 @@ const ProjectFilter: React.FC<ProjectFilterType> = ({ onInputSearch, onChangeFil
 
 type Props = {
   data?: GetProjects;
+  loading?: boolean;
+};
+
+type ProjectsMapper = Pick<
+  Project,
+  'vid' | 'name' | 'isFavorite' | 'region' | 'attendees' | 'createdBy' | 'createdAt' | 'editedAt'
+> | null;
+
+const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): ProjectsTableRow[] => {
+  if (!projects) {
+    return [];
+  }
+
+  return projects?.flatMap((project) => {
+    if (project === null) {
+      return [];
+    }
+
+    const roles = project.attendees
+      ?.map((a) => a?.roles)
+      ?.map((rs) => rs?.map((r) => r?.name).join(''))
+      .join(', ');
+
+    const createdAt = project.createdAt
+      ? dayjs(project.createdAt).format('D MMMM YYYY')
+      : undefined;
+
+    const editedAt = project.editedAt ? (
+      <div className={cn('EditedAt')}>
+        <Text size="s">{dayjs(project.editedAt).format('D MMMM YYYY')}</Text>
+        <Text size="s" view="secondary">
+          {dayjs(project.editedAt).format(', H:mm')}
+        </Text>
+      </div>
+    ) : undefined;
+
+    return {
+      id: project.vid ?? 'wtf-id',
+      name: project.name ?? undefined,
+      isFavorite: project.isFavorite ?? undefined,
+      region: project.region?.name ?? undefined,
+      roles: roles ?? undefined,
+      createdBy: project?.createdBy?.name ?? undefined,
+      createdAt,
+      editedAt,
+    };
+  });
 };
 
 export const ProjectsPageView: React.FC<Props> = (props) => {
+  const projects =
+    props.data?.projects?.__typename !== 'ProjectList'
+      ? []
+      : projectsMapper(props.data?.projects.data);
+
+  const isLoading = props.loading && !props.data;
+
+  const table = (
+    <div className={cn('Table')}>
+      <ProjectsTable
+        rows={projects}
+        onFavorite={(id) => {
+          // eslint-disable-next-line no-console
+          console.log(id);
+        }}
+      />
+      <div className={cn('LoadMore')}>
+        <Button view="ghost" width="full" label="Загрузить ещё" />
+      </div>
+    </div>
+  );
+
   return (
-    <div data-testid={testId.root} className={cn()} {...props}>
+    <div data-testid={testId.root} className={cn()}>
       <div className={cn('Container')}>
         <div className={cn('Header')}>
           <div className={cn('Heading')}>
@@ -109,15 +193,14 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
             // eslint-disable-next-line no-console
             onChangeFilter={(value: Item): void => console.log(`Filter: ${value.name}`)}
           />
-          <div className={cn('Table')}>
-            <Text as="span" size="m">
-              Таблица
-            </Text>
-          </div>
-          <div className={cn('LoadMore')}>
-            <Button view="ghost" width="full" label="Загрузить ещё" />
-          </div>
         </div>
+        {isLoading ? (
+          <div className={cn('Loader')}>
+            <Loader />
+          </div>
+        ) : (
+          table
+        )}
       </div>
     </div>
   );

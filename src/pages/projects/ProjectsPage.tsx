@@ -4,7 +4,7 @@ import { useGetProjects } from './__generated__/projects';
 import { ProjectsPageView } from './ProjectsPageView';
 
 export const ProjectsPage = (): React.ReactElement => {
-  const getProjectsQuery = useGetProjects();
+  const { data, loading } = useGetProjects();
 
-  return <ProjectsPageView data={getProjectsQuery.data} />;
+  return <ProjectsPageView data={data} loading={loading} />;
 };
