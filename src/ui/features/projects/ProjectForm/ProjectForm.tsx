@@ -157,13 +157,10 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
               const { values } = formState;
               const { description = {} } = values;
 
-              if (
-                description.name !== bannerInfo.title ||
-                description.region !== bannerInfo.description
-              ) {
+              if (description.name !== bannerInfo.title) {
                 setBannerInfo({
+                  ...bannerInfo,
                   title: description.name,
-                  description: description.region,
                 });
               }
             }}
