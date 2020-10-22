@@ -1,9 +1,10 @@
+require('dotenv').config();
 const webpackMerge = require('webpack-merge');
 const singleSpaDefaults = require('webpack-config-single-spa-react-ts');
 const ImportMapPlugin = require('webpack-import-map-plugin');
 const { getAppConfig } = require('./app-config');
 
-const { projectName } = getAppConfig();
+const { projectName, port } = getAppConfig();
 
 module.exports = (webpackConfigEnv) => {
   const defaultConfig = singleSpaDefaults({
@@ -38,7 +39,7 @@ module.exports = (webpackConfigEnv) => {
     plugins: [
       new ImportMapPlugin({
         fileName: 'import-map.json',
-        baseUrl: process.env.BASE_URL,
+        baseUrl: process.env.BASE_URL || `http://locahost:${port}`,
         filter(x) {
           return ['main.js'].includes(x.name);
         },
