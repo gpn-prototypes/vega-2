@@ -13,13 +13,13 @@ import dayjs from 'dayjs';
 
 import 'dayjs/locale/ru';
 
+import { Project } from '../../__generated__/types';
+
 import { GetProjects } from './__generated__/projects';
 import { cnProjectsPage as cn } from './cn-projects-page';
 import { ProjectsTable, ProjectsTableRow } from './ProjectsTable';
 
 import './ProjectsPage.css';
-
-import { Project } from '@/__generated__/types';
 
 dayjs.locale('ru');
 

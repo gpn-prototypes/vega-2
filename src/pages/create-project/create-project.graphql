@@ -17,14 +17,26 @@ mutation CreateProject(
     result {
       ... on Project {
         vid
+        isFavorite
         name
-        type
+        attendees {
+          user {
+            name
+            role
+          }
+          roles {
+            name
+          }
+        }
         region {
-          vid
           name
         }
-        coordinates
-        description
+        editedAt
+        createdAt
+        createdBy {
+          name
+          vid
+        }
       }
       ... on Error {
         code

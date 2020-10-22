@@ -7,7 +7,13 @@ import { App } from './App';
 import './App.css';
 
 const client = new ApolloClient({
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Project: {
+        keyFields: ['vid'],
+      },
+    },
+  }),
   link: new HttpLink({
     uri: 'http://outsourcing.nat.tepkom.ru:38080/graphql',
     headers: {

@@ -29,11 +29,14 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   const [
     createProject,
     { data: createProjectData, called: isCreateProjectCalled },
-  ] = useCreateProject();
+  ] = useCreateProject({
+    onCompleted() {
+      history.push('/projects');
+    },
+  });
 
   const handleFormSubmit = (values: CreateProjectVariables) => {
     createProject({ variables: values });
-    history.push('/projects');
   };
 
   if (isCreateProjectCalled && createProjectData) {
