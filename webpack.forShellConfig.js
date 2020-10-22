@@ -39,7 +39,7 @@ module.exports = (webpackConfigEnv) => {
     plugins: [
       new ImportMapPlugin({
         fileName: 'import-map.json',
-        baseUrl: process.env.BASE_URL || `http://localhost:${port}`,
+        baseUrl: process.env.BASE_URL || `http://locahost:${port}`,
         filter(x) {
           return ['main.js'].includes(x.name);
         },

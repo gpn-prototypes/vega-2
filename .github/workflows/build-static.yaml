@@ -33,6 +33,12 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+
+      - run: yarn generate:types
+        working-directory: vega
+        env:
+          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+
       - uses: docker://quay.csssr.cloud/csssr/github-info:v1
         id: gh
 
