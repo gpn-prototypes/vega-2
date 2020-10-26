@@ -158,6 +158,9 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
 
   const isLoading = props.loading && !props.data;
 
+  // TODO: Поправить условие, когда можно будет получить общее количество проектов и сделают пагинацию
+  const visibleLoadMore = projects.length > 20;
+
   const table = (
     <div className={cn('Table')}>
       <ProjectsTable
@@ -167,9 +170,11 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
           console.log(id);
         }}
       />
-      <div className={cn('LoadMore')}>
-        <Button view="ghost" width="full" label="Загрузить ещё" />
-      </div>
+      {visibleLoadMore && (
+        <div className={cn('LoadMore')}>
+          <Button view="ghost" width="full" label="Загрузить ещё" />
+        </div>
+      )}
     </div>
   );
 
