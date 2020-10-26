@@ -174,7 +174,7 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
       />
       {visibleLoadMore && (
         <div className={cn('LoadMore')}>
-          <Button view="ghost" width="full" label="Загрузить ещё" />
+          <Button view="ghost" width="full" label="Загрузить ещё" size="l" />
         </div>
       )}
     </div>
