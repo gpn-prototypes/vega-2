@@ -11,6 +11,7 @@ import {
   TextField,
 } from '@gpn-prototypes/vega-ui';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 
 import 'dayjs/locale/ru';
 
@@ -23,6 +24,7 @@ import { ProjectsTable, ProjectsTableRow } from './ProjectsTable';
 import './ProjectsPage.css';
 
 dayjs.locale('ru');
+dayjs.extend(utc);
 
 type Item = {
   name: string;
@@ -125,14 +127,14 @@ const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): Pro
       .join(', ');
 
     const createdAt = project.createdAt
-      ? dayjs(project.createdAt).format('D MMMM YYYY')
+      ? dayjs.utc(project.createdAt).local().format('D MMMM YYYY')
       : undefined;
 
     const editedAt = project.editedAt ? (
       <div className={cn('EditedAt')}>
-        <Text size="s">{dayjs(project.editedAt).format('D MMMM YYYY')}</Text>
+        <Text size="s">{dayjs.utc(project.editedAt).local().format('D MMMM YYYY')}</Text>
         <Text size="s" view="secondary">
-          {dayjs(project.editedAt).format(', H:mm')}
+          {dayjs.utc(project.editedAt).local().format(', H:mm')}
         </Text>
       </div>
     ) : undefined;
