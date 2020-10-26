@@ -5,6 +5,7 @@ import {
   Button,
   ChoiceGroup,
   IconBookmarkFilled,
+  IconSearch,
   Loader,
   Text,
   TextField,
@@ -88,6 +89,8 @@ const ProjectFilter: React.FC<ProjectFilterType> = ({ onInputSearch, onChangeFil
             setSearchValue(value);
             onInputSearch(value);
           }}
+          size="s"
+          leftSide={IconSearch}
           width="full"
           placeholder="Введите название проекта или имя автора"
         />
