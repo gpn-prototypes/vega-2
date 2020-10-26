@@ -183,7 +183,7 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
             </Text>
           </div>
           <Link to="/projects/create">
-            <Button label="Создать проект" />
+            <Button label="Создать новый проект" size="s" />
           </Link>
         </div>
         <div className={cn('Projects')}>
