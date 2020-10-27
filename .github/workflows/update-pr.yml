@@ -18,7 +18,7 @@ jobs:
           body-template: |
             ## Задача
             Задача в Jira CSSSR: https://jira.csssr.io/browse/%branch%
-            Ссылка на стенд: http://%branch%.vega-2.csssr.cloud
+            Ссылка на скрипт: http://%branch%.vega-sp.csssr.cloud/vega-sp.js
           replace-body: false
           body-prefix-newline-count: 2
           uppercase-body: true
