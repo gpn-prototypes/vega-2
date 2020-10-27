@@ -2,7 +2,7 @@ import React from 'react';
 import { Field } from 'react-final-form';
 import { Form as VegaForm, TextField } from '@gpn-prototypes/vega-ui';
 
-import { ReferenceDataType } from '../../../../../../pages/create-project/types';
+import { ReferenceDataType } from '../../../../../../pages/project/types';
 import { cnDescriptionStep, cnProjectForm } from '../../cn-form';
 
 type StepProps = {
@@ -63,6 +63,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           </VegaForm.Label>
           <Field
             name="description.region"
+            initialValue={oneExistingRegionName}
             render={({ input }): React.ReactNode => (
               <TextField
                 id="region"

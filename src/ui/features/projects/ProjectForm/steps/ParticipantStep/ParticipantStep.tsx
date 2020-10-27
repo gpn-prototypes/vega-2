@@ -42,6 +42,7 @@ export const ParticipantStep: React.FC<StepProps> = () => {
   ];
 
   const handleSubmit = (values: unknown) => {
+    // eslint-disable-next-line no-console
     console.log(values);
   };
 

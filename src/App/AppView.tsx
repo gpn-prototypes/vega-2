@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-d
 import { Root as VegaRoot } from '@gpn-prototypes/vega-ui';
 
 import { PageLayout } from '../layouts/PageLayout';
-import { CreateProjectPage } from '../pages/create-project';
+import { CreateProjectPage, EditProjectPage } from '../pages/project';
 import { ProjectsPage } from '../pages/projects';
 
 import './App.css';
@@ -20,6 +20,11 @@ export const AppView = (): React.ReactElement => {
         <Route exact path="/projects/create">
           <PageLayout>
             <CreateProjectPage />
+          </PageLayout>
+        </Route>
+        <Route exact path="/projects/edit">
+          <PageLayout>
+            <EditProjectPage />
           </PageLayout>
         </Route>
         <Redirect to="/projects" />
