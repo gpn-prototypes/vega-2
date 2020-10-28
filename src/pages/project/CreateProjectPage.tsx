@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Loader, PageBanner } from '@gpn-prototypes/vega-ui';
+import { Loader } from '@gpn-prototypes/vega-ui';
 
 import { ProjectForm } from '../../ui/features/projects';
 
@@ -8,18 +8,15 @@ import {
   CreateProjectVariables,
   useCreateProject,
   useQueryRegionList,
-} from './__generated__/create-project';
+} from './__generated__/project';
 import { cnPage } from './cn-page';
-import { BannerInfoProps, ReferenceDataType } from './types';
+import { ReferenceDataType } from './types';
 
-import './CreateProjectPage.css';
+import './ProjectPage.css';
 
 type PageProps = Record<string, unknown>;
 
 export const CreateProjectPage: React.FC<PageProps> = () => {
-  const [bannerInfo, setBannerInfo] = useState<BannerInfoProps>({});
-  const { title, description } = bannerInfo;
-
   const history = useHistory();
 
   const { data: queryRegionListData, loading: isQueryRegionListLoading } = useQueryRegionList();
@@ -50,13 +47,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
   return (
     <div className={cnPage()}>
-      <PageBanner title={title} description={description} />
-      <ProjectForm
-        bannerInfo={bannerInfo}
-        setBannerInfo={setBannerInfo}
-        referenceData={referenceData}
-        onSubmit={handleFormSubmit}
-      />
+      <ProjectForm mode="create" referenceData={referenceData} onSubmit={handleFormSubmit} />
     </div>
   );
 };

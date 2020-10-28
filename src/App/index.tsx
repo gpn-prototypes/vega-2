@@ -6,6 +6,8 @@ import { App } from './App';
 
 import './App.css';
 
+const authToken = localStorage.getItem('auth-token');
+
 const client = new ApolloClient({
   cache: new InMemoryCache({
     typePolicies: {
@@ -17,9 +19,7 @@ const client = new ApolloClient({
   link: new HttpLink({
     uri: 'http://outsourcing.nat.tepkom.ru:38080/graphql',
     headers: {
-      Authorization: localStorage.getItem('auth-token')
-        ? `Bearer ${localStorage.getItem('auth-token')}`
-        : undefined,
+      Authorization: authToken ? `Bearer ${authToken}` : undefined,
     },
   }),
 });

@@ -20,20 +20,23 @@
 
   &__Footer {
     display: flex;
-    justify-content: space-between;
     flex: none;
+
+    &_content_space-between {
+      justify-content: space-between;
+    }
+
+    &_content_end {
+      justify-content: flex-end;
+    }
   }
 
   &__Footer-buttons-block {
     display: flex;
   }
 
-  &__Footer-rightmost-button:not(:first-child) {
-    margin-left: var(--space-xs);
-  }
-
-  &__Informer {
-    background: var(--color-bg-warning);
+  &__Footer-button-back {
+    margin-right: var(--space-xs);
   }
 }
 
