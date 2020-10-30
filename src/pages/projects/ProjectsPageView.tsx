@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { IconProps } from '@gpn-design/uikit/Icon';
+import { IconProps } from '@consta/uikit/Icon';
 import {
   Button,
   ChoiceGroup,
