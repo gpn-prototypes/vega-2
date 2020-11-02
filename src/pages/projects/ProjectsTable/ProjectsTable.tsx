@@ -34,7 +34,7 @@ type Props = {
 
 const COLUMNS: React.ComponentProps<typeof Table>['columns'] = [
   {
-    title: <IconBookmarkStroked size="s" />,
+    title: <IconBookmarkStroked size="s" view="ghost" />,
     accessor: 'favorite',
     align: 'center',
     width: 55,

@@ -5,11 +5,13 @@ import {
   Button,
   ChoiceGroup,
   IconBookmarkFilled,
+  IconSearch,
   Loader,
   Text,
   TextField,
 } from '@gpn-prototypes/vega-ui';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 
 import 'dayjs/locale/ru';
 
@@ -22,6 +24,7 @@ import { ProjectsTable, ProjectsTableRow } from './ProjectsTable';
 import './ProjectsPage.css';
 
 dayjs.locale('ru');
+dayjs.extend(utc);
 
 type Item = {
   name: string;
@@ -88,6 +91,8 @@ const ProjectFilter: React.FC<ProjectFilterType> = ({ onInputSearch, onChangeFil
             setSearchValue(value);
             onInputSearch(value);
           }}
+          size="s"
+          leftSide={IconSearch}
           width="full"
           placeholder="Введите название проекта или имя автора"
         />
@@ -122,14 +127,14 @@ const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): Pro
       .join(', ');
 
     const createdAt = project.createdAt
-      ? dayjs(project.createdAt).format('D MMMM YYYY')
+      ? dayjs.utc(project.createdAt).local().format('D MMMM YYYY')
       : undefined;
 
     const editedAt = project.editedAt ? (
       <div className={cn('EditedAt')}>
-        <Text size="s">{dayjs(project.editedAt).format('D MMMM YYYY')}</Text>
+        <Text size="s">{dayjs.utc(project.editedAt).local().format('D MMMM YYYY')}</Text>
         <Text size="s" view="secondary">
-          {dayjs(project.editedAt).format(', H:mm')}
+          {dayjs.utc(project.editedAt).local().format(', H:mm')}
         </Text>
       </div>
     ) : undefined;
@@ -155,6 +160,9 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
 
   const isLoading = props.loading && !props.data;
 
+  // TODO: Поправить условие, когда можно будет получить общее количество проектов и сделают пагинацию
+  const visibleLoadMore = projects.length > 20;
+
   const table = (
     <div className={cn('Table')}>
       <ProjectsTable
@@ -164,9 +172,11 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
           console.log(id);
         }}
       />
-      <div className={cn('LoadMore')}>
-        <Button view="ghost" width="full" label="Загрузить ещё" />
-      </div>
+      {visibleLoadMore && (
+        <div className={cn('LoadMore')}>
+          <Button view="ghost" width="full" label="Загрузить ещё" size="l" />
+        </div>
+      )}
     </div>
   );
 
@@ -183,7 +193,7 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
             </Text>
           </div>
           <Link to="/projects/create">
-            <Button label="Создать проект" />
+            <Button label="Создать новый проект" size="s" />
           </Link>
         </div>
         <div className={cn('Projects')}>
