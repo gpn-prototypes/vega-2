@@ -13,14 +13,14 @@ module.exports = (webpackConfigEnv) => {
     webpackConfigEnv,
   });
 
-  return webpackMerge.smart(defaultConfig, {
+  const config = webpackMerge.smart(defaultConfig, {
     // modify the webpack config however you'd like to by adding to this object
     externals: ['@apollo/client', 'graphql'],
     entry: ['./src/singleSpaEntry.tsx'],
     module: {
       rules: [
         {
-          test: /\.(png|jpe?g|gif)$/i,
+          test: /\.(png|jpe?g|gif|svg)$/i,
           use: [
             {
               loader: 'file-loader',
@@ -54,4 +54,6 @@ module.exports = (webpackConfigEnv) => {
       }),
     ],
   });
+
+  return config;
 };
