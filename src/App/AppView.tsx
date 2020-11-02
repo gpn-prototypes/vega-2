@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Root as VegaRoot } from '@gpn-prototypes/vega-ui';
 
 import { PageLayout } from '../layouts/PageLayout';
@@ -9,32 +9,25 @@ import { ProjectsPage } from '../pages/projects';
 import './App.css';
 
 export const AppView = (): React.ReactElement => {
-  const content = (
-    <Router>
-      <Switch>
-        <Route exact path="/projects">
-          <PageLayout>
-            <ProjectsPage />
-          </PageLayout>
-        </Route>
-        <Route exact path="/projects/create">
-          <PageLayout>
-            <CreateProjectPage />
-          </PageLayout>
-        </Route>
-        <Route exact path="/projects/edit">
-          <PageLayout>
-            <EditProjectPage />
-          </PageLayout>
-        </Route>
-        <Redirect to="/projects" />
-      </Switch>
-    </Router>
-  );
-
   return (
-    <VegaRoot className="App__Wrapper" defaultTheme="dark">
-      <div className="App">{content}</div>
-    </VegaRoot>
+    <Router>
+      <Route
+        exact
+        path={['/projects', '/projects/create', '/projects/show/:project_id']}
+        render={() => (
+          <VegaRoot className="App__Wrapper" defaultTheme="dark">
+            <div className="App">
+              <PageLayout>
+                <Switch>
+                  <Route exact path="/projects" component={ProjectsPage} />
+                  <Route exact path="/projects/create" component={CreateProjectPage} />
+                  <Route exact path="/projects/show/:project_id" component={EditProjectPage} />
+                </Switch>
+              </PageLayout>
+            </div>
+          </VegaRoot>
+        )}
+      />
+    </Router>
   );
 };
