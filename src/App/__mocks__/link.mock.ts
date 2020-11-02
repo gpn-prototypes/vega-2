@@ -87,6 +87,20 @@ export const mutationUpdateProjectVariable = {
   version: 1,
 };
 
+export const mutationUpdateProjectVariableNameForStitch = {
+  id: 1,
+  name: 'stitched name',
+  status: 'draft',
+  version: 2,
+};
+
+export const mutationUpdateProjectVariableDescriptionForStitch = {
+  id: 1,
+  description: 'stitched description',
+  status: 'draft',
+  version: 2,
+};
+
 export const mutationUpdateProjectMergedVariable = {
   id: 1,
   name: 'new name',
@@ -104,6 +118,21 @@ export const mutationUpdateProjectData = {
         description: 'description 2',
         status: 'draft',
         version: 2,
+        __typename: 'Project',
+      },
+    },
+  },
+};
+
+export const mutationUpdateProjectData3 = {
+  data: {
+    updateProject: {
+      result: {
+        id: 1,
+        name: 'new name',
+        description: 'description 2',
+        status: 'draft',
+        version: 3,
         __typename: 'Project',
       },
     },
@@ -154,6 +183,21 @@ export const mutationValidationErrorData = {
       message: 'Validation error',
     },
   ],
+};
+
+export const mutationUpdateProjectDataStitched = {
+  data: {
+    updateProject: {
+      result: {
+        id: 1,
+        name: 'stitched name',
+        description: 'stitched description',
+        status: 'draft',
+        version: 4,
+        __typename: 'Project',
+      },
+    },
+  },
 };
 
 export const mutationCreateUserVariable = {

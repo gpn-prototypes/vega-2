@@ -1,53 +1,12 @@
 import { NextLink, Operation } from '@apollo/client';
 import { DelayFunction } from '@apollo/client/link/retry/delayFunction';
-import { RetryFunction } from '@apollo/client/link/retry/retryFunction';
 import * as jsonDiffPatch from 'jsondiffpatch';
-
-export function deepMerge(...objects: Record<string, unknown>[]) {
-  const isObject = (obj: unknown) => obj && typeof obj === 'object';
-
-  function deepMergeInner(target: Record<string, unknown>, source: Record<string, unknown>) {
-    Object.keys(source).forEach((key: string) => {
-      const targetValue = target[key];
-      const sourceValue = source[key];
-
-      console.log({ targetValue, sourceValue });
-
-      if (Array.isArray(targetValue) && Array.isArray(sourceValue)) {
-        target[key] = targetValue.concat(sourceValue);
-      } else if (isObject(targetValue) && isObject(sourceValue)) {
-        target[key] = deepMergeInner({ ...targetValue }, sourceValue);
-      } else {
-        target[key] = sourceValue;
-      }
-    });
-
-    return target;
-  }
-
-  if (objects.length < 2) {
-    throw new Error('deepMerge: this function expects at least 2 objects to be provided');
-  }
-
-  if (objects.some((object) => !isObject(object))) {
-    throw new Error('deepMerge: all values should be of type "object"');
-  }
-
-  const target = objects.shift();
-  let source: Record<string, unknown> | undefined;
-
-  while ((source = objects.shift())) {
-    deepMergeInner(target, source);
-  }
-
-  return target;
-}
 
 type RetryableOperationOptions = {
   operation: Operation;
   nextLink: NextLink;
   delayFor: DelayFunction;
-  retryIf: RetryFunction;
+  maxAttempts: number;
 };
 
 type Project = {
@@ -88,15 +47,21 @@ export class RetryableOperation<TValue = any> {
 
   private delayFor: DelayFunction;
 
-  private retryIf: RetryFunction;
+  private shouldComplete: boolean;
+
+  private isMergeInProgress: boolean;
+
+  readonly maxAttempts: number;
 
   constructor(options: RetryableOperationOptions) {
-    const { operation, nextLink, delayFor, retryIf } = options;
+    const { operation, nextLink, delayFor, maxAttempts } = options;
 
     this.operation = operation;
     this.nextLink = nextLink;
     this.delayFor = delayFor;
-    this.retryIf = retryIf;
+    this.shouldComplete = false;
+    this.maxAttempts = maxAttempts;
+    this.isMergeInProgress = false;
   }
 
   /**
@@ -175,14 +140,22 @@ export class RetryableOperation<TValue = any> {
   }
 
   private onNext = (value: any) => {
-    const haveErrorDiff = value.data.updateProject.code === 'ERROR_DIFF';
+    const haveErrorDiff = value.data.updateProject?.code === 'ERROR_DIFF';
+    const isNeedMerge = this.retryCount < this.maxAttempts && haveErrorDiff;
 
-    console.log(value);
-
-    if (haveErrorDiff) {
-      this.onError(value.data.updateProject);
+    if (isNeedMerge) {
+      this.isMergeInProgress = true;
+      this.shouldComplete = false;
+      this.onDiffError(value);
       return;
     }
+
+    if (isNeedMerge && this.isMergeInProgress) {
+      // склеить мутации
+    }
+
+    this.shouldComplete = true;
+    this.isMergeInProgress = false;
     this.values.push(value);
 
     for (const observer of this.observers) {
@@ -192,6 +165,10 @@ export class RetryableOperation<TValue = any> {
   };
 
   private onComplete = () => {
+    if (!this.shouldComplete) {
+      return;
+    }
+
     this.complete = true;
     for (const observer of this.observers) {
       if (!observer) continue;
@@ -199,32 +176,35 @@ export class RetryableOperation<TValue = any> {
     }
   };
 
-  private onError = async (error: ErrorProjectDiff) => {
+  private onDiffError = (error) => {
     this.retryCount += 1;
+    const shouldRetry = error.data.updateProject.code === 'ERROR_DIFF';
 
-    // Should we retry?
-    // const shouldRetry = await this.retryIf(this.retryCount, this.operation, error);
+    if (this.retryCount < this.maxAttempts && shouldRetry) {
+      const { variables } = this.operation;
+      const { remoteProject } = error.data.updateProject;
+      const diff = jsonDiffPatch.diff(remoteProject, variables);
 
-    const shouldRetry = error.code === 'ERROR_DIFF';
+      if (diff) {
+        const patchedVars = {
+          ...jsonDiffPatch.patch(variables, diff),
+          version: remoteProject.version,
+        };
 
-    if (shouldRetry) {
-      // const { variables } = this.operation;
-      // const { remoteProject } = error;
-      // const diff = jsonDiffPatch.diff(remoteProject, variables);
-
-      // if (diff) {
-      //   const patchedVars = {
-      //     ...jsonDiffPatch.patch(variables, diff),
-      //     version: remoteProject.version,
-      //   };
-
-      //   this.operation = { ...this.operation, variables: patchedVars };
-      // }
+        this.operation = { ...this.operation, variables: patchedVars };
+      }
 
       this.scheduleRetry(this.delayFor(this.retryCount, this.operation, error));
       return;
     }
 
+    for (const observer of this.observers) {
+      if (!observer) continue;
+      observer.error!(error);
+    }
+  };
+
+  private onError = async (error: any) => {
     this.error = error;
     for (const observer of this.observers) {
       if (!observer) continue;
