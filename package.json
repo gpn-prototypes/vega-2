@@ -37,13 +37,13 @@
   },
   "dependencies": {
     "@apollo/client": "^3.2.2",
-    "@gpn-prototypes/vega-ui": "^2.12.3",
-    "graphql": "^15.3.0",
     "@consta/uikit": "^1.10.1",
+    "@gpn-prototypes/vega-ui": "^2.12.3",
     "bem-cn": "^3.0.1",
     "dayjs": "^1.9.3",
     "final-form": "^4.20.1",
     "final-form-arrays": "^3.0.2",
+    "graphql": "^15.3.0",
     "ramda": "^0.27.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -89,8 +89,8 @@
     "webpack-config-single-spa-react-ts": "^1.12.0",
     "webpack-config-single-spa-ts": "^1.12.0",
     "webpack-dev-server": "^3.11.0",
-    "webpack-merge": "^4.2.2",
-    "webpack-import-map-plugin": "^1.0.0-alpha0"
+    "webpack-import-map-plugin": "^1.0.0-alpha0",
+    "webpack-merge": "^4.2.2"
   },
   "resolutions": {
     "tslib": "1.13.0"

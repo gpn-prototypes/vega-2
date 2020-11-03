@@ -115,7 +115,7 @@ export const ProjectsTable: React.FC<Props> = (props) => {
 
   return (
     <Table
-      isZebraStriped
+      zebraStriped="odd"
       columns={COLUMNS}
       rows={rows}
       verticalAlign="center"
