@@ -67,6 +67,12 @@
     flex-direction: column;
   }
 
+  &__MenuIcon {
+    margin-right: var(--space-xs);
+
+    display: inline-flex;
+  }
+
   &__Loader {
     display: flex;
 

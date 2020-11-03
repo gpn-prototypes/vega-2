@@ -4,8 +4,10 @@ import {
   Button,
   ChoiceGroup,
   IconBookmarkFilled,
+  IconEdit,
   IconProps,
   IconSearch,
+  IconTrash,
   Loader,
   Text,
   TextField,
@@ -19,7 +21,7 @@ import { Project } from '../../__generated__/types';
 
 import { GetProjects } from './__generated__/projects';
 import { cnProjectsPage as cn } from './cn-projects-page';
-import { ProjectsTable, ProjectsTableRow } from './ProjectsTable';
+import { MenuItemProps, ProjectsTable, ProjectsTableRow } from './ProjectsTable';
 
 import './ProjectsPage.css';
 
@@ -153,12 +155,41 @@ const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): Pro
 };
 
 export const ProjectsPageView: React.FC<Props> = (props) => {
-  const projects =
+  const mappedProjects =
     props.data?.projects?.__typename !== 'ProjectList'
       ? []
       : projectsMapper(props.data?.projects.data);
 
   const isLoading = props.loading && !props.data;
+
+  const projects = mappedProjects.map((project) => {
+    const edit = ({ close, ...rest }: MenuItemProps) => {
+      return (
+        <Link to="/projects/create" onClick={() => close()} {...rest}>
+          <span className={cn('MenuIcon')}>
+            <IconEdit size="s" />
+          </span>
+          <Text>Редактировать</Text>
+        </Link>
+      );
+    };
+
+    const remove = ({ close, ...rest }: MenuItemProps) => {
+      return (
+        <button type="button" onClick={() => close()} {...rest}>
+          <span className={cn('MenuIcon')}>
+            <IconTrash size="s" />
+          </span>
+          <Text>Удалить</Text>
+        </button>
+      );
+    };
+
+    return {
+      ...project,
+      menu: [edit, remove],
+    };
+  });
 
   // TODO: Поправить условие, когда можно будет получить общее количество проектов и сделают пагинацию
   const visibleLoadMore = projects.length > 20;

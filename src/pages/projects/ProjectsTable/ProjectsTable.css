@@ -9,4 +9,31 @@
   &__editedTime {
     flex-grow: 1;
   }
+
+  &__menu {
+    position: absolute;
+    right: var(--space-xs);
+  }
+
+  &__navigation {
+    padding: var(--space-xs) var(--space-xs);
+
+    background-color: var(--color-bg-default);
+    border: 1px solid var(--color-bg-border);
+    border-radius: 4px;
+  }
+
+  &__navigationItem {
+    display: inline-flex;
+    align-items: center;
+
+    &:active {
+      text-decoration: none;
+    }
+  }
+
+  &__iconWrap {
+    width: 24px;
+    height: 24px;
+  }
 }

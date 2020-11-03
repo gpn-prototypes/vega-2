@@ -3,6 +3,9 @@ import {
   Button,
   IconBookmarkFilled,
   IconBookmarkStroked,
+  IconKebab,
+  NavigationList,
+  Popover,
   Table,
   Text,
 } from '@gpn-prototypes/vega-ui';
@@ -13,7 +16,18 @@ const blockName = 'ProjectsTable';
 const styles = {
   editedAt: `${blockName}__editedAt`,
   editedTime: `${blockName}__editedTime`,
+  menu: `${blockName}__menu`,
+  navigation: `${blockName}__navigation`,
+  navigationItem: `${blockName}__navigationItem`,
+  iconWrap: `${blockName}__iconWrap`,
 };
+
+export type MenuItemProps = {
+  close: VoidFunction;
+  className?: string;
+};
+
+type MenuItem = React.FC<MenuItemProps>;
 
 export type ProjectsTableRow = {
   id: string;
@@ -24,6 +38,7 @@ export type ProjectsTableRow = {
   createdBy?: string;
   createdAt?: string;
   editedAt?: string | React.ReactElement;
+  menu?: MenuItem[];
 };
 
 type Props = {
@@ -77,39 +92,111 @@ const COLUMNS: React.ComponentProps<typeof Table>['columns'] = [
   },
 ];
 
+type EditedAtProps = {
+  date: string | React.ReactElement;
+  menu?: MenuItem[];
+  isVisible: boolean;
+  onClickItem?: VoidFunction;
+};
+
+const EditedAt: React.FC<EditedAtProps> = ({ date, menu, isVisible, onClickItem }) => {
+  const anchorRef = React.createRef<HTMLButtonElement>();
+  const [isPopoverVisible, setIsPopoverVisible] = React.useState(false);
+  return (
+    <div className={styles.editedAt}>
+      <Text size="s" className={styles.editedTime}>
+        {date}
+      </Text>
+      <div className={styles.menu}>
+        <div className={styles.iconWrap}>
+          {isVisible && (
+            <Button
+              label="Меню"
+              iconLeft={IconKebab}
+              iconSize="s"
+              onlyIcon
+              view="clear"
+              size="xs"
+              ref={anchorRef}
+              onClick={() => setIsPopoverVisible(!isPopoverVisible)}
+            />
+          )}
+        </div>
+
+        {menu && isPopoverVisible && (
+          <Popover
+            direction="downLeft"
+            offset={6}
+            anchorRef={anchorRef}
+            onClickOutside={() => setIsPopoverVisible(false)}
+          >
+            <NavigationList className={styles.navigation}>
+              {menu.map((Item) => {
+                return (
+                  <NavigationList.Item>
+                    {({ className }) => {
+                      return (
+                        <Item
+                          close={() => {
+                            setIsPopoverVisible(false);
+                            if (onClickItem) {
+                              onClickItem();
+                            }
+                          }}
+                          className={`${className} ${styles.navigationItem}`}
+                        />
+                      );
+                    }}
+                  </NavigationList.Item>
+                );
+              })}
+            </NavigationList>
+          </Popover>
+        )}
+      </div>
+    </div>
+  );
+};
+
 export const ProjectsTable: React.FC<Props> = (props) => {
   const placeholder = props.placeholder ?? <Text size="s">Пока нет ни одного проекта :(</Text>;
+  const [idMenuVisible, setIdMenuVisible] = React.useState<string | undefined>(undefined);
 
   const rows =
     props.rows?.map((project) => {
-      const editedAt = (
-        <div className={styles.editedAt}>
-          <Text size="s" className={styles.editedTime}>
-            {project.editedAt}
-          </Text>
-        </div>
-      );
       const icon = project.isFavorite ? IconBookmarkFilled : IconBookmarkStroked;
+      const isVisible = idMenuVisible === project.id;
 
       return {
         ...project,
         favorite: (
-          <Button
-            label="Избранное"
-            iconLeft={icon}
-            iconSize="s"
-            onlyIcon
-            view="clear"
-            size="xs"
-            form="round"
-            onClick={() => {
-              if (project.id) {
-                props.onFavorite(project.id);
-              }
-            }}
-          />
+          <div className={styles.iconWrap}>
+            {(isVisible || project.isFavorite) && (
+              <Button
+                label="Избранное"
+                iconLeft={icon}
+                iconSize="s"
+                onlyIcon
+                view="clear"
+                size="xs"
+                form="round"
+                onClick={() => {
+                  if (project.id) {
+                    props.onFavorite(project.id);
+                  }
+                }}
+              />
+            )}
+          </div>
         ),
-        editedAt,
+        editedAt: project.editedAt ? (
+          <EditedAt
+            date={project.editedAt}
+            menu={project.menu}
+            isVisible={isVisible}
+            onClickItem={() => setIdMenuVisible(undefined)}
+          />
+        ) : null,
       };
     }) || [];
 
@@ -120,6 +207,9 @@ export const ProjectsTable: React.FC<Props> = (props) => {
       rows={rows}
       verticalAlign="center"
       emptyRowsPlaceholder={placeholder}
+      onRowHover={({ id }) => {
+        setIdMenuVisible(id);
+      }}
     />
   );
 };

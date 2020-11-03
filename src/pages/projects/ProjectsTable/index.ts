@@ -1,1 +1,1 @@
-export { ProjectsTable, ProjectsTableRow } from './ProjectsTable';
+export { ProjectsTable, ProjectsTableRow, MenuItemProps } from './ProjectsTable';
