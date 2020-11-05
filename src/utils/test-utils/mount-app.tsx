@@ -29,7 +29,7 @@ export const mountApp = (node: React.ReactElement, options: MountAppOptions = {}
 
   const mockLink = new MockLink(mocks);
 
-  const links = from([MergeLink({}), mockLink]);
+  const links = options.link ? from([options.link, mockLink]) : undefined;
 
   const TestApp: React.FC = (props) => {
     return (

@@ -53,6 +53,8 @@ export class RetryableOperation<TValue = any> {
 
   readonly maxAttempts: number;
 
+  private operationInQueue: Operation | null;
+
   constructor(options: RetryableOperationOptions) {
     const { operation, nextLink, delayFor, maxAttempts } = options;
 
@@ -62,6 +64,8 @@ export class RetryableOperation<TValue = any> {
     this.shouldComplete = false;
     this.maxAttempts = maxAttempts;
     this.isMergeInProgress = false;
+
+    this.operationInQueue = null;
   }
 
   /**
@@ -131,7 +135,34 @@ export class RetryableOperation<TValue = any> {
     this.canceled = true;
   }
 
+  private mergeOperations(operation: Operation) {
+    if (!this.operationInQueue) {
+      this.operationInQueue = operation;
+      return;
+    }
+
+    const { variables } = operation;
+
+    this.operationInQueue = {
+      ...this.operationInQueue,
+      variables: { ...this.operationInQueue, ...variables },
+    };
+
+    console.log(this.operationInQueue);
+  }
+
   private try() {
+    // if (this.isMergeInProgress) {
+    //   console.log(this.operation);
+    //   this.mergeOperations(this.operation);
+    // } else {
+    //   if (this.operationInQueue) {
+    //     this.operation = this.operationInQueue;
+    //   }
+
+    //   this.operationInQueue = null;
+    // }
+
     this.currentSubscription = this.nextLink(this.operation).subscribe({
       next: this.onNext,
       error: this.onError,
@@ -148,10 +179,6 @@ export class RetryableOperation<TValue = any> {
       this.shouldComplete = false;
       this.onDiffError(value);
       return;
-    }
-
-    if (isNeedMerge && this.isMergeInProgress) {
-      // склеить мутации
     }
 
     this.shouldComplete = true;

@@ -1,7 +1,4 @@
-import { nextTick } from 'process';
-
 import { ApolloLink, execute, fromError, Observable, throwServerError } from '@apollo/client';
-import { waitFor } from '@testing-library/react';
 
 import waitForObservables from '../utils/test-utils/wait-for-observable';
 
@@ -179,24 +176,25 @@ describe('MergeLink', () => {
       .mockImplementationOnce(() => Observable.of(mock.mutationUpdateProjectErrorData3))
       .mockImplementationOnce(() => Observable.of(mock.mutationUpdateProjectData3))
       .mockImplementationOnce(() => Observable.of(mock.mutationUpdateProjectDataStitched));
+
     const link = ApolloLink.from([retry, stub]);
 
-    const [firstMutation, secondMutation, updateProjectResult] = (await waitForObservables(
+    const [first, second, third] = (await waitForObservables(
       execute(link, {
         query: mock.UPDATE_PROJECT_MUTATION,
         variables: mock.mutationUpdateProjectVariable,
       }),
       execute(link, {
-        query: mock.UPDATE_USER_MUTATION,
-        variables: mock.mutationUpdateProjectVariableNameForStitch,
+        query: mock.UPDATE_PROJECT_MUTATION,
+        variables: mock.mutationUpdateProjectVariableDescriptionForStitch,
       }),
       execute(link, {
-        query: mock.UPDATE_USER_MUTATION,
-        variables: mock.mutationUpdateProjectVariableDescriptionForStitch,
+        query: mock.UPDATE_PROJECT_MUTATION,
+        variables: mock.mutationUpdateProjectVariableNameForStitch,
       }),
     )) as any;
 
-    expect(updateProjectResult.values).toEqual([mock.mutationUpdateProjectDataStitched]);
+    expect(first.values).toEqual([mock.mutationUpdateProjectDataStitched]);
     expect(stub).toHaveBeenCalledTimes(4);
   });
 });
