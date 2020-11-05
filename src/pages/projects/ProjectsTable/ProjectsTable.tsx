@@ -93,7 +93,7 @@ const COLUMNS: React.ComponentProps<typeof Table>['columns'] = [
 ];
 
 type EditedAtProps = {
-  date: string | React.ReactElement;
+  date?: string | React.ReactElement;
   menu?: MenuItem[];
   isVisible: boolean;
   onClickItem?: VoidFunction;
@@ -189,14 +189,14 @@ export const ProjectsTable: React.FC<Props> = (props) => {
             )}
           </div>
         ),
-        editedAt: project.editedAt ? (
+        editedAt: (
           <EditedAt
             date={project.editedAt}
             menu={project.menu}
             isVisible={isVisible}
             onClickItem={() => setIdMenuVisible(undefined)}
           />
-        ) : null,
+        ),
       };
     }) || [];
 

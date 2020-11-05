@@ -86,4 +86,19 @@
   &__EditedAt {
     display: flex;
   }
+
+  &__SnackBar {
+    width: 400px;
+  }
+
+  &__PortalSnackBar {
+    position: absolute;
+
+    bottom: 0;
+
+    display: flex;
+    justify-content: center;
+
+    width: 100%;
+  }
 }

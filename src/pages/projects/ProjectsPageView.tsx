@@ -9,8 +9,11 @@ import {
   IconSearch,
   IconTrash,
   Loader,
+  SnackBar,
   Text,
   TextField,
+  usePortal,
+  usePortalRender,
 } from '@gpn-prototypes/vega-ui';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -19,9 +22,10 @@ import 'dayjs/locale/ru';
 
 import { Project } from '../../__generated__/types';
 
-import { GetProjects } from './__generated__/projects';
+import { GetProjects, useDeleteProject } from './__generated__/projects';
 import { cnProjectsPage as cn } from './cn-projects-page';
 import { MenuItemProps, ProjectsTable, ProjectsTableRow } from './ProjectsTable';
+import { useSnackbar } from './use-snackbar';
 
 import './ProjectsPage.css';
 
@@ -162,6 +166,13 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
 
   const isLoading = props.loading && !props.data;
 
+  const [items, { addItem, removeItem }] = useSnackbar();
+
+  const { renderPortalWithTheme } = usePortalRender();
+  const { portal } = usePortal({ name: 'snackbar', className: cn('PortalSnackBar') });
+
+  const [deleteProject] = useDeleteProject();
+
   const projects = mappedProjects.map((project) => {
     const edit = ({ close, ...rest }: MenuItemProps) => {
       return (
@@ -176,7 +187,33 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
 
     const remove = ({ close, ...rest }: MenuItemProps) => {
       return (
-        <button type="button" onClick={() => close()} {...rest}>
+        <button
+          type="button"
+          onClick={() => {
+            addItem({
+              key: `${project.id}-alert`,
+              message: `Вы уверены, что хотите удалить проект "${project.name}" из системы?`,
+              status: 'alert',
+              actions: [
+                {
+                  label: 'Да, удалить',
+                  onClick(): void {
+                    deleteProject({ variables: { vid: project.id } });
+                    removeItem(`${project.id}-alert`);
+                  },
+                },
+                {
+                  label: 'Нет, оставить',
+                  onClick(): void {
+                    removeItem(`${project.id}-alert`);
+                  },
+                },
+              ],
+            });
+            close();
+          }}
+          {...rest}
+        >
           <span className={cn('MenuIcon')}>
             <IconTrash size="s" />
           </span>
@@ -243,6 +280,11 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
           table
         )}
       </div>
+      {portal &&
+        renderPortalWithTheme(
+          <SnackBar className={cn('SnackBar').toString()} items={items} />,
+          portal,
+        )}
     </div>
   );
 };
