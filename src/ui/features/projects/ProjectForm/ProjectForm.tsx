@@ -26,7 +26,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
 
   /* смотрите комментарий к oneExistingRegion в DescriptionStep */
 
-  let oneExistingRegionId: string | undefined;
+  // let oneExistingRegionId: string | undefined;
 
   if (
     referenceData &&
@@ -34,14 +34,12 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     Array.isArray(referenceData.regionList) &&
     referenceData.regionList[0]
   ) {
-    oneExistingRegionId = referenceData.regionList[0].vid ? referenceData.regionList[0].vid : '';
+    // oneExistingRegionId = referenceData.regionList[0].vid ? referenceData.regionList[0].vid : '';
   }
 
   const handleFormSubmit = (values: FormValues): void => {
     onSubmit({
       name: values.description.name,
-      type: values.description.type,
-      region: oneExistingRegionId,
       coordinates: values.description.coordinates,
       description: values.description.description,
     });
