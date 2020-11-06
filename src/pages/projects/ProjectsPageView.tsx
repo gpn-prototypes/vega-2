@@ -171,7 +171,10 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
   const { renderPortalWithTheme } = usePortalRender();
   const { portal } = usePortal({ name: 'snackbar', className: cn('PortalSnackBar') });
 
-  const [deleteProject] = useDeleteProject();
+  const [deleteProject] = useDeleteProject({
+    refetchQueries: [`GetProjects`],
+    awaitRefetchQueries: true,
+  });
 
   const projects = mappedProjects.map((project) => {
     const edit = ({ close, ...rest }: MenuItemProps) => {
@@ -198,7 +201,13 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
                 {
                   label: 'Да, удалить',
                   onClick(): void {
-                    deleteProject({ variables: { vid: project.id } });
+                    deleteProject({ variables: { vid: project.id } }).then(() => {
+                      addItem({
+                        key: `${project.id}-system`,
+                        status: 'system',
+                        message: `Проект "${project.name}" успешно удален. Его можно найти в "Архиве".`,
+                      });
+                    });
                     removeItem(`${project.id}-alert`);
                   },
                 },
