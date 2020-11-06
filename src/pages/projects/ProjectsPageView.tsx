@@ -4,33 +4,17 @@ import {
   Button,
   ChoiceGroup,
   IconBookmarkFilled,
-  IconEdit,
   IconProps,
   IconSearch,
-  IconTrash,
   Loader,
-  SnackBar,
   Text,
   TextField,
-  usePortal,
-  usePortalRender,
 } from '@gpn-prototypes/vega-ui';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 
-import 'dayjs/locale/ru';
-
-import { Project } from '../../__generated__/types';
-
-import { GetProjects, useDeleteProject } from './__generated__/projects';
 import { cnProjectsPage as cn } from './cn-projects-page';
-import { MenuItemProps, ProjectsTable, ProjectsTableRow } from './ProjectsTable';
-import { useSnackbar } from './use-snackbar';
+import { ProjectsTable, ProjectsTableRow } from './ProjectsTable';
 
 import './ProjectsPage.css';
-
-dayjs.locale('ru');
-dayjs.extend(utc);
 
 type Item = {
   name: string;
@@ -108,145 +92,18 @@ const ProjectFilter: React.FC<ProjectFilterType> = ({ onInputSearch, onChangeFil
 };
 
 type Props = {
-  data?: GetProjects;
-  loading?: boolean;
-};
-
-type ProjectsMapper = Pick<
-  Project,
-  'vid' | 'name' | 'isFavorite' | 'region' | 'attendees' | 'createdBy' | 'createdAt' | 'editedAt'
-> | null;
-
-const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): ProjectsTableRow[] => {
-  if (!projects) {
-    return [];
-  }
-
-  return projects?.flatMap((project) => {
-    if (project === null) {
-      return [];
-    }
-
-    const roles = project.attendees
-      ?.map((a) => a?.roles)
-      ?.map((rs) => rs?.map((r) => r?.name).join(''))
-      .join(', ');
-
-    const createdAt = project.createdAt
-      ? dayjs.utc(project.createdAt).local().format('D MMMM YYYY')
-      : undefined;
-
-    const editedAt = project.editedAt ? (
-      <div className={cn('EditedAt')}>
-        <Text size="s">{dayjs.utc(project.editedAt).local().format('D MMMM YYYY')}</Text>
-        <Text size="s" view="secondary">
-          {dayjs.utc(project.editedAt).local().format(', H:mm')}
-        </Text>
-      </div>
-    ) : undefined;
-
-    return {
-      id: project.vid ?? 'wtf-id',
-      name: project.name ?? undefined,
-      isFavorite: project.isFavorite ?? undefined,
-      region: project.region?.name ?? undefined,
-      roles: roles ?? undefined,
-      createdBy: project?.createdBy?.name ?? undefined,
-      createdAt,
-      editedAt,
-    };
-  });
+  projects: ProjectsTableRow[];
+  isLoading: boolean;
 };
 
 export const ProjectsPageView: React.FC<Props> = (props) => {
-  const mappedProjects =
-    props.data?.projects?.__typename !== 'ProjectList'
-      ? []
-      : projectsMapper(props.data?.projects.data);
-
-  const isLoading = props.loading && !props.data;
-
-  const [items, { addItem, removeItem }] = useSnackbar();
-
-  const { renderPortalWithTheme } = usePortalRender();
-  const { portal } = usePortal({ name: 'snackbar', className: cn('PortalSnackBar') });
-
-  const [deleteProject] = useDeleteProject({
-    refetchQueries: [`GetProjects`],
-    awaitRefetchQueries: true,
-  });
-
-  const projects = mappedProjects.map((project) => {
-    const edit = ({ close, ...rest }: MenuItemProps) => {
-      return (
-        <Link to="/projects/create" onClick={() => close()} {...rest}>
-          <span className={cn('MenuIcon')}>
-            <IconEdit size="s" />
-          </span>
-          <Text>Редактировать</Text>
-        </Link>
-      );
-    };
-
-    const remove = ({ close, ...rest }: MenuItemProps) => {
-      return (
-        <button
-          type="button"
-          onClick={() => {
-            addItem({
-              key: `${project.id}-alert`,
-              message: `Вы уверены, что хотите удалить проект "${project.name}" из системы?`,
-              status: 'alert',
-              actions: [
-                {
-                  label: 'Да, удалить',
-                  onClick(): void {
-                    deleteProject({ variables: { vid: project.id } }).then(() => {
-                      addItem({
-                        key: `${project.id}-system`,
-                        status: 'system',
-                        message: `Проект "${project.name}" успешно удален. Его можно найти в "Архиве".`,
-                      });
-                    });
-                    removeItem(`${project.id}-alert`);
-                  },
-                },
-                {
-                  label: 'Нет, оставить',
-                  onClick(): void {
-                    removeItem(`${project.id}-alert`);
-                  },
-                },
-              ],
-            });
-            close();
-          }}
-          {...rest}
-        >
-          <span className={cn('MenuIcon')}>
-            <IconTrash size="s" />
-          </span>
-          <Text>Удалить</Text>
-        </button>
-      );
-    };
-
-    return {
-      ...project,
-      menu: [
-        { key: `${project.id}-edit`, Element: edit },
-        { key: `${project.id}-remove`, Element: remove },
-      ],
-    };
-  });
-
   // TODO: Поправить условие, когда можно будет получить общее количество проектов и сделают пагинацию
-  const visibleLoadMore = projects.length > 20;
+  const visibleLoadMore = props.projects.length > 20;
 
   const table = (
     <div className={cn('Table')}>
       <ProjectsTable
-        rows={projects}
+        rows={props.projects}
         onFavorite={(id) => {
           // eslint-disable-next-line no-console
           console.log(id);
@@ -284,7 +141,7 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
             onChangeFilter={(value: Item): void => console.log(`Filter: ${value.name}`)}
           />
         </div>
-        {isLoading ? (
+        {props.isLoading ? (
           <div className={cn('Loader')}>
             <Loader />
           </div>
@@ -292,11 +149,6 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
           table
         )}
       </div>
-      {portal &&
-        renderPortalWithTheme(
-          <SnackBar className={cn('SnackBar').toString()} items={items} />,
-          portal,
-        )}
     </div>
   );
 };

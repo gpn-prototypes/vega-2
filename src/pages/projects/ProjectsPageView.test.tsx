@@ -7,7 +7,7 @@ import { ProjectsPageView } from './ProjectsPageView';
 function renderComponent(): tl.RenderResult {
   return tl.render(
     <Router>
-      <ProjectsPageView />
+      <ProjectsPageView projects={[]} isLoading={false} />
     </Router>,
   );
 }
