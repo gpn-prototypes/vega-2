@@ -5,32 +5,29 @@ import * as tl from '@testing-library/react';
 import { MergeLink } from '../../App/Link';
 
 import {
-  CREATE_USER_MUTATION,
-  GET_PROJECTS_QUERY,
   mock,
+  mockedError,
   mockMultipleWithErrorDiff,
   mockWithErrorDiff,
+  Project,
   projectAfterMutation,
   projectAfterMutationVer3,
-  UPDATE_PROJECT_MUTATION,
+  query,
+  User,
+  userAfterUpdate,
   variables,
 } from './mocks';
 import { mountApp } from './mount-app';
 
-type Project = {
-  id: number;
-  name: string;
-  description: string;
-  status: string;
-  version: number;
-};
-
-type QueryResult = { project: Project };
+type QueryProjectResult = { project: Project };
+type QueryUserResult = { user: User };
 
 const App = () => {
-  useQuery(GET_PROJECTS_QUERY);
-  const [mutate] = useMutation(UPDATE_PROJECT_MUTATION);
-  const [userCreate] = useMutation(CREATE_USER_MUTATION);
+  useQuery(query.GET_PROJECTS_QUERY);
+
+  const [mutate, { error, loading }] = useMutation(query.UPDATE_PROJECT_MUTATION, {
+    errorPolicy: 'all',
+  });
 
   const handleClick = () => {
     mutate({
@@ -46,7 +43,35 @@ const App = () => {
     });
   };
 
+  if (loading) {
+    return <div data-testid="loading">Идёт загрузка</div>;
+  }
+
+  if (error) {
+    return <div data-testid="error">Ошибка</div>;
+  }
+
+  return (
+    <div>
+      <button type="button" data-testid="updateData" onClick={handleClick}>
+        Изменить данные
+      </button>
+    </div>
+  );
+};
+
+const AppWithMultipleQuery = () => {
+  useQuery(query.GET_PROJECTS_QUERY);
+  useQuery(query.GET_USER_QUERY);
+
+  const [mutate] = useMutation(query.UPDATE_PROJECT_MUTATION);
+  const [userUpdate] = useMutation(query.UPDATE_USER_MUTATION);
+
   const handleUpdateAndCreate = () => {
+    userUpdate({
+      variables: { user: variables.mutationUpdateUserVariable },
+    });
+
     mutate({
       variables: {
         project: {
@@ -58,17 +83,10 @@ const App = () => {
         },
       },
     });
-
-    userCreate({
-      variables: variables.mutationCreateUserVariable,
-    });
   };
 
   return (
     <div>
-      <button type="button" data-testid="updateData" onClick={handleClick}>
-        Изменить данные
-      </button>
       <button type="button" data-testid="updateAndCreateData" onClick={handleUpdateAndCreate}>
         Изменить данные
       </button>
@@ -77,6 +95,10 @@ const App = () => {
 };
 
 describe('QueryWithMerge', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('рендерится без ошибок', async () => {
     const { $ } = await mountApp(<div data-testid="test" />, { mocks: mock });
     expect($.getByTestId('test')).toBeInTheDocument();
@@ -95,9 +117,10 @@ describe('QueryWithMerge', () => {
 
     await waitRequest();
 
-    const query = await cache.readQuery({ query: GET_PROJECTS_QUERY });
+    const project = await cache.readQuery<QueryProjectResult>({ query: query.GET_PROJECTS_QUERY })
+      ?.project;
 
-    expect(query.project).toEqual(projectAfterMutation);
+    expect(project).toEqual(projectAfterMutation);
   });
 
   it('происходит мутация c решением конфликта', async () => {
@@ -113,13 +136,14 @@ describe('QueryWithMerge', () => {
 
     await waitRequest();
 
-    const query = await cache.readQuery({ query: GET_PROJECTS_QUERY });
+    const project = await cache.readQuery<QueryProjectResult>({ query: query.GET_PROJECTS_QUERY })
+      ?.project;
 
-    expect(query.project).toEqual(projectAfterMutationVer3);
+    expect(project).toEqual(projectAfterMutationVer3);
   });
 
-  it.only('запускаются несколько мутаций с конфликтом в одной из них', async () => {
-    const { $, waitRequest, cache } = await mountApp(<App />, {
+  it('запускаются несколько мутаций с конфликтом в одной из них', async () => {
+    const { $, waitRequest, cache } = await mountApp(<AppWithMultipleQuery />, {
       mocks: mockMultipleWithErrorDiff,
       link: new MergeLink(),
     });
@@ -131,8 +155,46 @@ describe('QueryWithMerge', () => {
 
     await waitRequest();
 
-    const queryProject = await cache.readQuery({ query: GET_PROJECTS_QUERY });
+    const project = await cache.readQuery<QueryProjectResult>({ query: query.GET_PROJECTS_QUERY })
+      ?.project;
+    const user = await cache.readQuery<QueryUserResult>({ query: query.GET_USER_QUERY })?.user;
 
-    expect(queryProject.project).toEqual(projectAfterMutationVer3);
+    expect(project).toEqual(projectAfterMutationVer3);
+    expect(user).toEqual(userAfterUpdate);
+  });
+
+  it('возвращается ошибка', async () => {
+    const { $, waitRequest } = await mountApp(<App />, {
+      mocks: mockedError,
+      link: new MergeLink(),
+    });
+
+    await waitRequest();
+
+    tl.act(() => {
+      tl.fireEvent.click($.getByTestId('updateData'));
+    });
+
+    await waitRequest();
+
+    expect($.getByTestId('error')).toBeInTheDocument();
+  });
+
+  it('отображается статус загрузки при мутации c решением конфликта', async () => {
+    const { $, waitRequest } = await mountApp(<App />, {
+      mocks: mockWithErrorDiff,
+      link: new MergeLink(),
+    });
+    await waitRequest();
+
+    tl.act(() => {
+      tl.fireEvent.click($.getByTestId('updateData'));
+    });
+
+    const loading = $.getByTestId('loading');
+
+    expect(loading).toBeInTheDocument();
+
+    await waitRequest();
   });
 });

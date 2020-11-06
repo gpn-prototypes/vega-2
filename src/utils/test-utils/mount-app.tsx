@@ -3,20 +3,27 @@ import { ApolloLink, from, InMemoryCache } from '@apollo/client';
 import { MockedProvider, MockedResponse, MockLink } from '@apollo/client/testing';
 import * as tl from '@testing-library/react';
 
-import { MergeLink } from '../../App/Link';
-
-interface MountAppOptions {
+type MountAppOptions = {
   shouldAddToBody?: boolean;
   mocks?: MockedResponse[];
   link?: ApolloLink;
-}
+};
+
+type MountAppResult = {
+  $: tl.RenderResult;
+  cache: InMemoryCache;
+  waitRequest(amount?: number): Promise<void>;
+};
 
 // Then, put this client in ApolloProvider
 // Import the schema object from previous code snippet above
 
 // Wherever we want a component to display mocked data
 // MyComponent uses the Query component internally
-export const mountApp = (node: React.ReactElement, options: MountAppOptions = {}) => {
+export const mountApp = (
+  node: React.ReactElement,
+  options: MountAppOptions = {},
+): MountAppResult => {
   const mocks = options.mocks ? options.mocks : [];
 
   const cache = new InMemoryCache({
@@ -24,12 +31,15 @@ export const mountApp = (node: React.ReactElement, options: MountAppOptions = {}
       Project: {
         keyFields: ['id'],
       },
+      User: {
+        keyFields: ['id'],
+      },
     },
   });
 
   const mockLink = new MockLink(mocks);
 
-  const links = options.link ? from([options.link, mockLink]) : undefined;
+  const links = options.link ? from([options.link, mockLink]) : from([mockLink]);
 
   const TestApp: React.FC = (props) => {
     return (

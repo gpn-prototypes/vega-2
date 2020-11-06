@@ -171,7 +171,7 @@ export class RetryableOperation<TValue = any> {
   }
 
   private onNext = (value: any) => {
-    const haveErrorDiff = value.data.updateProject?.code === 'ERROR_DIFF';
+    const haveErrorDiff = !value.errors && value.data.updateProject?.code === 'ERROR_DIFF';
     const isNeedMerge = this.retryCount < this.maxAttempts && haveErrorDiff;
 
     if (isNeedMerge) {
