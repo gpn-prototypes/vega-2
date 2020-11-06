@@ -15,7 +15,7 @@ module.exports = (webpackConfigEnv) => {
 
   const config = webpackMerge.smart(defaultConfig, {
     // modify the webpack config however you'd like to by adding to this object
-    externals: ['@apollo/client', 'graphql'],
+    externals: ['@apollo/client', 'graphql', '@gpn-prototypes/vega-ui'],
     entry: ['./src/singleSpaEntry.tsx'],
     module: {
       rules: [
