@@ -27,7 +27,10 @@ export type MenuItemProps = {
   className?: string;
 };
 
-type MenuItem = React.FC<MenuItemProps>;
+type MenuItem = {
+  key: string;
+  Element: React.FC<MenuItemProps>;
+};
 
 export type ProjectsTableRow = {
   id: string;
@@ -131,12 +134,12 @@ const EditedAt: React.FC<EditedAtProps> = ({ date, menu, isVisible, onClickItem 
             onClickOutside={() => setIsPopoverVisible(false)}
           >
             <NavigationList className={styles.navigation}>
-              {menu.map((Item) => {
+              {menu.map(({ Element, key }) => {
                 return (
-                  <NavigationList.Item>
+                  <NavigationList.Item key={key}>
                     {({ className }) => {
                       return (
-                        <Item
+                        <Element
                           close={() => {
                             setIsPopoverVisible(false);
                             if (onClickItem) {

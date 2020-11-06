@@ -233,7 +233,10 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
 
     return {
       ...project,
-      menu: [edit, remove],
+      menu: [
+        { key: `${project.id}-edit`, Element: edit },
+        { key: `${project.id}-remove`, Element: remove },
+      ],
     };
   });
 
