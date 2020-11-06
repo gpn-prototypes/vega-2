@@ -1,19 +1,5 @@
-mutation CreateProject(
-  $name: String!
-  $type: String
-  $region: ID
-  $coordinates: String
-  $description: String
-) {
-  createProject(
-    data: {
-      name: $name
-      type: $type
-      region: $region
-      coordinates: $coordinates
-      description: $description
-    }
-  ) {
+mutation CreateProject($name: String!, $coordinates: String, $description: String) {
+  createProject(data: { name: $name, coordinates: $coordinates, description: $description }) {
     result {
       ... on Project {
         vid
