@@ -5,6 +5,8 @@ query GetProjects {
         vid
         isFavorite
         name
+        version
+        status
         attendees {
           user {
             name
@@ -29,6 +31,25 @@ query GetProjects {
       code
       message
       details
+    }
+  }
+}
+
+mutation UpdateProject($vid: UUID, $data: ProjectUpdateType) {
+  updateProject(data: $data, vid: $vid) {
+    result {
+      ... on Project {
+        vid
+        isFavorite
+        status
+        version
+      }
+      ... on Error {
+        code
+        message
+        details
+        payload
+      }
     }
   }
 }

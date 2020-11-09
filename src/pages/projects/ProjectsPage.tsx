@@ -15,7 +15,7 @@ import 'dayjs/locale/ru';
 
 import { Project } from '../../__generated__/types';
 
-import { useDeleteProject, useGetProjects } from './__generated__/projects';
+import { useDeleteProject, useGetProjects, useUpdateProject } from './__generated__/projects';
 import { MenuItemProps, TableRow } from './ProjectsTable/types';
 import { cnProjectsPage as cn } from './cn-projects-page';
 import { ProjectsPageView } from './ProjectsPageView';
@@ -26,7 +26,16 @@ dayjs.extend(utc);
 
 type ProjectsMapper = Pick<
   Project,
-  'vid' | 'name' | 'isFavorite' | 'region' | 'attendees' | 'createdBy' | 'createdAt' | 'editedAt'
+  | 'vid'
+  | 'name'
+  | 'isFavorite'
+  | 'region'
+  | 'attendees'
+  | 'createdBy'
+  | 'createdAt'
+  | 'editedAt'
+  | 'version'
+  | 'status'
 > | null;
 
 const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): TableRow[] => {
@@ -60,6 +69,8 @@ const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): Tab
     return {
       id: project.vid ?? 'wtf-id',
       name: project.name ?? undefined,
+      version: project.version ?? undefined,
+      status: project.status ?? undefined,
       isFavorite: project.isFavorite ?? undefined,
       region: project.region?.name ?? undefined,
       roles: roles ?? undefined,
@@ -80,6 +91,16 @@ export const ProjectsPage = (): React.ReactElement => {
   const { data, loading } = useGetProjects({
     fetchPolicy: 'network-only',
   });
+  const [updateProject] = useUpdateProject({
+    refetchQueries: [`GetProjects`],
+  });
+
+  const addToFavorite = React.useCallback(
+    (id, payload) => {
+      updateProject({ variables: { vid: id, data: payload } });
+    },
+    [updateProject],
+  );
 
   const isLoading = loading && !data?.projects;
 
@@ -155,7 +176,7 @@ export const ProjectsPage = (): React.ReactElement => {
 
   return (
     <>
-      <ProjectsPageView projects={projects} isLoading={isLoading} />
+      <ProjectsPageView projects={projects} isLoading={isLoading} onFavorite={addToFavorite} />
       {portal &&
         renderPortalWithTheme(
           <SnackBar className={cn('SnackBar').toString()} items={items} />,
