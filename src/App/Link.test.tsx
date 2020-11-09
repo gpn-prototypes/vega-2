@@ -104,7 +104,7 @@ describe('MergeLink', () => {
   });
 
   // ??? уточнить ценность теста после обновления схемы с ошибками
-  it.skip('возвращается ошибка валидации', async () => {
+  it.only('возвращается ошибка валидации', async () => {
     const response = { status: 400, ok: false } as Response;
     const retry = new MergeLink({ attempts: { max: 2 } });
     const stub = jest.fn(() =>

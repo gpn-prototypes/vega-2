@@ -16,7 +16,7 @@ const httpLink = new HttpLink({
   },
 });
 
-const links = from([MergeLink, httpLink]);
+const links = from([new MergeLink(), httpLink]);
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),

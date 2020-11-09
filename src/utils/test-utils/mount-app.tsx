@@ -15,11 +15,6 @@ type MountAppResult = {
   waitRequest(amount?: number): Promise<void>;
 };
 
-// Then, put this client in ApolloProvider
-// Import the schema object from previous code snippet above
-
-// Wherever we want a component to display mocked data
-// MyComponent uses the Query component internally
 export const mountApp = (
   node: React.ReactElement,
   options: MountAppOptions = {},

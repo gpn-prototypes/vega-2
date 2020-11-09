@@ -81,9 +81,9 @@ export class RetryableOperation<TValue = any> {
     this.observers.push(observer);
 
     // If we've already begun, catch this observer up.
-    for (const value of this.values) {
+    this.values.forEach((value) => {
       observer.next!(value);
-    }
+    });
 
     if (this.complete) {
       observer.complete!();
@@ -147,8 +147,6 @@ export class RetryableOperation<TValue = any> {
       ...this.operationInQueue,
       variables: { ...this.operationInQueue, ...variables },
     };
-
-    console.log(this.operationInQueue);
   }
 
   private try() {
@@ -185,10 +183,10 @@ export class RetryableOperation<TValue = any> {
     this.isMergeInProgress = false;
     this.values.push(value);
 
-    for (const observer of this.observers) {
-      if (!observer) continue;
+    this.observers.forEach((observer) => {
+      if (!observer) return;
       observer.next!(value);
-    }
+    });
   };
 
   private onComplete = () => {
@@ -197,10 +195,11 @@ export class RetryableOperation<TValue = any> {
     }
 
     this.complete = true;
-    for (const observer of this.observers) {
-      if (!observer) continue;
+
+    this.observers.forEach((observer) => {
+      if (!observer) return;
       observer.complete!();
-    }
+    });
   };
 
   private onDiffError = (error) => {
@@ -225,18 +224,18 @@ export class RetryableOperation<TValue = any> {
       return;
     }
 
-    for (const observer of this.observers) {
-      if (!observer) continue;
+    this.observers.forEach((observer) => {
+      if (!observer) return;
       observer.error!(error);
-    }
+    });
   };
 
   private onError = async (error: any) => {
     this.error = error;
-    for (const observer of this.observers) {
-      if (!observer) continue;
+    this.observers.forEach((observer) => {
+      if (!observer) return;
       observer.error!(error);
-    }
+    });
   };
 
   private scheduleRetry(delay: number) {
