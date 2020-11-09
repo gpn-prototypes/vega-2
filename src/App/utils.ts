@@ -246,6 +246,6 @@ export class RetryableOperation<TValue = any> {
     this.timerId = (setTimeout(() => {
       this.timerId = undefined;
       this.try();
-    }, delay) as any) as number;
+    }, delay) as unknown) as number;
   }
 }

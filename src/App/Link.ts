@@ -4,6 +4,8 @@ import { buildDelayFunction, DelayFunction } from '@apollo/client/link/retry/del
 
 import { RetryableOperation } from './utils';
 
+const COUNT_ATTEMPTS_MAX = 5;
+
 export class MergeLink extends ApolloLink {
   private delayFor: DelayFunction;
 
@@ -12,7 +14,8 @@ export class MergeLink extends ApolloLink {
   constructor(options?: RetryLink.Options) {
     super();
     const { attempts, delay } = options || ({} as RetryLink.Options);
-    this.attemptsMax = typeof attempts === 'function' || !attempts?.max ? 5 : attempts?.max;
+    this.attemptsMax =
+      typeof attempts === 'function' || !attempts?.max ? COUNT_ATTEMPTS_MAX : attempts?.max;
     this.delayFor = typeof delay === 'function' ? delay : buildDelayFunction(delay);
   }
 

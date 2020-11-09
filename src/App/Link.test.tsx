@@ -9,10 +9,10 @@ const standardError = new Error('I never work');
 
 describe('MergeLink', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
-  it('при ошибке конфликта запрос повторяется указанное кол-во раз', async () => {
+  it('при ошибке конфликта запрос повторяется указанное кол-во раз', async (done) => {
     const max = 10;
     const retry = new MergeLink({ delay: { initial: 1 }, attempts: { max } });
     const stub = jest.fn(() => Observable.of(mock.mutationUpdateProjectErrorData)) as any;
@@ -25,14 +25,24 @@ describe('MergeLink', () => {
       }),
     )) as any;
 
+    done();
+
     expect(resultWithError.error).toEqual(mock.mutationUpdateProjectErrorData);
     expect(stub).toHaveBeenCalledTimes(max);
   });
 
   it('по умолчанию совершается 5 запросов при ошибке', async () => {
-    const retry = new MergeLink();
+    const retry = new MergeLink({ delay: { initial: 1 } });
     const stub = jest
       .fn()
+      .mockImplementationOnce(() => Observable.of(mock.mutationUpdateProjectErrorData))
+      .mockImplementationOnce(() => Observable.of(mock.mutationUpdateProjectErrorData))
+      .mockImplementationOnce(() => Observable.of(mock.mutationUpdateProjectErrorData))
+      .mockImplementationOnce(() => Observable.of(mock.mutationUpdateProjectErrorData))
+      .mockImplementationOnce(() => Observable.of(mock.mutationUpdateProjectErrorData))
+      .mockImplementationOnce(() => Observable.of(mock.mutationUpdateProjectErrorData))
+      .mockImplementationOnce(() => Observable.of(mock.mutationUpdateProjectErrorData))
+      .mockImplementationOnce(() => Observable.of(mock.mutationUpdateProjectErrorData))
       .mockImplementationOnce(() => Observable.of(mock.mutationUpdateProjectErrorData))
       .mockImplementationOnce(() => Observable.of(mock.mutationUpdateProjectErrorData))
       .mockImplementationOnce(() => Observable.of(mock.mutationUpdateProjectErrorData))
@@ -51,6 +61,35 @@ describe('MergeLink', () => {
 
     expect(resultWithError.error).toEqual(mock.mutationUpdateProjectErrorData);
     expect(stub).toHaveBeenCalledTimes(5);
+  });
+
+  it('возвращается ответ при query', async () => {
+    const retry = new MergeLink();
+    const stub = jest.fn(() => Observable.of(mock.queryData));
+    const link = ApolloLink.from([retry, stub]);
+
+    const [{ values }] = (await waitForObservables(
+      execute(link, { query: mock.GET_PROJECT_QUERY }),
+    )) as any;
+
+    expect(values).toEqual([mock.queryData]);
+    expect(stub).toHaveBeenCalledTimes(1);
+  });
+
+  it('возвращается ответ при mutation', async () => {
+    const retry = new MergeLink();
+    const stub = jest.fn(() => Observable.of(mock.mutationUpdateProjectData));
+    const link = ApolloLink.from([retry, stub]);
+
+    const [{ values }] = (await waitForObservables(
+      execute(link, {
+        query: mock.UPDATE_PROJECT_MUTATION,
+        variables: mock.mutationUpdateProjectVariable,
+      }),
+    )) as any;
+
+    expect(values).toEqual([mock.mutationUpdateProjectData]);
+    expect(stub).toHaveBeenCalledTimes(1);
   });
 
   it('возвращается ответ при query', async () => {
@@ -104,7 +143,7 @@ describe('MergeLink', () => {
   });
 
   // ??? уточнить ценность теста после обновления схемы с ошибками
-  it.only('возвращается ошибка валидации', async () => {
+  it.skip('возвращается ошибка валидации', async () => {
     const response = { status: 400, ok: false } as Response;
     const retry = new MergeLink({ attempts: { max: 2 } });
     const stub = jest.fn(() =>
