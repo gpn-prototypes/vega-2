@@ -8,6 +8,15 @@ import './App.css';
 
 const authToken = localStorage.getItem('auth-token');
 
+/*
+
+  В будущем можно использовать глобальное переопределение идентификатора на "vid":
+  https://www.apollographql.com/docs/react/caching/cache-configuration/#customizing-identifier-generation-globally
+
+  Объекты: Region, Country
+
+*/
+
 const client = new ApolloClient({
   cache: new InMemoryCache({
     typePolicies: {

@@ -5,6 +5,8 @@ mutation CreateProject($name: String!, $coordinates: String, $description: Strin
         vid
         isFavorite
         name
+        coordinates
+        description
         attendees {
           user {
             name
@@ -15,7 +17,9 @@ mutation CreateProject($name: String!, $coordinates: String, $description: Strin
           }
         }
         region {
+          vid
           name
+          fullName
         }
         editedAt
         createdAt
@@ -34,9 +38,78 @@ mutation CreateProject($name: String!, $coordinates: String, $description: Strin
   }
 }
 
+mutation UpdateProject2(
+  $vid: UUID
+  $name: String!
+  $coordinates: String
+  $description: String
+  $status: ProjectStatusEnum!
+  $version: Int!
+) {
+  updateProject(
+    vid: $vid
+    data: {
+      name: $name
+      coordinates: $coordinates
+      description: $description
+      status: $status
+      version: $version
+    }
+  ) {
+    result {
+      ... on Project {
+        vid
+        name
+        type
+        region {
+          vid
+          name
+          fullName
+        }
+        coordinates
+        description
+        yearStart
+        version
+      }
+      ... on Error {
+        code
+        message
+        details
+        payload
+      }
+    }
+  }
+}
+
+query QueryProject($vid: UUID) {
+  project(vid: $vid) {
+    ... on Project {
+      vid
+      name
+      type
+      region {
+        vid
+        name
+        fullName
+      }
+      coordinates
+      description
+      yearStart
+      version
+    }
+    ... on Error {
+      code
+      message
+      details
+      payload
+    }
+  }
+}
+
 query QueryRegionList {
   regionList {
     vid
     name
+    fullName
   }
 }

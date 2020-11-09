@@ -13,7 +13,7 @@ export const AppView = (): React.ReactElement => {
     <Router>
       <Route
         exact
-        path={['/projects', '/projects/create', '/projects/show/:project_id']}
+        path={['/projects', '/projects/create', '/projects/show/:projectId']}
         render={() => (
           <VegaRoot className="SP-App-Wrapper" defaultTheme="dark">
             <div className="SP-App">
@@ -21,7 +21,7 @@ export const AppView = (): React.ReactElement => {
                 <Switch>
                   <Route exact path="/projects" component={ProjectsPage} />
                   <Route exact path="/projects/create" component={CreateProjectPage} />
-                  <Route exact path="/projects/show/:project_id" component={EditProjectPage} />
+                  <Route exact path="/projects/show/:projectId" component={EditProjectPage} />
                 </Switch>
               </PageLayout>
             </div>
