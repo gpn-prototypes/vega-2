@@ -2,7 +2,7 @@
   padding-right: var(--space-s);
 
   &__iconWrap {
-    width: 24px;
-    height: 24px;
+    width: var(--graphics-size-m);
+    height: var(--graphics-size-m);
   }
 }
