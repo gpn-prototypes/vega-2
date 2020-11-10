@@ -92,7 +92,7 @@ export const ProjectsPage = (): React.ReactElement => {
   const projects = mappedProjects.map((project) => {
     const edit = ({ close, ...rest }: MenuItemProps) => {
       return (
-        <Link to="/projects/create" onClick={() => close()} {...rest}>
+        <Link to={`/projects/show/${project.id}`} onClick={() => close()} {...rest}>
           <span className={cn('MenuIcon')}>
             <IconEdit size="s" />
           </span>
