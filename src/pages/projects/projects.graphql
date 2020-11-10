@@ -32,3 +32,19 @@ query GetProjects {
     }
   }
 }
+
+mutation DeleteProject($vid: UUID) {
+  deleteProject(vid: $vid) {
+    result {
+      ... on Result {
+        vid
+      }
+      ... on Error {
+        code
+        message
+        details
+        payload
+      }
+    }
+  }
+}

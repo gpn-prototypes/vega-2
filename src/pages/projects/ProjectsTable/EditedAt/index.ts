@@ -1,0 +1,1 @@
+export { EditedAt } from './EditedAt';

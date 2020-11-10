@@ -1,12 +1,8 @@
 .ProjectsTable {
   padding-right: var(--space-s);
 
-  &__editedAt {
-    display: flex;
-    align-items: center;
-  }
-
-  &__editedTime {
-    flex-grow: 1;
+  &__iconWrap {
+    width: var(--graphics-size-m);
+    height: var(--graphics-size-m);
   }
 }

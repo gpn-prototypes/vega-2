@@ -67,6 +67,12 @@
     flex-direction: column;
   }
 
+  &__MenuIcon {
+    margin-right: var(--space-xs);
+
+    display: inline-flex;
+  }
+
   &__Loader {
     display: flex;
 
@@ -79,5 +85,20 @@
 
   &__EditedAt {
     display: flex;
+  }
+
+  &__SnackBar {
+    width: 400px;
+  }
+
+  &__PortalSnackBar {
+    position: absolute;
+
+    bottom: 0;
+
+    display: flex;
+    justify-content: center;
+
+    width: 100%;
   }
 }

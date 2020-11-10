@@ -1358,9 +1358,9 @@
     regenerator-runtime "^0.13.4"
 
 "@babel/runtime@^7.1.2", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7":
-  version "7.12.1"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.12.1.tgz#b4116a6b6711d010b2dad3b7b6e43bf1b9954740"
-  integrity sha512-J5AIf3vPj3UwXaAzb5j1xM4WAQDX3EMgemF8rjCP3SoW09LfRKAXQKt6CoVYl230P6iWdRcBbnLDDdnqWxZSCA==
+  version "7.12.5"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.12.5.tgz#410e7e487441e1b360c29be715d870d9b985882e"
+  integrity sha512-plcc+hbExy3McchJCEQG3knOsuh3HH+Prx1P6cLIkET/0dLuQDEnrT+s27Axgc9bqfsmNUNHfscgMUdBpC9xfg==
   dependencies:
     regenerator-runtime "^0.13.4"
 
@@ -1535,23 +1535,10 @@
     resolve-from "^5.0.0"
     resolve-global "^1.0.0"
 
-"@consta/uikit@^1.10.0", "@consta/uikit@^1.10.4":
+"@consta/uikit@^1.10.0", "@consta/uikit@^1.10.1", "@consta/uikit@^1.10.4":
   version "1.10.4"
   resolved "https://registry.yarnpkg.com/@consta/uikit/-/uikit-1.10.4.tgz#9d56249efb7e7254d481a0765589e72d40c793af"
   integrity sha512-693fxNHu4qS4mgEMi46H7ovpuEp2PyfVGXiGwA1KVYPtoKKX7ouFEbMbo21f6Oo1tkcYAYGqfzUcefyZQzWiiQ==
-  dependencies:
-    "@bem-react/classname" "^1.5.8"
-    "@bem-react/classnames" "^1.3.9"
-    bem-cn "^3.0.1"
-    compute-scroll-into-view "^1.0.14"
-    react-textarea-autosize "^7.1.2"
-    react-transition-group "^4.4.1"
-    tslib "^1.13.0"
-
-"@consta/uikit@^1.10.1":
-  version "1.10.1"
-  resolved "https://registry.yarnpkg.com/@consta/uikit/-/uikit-1.10.1.tgz#408b2a3cc7d096dc895184fae1a45c521f5a410e"
-  integrity sha512-VpiZZPamxZTgYkhpxYdgkomxWqP0UYtPhA5yfFNH2O/XjAyw2yqpvWfIxhf2m0kgZs6M1UwxkibDEMbhGU8J2Q==
   dependencies:
     "@bem-react/classname" "^1.5.8"
     "@bem-react/classnames" "^1.3.9"
@@ -1651,6 +1638,13 @@
   version "0.1.9"
   resolved "https://npm.pkg.github.com/download/@gpn-prototypes/vega-badge/0.1.9/b5e69c924a3b075ef2df35c4894ae4569fce4924a3ea7bf76a67ee1fca799661#6930ff8fd84323cb6c1c90d578460ff4b8dac158"
   integrity sha512-ieCe8Nu0VlmlmBphhF7klzGHG4xXBd5Ob6KRLiJUMeWKdeeuzy4cQNjsfqwrZ/W0k38B3peBYDfZsHsvVi91xQ==
+  dependencies:
+    "@consta/uikit" "^1.10.4"
+
+"@gpn-prototypes/vega-basic-select@^0.0.2":
+  version "0.0.2"
+  resolved "https://npm.pkg.github.com/download/@gpn-prototypes/vega-basic-select/0.0.2/f717a0e419d648a4f897dd815471ccef8bf5b35263c34dca0054fe8a72fca333#ede22b640ce0c072fd0efe556d812ea33ff35089"
+  integrity sha512-0i2PrVOTZv9c5dKs3oBLiTRQ4MZzkODF5/p33SIt9BhPUgooHc9LB9vBzuYj8VDDu5MmXlpygV7k7CcpsPGecg==
   dependencies:
     "@consta/uikit" "^1.10.4"
 
@@ -1989,14 +1983,15 @@
     bem-cn "^3.0.1"
 
 "@gpn-prototypes/vega-ui@^2.12.3":
-  version "2.14.5"
-  resolved "https://npm.pkg.github.com/download/@gpn-prototypes/vega-ui/2.14.5/be5cc64b8492f2d60b70a8a18a97978f2d16ebfd33374c91756b4f5be8f16044#c60d11ea4ea368537de7d880c9efe913d9922259"
-  integrity sha512-qp9S35RtbbSKM+ssge+dX8dQHHCtI6/tOGiQP3YOFVxMYkEHlQBWM5NJNhF+Hes/p0/4+mV9W2TzFt8eJnv5NQ==
+  version "2.14.7"
+  resolved "https://npm.pkg.github.com/download/@gpn-prototypes/vega-ui/2.14.7/6e812b16fce61e559c2ea6ffa75fa4c5506cb6e0922556491085f53cffc852a3#428a46de1b9d73eca6b95b4d568eed510c2d8dfa"
+  integrity sha512-hG2IMQTW6pXGsVRLN5bo/NYXuweiqj9J8LAyXx4uL8OeMqgJKutdlfjbYs1AOSodW+wEcclaAh3KiRDtw/YYpA==
   dependencies:
     "@gpn-prototypes/vega-animation" "^0.0.3"
     "@gpn-prototypes/vega-attach" "^0.1.6"
     "@gpn-prototypes/vega-avatar" "^0.1.8"
     "@gpn-prototypes/vega-badge" "^0.1.9"
+    "@gpn-prototypes/vega-basic-select" "^0.0.2"
     "@gpn-prototypes/vega-button" "^0.2.3"
     "@gpn-prototypes/vega-canvas" "^0.1.0"
     "@gpn-prototypes/vega-carousel" "^0.0.12"
@@ -11512,9 +11507,9 @@ react-konva@^16.13.0-6:
     scheduler "^0.19.1"
 
 react-popper@^2.2.3:
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-2.2.3.tgz#33d425fa6975d4bd54d9acd64897a89d904b9d97"
-  integrity sha512-mOEiMNT1249js0jJvkrOjyHsGvqcJd3aGW/agkiMoZk3bZ1fXN1wQszIQSjHIai48fE67+zwF8Cs+C4fWqlfjw==
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-2.2.4.tgz#d2ad3d2474ac9f1abf93df3099d408e5aa6a2e22"
+  integrity sha512-NacOu4zWupdQjVXq02XpTD3yFPSfg5a7fex0wa3uGKVkFK7UN6LvVxgcb+xYr56UCuWiNPMH20tntdVdJRwYew==
   dependencies:
     react-fast-compare "^3.0.1"
     warning "^4.0.2"
@@ -13854,9 +13849,9 @@ uuid@^7.0.3:
   integrity sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
 
 uuid@^8.3.0:
-  version "8.3.0"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.0.tgz#ab738085ca22dc9a8c92725e459b1d507df5d6ea"
-  integrity sha512-fX6Z5o4m6XsXBdli9g7DtWgAx+osMsRRZFKma1mIUsLCz6vRvv+pz5VNbyu9UEDzpMWulZfvpgb/cmDXVulYFQ==
+  version "8.3.1"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.1.tgz#2ba2e6ca000da60fce5a196954ab241131e05a31"
+  integrity sha512-FOmRr+FmWEIG8uhZv6C2bTgEVXsHk08kE7mPlrBbEe+c3r9pjceVPgupIfNIhc4yx55H69OXANrUaSuu9eInKg==
 
 v8-compile-cache@2.0.3:
   version "2.0.3"
