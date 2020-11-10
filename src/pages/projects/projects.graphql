@@ -36,13 +36,13 @@ query GetProjects {
 mutation DeleteProject($vid: UUID) {
   deleteProject(vid: $vid) {
     result {
-			... on Result {
+      ... on Result {
         vid
       }
       ... on Error {
-        code,
-        message,
-        details,
+        code
+        message
+        details
         payload
       }
     }
