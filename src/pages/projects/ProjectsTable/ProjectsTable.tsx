@@ -3,49 +3,22 @@ import {
   Button,
   IconBookmarkFilled,
   IconBookmarkStroked,
-  IconKebab,
-  NavigationList,
-  Popover,
   Table,
   Text,
 } from '@gpn-prototypes/vega-ui';
+
+import { EditedAt } from './EditedAt';
+import { TableRow } from './types';
 
 import './ProjectsTable.css';
 
 const blockName = 'ProjectsTable';
 const styles = {
-  editedAt: `${blockName}__editedAt`,
-  editedTime: `${blockName}__editedTime`,
-  menu: `${blockName}__menu`,
-  navigation: `${blockName}__navigation`,
-  navigationItem: `${blockName}__navigationItem`,
   iconWrap: `${blockName}__iconWrap`,
 };
 
-export type MenuItemProps = {
-  close: VoidFunction;
-  className?: string;
-};
-
-type MenuItem = {
-  key: string;
-  Element: React.FC<MenuItemProps>;
-};
-
-export type ProjectsTableRow = {
-  id: string;
-  isFavorite?: boolean;
-  name?: string;
-  region?: string;
-  roles?: string;
-  createdBy?: string;
-  createdAt?: string;
-  editedAt?: string | React.ReactElement;
-  menu?: MenuItem[];
-};
-
 type Props = {
-  rows?: ProjectsTableRow[];
+  rows?: TableRow[];
   placeholder?: string | React.ReactElement;
   onFavorite: (id: string) => void;
 };
@@ -94,72 +67,6 @@ const COLUMNS: React.ComponentProps<typeof Table>['columns'] = [
     width: 212,
   },
 ];
-
-type EditedAtProps = {
-  date?: string | React.ReactElement;
-  menu?: MenuItem[];
-  isVisible: boolean;
-  onClickItem?: VoidFunction;
-};
-
-const EditedAt: React.FC<EditedAtProps> = ({ date, menu, isVisible, onClickItem }) => {
-  const anchorRef = React.createRef<HTMLButtonElement>();
-  const [isPopoverVisible, setIsPopoverVisible] = React.useState(false);
-  return (
-    <div className={styles.editedAt}>
-      <Text size="s" className={styles.editedTime}>
-        {date}
-      </Text>
-      <div className={styles.menu}>
-        <div className={styles.iconWrap}>
-          {isVisible && (
-            <Button
-              label="Меню"
-              iconLeft={IconKebab}
-              iconSize="s"
-              onlyIcon
-              view="clear"
-              size="xs"
-              ref={anchorRef}
-              onClick={() => setIsPopoverVisible(!isPopoverVisible)}
-            />
-          )}
-        </div>
-
-        {menu && isPopoverVisible && (
-          <Popover
-            direction="downLeft"
-            offset={6}
-            anchorRef={anchorRef}
-            onClickOutside={() => setIsPopoverVisible(false)}
-          >
-            <NavigationList className={styles.navigation}>
-              {menu.map(({ Element, key }) => {
-                return (
-                  <NavigationList.Item key={key}>
-                    {({ className }) => {
-                      return (
-                        <Element
-                          close={() => {
-                            setIsPopoverVisible(false);
-                            if (onClickItem) {
-                              onClickItem();
-                            }
-                          }}
-                          className={`${className} ${styles.navigationItem}`}
-                        />
-                      );
-                    }}
-                  </NavigationList.Item>
-                );
-              })}
-            </NavigationList>
-          </Popover>
-        )}
-      </div>
-    </div>
-  );
-};
 
 export const ProjectsTable: React.FC<Props> = (props) => {
   const placeholder = props.placeholder ?? <Text size="s">Пока нет ни одного проекта :(</Text>;

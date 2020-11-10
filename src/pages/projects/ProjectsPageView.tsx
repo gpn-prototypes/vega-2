@@ -11,8 +11,9 @@ import {
   TextField,
 } from '@gpn-prototypes/vega-ui';
 
+import { TableRow } from './ProjectsTable/types';
 import { cnProjectsPage as cn } from './cn-projects-page';
-import { ProjectsTable, ProjectsTableRow } from './ProjectsTable';
+import { ProjectsTable } from './ProjectsTable';
 
 import './ProjectsPage.css';
 
@@ -92,7 +93,7 @@ const ProjectFilter: React.FC<ProjectFilterType> = ({ onInputSearch, onChangeFil
 };
 
 type Props = {
-  projects: ProjectsTableRow[];
+  projects: TableRow[];
   isLoading: boolean;
 };
 

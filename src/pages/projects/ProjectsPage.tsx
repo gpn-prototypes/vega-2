@@ -16,9 +16,9 @@ import 'dayjs/locale/ru';
 import { Project } from '../../__generated__/types';
 
 import { useDeleteProject, useGetProjects } from './__generated__/projects';
+import { MenuItemProps, TableRow } from './ProjectsTable/types';
 import { cnProjectsPage as cn } from './cn-projects-page';
 import { ProjectsPageView } from './ProjectsPageView';
-import { MenuItemProps, ProjectsTableRow } from './ProjectsTable';
 import { useSnackbar } from './use-snackbar';
 
 dayjs.locale('ru');
@@ -29,7 +29,7 @@ type ProjectsMapper = Pick<
   'vid' | 'name' | 'isFavorite' | 'region' | 'attendees' | 'createdBy' | 'createdAt' | 'editedAt'
 > | null;
 
-const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): ProjectsTableRow[] => {
+const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): TableRow[] => {
   if (!projects) {
     return [];
   }
