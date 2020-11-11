@@ -11,6 +11,8 @@ import {
   TextField,
 } from '@gpn-prototypes/vega-ui';
 
+import { ProjectUpdateType } from '../../__generated__/types';
+
 import { TableRow } from './ProjectsTable/types';
 import { cnProjectsPage as cn } from './cn-projects-page';
 import { ProjectsTable } from './ProjectsTable';
@@ -95,6 +97,7 @@ const ProjectFilter: React.FC<ProjectFilterType> = ({ onInputSearch, onChangeFil
 type Props = {
   projects: TableRow[];
   isLoading: boolean;
+  onFavorite(id: string, payload: ProjectUpdateType): void;
 };
 
 export const ProjectsPageView: React.FC<Props> = (props) => {
@@ -105,9 +108,9 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
     <div className={cn('Table')}>
       <ProjectsTable
         rows={props.projects}
-        onFavorite={(id) => {
+        onFavorite={(id, payload) => {
           // eslint-disable-next-line no-console
-          console.log(id);
+          props.onFavorite(id, payload);
         }}
       />
       {visibleLoadMore && (

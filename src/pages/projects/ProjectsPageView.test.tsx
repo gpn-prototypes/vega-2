@@ -7,7 +7,7 @@ import { ProjectsPageView } from './ProjectsPageView';
 function renderComponent(): tl.RenderResult {
   return tl.render(
     <Router>
-      <ProjectsPageView projects={[]} isLoading={false} />
+      <ProjectsPageView projects={[]} isLoading={false} onFavorite={() => {}} />
     </Router>,
   );
 }

@@ -7,6 +7,8 @@ import {
   Text,
 } from '@gpn-prototypes/vega-ui';
 
+import { ProjectUpdateType } from '../../../__generated__/types';
+
 import { EditedAt } from './EditedAt';
 import { TableRow } from './types';
 
@@ -20,7 +22,7 @@ const styles = {
 type Props = {
   rows?: TableRow[];
   placeholder?: string | React.ReactElement;
-  onFavorite: (id: string) => void;
+  onFavorite(id: string, payload: ProjectUpdateType): void;
 };
 
 const COLUMNS: React.ComponentProps<typeof Table>['columns'] = [
@@ -91,8 +93,12 @@ export const ProjectsTable: React.FC<Props> = (props) => {
                 size="xs"
                 form="round"
                 onClick={() => {
-                  if (project.id) {
-                    props.onFavorite(project.id);
+                  if (project.id && project.status && project.version) {
+                    props.onFavorite(project.id, {
+                      status: project.status,
+                      version: project.version,
+                      isFavorite: !project.isFavorite,
+                    });
                   }
                 }}
               />

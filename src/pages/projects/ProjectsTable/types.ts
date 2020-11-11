@@ -1,3 +1,5 @@
+import { ProjectStatusEnum } from '../../../__generated__/types';
+
 export type MenuItemProps = {
   close: VoidFunction;
   className?: string;
@@ -18,4 +20,6 @@ export type TableRow = {
   createdAt?: string;
   editedAt?: string | React.ReactElement;
   menu?: MenuItem[];
+  version?: number;
+  status?: ProjectStatusEnum;
 };
