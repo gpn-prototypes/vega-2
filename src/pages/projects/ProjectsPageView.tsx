@@ -22,7 +22,7 @@ type Props = {
 
 export const ProjectsPageView: React.FC<Props> = (props) => {
   // TODO: Поправить условие, когда можно будет получить общее количество проектов и сделают пагинацию
-  const visibleLoadMore = props.projects.length > 20;
+  // const visibleLoadMore = props.projects.length > 20;
 
   const table = (
     <div className={cn('Table')}>
@@ -33,11 +33,11 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
           props.onFavorite(id, payload);
         }}
       />
-      {visibleLoadMore && (
+      {/* {visibleLoadMore && (
         <div className={cn('LoadMore')}>
           <Button view="ghost" width="full" label="Загрузить ещё" size="l" />
         </div>
-      )}
+      )} */}
     </div>
   );
 
