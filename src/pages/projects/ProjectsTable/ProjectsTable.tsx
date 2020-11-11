@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   Button,
   IconBookmarkFilled,
@@ -85,6 +86,8 @@ export const ProjectsTable: React.FC<Props> = (props) => {
   const placeholder = props.placeholder ?? <Text size="s">Пока нет ни одного проекта :(</Text>;
   const [idMenuVisible, setIdMenuVisible] = React.useState<string | undefined>(undefined);
 
+  const history = useHistory();
+
   const rows =
     props.rows?.map((project) => {
       const icon = project.isFavorite ? IconBookmarkFilled : IconBookmarkStroked;
@@ -107,7 +110,8 @@ export const ProjectsTable: React.FC<Props> = (props) => {
                   view="clear"
                   size="xs"
                   form="round"
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     if (project.id && project.status && project.version) {
                       props.onFavorite(project.id, {
                         status: project.status,
@@ -140,6 +144,12 @@ export const ProjectsTable: React.FC<Props> = (props) => {
       rows={rows}
       verticalAlign="center"
       emptyRowsPlaceholder={placeholder}
+      activeRow={{
+        id: undefined,
+        onChange: (id) => {
+          history.push(`/projects/show/${id}`);
+        },
+      }}
       onRowHover={({ id }) => {
         setIdMenuVisible(id);
       }}

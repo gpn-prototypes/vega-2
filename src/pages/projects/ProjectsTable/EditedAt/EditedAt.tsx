@@ -41,7 +41,10 @@ export const EditedAt: React.FC<EditedAtProps> = ({ date, menu, isVisible, onCli
               view="clear"
               size="xs"
               ref={anchorRef}
-              onClick={() => setIsPopoverVisible(!isPopoverVisible)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsPopoverVisible(!isPopoverVisible);
+              }}
             />
           )}
         </div>

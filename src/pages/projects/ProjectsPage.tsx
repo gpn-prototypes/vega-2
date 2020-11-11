@@ -126,7 +126,8 @@ export const ProjectsPage = (): React.ReactElement => {
       return (
         <button
           type="button"
-          onClick={() => {
+          onClick={(e) => {
+            e.stopPropagation();
             addItem({
               key: `${project.id}-alert`,
               message: `Вы уверены, что хотите удалить проект "${project.name}" из системы?`,
