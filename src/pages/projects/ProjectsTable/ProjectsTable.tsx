@@ -35,37 +35,37 @@ const COLUMNS: React.ComponentProps<typeof Table>['columns'] = [
   {
     title: 'Название',
     accessor: 'name',
-    sortable: true,
+    // sortable: true,
     width: 195,
   },
   {
     title: 'Регион',
     accessor: 'region',
-    sortable: true,
+    // sortable: true,
     width: 245,
   },
   {
     title: 'Ваша роль',
     accessor: 'roles',
-    sortable: true,
+    // sortable: true,
     width: 185,
   },
   {
     title: 'Автор',
     accessor: 'createdBy',
-    sortable: true,
+    // sortable: true,
     width: 215,
   },
   {
     title: 'Создан',
     accessor: 'createdAt',
-    sortable: true,
+    // sortable: true,
     width: 165,
   },
   {
     title: 'Изменён',
     accessor: 'editedAt',
-    sortable: true,
+    // sortable: true,
     width: 212,
   },
 ];
