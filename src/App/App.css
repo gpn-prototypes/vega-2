@@ -7,10 +7,10 @@
   box-sizing: border-box;
 }
 
-.App {
+.SP-App {
   background: var(--color-bg-default);
 
-  &__Wrapper {
+  &-Wrapper {
     width: 100%;
   }
 
