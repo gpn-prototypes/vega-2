@@ -50,7 +50,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
                       <button
                         type="button"
                         onClick={(): void => setActiveStepIndex(index)}
-                        {...props}
+                        className={cnProjectForm('NavigationButton').mix(props.className)}
                       >
                         {title}
                       </button>
