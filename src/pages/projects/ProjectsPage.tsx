@@ -130,7 +130,7 @@ export const ProjectsPage = (): React.ReactElement => {
             e.stopPropagation();
             addItem({
               key: `${project.id}-alert`,
-              message: `Вы уверены, что хотите удалить проект "${project.name}" из системы?`,
+              message: `Вы уверены, что хотите удалить проект «${project.name}» из системы?`,
               status: 'alert',
               actions: [
                 {
@@ -138,9 +138,10 @@ export const ProjectsPage = (): React.ReactElement => {
                   onClick(): void {
                     deleteProject({ variables: { vid: project.id } }).then(() => {
                       addItem({
+                        autoClose: 3,
                         key: `${project.id}-system`,
-                        status: 'system',
-                        message: `Проект "${project.name}" успешно удален. Его можно найти в "Архиве".`,
+                        status: 'success',
+                        message: `Проект «${project.name}» успешно удален.`,
                       });
                     });
                     removeItem(`${project.id}-alert`);

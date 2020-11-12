@@ -92,7 +92,7 @@
   }
 
   &__PortalSnackBar {
-    position: absolute;
+    position: fixed;
 
     bottom: 0;
 

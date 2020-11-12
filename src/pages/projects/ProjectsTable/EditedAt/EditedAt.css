@@ -22,6 +22,8 @@
   }
 
   &__navigationItem {
+    padding: var(--space-xs) var(--space-s) var(--space-xs) var(--space-xs);
+
     display: inline-flex;
     align-items: center;
 
