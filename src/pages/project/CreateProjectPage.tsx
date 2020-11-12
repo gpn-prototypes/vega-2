@@ -5,7 +5,7 @@ import { Loader } from '@gpn-prototypes/vega-ui';
 import { ProjectStatusEnum } from '../../__generated__/types';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
-import { useCreateProject, useQueryRegionList, useUpdateProject } from './__generated__/project';
+import { useCreateProject, useQueryRegionList, useUpdateProject2 } from './__generated__/project';
 import { cnPage } from './cn-page';
 import { ReferenceDataType } from './types';
 
@@ -22,7 +22,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
   const [createProject, { error: createProjectError }] = useCreateProject();
 
-  const [updateProject, { error: updateProjectError }] = useUpdateProject();
+  const [updateProject, { error: updateProjectError }] = useUpdateProject2();
 
   useEffect(() => {
     const data = localStorage.getItem(BLANK_PROJECT_ID);

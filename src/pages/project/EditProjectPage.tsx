@@ -67,8 +67,13 @@ export const EditProjectPage: React.FC<PageProps> = () => {
 
     updateProject({
       variables: {
-        ...values.description,
         vid: projectId,
+        name: values.description.name,
+        type: values.description.type,
+        region: values.description.region,
+        coordinates: values.description.coordinates,
+        description: values.description.description,
+        yearStart: values.description.yearStart,
         status: ProjectStatusEnum.Unpublished,
         version: version || 0,
       },
