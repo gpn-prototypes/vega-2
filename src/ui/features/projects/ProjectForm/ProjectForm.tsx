@@ -45,7 +45,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
             <div className={cnProjectForm('Content')}>
               <NavigationList className={cnProjectForm('Navigation')}>
                 {steps.map(({ title }, index) => (
-                  <NavigationList.Item key={title} active={index === activeStepIndex}>
+                  <NavigationList.Item key={title}>
                     {(props): React.ReactNode => (
                       <button
                         type="button"
