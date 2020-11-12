@@ -13,7 +13,7 @@ export type MenuItem = {
 export type TableRow = {
   id: string;
   isFavorite?: boolean;
-  name?: React.ReactElement;
+  name?: string;
   region?: string;
   roles?: string;
   createdBy?: string;

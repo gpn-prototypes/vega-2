@@ -48,12 +48,6 @@ const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): Tab
       return [];
     }
 
-    const name = (
-      <Link className={cn('Name')} to={`/projects/show/${project.vid}`}>
-        {project.name}
-      </Link>
-    );
-
     const roles = project.attendees
       ?.map((a) => a?.roles)
       ?.map((rs) => rs?.map((r) => r?.name).join(''))
@@ -74,7 +68,7 @@ const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): Tab
 
     return {
       id: project.vid ?? 'wtf-id',
-      name,
+      name: project.name ?? undefined,
       version: project.version ?? undefined,
       status: project.status ?? undefined,
       isFavorite: project.isFavorite ?? undefined,

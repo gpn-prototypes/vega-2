@@ -101,10 +101,4 @@
 
     width: 100%;
   }
-
-  &__Name {
-    text-decoration: none;
-
-    color: inherit;
-  }
 }
