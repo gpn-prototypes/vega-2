@@ -1,35 +1,80 @@
-mutation CreateProject($name: String!, $coordinates: String, $description: String) {
-  createProject(data: { name: $name, coordinates: $coordinates, description: $description }) {
+fragment projectFormFields on Project {
+  vid
+  name
+  type
+  region {
+    vid
+    name
+    fullName
+  }
+  coordinates
+  description
+  yearStart
+  version
+}
+
+fragment commonError on Error {
+  code
+  message
+  details
+  payload
+}
+
+mutation CreateProject {
+  createProject(data: {}) {
     result {
       ... on Project {
-        vid
-        isFavorite
-        name
-        attendees {
-          user {
-            name
-            role
-          }
-          roles {
-            name
-          }
-        }
-        region {
-          name
-        }
-        editedAt
-        createdAt
-        createdBy {
-          name
-          vid
-        }
+        ...projectFormFields
       }
       ... on Error {
-        code
-        message
-        details
-        payload
+        ...commonError
       }
+    }
+  }
+}
+
+mutation UpdateProject2(
+  $vid: UUID
+  $name: String
+  $type: ProjectTypeEnum
+  $region: ID
+  $coordinates: String
+  $description: String
+  $status: ProjectStatusEnum
+  $yearStart: Int
+  $version: Int!
+) {
+  updateProject(
+    vid: $vid
+    data: {
+      name: $name
+      type: $type
+      region: $region
+      coordinates: $coordinates
+      description: $description
+      status: $status
+      yearStart: $yearStart
+      version: $version
+    }
+  ) {
+    result {
+      ... on Project {
+        ...projectFormFields
+      }
+      ... on Error {
+        ...commonError
+      }
+    }
+  }
+}
+
+query QueryProject($vid: UUID) {
+  project(vid: $vid) {
+    ... on Project {
+      ...projectFormFields
+    }
+    ... on Error {
+      ...commonError
     }
   }
 }
@@ -38,5 +83,10 @@ query QueryRegionList {
   regionList {
     vid
     name
+    fullName
+    country {
+      vid
+      name
+    }
   }
 }

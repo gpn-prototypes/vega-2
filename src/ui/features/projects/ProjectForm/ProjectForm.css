@@ -14,6 +14,19 @@
     width: 302px;
   }
 
+  /* NavigationButton - временное решение до первого релиза, пока у нас только один пункт бокового меню  */
+  &__NavigationButton {
+    cursor: default;
+
+    &:hover {
+      background: transparent !important;
+    }
+
+    &:focus {
+      background: transparent !important;
+    }
+  }
+
   &__Step {
     margin-left: calc(var(--space-xl) + var(--space-2xl));
   }

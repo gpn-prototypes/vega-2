@@ -1,21 +1,22 @@
-import { CreateProjectVariables } from '../../../../pages/project/__generated__/project';
+import { ProjectTypeEnum } from '../../../../__generated__/types';
 import { ReferenceDataType } from '../../../../pages/project/types';
 
 export type FormMode = 'create' | 'edit';
 
 export type FormValues = {
   description: {
-    name: string;
-    region: string;
-    type: string;
-    coordinates: string;
-    description: string;
+    name?: string;
+    region?: string;
+    type?: ProjectTypeEnum;
+    coordinates?: string;
+    yearStart?: number;
+    description?: string;
   };
 };
 
 export type FormProps = {
   mode: FormMode;
-  referenceData: ReferenceDataType;
   initialValues?: FormValues;
-  onSubmit: (values: CreateProjectVariables) => void;
+  referenceData: ReferenceDataType;
+  onSubmit: (values: FormValues) => void;
 };
