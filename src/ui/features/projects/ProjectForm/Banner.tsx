@@ -9,17 +9,17 @@ type BannerProps = {
 };
 
 const getDescription = (
-  region: string | undefined,
+  regionVid: string | undefined,
   regionList: ReferenceDataType['regionList'],
 ): string | undefined => {
-  if (!region) {
+  if (!regionVid) {
     return undefined;
   }
 
-  const reg = regionList?.find((r) => r?.vid === region);
+  const region = regionList?.find((r) => r?.vid === regionVid);
 
-  const countryName = reg?.country?.name;
-  const regionName = reg?.fullName || reg?.name;
+  const countryName = region?.country?.name;
+  const regionName = region?.fullName || region?.name;
 
   return `${countryName}, ${regionName}`;
 };

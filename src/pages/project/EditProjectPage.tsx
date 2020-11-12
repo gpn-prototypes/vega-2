@@ -63,7 +63,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
     console.log('handleFormSubmit', values);
 
     const version =
-      queryProjectData?.project?.__typename === 'Project' ? queryProjectData?.project?.version : 0;
+      queryProjectData?.project?.__typename === 'Project' ? queryProjectData?.project?.version : 1;
 
     updateProject({
       variables: {
@@ -75,7 +75,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
         description: values.description.description,
         yearStart: values.description.yearStart,
         status: ProjectStatusEnum.Unpublished,
-        version: version || 0,
+        version: version || 1,
       },
     });
   };
@@ -86,7 +86,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
 
   if (queryProjectError || queryRegionListError || updateProjectError) {
     // eslint-disable-next-line no-console
-    console.log(queryProjectError, queryRegionListError, updateProjectError);
+    console.log({ queryProjectError, queryRegionListError, updateProjectError });
     return null;
   }
 

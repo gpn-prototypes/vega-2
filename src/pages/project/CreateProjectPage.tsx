@@ -25,6 +25,8 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   const [updateProject, { error: updateProjectError }] = useUpdateProject2();
 
   useEffect(() => {
+    let isCancelled = false;
+
     const data = localStorage.getItem(BLANK_PROJECT_ID);
 
     const call = async () => {
@@ -35,7 +37,9 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
         localStorage.setItem(BLANK_PROJECT_ID, String(projectId));
 
-        setBlankProjectId(projectId);
+        if (!isCancelled) {
+          setBlankProjectId(projectId);
+        }
       }
 
       if (createProjectResult.data?.createProject?.result?.__typename === 'Error') {
@@ -53,6 +57,10 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     } else {
       call();
     }
+
+    return () => {
+      isCancelled = true;
+    };
   }, [createProject]);
 
   const {
@@ -98,7 +106,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
   if (createProjectError || updateProjectError || queryRegionListError) {
     // eslint-disable-next-line no-console
-    console.log(createProjectError, updateProjectError, queryRegionListError);
+    console.log({ createProjectError, updateProjectError, queryRegionListError });
 
     return null;
   }
