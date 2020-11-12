@@ -6,15 +6,15 @@ import { FormMode } from './types';
 
 export type FooterProps = {
   mode: FormMode;
+  isFormDirty: boolean;
   activeStep: number;
   stepsAmount: number;
-  isFormDirty: boolean;
   onStepChange: (step: number) => void;
   onCancel: () => void;
 };
 
 export const Footer: React.FC<FooterProps> = (props) => {
-  const { mode, activeStep, stepsAmount, isFormDirty, onStepChange, onCancel } = props;
+  const { mode, isFormDirty, activeStep, stepsAmount, onStepChange, onCancel } = props;
 
   const isCreateMode = mode === 'create';
   const isEditMode = mode === 'edit';

@@ -5,12 +5,7 @@ import { Loader } from '@gpn-prototypes/vega-ui';
 import { Project, ProjectStatusEnum } from '../../__generated__/types';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
-import {
-  CreateProjectVariables,
-  useQueryProject,
-  useQueryRegionList,
-  useUpdateProject2,
-} from './__generated__/project';
+import { useQueryProject, useQueryRegionList, useUpdateProject2 } from './__generated__/project';
 import { cnPage } from './cn-page';
 import { ReferenceDataType } from './types';
 
@@ -24,17 +19,18 @@ type PageProps = Record<string, unknown>;
 
 type ProjectType = Pick<
   Project,
-  'vid' | 'name' | 'region' | 'type' | 'coordinates' | 'description'
+  'vid' | 'name' | 'type' | 'region' | 'coordinates' | 'description' | 'yearStart'
 >;
 
 const getInitialValues = (project: ProjectType): FormValues => {
   return {
     description: {
-      name: project.name ?? '',
-      region: project.region?.name || '',
-      type: project.type || '',
-      coordinates: project.coordinates || '',
-      description: project.description || '',
+      name: project.name || undefined,
+      type: project.type || undefined,
+      region: project.region?.vid || undefined,
+      coordinates: project.coordinates || undefined,
+      description: project.description || undefined,
+      yearStart: project.yearStart || undefined,
     },
   };
 };
@@ -62,7 +58,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
 
   const referenceData: ReferenceDataType = { regionList: queryRegionListData?.regionList };
 
-  const handleFormSubmit = (values: CreateProjectVariables) => {
+  const handleFormSubmit = (values: FormValues) => {
     // eslint-disable-next-line no-console
     console.log('handleFormSubmit', values);
 
@@ -71,7 +67,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
 
     updateProject({
       variables: {
-        ...values,
+        ...values.description,
         vid: projectId,
         status: ProjectStatusEnum.Unpublished,
         version: version || 0,

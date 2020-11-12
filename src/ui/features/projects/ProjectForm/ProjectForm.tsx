@@ -6,46 +6,23 @@ import { Form as VegaForm, NavigationList } from '@gpn-prototypes/vega-ui';
 import { Banner } from './Banner';
 import { cnProjectForm } from './cn-form';
 import { Footer } from './Footer';
-import { DescriptionStep, DocumentStep, ParticipantStep } from './steps';
+import { DescriptionStep } from './steps';
 import { FormProps, FormValues } from './types';
 
 import './ProjectForm.css';
 
-const steps = [
-  { title: 'Описание проекта', content: DescriptionStep },
-  { title: 'Участники', content: ParticipantStep },
-  { title: 'Связанные документы и файлы', content: DocumentStep },
-];
+const steps = [{ title: 'Описание проекта', content: DescriptionStep }];
 
 export const ProjectForm: React.FC<FormProps> = (formProps) => {
-  const { mode, referenceData, initialValues, onSubmit } = formProps;
+  const { mode, initialValues, referenceData, onSubmit } = formProps;
 
   const [activeStepIndex, setActiveStepIndex] = useState(0);
 
   const history = useHistory();
 
-  /* смотрите комментарий к oneExistingRegion в DescriptionStep */
-
-  // let oneExistingRegionId: string | undefined;
-
-  if (
-    referenceData &&
-    referenceData.regionList &&
-    Array.isArray(referenceData.regionList) &&
-    referenceData.regionList[0]
-  ) {
-    // oneExistingRegionId = referenceData.regionList[0].vid ? referenceData.regionList[0].vid : '';
-  }
-
   const handleFormSubmit = (values: FormValues): void => {
-    onSubmit({
-      name: values.description.name,
-      coordinates: values.description.coordinates,
-      description: values.description.description,
-    });
+    onSubmit(values);
   };
-
-  const Step = steps[activeStepIndex].content;
 
   const handleStepChange = (step: number) => {
     setActiveStepIndex(step);
@@ -55,16 +32,18 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     history.push('/projects');
   };
 
+  const Step = steps[activeStepIndex].content;
+
   return (
     <Form
       initialValues={initialValues}
       onSubmit={handleFormSubmit}
       render={({ handleSubmit, dirty }): React.ReactNode => (
         <>
-          <Banner />
+          <Banner referenceData={referenceData} />
           <VegaForm onSubmit={handleSubmit} className={cnProjectForm()}>
             <div className={cnProjectForm('Content')}>
-              <NavigationList className={cnProjectForm('Navigation')} ordered>
+              <NavigationList className={cnProjectForm('Navigation')}>
                 {steps.map(({ title }, index) => (
                   <NavigationList.Item key={title} active={index === activeStepIndex}>
                     {(props): React.ReactNode => (
@@ -83,9 +62,9 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
             </div>
             <Footer
               mode={mode}
+              isFormDirty={dirty}
               activeStep={activeStepIndex}
               stepsAmount={steps.length}
-              isFormDirty={dirty}
               onStepChange={handleStepChange}
               onCancel={handleCancel}
             />
