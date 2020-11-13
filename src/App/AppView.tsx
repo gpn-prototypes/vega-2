@@ -5,6 +5,7 @@ import { Root as VegaRoot } from '@gpn-prototypes/vega-ui';
 import { PageLayout } from '../layouts/PageLayout';
 import { CreateProjectPage, EditProjectPage } from '../pages/project';
 import { ProjectsPage } from '../pages/projects';
+import { SnackbarProvider } from '../providers';
 
 import './App.css';
 
@@ -16,15 +17,17 @@ export const AppView = (): React.ReactElement => {
         path={['/projects', '/projects/create', '/projects/show/:projectId']}
         render={() => (
           <VegaRoot className="SP-App-Wrapper" defaultTheme="dark">
-            <div className="SP-App">
-              <PageLayout>
-                <Switch>
-                  <Route exact path="/projects" component={ProjectsPage} />
-                  <Route exact path="/projects/create" component={CreateProjectPage} />
-                  <Route exact path="/projects/show/:projectId" component={EditProjectPage} />
-                </Switch>
-              </PageLayout>
-            </div>
+            <SnackbarProvider>
+              <div className="SP-App">
+                <PageLayout>
+                  <Switch>
+                    <Route exact path="/projects" component={ProjectsPage} />
+                    <Route exact path="/projects/create" component={CreateProjectPage} />
+                    <Route exact path="/projects/show/:projectId" component={EditProjectPage} />
+                  </Switch>
+                </PageLayout>
+              </div>
+            </SnackbarProvider>
           </VegaRoot>
         )}
       />

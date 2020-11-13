@@ -1,25 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  IconEdit,
-  IconTrash,
-  SnackBar,
-  Text,
-  usePortal,
-  usePortalRender,
-} from '@gpn-prototypes/vega-ui';
+import { IconEdit, IconTrash, Text } from '@gpn-prototypes/vega-ui';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 import 'dayjs/locale/ru';
 
 import { Project } from '../../__generated__/types';
+import { useSnackbar } from '../../providers/snackbar';
 
 import { useDeleteProject, useGetProjects, useUpdateProject } from './__generated__/projects';
 import { MenuItemProps, TableRow } from './ProjectsTable/types';
 import { cnProjectsPage as cn } from './cn-projects-page';
 import { ProjectsPageView } from './ProjectsPageView';
-import { useSnackbar } from './use-snackbar';
 
 dayjs.locale('ru');
 dayjs.extend(utc);
@@ -82,7 +75,7 @@ const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): Tab
 };
 
 export const ProjectsPage = (): React.ReactElement => {
-  const [items, { addItem, removeItem }] = useSnackbar();
+  const { addItem, removeItem } = useSnackbar();
 
   const [deleteProject] = useDeleteProject({
     refetchQueries: [`GetProjects`],
@@ -103,9 +96,6 @@ export const ProjectsPage = (): React.ReactElement => {
   );
 
   const isLoading = loading && !data?.projects;
-
-  const { renderPortalWithTheme } = usePortalRender();
-  const { portal } = usePortal({ name: 'snackbar', className: cn('PortalSnackBar') });
 
   const mappedProjects =
     data?.projects?.__typename !== 'ProjectList' ? [] : projectsMapper(data?.projects.data);
@@ -179,11 +169,6 @@ export const ProjectsPage = (): React.ReactElement => {
   return (
     <>
       <ProjectsPageView projects={projects} isLoading={isLoading} onFavorite={addToFavorite} />
-      {portal &&
-        renderPortalWithTheme(
-          <SnackBar className={cn('SnackBar').toString()} items={items} />,
-          portal,
-        )}
     </>
   );
 };
