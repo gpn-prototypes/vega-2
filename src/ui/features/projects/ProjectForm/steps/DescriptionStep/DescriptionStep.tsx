@@ -1,7 +1,6 @@
 import React from 'react';
 import { Field } from 'react-final-form';
-import { Combobox } from '@consta/uikit/Combobox';
-import { Form as VegaForm, TextField } from '@gpn-prototypes/vega-ui';
+import { Combobox, Form as VegaForm, TextField } from '@gpn-prototypes/vega-ui';
 
 import { ProjectTypeEnum } from '../../../../../../__generated__/types';
 import { ReferenceDataType } from '../../../../../../pages/project/types';
@@ -80,6 +79,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 getOptionLabel={getItemLabel}
                 placeholder="Выберите регион"
                 value={regionOptions.find(({ value }) => value === input.value)}
+                // @ts-expect-error: Ошибка реэкспорта оболочки, исправить в vega-ui TODO
                 onChange={(value: SelectOption | null): void => {
                   input.onChange(value?.value);
                 }}
@@ -107,6 +107,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 placeholder="Выберите тип проекта"
                 disabled
                 value={typeOptions.find(({ value }) => value === input.value)}
+                // @ts-expect-error: Ошибка реэкспорта оболочки, исправить в vega-ui TODO
                 onChange={(value: SelectOption | null): void => {
                   input.onChange(value?.value);
                 }}
@@ -155,6 +156,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 options={yearStartOptions}
                 getOptionLabel={getItemLabel}
                 value={yearStartOptions.find(({ value }) => value === input.value)}
+                // @ts-expect-error: Ошибка реэкспорта оболочки, исправить в vega-ui TODO
                 onChange={(value: SelectOption | null): void => {
                   input.onChange(value?.value);
                 }}
