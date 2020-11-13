@@ -37,7 +37,7 @@ mutation UpdateProject2(
   $vid: UUID
   $name: String
   $type: ProjectTypeEnum
-  $region: ID
+  $region: UUID
   $coordinates: String
   $description: String
   $status: ProjectStatusEnum

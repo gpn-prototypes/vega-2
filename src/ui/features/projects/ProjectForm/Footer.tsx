@@ -61,6 +61,14 @@ export const Footer: React.FC<FooterProps> = (props) => {
 
   const editProjectFromFooter = (
     <PageFooter className={cnProjectForm('Footer', { content: 'end' })}>
+      <Button
+        size="s"
+        view="ghost"
+        label="Отменить"
+        type="button"
+        className={cnProjectForm('Footer-button-back').toString()}
+        onClick={onCancel}
+      />
       <Button size="s" view="primary" label="Сохранить изменения" type="submit" />
     </PageFooter>
   );

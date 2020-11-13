@@ -17,6 +17,23 @@ type StepProps = {
 
 const typeOptions = [{ label: 'Геологоразведочный', value: ProjectTypeEnum.Geo }];
 
+const getYearStartOptions = (): SelectOption[] => {
+  const currentYear = new Date().getFullYear();
+  const options = [];
+
+  for (let i = -1; i < 6; i += 1) {
+    const year = currentYear + i;
+    const option = {
+      label: `${year}`,
+      value: year,
+    };
+
+    options.push(option);
+  }
+
+  return options;
+};
+
 export const DescriptionStep: React.FC<StepProps> = (props) => {
   const { referenceData } = props;
   const { regionList } = referenceData;
@@ -27,15 +44,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
       value: region?.vid || '',
     })) || [];
 
-  const yearStartOptions = [
-    { label: '2019', value: 2019 },
-    { label: '2020', value: 2020 },
-    { label: '2021', value: 2021 },
-    { label: '2022', value: 2022 },
-    { label: '2023', value: 2023 },
-    { label: '2024', value: 2024 },
-    { label: '2025', value: 2025 },
-  ];
+  const yearStartOptions = getYearStartOptions();
 
   const getItemLabel = (option: SelectOption): string => option.label;
 
