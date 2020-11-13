@@ -38,7 +38,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     <Form
       initialValues={initialValues}
       onSubmit={handleFormSubmit}
-      render={({ handleSubmit, dirty }): React.ReactNode => (
+      render={({ handleSubmit, dirty, form, values }): React.ReactNode => (
         <>
           <Banner referenceData={referenceData} />
           <VegaForm onSubmit={handleSubmit} className={cnProjectForm()}>
@@ -66,9 +66,16 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
               activeStep={activeStepIndex}
               stepsAmount={steps.length}
               onStepChange={handleStepChange}
-              onCancel={handleCancel}
+              onCancel={() => {
+                if (mode === 'create') {
+                  handleCancel();
+                } else {
+                  form.reset();
+                }
+              }}
             />
           </VegaForm>
+          <pre>{JSON.stringify(values, null, 2)}</pre>
         </>
       )}
     />
