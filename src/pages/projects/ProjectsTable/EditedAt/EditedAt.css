@@ -14,7 +14,7 @@
   }
 
   &__navigation {
-    padding: var(--space-xs) var(--space-xs);
+    padding: var(--space-xs) 0;
 
     background-color: var(--color-bg-default);
     border: 1px solid var(--color-bg-border);
@@ -22,8 +22,12 @@
   }
 
   &__navigationItem {
+    padding: var(--space-xs) var(--space-s) var(--space-xs) var(--space-xs);
+
     display: inline-flex;
     align-items: center;
+
+    border-radius: 0;
 
     &:active {
       text-decoration: none;

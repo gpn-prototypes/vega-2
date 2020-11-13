@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import {
   Button,
   IconBookmarkFilled,
@@ -17,6 +18,10 @@ import './ProjectsTable.css';
 const blockName = 'ProjectsTable';
 const styles = {
   iconWrap: `${blockName}__iconWrap`,
+  name: `${blockName}__name`,
+  nameWrap: `${blockName}__nameWrap`,
+  iconFavorite: `${blockName}__iconFavorite`,
+  columnName: `${blockName}__columnName`,
 };
 
 type Props = {
@@ -27,52 +32,61 @@ type Props = {
 
 const COLUMNS: React.ComponentProps<typeof Table>['columns'] = [
   {
-    title: <IconBookmarkStroked size="s" view="ghost" />,
-    accessor: 'favorite',
-    align: 'center',
-    width: 55,
+    title: (
+      <div className={styles.columnName}>
+        <div className={styles.iconWrap}>
+          <IconBookmarkStroked className={styles.iconFavorite} size="s" view="ghost" />
+        </div>
+        <>Название</>
+      </div>
+    ),
+    accessor: 'name',
+    // sortable: true,
+    width: 260,
   },
   {
-    title: 'Название',
-    accessor: 'name',
-    sortable: true,
-    width: 195,
+    title: 'Описание',
+    accessor: 'description',
+    // sortable: true,
+    width: 260,
   },
   {
     title: 'Регион',
     accessor: 'region',
-    sortable: true,
-    width: 245,
-  },
-  {
-    title: 'Ваша роль',
-    accessor: 'roles',
-    sortable: true,
-    width: 185,
-  },
-  {
-    title: 'Автор',
-    accessor: 'createdBy',
-    sortable: true,
-    width: 215,
+    // sortable: true,
+    width: 260,
   },
   {
     title: 'Создан',
     accessor: 'createdAt',
-    sortable: true,
-    width: 165,
+    // sortable: true,
+    width: 200,
+  },
+  // {
+  //   title: 'Ваша роль',
+  //   accessor: 'roles',
+  //   // sortable: true,
+  //   width: 185,
+  // },
+  {
+    title: 'Автор',
+    accessor: 'createdBy',
+    // sortable: true,
+    width: 260,
   },
   {
     title: 'Изменён',
     accessor: 'editedAt',
-    sortable: true,
-    width: 212,
+    // sortable: true,
+    width: 216,
   },
 ];
 
 export const ProjectsTable: React.FC<Props> = (props) => {
   const placeholder = props.placeholder ?? <Text size="s">Пока нет ни одного проекта :(</Text>;
   const [idMenuVisible, setIdMenuVisible] = React.useState<string | undefined>(undefined);
+
+  const history = useHistory();
 
   const rows =
     props.rows?.map((project) => {
@@ -81,28 +95,35 @@ export const ProjectsTable: React.FC<Props> = (props) => {
 
       return {
         ...project,
-        favorite: (
-          <div className={styles.iconWrap}>
-            {(isVisible || project.isFavorite) && (
-              <Button
-                label="Избранное"
-                iconLeft={icon}
-                iconSize="s"
-                onlyIcon
-                view="clear"
-                size="xs"
-                form="round"
-                onClick={() => {
-                  if (project.id && project.status && project.version) {
-                    props.onFavorite(project.id, {
-                      status: project.status,
-                      version: project.version,
-                      isFavorite: !project.isFavorite,
-                    });
-                  }
-                }}
-              />
-            )}
+        name: (
+          <div
+            className={styles.nameWrap}
+            title={project.name && project.name.length > 40 ? project.name : undefined}
+          >
+            <div className={styles.iconWrap}>
+              {(isVisible || project.isFavorite) && (
+                <Button
+                  label="Избранное"
+                  iconLeft={icon}
+                  iconSize="s"
+                  onlyIcon
+                  view="clear"
+                  size="xs"
+                  form="round"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (project.id && project.status && project.version) {
+                      props.onFavorite(project.id, {
+                        status: project.status,
+                        version: project.version,
+                        isFavorite: !project.isFavorite,
+                      });
+                    }
+                  }}
+                />
+              )}
+            </div>
+            <div className={styles.name}>{project.name}</div>
           </div>
         ),
         editedAt: (
@@ -123,6 +144,12 @@ export const ProjectsTable: React.FC<Props> = (props) => {
       rows={rows}
       verticalAlign="center"
       emptyRowsPlaceholder={placeholder}
+      activeRow={{
+        id: undefined,
+        onChange: (id) => {
+          history.push(`/projects/show/${id}`);
+        },
+      }}
       onRowHover={({ id }) => {
         setIdMenuVisible(id);
       }}

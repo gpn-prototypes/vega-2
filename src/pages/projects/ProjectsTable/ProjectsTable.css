@@ -2,7 +2,41 @@
   padding-right: var(--space-s);
 
   &__iconWrap {
+    margin-right: var(--space-m);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     width: var(--graphics-size-m);
     height: var(--graphics-size-m);
+
+    flex-shrink: 0;
+  }
+
+  &__nameWrap {
+    display: flex;
+    align-items: center;
+  }
+
+  &__name {
+    display: -webkit-box;
+    overflow: hidden;
+
+    max-width: 100%;
+    max-height: calc(2 * var(--line-height-text-s));
+
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  &__columnName {
+    display: flex;
+    align-items: center;
+  }
+
+  &__columnName &__iconWrap {
+    height: var(--graphics-size-s);
   }
 }
