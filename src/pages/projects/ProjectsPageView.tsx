@@ -49,9 +49,9 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
             <Text as="h1" size="3xl" weight="bold" className={cn('Title').toString()}>
               Проекты
             </Text>
-            <Text as="span" size="s" view="secondary" className={cn('SearchResult').toString()}>
+            {/* <Text as="span" size="s" view="secondary" className={cn('SearchResult').toString()}>
               6 из 12
-            </Text>
+            </Text> */}
           </div>
           <Link to="/projects/create">
             <Button label="Создать новый проект" size="s" />

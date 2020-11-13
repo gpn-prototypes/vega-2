@@ -18,6 +18,7 @@ export type TableRow = {
   roles?: string;
   createdBy?: string;
   createdAt?: string;
+  description?: string;
   editedAt?: string | React.ReactElement;
   menu?: MenuItem[];
   version?: number;

@@ -18,7 +18,7 @@ import './ProjectsTable.css';
 const blockName = 'ProjectsTable';
 const styles = {
   iconWrap: `${blockName}__iconWrap`,
-  name: `${blockName}__name`,
+  textOverflow: `${blockName}__textOverflow`,
   nameWrap: `${blockName}__nameWrap`,
   iconFavorite: `${blockName}__iconFavorite`,
   columnName: `${blockName}__columnName`,
@@ -95,6 +95,18 @@ export const ProjectsTable: React.FC<Props> = (props) => {
 
       return {
         ...project,
+        description: (
+          <div
+            title={
+              project.description && project.description.length > 40
+                ? project.description
+                : undefined
+            }
+            className={styles.textOverflow}
+          >
+            {project?.description}
+          </div>
+        ),
         name: (
           <div
             className={styles.nameWrap}
@@ -123,7 +135,7 @@ export const ProjectsTable: React.FC<Props> = (props) => {
                 />
               )}
             </div>
-            <div className={styles.name}>{project.name}</div>
+            <div className={styles.textOverflow}>{project.name}</div>
           </div>
         ),
         editedAt: (

@@ -19,7 +19,7 @@
     align-items: center;
   }
 
-  &__name {
+  &__textOverflow {
     display: -webkit-box;
     overflow: hidden;
 

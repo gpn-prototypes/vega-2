@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { IconEdit, IconTrash, Text } from '@gpn-prototypes/vega-ui';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -79,6 +79,8 @@ const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): Tab
 export const ProjectsPage = (): React.ReactElement => {
   const { addItem, removeItem } = useSnackbar();
 
+  const history = useHistory();
+
   const [deleteProject] = useDeleteProject({
     refetchQueries: [`GetProjects`],
     awaitRefetchQueries: true,
@@ -105,12 +107,20 @@ export const ProjectsPage = (): React.ReactElement => {
   const projects = mappedProjects.map((project) => {
     const edit = ({ close, ...rest }: MenuItemProps) => {
       return (
-        <Link to={`/projects/show/${project.id}`} onClick={() => close()} {...rest}>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            history.push(`/projects/show/${project.id}`);
+            close();
+          }}
+          {...rest}
+        >
           <span className={cn('MenuIcon')}>
             <IconEdit size="s" />
           </span>
           <Text>Редактировать</Text>
-        </Link>
+        </button>
       );
     };
 
