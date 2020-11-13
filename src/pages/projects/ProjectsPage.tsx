@@ -29,6 +29,7 @@ type ProjectsMapper = Pick<
   | 'editedAt'
   | 'version'
   | 'status'
+  | 'description'
 > | null;
 
 const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): TableRow[] => {
@@ -64,6 +65,7 @@ const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): Tab
       name: project.name ?? undefined,
       version: project.version ?? undefined,
       status: project.status ?? undefined,
+      description: project.description ?? undefined,
       isFavorite: project.isFavorite ?? undefined,
       region: project.region?.name ?? undefined,
       roles: roles ?? undefined,
