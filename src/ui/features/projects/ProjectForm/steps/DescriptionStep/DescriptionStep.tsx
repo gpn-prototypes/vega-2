@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field } from 'react-final-form';
-import { Combobox, Form as VegaForm, TextField } from '@gpn-prototypes/vega-ui';
+import { BasicSelect, Combobox, Form as VegaForm, TextField } from '@gpn-prototypes/vega-ui';
 
 import { ProjectTypeEnum } from '../../../../../../__generated__/types';
 import { ReferenceDataType } from '../../../../../../pages/project/types';
@@ -36,15 +36,20 @@ const getYearStartOptions = (): SelectOption[] => {
   return options;
 };
 
+const defaultOptions = [{ label: 'Не выбрано', value: 'NOT_SELECTED' }];
+
 export const DescriptionStep: React.FC<StepProps> = (props) => {
   const { mode, referenceData } = props;
   const { regionList } = referenceData;
 
-  const regionOptions =
-    regionList?.map((region) => ({
-      label: region?.name || '',
-      value: region?.vid || '',
-    })) || [];
+  const regionOptions = regionList
+    ? defaultOptions.concat(
+        regionList?.map((region) => ({
+          label: region?.name || '',
+          value: region?.vid || '',
+        })),
+      )
+    : [];
 
   const yearStartOptions = getYearStartOptions();
 
@@ -83,7 +88,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           <Field
             name="description.region"
             render={({ input }): React.ReactNode => (
-              <Combobox
+              <BasicSelect
                 id="region"
                 size="s"
                 options={regionOptions}
@@ -161,7 +166,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
             name="description.yearStart"
             initialValue={mode === 'create' && yearStartOptions[2].value}
             render={({ input }): React.ReactNode => (
-              <Combobox
+              <BasicSelect
                 id="yearStart"
                 size="s"
                 options={yearStartOptions}

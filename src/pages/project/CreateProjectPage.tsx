@@ -77,7 +77,10 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
         vid: blankProjectId,
         name: values.description.name,
         type: values.description.type,
-        region: values.description.region,
+        region:
+          values.description.region && values.description.region !== 'NOT_SELECTED'
+            ? values.description.region
+            : undefined,
         coordinates: values.description.coordinates,
         description: values.description.description,
         yearStart: values.description.yearStart,
