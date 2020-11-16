@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { IconEdit, IconTrash, Text } from '@gpn-prototypes/vega-ui';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -29,6 +29,7 @@ type ProjectsMapper = Pick<
   | 'editedAt'
   | 'version'
   | 'status'
+  | 'description'
 > | null;
 
 const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): TableRow[] => {
@@ -64,6 +65,7 @@ const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): Tab
       name: project.name ?? undefined,
       version: project.version ?? undefined,
       status: project.status ?? undefined,
+      description: project.description ?? undefined,
       isFavorite: project.isFavorite ?? undefined,
       region: project.region?.name ?? undefined,
       roles: roles ?? undefined,
@@ -76,6 +78,8 @@ const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): Tab
 
 export const ProjectsPage = (): React.ReactElement => {
   const { addItem, removeItem } = useSnackbar();
+
+  const history = useHistory();
 
   const [deleteProject] = useDeleteProject({
     refetchQueries: [`GetProjects`],
@@ -103,12 +107,20 @@ export const ProjectsPage = (): React.ReactElement => {
   const projects = mappedProjects.map((project) => {
     const edit = ({ close, ...rest }: MenuItemProps) => {
       return (
-        <Link to={`/projects/show/${project.id}`} onClick={() => close()} {...rest}>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            history.push(`/projects/show/${project.id}`);
+            close();
+          }}
+          {...rest}
+        >
           <span className={cn('MenuIcon')}>
             <IconEdit size="s" />
           </span>
           <Text>Редактировать</Text>
-        </Link>
+        </button>
       );
     };
 
