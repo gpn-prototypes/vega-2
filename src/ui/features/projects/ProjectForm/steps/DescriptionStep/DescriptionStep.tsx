@@ -5,6 +5,7 @@ import { Combobox, Form as VegaForm, TextField } from '@gpn-prototypes/vega-ui';
 import { ProjectTypeEnum } from '../../../../../../__generated__/types';
 import { ReferenceDataType } from '../../../../../../pages/project/types';
 import { cnDescriptionStep, cnProjectForm } from '../../cn-form';
+import { FormMode } from '../../types';
 
 type SelectOption = {
   label: string;
@@ -12,6 +13,7 @@ type SelectOption = {
 };
 
 type StepProps = {
+  mode: FormMode;
   referenceData: ReferenceDataType;
 };
 
@@ -35,7 +37,7 @@ const getYearStartOptions = (): SelectOption[] => {
 };
 
 export const DescriptionStep: React.FC<StepProps> = (props) => {
-  const { referenceData } = props;
+  const { mode, referenceData } = props;
   const { regionList } = referenceData;
 
   const regionOptions =
@@ -157,13 +159,14 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           </VegaForm.Label>
           <Field
             name="description.yearStart"
-            initialValue={yearStartOptions[2].value}
+            initialValue={mode === 'create' && yearStartOptions[2].value}
             render={({ input }): React.ReactNode => (
               <Combobox
                 id="yearStart"
                 size="s"
                 options={yearStartOptions}
                 getOptionLabel={getItemLabel}
+                placeholder="Выберите год"
                 value={yearStartOptions.find(({ value }) => value === input.value)}
                 // @ts-expect-error: Ошибка реэкспорта оболочки, исправить в vega-ui TODO
                 onChange={(value: SelectOption | null): void => {
