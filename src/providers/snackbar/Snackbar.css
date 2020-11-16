@@ -6,10 +6,12 @@
   position: fixed;
   z-index: 100;
 
+  left: 50%;
+
   bottom: 0;
 
   display: flex;
   justify-content: center;
 
-  width: 100%;
+  transform: translate(-50%, 0);
 }
