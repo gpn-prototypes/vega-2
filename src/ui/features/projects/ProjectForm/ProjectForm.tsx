@@ -38,7 +38,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     <Form
       initialValues={initialValues}
       onSubmit={handleFormSubmit}
-      render={({ handleSubmit, dirty, form, values }): React.ReactNode => (
+      render={({ handleSubmit, dirty, form }): React.ReactNode => (
         <>
           <Banner referenceData={referenceData} />
           <VegaForm onSubmit={handleSubmit} className={cnProjectForm()}>
@@ -74,7 +74,6 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
                 }
               }}
             />
-            <pre>{JSON.stringify(values, null, 2)}</pre>
           </VegaForm>
         </>
       )}
