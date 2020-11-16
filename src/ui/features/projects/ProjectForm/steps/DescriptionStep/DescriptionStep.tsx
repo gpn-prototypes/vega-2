@@ -36,20 +36,17 @@ const getYearStartOptions = (): SelectOption[] => {
   return options;
 };
 
-const defaultOptions = [{ label: 'Не выбрано', value: 'NOT_SELECTED' }];
+const defaultOption = { label: 'Не выбрано', value: 'NOT_SELECTED' };
 
 export const DescriptionStep: React.FC<StepProps> = (props) => {
   const { mode, referenceData } = props;
   const { regionList } = referenceData;
 
-  const regionOptions = regionList
-    ? defaultOptions.concat(
-        regionList?.map((region) => ({
-          label: region?.name || '',
-          value: region?.vid || '',
-        })),
-      )
-    : [];
+  const regionOptions =
+    regionList?.map((region) => ({
+      label: region?.name || '',
+      value: region?.vid || '',
+    })) || [];
 
   const yearStartOptions = getYearStartOptions();
 
@@ -91,7 +88,11 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
               <BasicSelect
                 id="region"
                 size="s"
-                options={regionOptions}
+                options={
+                  input.value && input.value !== 'NOT_SELECTED'
+                    ? [defaultOption, ...regionOptions]
+                    : regionOptions
+                }
                 getOptionLabel={getItemLabel}
                 placeholder="Выберите регион"
                 value={regionOptions.find(({ value }) => value === input.value)}
