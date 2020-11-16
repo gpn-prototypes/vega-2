@@ -77,11 +77,10 @@ const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): Tab
 };
 
 export const ProjectsPage = (): React.ReactElement => {
-  const { addItem } = useSnackbar();
-
   const [isOpenModal, setIsOpenModal] = React.useState<boolean>(false);
   const [dataDeleteProject, setDataDeleteProject] = React.useState<TableRow | null>(null);
 
+  const snackbar = useSnackbar();
   const history = useHistory();
 
   const [deleteProject] = useDeleteProject({
@@ -93,13 +92,24 @@ export const ProjectsPage = (): React.ReactElement => {
   });
   const [updateProject] = useUpdateProject({
     refetchQueries: [`GetProjects`],
+    awaitRefetchQueries: true,
   });
 
   const addToFavorite = React.useCallback(
-    (id, payload) => {
-      updateProject({ variables: { vid: id, data: payload } });
+    async (id, payload) => {
+      const addToFavoriteResult = await updateProject({ variables: { vid: id, data: payload } });
+
+      if (addToFavoriteResult.data?.updateProject?.result?.__typename === 'Error') {
+        const addToFavoriteError = addToFavoriteResult.data?.updateProject?.result;
+
+        snackbar.addItem({
+          key: `${addToFavoriteError.code}-add-to-favorite`,
+          status: 'alert',
+          message: addToFavoriteError.message,
+        });
+      }
     },
-    [updateProject],
+    [snackbar, updateProject],
   );
 
   const isLoading = loading && !data?.projects;
@@ -191,7 +201,7 @@ export const ProjectsPage = (): React.ReactElement => {
               if (dataDeleteProject) {
                 deleteProject({ variables: { vid: dataDeleteProject.id } }).then(() => {
                   setIsOpenModal(false);
-                  addItem({
+                  snackbar.addItem({
                     autoClose: 3,
                     key: `${dataDeleteProject.id}-system`,
                     status: 'success',
