@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { IconEdit, IconTrash, Text } from '@gpn-prototypes/vega-ui';
+import { Button, IconEdit, IconTrash, Modal, Text } from '@gpn-prototypes/vega-ui';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -77,7 +77,10 @@ const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): Tab
 };
 
 export const ProjectsPage = (): React.ReactElement => {
-  const { addItem, removeItem } = useSnackbar();
+  const { addItem } = useSnackbar();
+
+  const [isOpenModal, setIsOpenModal] = React.useState<boolean>(false);
+  const [dataDeleteProject, setDataDeleteProject] = React.useState<TableRow | null>(null);
 
   const history = useHistory();
 
@@ -130,34 +133,9 @@ export const ProjectsPage = (): React.ReactElement => {
           type="button"
           onClick={(e) => {
             e.stopPropagation();
-            addItem({
-              key: `${project.id}-alert`,
-              message: `Вы уверены, что хотите удалить проект «${project.name}» из системы?`,
-              status: 'alert',
-              actions: [
-                {
-                  label: 'Да, удалить',
-                  onClick(): void {
-                    deleteProject({ variables: { vid: project.id } }).then(() => {
-                      addItem({
-                        autoClose: 3,
-                        key: `${project.id}-system`,
-                        status: 'success',
-                        message: `Проект «${project.name}» успешно удален.`,
-                      });
-                    });
-                    removeItem(`${project.id}-alert`);
-                  },
-                },
-                {
-                  label: 'Нет, оставить',
-                  onClick(): void {
-                    removeItem(`${project.id}-alert`);
-                  },
-                },
-              ],
-            });
+            setDataDeleteProject(project);
             close();
+            setIsOpenModal(true);
           }}
           {...rest}
         >
@@ -181,6 +159,53 @@ export const ProjectsPage = (): React.ReactElement => {
   return (
     <>
       <ProjectsPageView projects={projects} isLoading={isLoading} onFavorite={addToFavorite} />
+      <Modal
+        hasOverlay
+        hasCloseButton
+        isOpen={isOpenModal}
+        onClose={() => {
+          setIsOpenModal(false);
+        }}
+        className={cn('Modal').toString()}
+      >
+        <Modal.Header>
+          <Text size="xs">Удаление проекта</Text>
+        </Modal.Header>
+        <Modal.Body>
+          <Text>{`Вы уверены, что хотите удалить проект «${dataDeleteProject?.name}» из системы?`}</Text>
+        </Modal.Body>
+        <Modal.Footer className={cn('ModalFooter').toString()}>
+          <Button
+            size="m"
+            onClick={() => {
+              setIsOpenModal(false);
+              setDataDeleteProject(null);
+            }}
+            view="primary"
+            label="Нет, оставить"
+            className={cn('ButtonCancel').toString()}
+          />
+          <Button
+            size="m"
+            onClick={() => {
+              if (dataDeleteProject) {
+                deleteProject({ variables: { vid: dataDeleteProject.id } }).then(() => {
+                  setIsOpenModal(false);
+                  addItem({
+                    autoClose: 3,
+                    key: `${dataDeleteProject.id}-system`,
+                    status: 'success',
+                    message: `Проект «${dataDeleteProject.name}» успешно удален.`,
+                  });
+                  setDataDeleteProject(null);
+                });
+              }
+            }}
+            view="ghost"
+            label="Да, удалить"
+          />
+        </Modal.Footer>
+      </Modal>
     </>
   );
 };

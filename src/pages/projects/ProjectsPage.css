@@ -101,4 +101,22 @@
 
     width: 100%;
   }
+
+  &__Modal {
+    width: 480px;
+  }
+
+  &__Modal ~ button {
+    border: none;
+    outline: none;
+  }
+
+  &__ModalFooter {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  &__ButtonCancel {
+    margin-right: var(--space-xs);
+  }
 }
