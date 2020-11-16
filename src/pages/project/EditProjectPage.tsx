@@ -70,7 +70,10 @@ export const EditProjectPage: React.FC<PageProps> = () => {
         vid: projectId,
         name: values.description.name,
         type: values.description.type,
-        region: values.description.region || null,
+        region:
+          values.description.region && values.description.region !== 'NOT_SELECTED'
+            ? values.description.region
+            : null,
         coordinates: values.description.coordinates || null,
         description: values.description.description || null,
         yearStart: values.description.yearStart || null,
