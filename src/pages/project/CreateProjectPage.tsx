@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Loader } from '@gpn-prototypes/vega-ui';
 
 import { ProjectStatusEnum } from '../../__generated__/types';
+import { useSnackbar } from '../../providers/snackbar';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
 import { useCreateProject, useQueryRegionList, useUpdateProject2 } from './__generated__/project';
@@ -17,6 +18,7 @@ type PageProps = Record<string, unknown>;
 
 export const CreateProjectPage: React.FC<PageProps> = () => {
   const history = useHistory();
+  const snackbar = useSnackbar();
 
   const [blankProjectId, setBlankProjectId] = useState<string | undefined>(undefined);
 
@@ -45,10 +47,11 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       if (createProjectResult.data?.createProject?.result?.__typename === 'Error') {
         const inlineCreateProjectError = createProjectResult.data?.createProject?.result;
 
-        // TODO: Обработать внутреннюю ошибку при создании проекта
-
-        // eslint-disable-next-line no-console
-        console.log('inlineCreateProjectError', inlineCreateProjectError);
+        snackbar.addItem({
+          key: `${inlineCreateProjectError.code}-create-error`,
+          status: 'alert',
+          message: inlineCreateProjectError.message,
+        });
       }
     };
 
@@ -61,7 +64,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     return () => {
       isCancelled = true;
     };
-  }, [createProject]);
+  }, [createProject, snackbar]);
 
   const {
     data: queryRegionListData,
@@ -95,12 +98,13 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     }
 
     if (updateProjectResult.data?.updateProject?.result?.__typename === 'Error') {
-      const inlineCreateProjectError = updateProjectResult.data?.updateProject?.result;
+      const inlineUpdateProjectError = updateProjectResult.data?.updateProject?.result;
 
-      // TODO: Обработать внутреннюю ошибку при создании проекта
-
-      // eslint-disable-next-line no-console
-      console.log('inlineCreateProjectError', inlineCreateProjectError);
+      snackbar.addItem({
+        key: `${inlineUpdateProjectError.code}-update-error`,
+        status: 'alert',
+        message: inlineUpdateProjectError.message,
+      });
     }
   };
 
