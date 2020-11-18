@@ -1,8 +1,8 @@
-.snackbar {
+.vega-sp-snackbar {
   width: 400px;
 }
 
-.snackbar-portal {
+.vega-sp-snackbar-portal {
   position: fixed;
   z-index: 100;
 
