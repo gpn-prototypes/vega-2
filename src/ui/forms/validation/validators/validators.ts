@@ -49,7 +49,7 @@ export const minLength = createValidator<number, string>({
 });
 
 export const maxLength = createValidator<number, string>({
-  messageFn: (length) => `Вы превысили максимальное количество символов в ${length} символов`,
+  messageFn: (length) => `Максимальное количество символов ${length}`,
   validate: (value, length) => value.length <= length,
 });
 

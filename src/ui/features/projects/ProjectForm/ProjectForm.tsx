@@ -16,8 +16,6 @@ import './ProjectForm.css';
 
 const focusOnErrors = createDecorator();
 
-const steps = [{ title: 'Описание проекта', content: DescriptionStep }];
-
 const validator = createValidate<Partial<FormValues>>({
   name: [
     validators.required(undefined, () => 'Заполните обязательное поле'),
@@ -31,6 +29,8 @@ const validator = createValidate<Partial<FormValues>>({
     ),
   ],
 });
+
+const steps = [{ title: 'Описание проекта', content: DescriptionStep }];
 
 export const ProjectForm: React.FC<FormProps> = (formProps) => {
   const { mode, initialValues, referenceData, onSubmit } = formProps;

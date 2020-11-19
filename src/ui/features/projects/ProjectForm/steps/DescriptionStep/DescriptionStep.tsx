@@ -18,6 +18,7 @@ type StepProps = {
 };
 
 const typeOptions = [{ label: 'Геологоразведочный', value: ProjectTypeEnum.Geo }];
+const typeInitialValue = typeOptions[0].value;
 
 const getYearStartOptions = (): SelectOption[] => {
   const currentYear = new Date().getFullYear();
@@ -36,7 +37,7 @@ const getYearStartOptions = (): SelectOption[] => {
   return options;
 };
 
-const defaultOption = { label: 'Не выбрано', value: 'NOT_SELECTED' };
+const notSelectedOption = { label: 'Не выбрано', value: 'NOT_SELECTED' };
 
 export const DescriptionStep: React.FC<StepProps> = (props) => {
   const { mode, referenceData } = props;
@@ -49,6 +50,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
     })) || [];
 
   const yearStartOptions = getYearStartOptions();
+  const yearStartInitialValue = mode === 'create' ? yearStartOptions[2].value : undefined;
 
   const getItemLabel = (option: SelectOption): string => option.label;
 
@@ -61,32 +63,36 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           </VegaForm.Label>
           <Field
             name="name"
-            render={({ input, meta }): React.ReactNode => (
-              <>
-                <TextField
-                  id="name"
-                  size="s"
-                  width="full"
-                  name={input.name}
-                  state={meta.error && meta.touched ? 'alert' : undefined}
-                  placeholder="Придумайте название проекта"
-                  value={input.value}
-                  onChange={({ e }): void => input.onChange(e)}
-                  onBlur={input.onBlur}
-                  onFocus={input.onFocus}
-                />
-                {meta.error && meta.touched && (
-                  <Text
-                    size="xs"
-                    lineHeight="xs"
-                    view="alert"
-                    className={cnDescriptionStep('ErrorText').toString()}
-                  >
-                    {meta.error}
-                  </Text>
-                )}
-              </>
-            )}
+            render={({ input, meta }): React.ReactNode => {
+              const showError = meta.error && meta.submitFailed;
+
+              return (
+                <>
+                  <TextField
+                    id="name"
+                    size="s"
+                    width="full"
+                    name={input.name}
+                    state={showError ? 'alert' : undefined}
+                    placeholder="Придумайте название проекта"
+                    value={input.value}
+                    onChange={({ e }): void => input.onChange(e)}
+                    onBlur={input.onBlur}
+                    onFocus={input.onFocus}
+                  />
+                  {showError && (
+                    <Text
+                      size="xs"
+                      lineHeight="xs"
+                      view="alert"
+                      className={cnDescriptionStep('ErrorText').toString()}
+                    >
+                      {meta.error}
+                    </Text>
+                  )}
+                </>
+              );
+            }}
           />
         </VegaForm.Field>
       </VegaForm.Row>
@@ -103,7 +109,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 size="s"
                 options={
                   input.value && input.value !== 'NOT_SELECTED'
-                    ? [defaultOption, ...regionOptions]
+                    ? [notSelectedOption, ...regionOptions]
                     : regionOptions
                 }
                 getOptionLabel={getItemLabel}
@@ -127,7 +133,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           </VegaForm.Label>
           <Field
             name="type"
-            initialValue={typeOptions[0].value}
+            initialValue={typeInitialValue}
             render={({ input }): React.ReactNode => (
               <Combobox
                 id="type"
@@ -178,7 +184,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           </VegaForm.Label>
           <Field
             name="yearStart"
-            initialValue={mode === 'create' && yearStartOptions[2].value}
+            initialValue={yearStartInitialValue}
             render={({ input }): React.ReactNode => (
               <BasicSelect
                 id="yearStart"
