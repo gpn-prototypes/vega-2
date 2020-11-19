@@ -78,15 +78,12 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     const updateProjectResult = await updateProject({
       variables: {
         vid: blankProjectId,
-        name: values.description.name,
-        type: values.description.type,
-        region:
-          values.description.region && values.description.region !== 'NOT_SELECTED'
-            ? values.description.region
-            : undefined,
-        coordinates: values.description.coordinates,
-        description: values.description.description,
-        yearStart: values.description.yearStart,
+        name: values.name,
+        type: values.type,
+        region: values.region && values.region !== 'NOT_SELECTED' ? values.region : undefined,
+        coordinates: values.coordinates,
+        description: values.description,
+        yearStart: values.yearStart,
         status: ProjectStatusEnum.Unpublished,
         version: 1,
       },

@@ -4,14 +4,12 @@ import { ReferenceDataType } from '../../../../pages/project/types';
 export type FormMode = 'create' | 'edit';
 
 export type FormValues = {
-  description: {
-    name?: string;
-    region?: string;
-    type?: ProjectTypeEnum;
-    coordinates?: string;
-    yearStart?: number;
-    description?: string;
-  };
+  name?: string;
+  region?: string;
+  type?: ProjectTypeEnum;
+  coordinates?: string;
+  yearStart?: number;
+  description?: string;
 };
 
 export type FormProps = {

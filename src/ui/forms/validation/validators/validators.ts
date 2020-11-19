@@ -6,8 +6,6 @@ import { createValidator } from './create-validator';
 export const emailPattern = /[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?/;
 /* eslint-enable */
 
-export const AVAILABLE_PASSWORD_SYMBOLS = ',!@#$%^&()_+|~-=\\{}[]`“;’<>?,./';
-
 export const required = createValidator<void, AnyValue>({
   messageFn: () => 'Обязательное поле',
   strictValidate(value) {
@@ -41,18 +39,18 @@ export const min = createValidator<number, number | string>({
 });
 
 export const max = createValidator<number, number | string>({
-  validate: (value, maxValue) => maxValue >= Number(value),
   messageFn: (maxValue) => `Максимальное значение ${maxValue}`,
+  validate: (value, maxValue) => maxValue >= Number(value),
 });
 
 export const minLength = createValidator<number, string>({
-  validate: (value, length) => value.length >= length,
   messageFn: (length) => `Минимальное количество символов ${length}`,
+  validate: (value, length) => value.length >= length,
 });
 
 export const maxLength = createValidator<number, string>({
-  validate: (value, length) => value.length <= length,
   messageFn: (length) => `Вы превысили максимальное количество символов в ${length} символов`,
+  validate: (value, length) => value.length <= length,
 });
 
 export const validators = {
