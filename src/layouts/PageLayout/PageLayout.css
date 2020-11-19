@@ -1,8 +1,10 @@
 .PageLayout {
+  flex-grow: 1;
+
   display: grid;
 
   width: 100%;
-  min-height: 100vh;
+  min-height: 100%;
 
   background-color: var(--color-bg-default);
 
