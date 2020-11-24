@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Loader } from '@gpn-prototypes/vega-ui';
 
 import { ProjectStatusEnum } from '../../__generated__/types';
-import { useSnackbar } from '../../providers/snackbar';
+import { useNotifications } from '../../providers/notifications';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
 import {
@@ -24,7 +24,7 @@ type PageProps = Record<string, unknown>;
 
 export const CreateProjectPage: React.FC<PageProps> = () => {
   const history = useHistory();
-  const snackbar = useSnackbar();
+  const notifications = useNotifications();
 
   const [isNavigationBlocked, setIsNavigationBlocked] = React.useState<boolean>(true);
 
@@ -57,10 +57,13 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       if (createProjectResult.data?.createProject?.result?.__typename === 'Error') {
         const inlineCreateProjectError = createProjectResult.data?.createProject?.result;
 
-        snackbar.addItem({
+        notifications.add({
           key: `${inlineCreateProjectError.code}-create-error`,
           status: 'alert',
           message: inlineCreateProjectError.message,
+          onClose(item) {
+            notifications.remove(item.key);
+          },
         });
       }
     };
@@ -74,7 +77,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     return () => {
       isCancelled = true;
     };
-  }, [createProject, snackbar]);
+  }, [createProject, notifications]);
 
   const {
     data: queryRegionListData,
@@ -110,10 +113,13 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     if (updateProjectResult.data?.updateProject?.result?.__typename === 'Error') {
       const inlineUpdateProjectError = updateProjectResult.data?.updateProject?.result;
 
-      snackbar.addItem({
+      notifications.add({
         key: `${inlineUpdateProjectError.code}-update-error`,
         status: 'alert',
         message: inlineUpdateProjectError.message,
+        onClose(item) {
+          notifications.remove(item.key);
+        },
       });
     }
   };
