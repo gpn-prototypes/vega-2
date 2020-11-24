@@ -18,9 +18,8 @@
     }
   },
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --progress --config ./webpack.forShellConfig.js",
-    "dev": "yarn generate:dev:types && cross-env NODE_ENV=development webpack-dev-server --open --mode development",
-    "dev:shell": "yarn generate:dev:types && cross-env NODE_ENV=development webpack-dev-server --mode development --port 9003 --config ./webpack.forShellConfig.js",
+    "build": "cross-env NODE_ENV=production webpack --progress --config ./webpack.config.js",
+    "dev": "yarn generate:dev:types && cross-env NODE_ENV=development webpack-dev-server --mode development --port 9003 --config ./webpack.config.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "format": "prettier --write '{src,types,scripts}/**/*.{json,{j,t}s{,x},css,}'",
