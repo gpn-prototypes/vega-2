@@ -87,6 +87,18 @@ export const EditProjectPage: React.FC<PageProps> = () => {
         },
       });
     }
+
+    if (updateProjectResult.data?.updateProject?.result?.__typename === 'Project') {
+      notifications.add({
+        key: `${projectId}-create`,
+        status: 'success',
+        autoClose: 3,
+        message: 'Изменения успешно сохранены',
+        onClose(item) {
+          notifications.remove(item.key);
+        },
+      });
+    }
   };
 
   const apolloError = queryProjectError || queryRegionListError || updateProjectError;

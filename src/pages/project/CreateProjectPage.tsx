@@ -107,6 +107,17 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       localStorage.removeItem(BLANK_PROJECT_ID);
 
       setIsNavigationBlocked(false);
+
+      notifications.add({
+        key: `${projectId}-create`,
+        status: 'success',
+        autoClose: 3,
+        message: 'Проект успешно создан',
+        onClose(item) {
+          notifications.remove(item.key);
+        },
+      });
+
       history.push(`/projects/show/${projectId}`);
     }
 
@@ -138,7 +149,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     if (deleteProjectResult.data?.deleteProject?.result?.__typename === 'Error') {
       const inlineDeleteProjectError = deleteProjectResult.data?.deleteProject?.result;
 
-      snackbar.addItem({
+      notifications.add({
         key: `${inlineDeleteProjectError.code}-delete-error`,
         status: 'alert',
         message: inlineDeleteProjectError.message,
@@ -153,7 +164,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     createProjectError || updateProjectError || deleteProjectError || queryRegionListError;
 
   if (apolloError) {
-    snackbar.addItem({
+    notifications.add({
       key: `${apolloError.name}-apollo-error`,
       status: 'alert',
       message: apolloError.message,
