@@ -18,7 +18,7 @@
     justify-content: flex-end;
   }
 
-  &__ButtonCancel {
+  &__ButtonClose {
     margin-right: var(--space-xs);
   }
 }
