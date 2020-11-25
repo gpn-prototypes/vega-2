@@ -36,6 +36,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
 
   return (
     <Form
+      keepDirtyOnReinitialize
       initialValues={initialValues}
       onSubmit={handleFormSubmit}
       render={({ handleSubmit, dirty, form }): React.ReactNode => (
