@@ -67,14 +67,14 @@ export const EditProjectPage: React.FC<PageProps> = () => {
     const updateProjectResult = await updateProject({
       variables: {
         vid: projectId,
-        name: values.description.name,
+        name: values.description.name?.trim(),
         type: values.description.type,
         region:
           values.description.region && values.description.region !== 'NOT_SELECTED'
             ? values.description.region
             : null,
-        coordinates: values.description.coordinates || null,
-        description: values.description.description || null,
+        coordinates: values.description.coordinates?.trim() || null,
+        description: values.description.description?.trim() || null,
         yearStart: values.description.yearStart || null,
         status: ProjectStatusEnum.Unpublished,
         version: version || 1,
