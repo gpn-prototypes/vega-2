@@ -75,6 +75,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                     name={input.name}
                     state={showError ? 'alert' : undefined}
                     placeholder="Придумайте название проекта"
+                    autoComplete="off"
                     value={input.value}
                     onChange={({ e }): void => input.onChange(e)}
                     onBlur={input.onBlur}
@@ -168,6 +169,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 size="s"
                 width="full"
                 placeholder="Укажите систему координат"
+                autoComplete="off"
                 name={input.name}
                 value={input.value}
                 onChange={({ e }): void => input.onChange(e)}
