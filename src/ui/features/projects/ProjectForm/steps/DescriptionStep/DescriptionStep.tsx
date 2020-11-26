@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field } from 'react-final-form';
-import { BasicSelect, Combobox, Form as VegaForm, TextField } from '@gpn-prototypes/vega-ui';
+import { BasicSelect, Combobox, Form as VegaForm, Text, TextField } from '@gpn-prototypes/vega-ui';
 
 import { ProjectTypeEnum } from '../../../../../../__generated__/types';
 import { ReferenceDataType } from '../../../../../../pages/project/types';
@@ -18,6 +18,7 @@ type StepProps = {
 };
 
 const typeOptions = [{ label: 'Геологоразведочный', value: ProjectTypeEnum.Geo }];
+const typeInitialValue = typeOptions[0].value;
 
 const getYearStartOptions = (): SelectOption[] => {
   const currentYear = new Date().getFullYear();
@@ -36,7 +37,7 @@ const getYearStartOptions = (): SelectOption[] => {
   return options;
 };
 
-const defaultOption = { label: 'Не выбрано', value: 'NOT_SELECTED' };
+const notSelectedOption = { label: 'Не выбрано', value: 'NOT_SELECTED' };
 
 export const DescriptionStep: React.FC<StepProps> = (props) => {
   const { mode, referenceData } = props;
@@ -49,6 +50,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
     })) || [];
 
   const yearStartOptions = getYearStartOptions();
+  const yearStartInitialValue = mode === 'create' ? yearStartOptions[2].value : undefined;
 
   const getItemLabel = (option: SelectOption): string => option.label;
 
@@ -60,20 +62,37 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
             Название проекта
           </VegaForm.Label>
           <Field
-            name="description.name"
-            render={({ input }): React.ReactNode => (
-              <TextField
-                id="name"
-                size="s"
-                width="full"
-                name={input.name}
-                placeholder="Придумайте название проекта"
-                value={input.value}
-                onChange={({ e }): void => input.onChange(e)}
-                onBlur={input.onBlur}
-                onFocus={input.onFocus}
-              />
-            )}
+            name="name"
+            render={({ input, meta }): React.ReactNode => {
+              const showError = meta.error && meta.submitFailed;
+
+              return (
+                <>
+                  <TextField
+                    id="name"
+                    size="s"
+                    width="full"
+                    name={input.name}
+                    state={showError ? 'alert' : undefined}
+                    placeholder="Придумайте название проекта"
+                    value={input.value}
+                    onChange={({ e }): void => input.onChange(e)}
+                    onBlur={input.onBlur}
+                    onFocus={input.onFocus}
+                  />
+                  {showError && (
+                    <Text
+                      size="xs"
+                      lineHeight="xs"
+                      view="alert"
+                      className={cnDescriptionStep('ErrorText').toString()}
+                    >
+                      {meta.error}
+                    </Text>
+                  )}
+                </>
+              );
+            }}
           />
         </VegaForm.Field>
       </VegaForm.Row>
@@ -83,14 +102,14 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
             Регион
           </VegaForm.Label>
           <Field
-            name="description.region"
+            name="region"
             render={({ input }): React.ReactNode => (
               <BasicSelect
                 id="region"
                 size="s"
                 options={
                   input.value && input.value !== 'NOT_SELECTED'
-                    ? [defaultOption, ...regionOptions]
+                    ? [notSelectedOption, ...regionOptions]
                     : regionOptions
                 }
                 getOptionLabel={getItemLabel}
@@ -114,8 +133,8 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
             Тип проекта
           </VegaForm.Label>
           <Field
-            name="description.type"
-            initialValue={typeOptions[0].value}
+            name="type"
+            initialValue={typeInitialValue}
             render={({ input }): React.ReactNode => (
               <Combobox
                 id="type"
@@ -142,7 +161,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
             Система координат
           </VegaForm.Label>
           <Field
-            name="description.coordinates"
+            name="coordinates"
             render={({ input }): React.ReactNode => (
               <TextField
                 id="coordinates"
@@ -165,8 +184,8 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
             Год начала планирования
           </VegaForm.Label>
           <Field
-            name="description.yearStart"
-            initialValue={mode === 'create' && yearStartOptions[2].value}
+            name="yearStart"
+            initialValue={yearStartInitialValue}
             render={({ input }): React.ReactNode => (
               <BasicSelect
                 id="yearStart"
@@ -192,7 +211,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
             Описание проекта
           </VegaForm.Label>
           <Field
-            name="description.description"
+            name="description"
             render={({ input }): React.ReactNode => (
               <TextField
                 id="description"

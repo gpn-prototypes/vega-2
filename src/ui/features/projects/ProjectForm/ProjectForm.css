@@ -55,6 +55,10 @@
 
 .ProjectForm-DescriptionStep {
   width: 480px;
+
+  &__ErrorText {
+    margin-top: var(--space-2xs);
+  }
 }
 
 .ProjectForm-DocumentStep {

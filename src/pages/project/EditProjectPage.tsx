@@ -25,14 +25,12 @@ type ProjectType = Pick<
 
 const getInitialValues = (project: ProjectType): FormValues => {
   return {
-    description: {
-      name: project.name || undefined,
-      type: project.type || undefined,
-      region: project.region?.vid || undefined,
-      coordinates: project.coordinates || undefined,
-      description: project.description || undefined,
-      yearStart: project.yearStart || undefined,
-    },
+    name: project.name || undefined,
+    type: project.type || undefined,
+    region: project.region?.vid || undefined,
+    coordinates: project.coordinates || undefined,
+    description: project.description || undefined,
+    yearStart: project.yearStart || undefined,
   };
 };
 
@@ -67,14 +65,11 @@ export const EditProjectPage: React.FC<PageProps> = () => {
     const updateProjectResult = await updateProject({
       variables: {
         vid: projectId,
-        name: values.description.name?.trim(),
-        region:
-          values.description.region && values.description.region !== 'NOT_SELECTED'
-            ? values.description.region
-            : null,
-        coordinates: values.description.coordinates?.trim() || null,
-        description: values.description.description?.trim() || null,
-        yearStart: values.description.yearStart || null,
+        name: values.name,
+        region: values.region && values.region !== 'NOT_SELECTED' ? values.region : null,
+        coordinates: values.coordinates || null,
+        description: values.description || null,
+        yearStart: values.yearStart || null,
         status: ProjectStatusEnum.Unpublished,
         version: version || 1,
       },

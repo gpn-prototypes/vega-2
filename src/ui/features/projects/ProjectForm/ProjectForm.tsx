@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Form } from 'react-final-form';
 import { useHistory } from 'react-router-dom';
 import { Form as VegaForm, NavigationList } from '@gpn-prototypes/vega-ui';
+import createDecorator from 'final-form-focus';
+
+import { createValidate, validators } from '../../../forms/validation';
 
 import { Banner } from './Banner';
 import { cnProjectForm } from './cn-form';
@@ -10,6 +13,22 @@ import { DescriptionStep } from './steps';
 import { FormProps, FormValues } from './types';
 
 import './ProjectForm.css';
+
+const focusOnErrors = createDecorator();
+
+const validator = createValidate<Partial<FormValues>>({
+  name: [
+    validators.required(undefined, () => 'Заполните обязательное поле'),
+    validators.minLength(
+      2,
+      () => 'Название проекта не может быть менее 2 символов и более 256 символов',
+    ),
+    validators.maxLength(
+      256,
+      () => 'Название проекта не может быть менее 2 символов и более 256 символов',
+    ),
+  ],
+});
 
 const steps = [{ title: 'Описание проекта', content: DescriptionStep }];
 
@@ -38,6 +57,8 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     <Form
       keepDirtyOnReinitialize
       initialValues={initialValues}
+      validate={validator}
+      decorators={[focusOnErrors]}
       onSubmit={handleFormSubmit}
       render={({ handleSubmit, dirty, form }): React.ReactNode => (
         <>

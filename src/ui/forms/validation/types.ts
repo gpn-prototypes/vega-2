@@ -25,14 +25,4 @@ export interface Values {
   [key: string]: Value;
 }
 
-export type Rule =
-  | 'required'
-  | 'email'
-  | 'min'
-  | 'max'
-  | 'pattern'
-  | 'minLength'
-  | 'maxLength'
-  | 'minLengthPassword'
-  | 'maxLengthPassword'
-  | 'password';
+export type Rule = 'required' | 'pattern' | 'email' | 'min' | 'max' | 'minLength' | 'maxLength';
