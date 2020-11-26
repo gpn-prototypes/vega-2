@@ -54,9 +54,8 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   const history = useHistory();
   const notifications = useNotifications();
 
-  const [isNavigationBlocked, setIsNavigationBlocked] = React.useState<boolean>(true);
-
   const [blankProjectId, setBlankProjectId] = useState<string | undefined>(undefined);
+  const [isNavigationBlocked, setIsNavigationBlocked] = React.useState<boolean>(true);
 
   const [
     createBlankProject,
