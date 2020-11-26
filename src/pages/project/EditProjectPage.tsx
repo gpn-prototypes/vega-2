@@ -84,8 +84,8 @@ export const EditProjectPage: React.FC<PageProps> = () => {
 
   const {
     data: queryRegionListData,
-    loading: queryRegionListLoading,
     error: queryRegionListError,
+    loading: queryRegionListLoading,
   } = useProjectFormRegionList();
 
   const referenceData: ReferenceDataType = { regionList: queryRegionListData?.regionList };
