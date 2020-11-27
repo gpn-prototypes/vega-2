@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
+import { createBrowserHistory } from 'history';
 
 import { App } from './App';
 
@@ -16,6 +17,8 @@ const authToken = localStorage.getItem('auth-token');
   Объекты: Region, Country
 
 */
+
+const history = createBrowserHistory();
 
 const client = new ApolloClient({
   cache: new InMemoryCache({
@@ -33,4 +36,4 @@ const client = new ApolloClient({
   }),
 });
 
-ReactDOM.render(<App graphqlClient={client} />, document.getElementById('root'));
+ReactDOM.render(<App history={history} graphqlClient={client} />, document.getElementById('root'));
