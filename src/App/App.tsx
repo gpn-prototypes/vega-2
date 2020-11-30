@@ -1,5 +1,6 @@
 import React from 'react';
-import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
+import { GraphQLClient } from '@gpn-prototypes/vega-sdk';
 import { History } from 'history';
 
 import { AppView } from './AppView';
@@ -7,7 +8,7 @@ import { AppView } from './AppView';
 import './App.css';
 
 type AppProps = {
-  graphqlClient: ApolloClient<NormalizedCacheObject>;
+  graphqlClient: GraphQLClient;
   history: History;
 };
 
