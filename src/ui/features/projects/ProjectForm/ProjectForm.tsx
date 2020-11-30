@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Form } from 'react-final-form';
 import { useHistory } from 'react-router-dom';
+import { createValidate, validators } from '@gpn-prototypes/vega-sdk';
 import { Form as VegaForm, NavigationList } from '@gpn-prototypes/vega-ui';
 import createDecorator from 'final-form-focus';
-
-import { createValidate, validators } from '../../../forms/validation';
 
 import { Banner } from './Banner';
 import { cnProjectForm } from './cn-form';
