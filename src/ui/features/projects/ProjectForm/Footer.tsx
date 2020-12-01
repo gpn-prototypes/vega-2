@@ -16,7 +16,19 @@ export type FooterProps = {
   onCancel: () => void;
 };
 
-export const Footer: React.FC<FooterProps> = (props) => {
+const testId = {
+  footer: 'ProjectForm:footer',
+  cancel: 'ProjectForm:button:cancel',
+  nextStep: 'ProjectForm:button:nextStep',
+  prevStep: 'ProjectForm:button:prevStep',
+  createButton: 'ProjectForm:button:сreate',
+} as const;
+
+type FooterType = React.FC<FooterProps> & {
+  testId: typeof testId;
+};
+
+export const Footer: FooterType = (props) => {
   const { mode, isFormDirty, activeStep, stepsAmount, onStepChange, onCancel } = props;
   const form = useForm();
 
@@ -38,8 +50,18 @@ export const Footer: React.FC<FooterProps> = (props) => {
   const isSubmitButtonDisabled = (!valid && !dirtySinceLastSubmit) || hasValidationErrors;
 
   const createProjectFormFooter = (
-    <PageFooter className={cnProjectForm('Footer', { content: 'space-between' })}>
-      <Button size="s" view="ghost" label="Отмена" type="button" onClick={onCancel} />
+    <PageFooter
+      className={cnProjectForm('Footer', { content: 'space-between' })}
+      data-testid={testId.footer}
+    >
+      <Button
+        size="s"
+        view="ghost"
+        label="Отмена"
+        type="button"
+        onClick={onCancel}
+        data-testid={testId.cancel}
+      />
       <div className={cnProjectForm('Footer-buttons-block')}>
         {!isFirstStep && (
           <Button
@@ -50,6 +72,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
             type="button"
             className={cnProjectForm('Footer-button-back').toString()}
             onClick={handlePrevStep}
+            data-testId={testId.prevStep}
           />
         )}
         {!isLastStep && (
@@ -60,6 +83,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
             iconRight={IconForward}
             type="button"
             onClick={handleNextStep}
+            data-testId={testId.nextStep}
           />
         )}
         {isLastStep && (
@@ -72,6 +96,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
               form.change('status', ProjectStatusEnum.Unpublished);
             }}
             disabled={isSubmitButtonDisabled}
+            data-testId={testId.createButton}
           />
         )}
       </div>
@@ -99,3 +124,5 @@ export const Footer: React.FC<FooterProps> = (props) => {
     </>
   );
 };
+
+Footer.testId = testId;

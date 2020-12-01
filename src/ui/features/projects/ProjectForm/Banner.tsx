@@ -7,6 +7,9 @@ import { ReferenceDataType } from '../../../../pages/project/types';
 type BannerProps = {
   referenceData: ReferenceDataType;
 };
+const testId = {
+  banner: 'ProjectForm:banner',
+};
 
 const getDescription = (
   regionVid: string | undefined,
@@ -32,5 +35,5 @@ export const Banner: React.FC<BannerProps> = (props) => {
   const title = values.name ? values.name : undefined;
   const description = values.region ? getDescription(values.region, regionList) : undefined;
 
-  return <PageBanner title={title} description={description} />;
+  return <PageBanner title={title} description={description} testid={testId.banner} />;
 };
