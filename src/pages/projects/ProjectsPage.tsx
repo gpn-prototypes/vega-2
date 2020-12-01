@@ -27,6 +27,14 @@ interface UpdateProjectDiffResult extends UpdateProject {
   result: Required<UpdateProjectDiff>;
 }
 
+const testId = {
+  modal: 'ProjectsPage:modal',
+  modalCancel: 'ProjectsPage:button:modal.cancel',
+  modalConfirm: 'ProjectsPage:button:modal.confirm',
+  projectRemove: 'ProjectsPage:button:remove',
+  projectEdit: 'ProjectsPage:button:edit',
+} as const;
+
 const projectsMapper = (updateProjectData: ProjectsTableList): TableRow[] => {
   if (updateProjectData.projects?.__typename !== 'ProjectList') {
     return [];
@@ -159,6 +167,7 @@ export const ProjectsPage = (): React.ReactElement => {
             close();
           }}
           {...rest}
+          data-testid={testId.projectEdit}
         >
           <span className={cn('MenuIcon')}>
             <IconEdit size="s" />
@@ -179,6 +188,7 @@ export const ProjectsPage = (): React.ReactElement => {
             setIsOpenModal(true);
           }}
           {...rest}
+          data-testid={testId.projectRemove}
         >
           <span className={cn('MenuIcon')}>
             <IconTrash size="s" />
@@ -212,6 +222,7 @@ export const ProjectsPage = (): React.ReactElement => {
           setIsOpenModal(false);
         }}
         className={cn('Modal').toString()}
+        data-testid={testId.modal}
       >
         <Modal.Header>
           <Text size="xs">Удаление проекта</Text>
@@ -231,6 +242,7 @@ export const ProjectsPage = (): React.ReactElement => {
             view="primary"
             label="Нет, оставить"
             className={cn('ButtonCancel').toString()}
+            data-testid={testId.modalCancel}
           />
           <Button
             size="m"
@@ -253,9 +265,12 @@ export const ProjectsPage = (): React.ReactElement => {
             }}
             view="ghost"
             label="Да, удалить"
+            data-testid={testId.modalConfirm}
           />
         </Modal.Footer>
       </Modal>
     </>
   );
 };
+
+ProjectsPage.testId = testId;

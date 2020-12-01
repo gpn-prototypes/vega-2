@@ -10,6 +10,9 @@ import './ProjectsPage.css';
 
 const testId = {
   root: 'ProjectsPage:root',
+  rootTitle: 'ProjectsPage:root:title',
+  create: 'ProjectsPage:link:create',
+  table: 'ProjectsPage:table',
 };
 
 type Props = {
@@ -23,7 +26,7 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
   // const visibleLoadMore = props.projects.length > 20;
 
   const table = (
-    <div className={cn('Table')}>
+    <div className={cn('Table')} data-testid={testId.table}>
       <ProjectsTable
         rows={props.projects}
         onFavorite={(id, payload) => {
@@ -44,14 +47,20 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
       <div className={cn('Container')}>
         <div className={cn('Header')}>
           <div className={cn('Heading')}>
-            <Text as="h1" size="3xl" weight="bold" className={cn('Title').toString()}>
+            <Text
+              as="h1"
+              size="3xl"
+              weight="bold"
+              className={cn('Title').toString()}
+              data-testid={testId.rootTitle}
+            >
               Проекты
             </Text>
             {/* <Text as="span" size="s" view="secondary" className={cn('SearchResult').toString()}>
               6 из 12
             </Text> */}
           </div>
-          <Link to="/projects/create">
+          <Link to="/projects/create" data-testid={testId.create}>
             <Button label="Создать новый проект" size="s" />
           </Link>
         </div>

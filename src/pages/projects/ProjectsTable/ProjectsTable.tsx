@@ -22,6 +22,11 @@ const styles = {
   columnName: `${blockName}__columnName`,
 };
 
+const testId = {
+  favorite: 'ProjectsPage:button:favorite',
+  projectName: 'ProjectsPage:cell:name',
+};
+
 type Props = {
   rows?: TableRow[];
   placeholder?: string | React.ReactElement;
@@ -120,6 +125,7 @@ export const ProjectsTable: React.FC<Props> = (props) => {
                   view="clear"
                   size="xs"
                   form="round"
+                  data-testid={testId.favorite}
                   onClick={(e) => {
                     e.stopPropagation();
                     if (project.id && project.status && project.version) {
@@ -132,7 +138,9 @@ export const ProjectsTable: React.FC<Props> = (props) => {
                 />
               )}
             </div>
-            <div className={styles.textOverflow}>{project.name}</div>
+            <div className={styles.textOverflow} data-testid={testId.projectName}>
+              {project.name}
+            </div>
           </div>
         ),
         editedAt: (
