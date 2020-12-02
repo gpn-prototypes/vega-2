@@ -79,7 +79,6 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       variables: {
         vid: blankProjectId,
         name: values.description.name?.trim(),
-        type: values.description.type,
         region:
           values.description.region && values.description.region !== 'NOT_SELECTED'
             ? values.description.region
