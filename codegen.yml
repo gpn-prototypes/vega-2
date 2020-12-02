@@ -1,6 +1,6 @@
 overwrite: true
 schema:
-  - http://outsourcing.nat.tepkom.ru:38080/graphql:
+  - http://integration-csssr-vega-builder.code013.org:38080/graphql:
       headers:
         Authorization: Bearer ${AUTH_TOKEN}
 documents: 'src/**/*.graphql'

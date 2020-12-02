@@ -36,7 +36,6 @@ mutation CreateProject {
 mutation UpdateProject2(
   $vid: UUID
   $name: String
-  $type: ProjectTypeEnum
   $region: UUID
   $coordinates: String
   $description: String
@@ -48,7 +47,6 @@ mutation UpdateProject2(
     vid: $vid
     data: {
       name: $name
-      type: $type
       region: $region
       coordinates: $coordinates
       description: $description
