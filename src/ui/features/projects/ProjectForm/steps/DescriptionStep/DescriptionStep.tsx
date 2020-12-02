@@ -100,7 +100,8 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 onChange={(value: SelectOption | null): void => {
                   input.onChange(value?.value);
                 }}
-                onBlur={input.onBlur}
+                // TODO исправить вместе с задачей: https://jira.csssr.io/browse/VEGA-698
+                // onBlur={input.onBlur}
                 onFocus={input.onFocus}
               />
             )}
