@@ -9,6 +9,7 @@ type BannerProps = {
 };
 const testId = {
   banner: 'ProjectForm:banner',
+  bannerEmpty: 'ProjectForm:banner.empty',
 };
 
 const getDescription = (

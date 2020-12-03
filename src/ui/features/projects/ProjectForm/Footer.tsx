@@ -19,6 +19,8 @@ export type FooterProps = {
 const testId = {
   footer: 'ProjectForm:footer',
   cancel: 'ProjectForm:button:cancel',
+  cancelEdit: 'ProjectForm:button:cancel.edit',
+  saveEdit: 'ProjectForm:button:save.edit',
   nextStep: 'ProjectForm:button:nextStep',
   prevStep: 'ProjectForm:button:prevStep',
   createButton: 'ProjectForm:button:сreate',
@@ -112,8 +114,15 @@ export const Footer: FooterType = (props) => {
         type="button"
         className={cnProjectForm('Footer-button-back').toString()}
         onClick={onCancel}
+        data-testid={testId.cancelEdit}
       />
-      <Button size="s" view="primary" label="Сохранить изменения" type="submit" />
+      <Button
+        size="s"
+        view="primary"
+        label="Сохранить изменения"
+        type="submit"
+        data-testid={testId.saveEdit}
+      />
     </PageFooter>
   );
 
