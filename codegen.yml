@@ -1,6 +1,6 @@
 overwrite: true
 schema:
-  - http://integration-csssr-vega-builder.code013.org:38080/graphql:
+  - "${BASE_API_URL}/graphql":
       headers:
         Authorization: Bearer ${AUTH_TOKEN}
 documents: 'src/**/*.graphql'
