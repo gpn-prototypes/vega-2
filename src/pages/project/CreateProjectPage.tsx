@@ -79,6 +79,8 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       variables: {
         vid: blankProjectId,
         name: values.name,
+        // При ребейзе удалить
+        type: values.type,
         region: values.region && values.region !== 'NOT_SELECTED' ? values.region : undefined,
         coordinates: values.coordinates,
         description: values.description,

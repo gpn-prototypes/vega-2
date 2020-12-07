@@ -1,6 +1,6 @@
 overwrite: true
 schema:
-  - "${BASE_API_URL}/graphql":
+  - '${BASE_API_URL}/graphql':
       headers:
         Authorization: Bearer ${AUTH_TOKEN}
 documents: 'src/**/*.graphql'
