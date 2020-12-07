@@ -36,6 +36,10 @@ module.exports = (webpackConfigEnv) => {
     return prev;
   }, {});
 
+  if (!process.env.BASE_API_URL) {
+    throw new Error('env.BASE_API_URL is empty');
+  }
+
   const config = webpackMerge.smart(defaultConfig, {
     // modify the webpack config however you'd like to by adding to this object
     externals: ['@apollo/client', 'graphql', '@gpn-prototypes/vega-ui'],
