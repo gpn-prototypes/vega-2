@@ -26,7 +26,7 @@ const client = new ApolloClient({
     },
   }),
   link: new HttpLink({
-    uri: 'http://outsourcing.nat.tepkom.ru:38080/graphql',
+    uri: process.env.BASE_API_URL,
     headers: {
       Authorization: authToken ? `Bearer ${authToken}` : undefined,
     },
