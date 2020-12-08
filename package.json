@@ -38,7 +38,7 @@
   "dependencies": {
     "@apollo/client": "^3.2.2",
     "@consta/uikit": "^1.10.4",
-    "@gpn-prototypes/vega-ui": "^2.15.1",
+    "@gpn-prototypes/vega-ui": "^2.15.8",
     "bem-cn": "^3.0.1",
     "dayjs": "^1.9.3",
     "final-form": "^4.20.1",
