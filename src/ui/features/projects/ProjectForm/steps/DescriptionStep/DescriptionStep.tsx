@@ -116,7 +116,6 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 getOptionLabel={getItemLabel}
                 placeholder="Выберите регион"
                 value={regionOptions.find(({ value }) => value === input.value)}
-                // @ts-expect-error: Ошибка реэкспорта оболочки, исправить в vega-ui TODO
                 onChange={(value: SelectOption | null): void => {
                   input.onChange(value?.value);
                 }}
@@ -145,7 +144,6 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 placeholder="Выберите тип проекта"
                 disabled
                 value={typeOptions.find(({ value }) => value === input.value)}
-                // @ts-expect-error: Ошибка реэкспорта оболочки, исправить в vega-ui TODO
                 onChange={(value: SelectOption | null): void => {
                   input.onChange(value?.value);
                 }}
@@ -196,7 +194,6 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 getOptionLabel={getItemLabel}
                 placeholder="Выберите год"
                 value={yearStartOptions.find(({ value }) => value === input.value)}
-                // @ts-expect-error: Ошибка реэкспорта оболочки, исправить в vega-ui TODO
                 onChange={(value: SelectOption | null): void => {
                   input.onChange(value?.value);
                 }}
