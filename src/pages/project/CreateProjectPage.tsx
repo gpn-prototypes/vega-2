@@ -122,14 +122,11 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     history.push('/projects');
   };
 
-  const handleNavigation = async () => {
+  const handleNavigation = async (path: string | null) => {
     const deleteProjectResult = await deleteProject({ variables: { vid: blankProjectId } });
 
     if (deleteProjectResult.data?.deleteProject?.result?.__typename === 'Result') {
       localStorage.removeItem(BLANK_PROJECT_ID);
-
-      setIsNavigationBlocked(false);
-      history.push('/projects');
     }
 
     if (deleteProjectResult.data?.deleteProject?.result?.__typename === 'Error') {
@@ -141,6 +138,9 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
         message: inlineDeleteProjectError.message,
       });
     }
+
+    setIsNavigationBlocked(false);
+    history.push(path || '/projects');
   };
 
   if (createProjectError || updateProjectError || deleteProjectError || queryRegionListError) {

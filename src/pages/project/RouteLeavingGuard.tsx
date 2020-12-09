@@ -7,11 +7,12 @@ import { cnPage } from './cn-page';
 
 type Props = {
   when: boolean;
-  navigate: (path: string) => Promise<void>;
+  navigate: (path: string | null) => Promise<void>;
 };
 
 export const RouteLeavingGuard: React.FC<Props> = ({ when, navigate }) => {
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [lastLocation, setLastLocation] = useState<Location | null>(null);
 
   const handleBlockedNavigation = (nextLocation: Location): boolean => {
@@ -26,11 +27,10 @@ export const RouteLeavingGuard: React.FC<Props> = ({ when, navigate }) => {
   };
 
   const handleAbort = () => {
-    setIsModalOpen(false);
+    setIsLoading(true);
 
-    if (lastLocation) {
-      navigate(lastLocation.pathname);
-    }
+    const path = lastLocation ? lastLocation.pathname : null;
+    navigate(path);
   };
 
   return (
@@ -58,7 +58,14 @@ export const RouteLeavingGuard: React.FC<Props> = ({ when, navigate }) => {
             className={cnPage('ButtonClose').toString()}
             onClick={handleClose}
           />
-          <Button size="s" view="ghost" label="Да, прервать" type="button" onClick={handleAbort} />
+          <Button
+            size="s"
+            view="ghost"
+            loading={isLoading}
+            label="Да, прервать"
+            type="button"
+            onClick={handleAbort}
+          />
         </Modal.Footer>
       </Modal>
     </>

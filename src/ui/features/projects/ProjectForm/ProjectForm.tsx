@@ -54,7 +54,6 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
 
   return (
     <Form
-      keepDirtyOnReinitialize
       initialValues={initialValues}
       validate={validator}
       decorators={[focusOnErrors]}
