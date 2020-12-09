@@ -1,6 +1,7 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route, Router, Switch } from 'react-router-dom';
 import { Root as VegaRoot } from '@gpn-prototypes/vega-ui';
+import { History } from 'history';
 
 import { PageLayout } from '../layouts/PageLayout';
 import { CreateProjectPage, EditProjectPage } from '../pages/project';
@@ -9,9 +10,13 @@ import { SnackbarProvider } from '../providers';
 
 import './App.css';
 
-export const AppView = (): React.ReactElement => {
+type Props = {
+  history: History;
+};
+
+export const AppView = (props: Props): React.ReactElement => {
   return (
-    <Router>
+    <Router history={props.history}>
       <Route
         exact
         path={['/projects', '/projects/create', '/projects/show/:projectId']}
