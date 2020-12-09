@@ -1770,7 +1770,12 @@
     "@gpn-prototypes/vega-text" "^0.1.10"
     bem-cn "^3.0.1"
 
-"@gpn-prototypes/vega-hooks@^0.5.5", "@gpn-prototypes/vega-hooks@^0.5.6":
+"@gpn-prototypes/vega-hooks@^0.5.5":
+  version "0.5.5"
+  resolved "https://npm.pkg.github.com/download/@gpn-prototypes/vega-hooks/0.5.5/ecf103c0b58e6820766df9a78611ed58c56673fd0131da5d96a4dfd3661be5fa#fb92c7a8e9e61621d9a71174c47fb9e8d7bc7064"
+  integrity sha512-n6tb82ybeqJwE/iqbnCTbNJbK09OgASE2a3s7UTxjFuT7Vnt4MmBfuk4s/40S+XqRQ+jTjwNMGq6f8JT6Lo0fg==
+
+"@gpn-prototypes/vega-hooks@^0.5.6":
   version "0.5.6"
   resolved "https://npm.pkg.github.com/download/@gpn-prototypes/vega-hooks/0.5.6/22daf2874d8d0ceba07122364368c857b76a7af4c3b80c5e15828d310bc611bf#877fe93577197d24dbe311daed453ab2fefc28ea"
   integrity sha512-kimuy8VEbMvvdarTR4DmIiQYJF4pGsP6krmCR6tqUJcMAFU7pPW3fo89165pDk/E8GAGsV6QhKHCMc6hD2V+bA==
@@ -5388,9 +5393,9 @@ csstype@^2.2.0:
   integrity sha512-D34BqZU4cIlMCY93rZHbrq9pjTAQJ3U8S8rfBqjwHxkGPThWFjzZDQpgMJY0QViLxth6ZKYiwFBo14RdN44U/w==
 
 csstype@^3.0.2:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.4.tgz#b156d7be03b84ff425c9a0a4b1e5f4da9c5ca888"
-  integrity sha512-xc8DUsCLmjvCfoD7LTGE0ou2MIWLx0K9RCZwSHMOdynqRsP4MtUcLeqh1HcQ2dInwDTqn+3CE0/FZh1et+p4jA==
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.5.tgz#7fdec6a28a67ae18647c51668a9ff95bb2fa7bb8"
+  integrity sha512-uVDi8LpBUKQj6sdxNaTetL6FpeCqTjOvAQuQUa/qAqq8oOd4ivkbhgnqayl0dnPal8Tb/yB1tF+gOvCBiicaiQ==
 
 cyclist@^1.0.1:
   version "1.0.1"
@@ -9394,9 +9399,9 @@ known-css-properties@^0.19.0:
   integrity sha512-eYboRV94Vco725nKMlpkn3nV2+96p9c3gKXRsYqAJSswSENvBhN7n5L+uDhY58xQa0UukWsDMTGELzmD8Q+wTA==
 
 konva@^7.0.6:
-  version "7.1.6"
-  resolved "https://registry.yarnpkg.com/konva/-/konva-7.1.6.tgz#7c8e4dd2c3a9c8bc392d0be040a4b1c65aa120e7"
-  integrity sha512-9g+T1oBj2jGVybTfHUdOJ/H+NIrTIlMi13rjpwIw8aAgsHfoRcCr/ZF6muzRzoZjRd5XeTD7UbFYhZM42hJ9ZA==
+  version "7.2.1"
+  resolved "https://registry.yarnpkg.com/konva/-/konva-7.2.1.tgz#81fa8c9237b76b1d37320e8bd7e17e72217a321e"
+  integrity sha512-Odza46JhOxVxpknjM23KGjNywQvHHoxWC0Mp6In2EUpE+fJ1Yli7NGOtAcDF7rIRA8dxc7hqDeGJtDhqWfFIsg==
 
 latest-version@5.1.0:
   version "5.1.0"
@@ -13883,9 +13888,9 @@ uuid@^7.0.3:
   integrity sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
 
 uuid@^8.3.0:
-  version "8.3.1"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.1.tgz#2ba2e6ca000da60fce5a196954ab241131e05a31"
-  integrity sha512-FOmRr+FmWEIG8uhZv6C2bTgEVXsHk08kE7mPlrBbEe+c3r9pjceVPgupIfNIhc4yx55H69OXANrUaSuu9eInKg==
+  version "8.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
 v8-compile-cache@2.0.3:
   version "2.0.3"
