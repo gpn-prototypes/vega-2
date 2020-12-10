@@ -72,51 +72,55 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
   const referenceData: ReferenceDataType = { regionList: queryRegionListData?.regionList };
 
-  const handleFormSubmit = async (values: FormValues) => {
-    const createProjectResult = await createProject({
-      variables: {
-        vid: blankProjectId,
-        name: values.name,
-        region: values.region,
-        coordinates: values.coordinates,
-        description: values.description,
-        yearStart: values.yearStart,
-        status: ProjectStatusEnum.Unpublished,
-        version: 1,
-      },
-    });
+  const handleFormSubmit = React.useCallback(
+    async (values: FormValues) => {
+      let errors = {};
 
-    if (createProjectResult.data?.updateProject?.result?.__typename === 'Project') {
-      const projectId = createProjectResult.data.updateProject?.result?.vid || undefined;
-
-      setIsNavigationBlocked(false);
-
-      notifications.add({
-        key: `${projectId}-create`,
-        status: 'success',
-        autoClose: 3,
-        message: 'Проект успешно создан',
-        onClose(item) {
-          notifications.remove(item.key);
+      const createProjectResult = await createProject({
+        variables: {
+          vid: blankProjectId,
+          name: values.name,
+          region: values.region,
+          coordinates: values.coordinates,
+          description: values.description,
+          yearStart: values.yearStart,
+          status: ProjectStatusEnum.Unpublished,
+          version: 1,
         },
       });
 
-      history.push(`/projects/show/${projectId}`);
-    }
+      if (createProjectResult.data?.updateProject?.result?.__typename === 'Project') {
+        const projectId = updateProjectResult.data.updateProject?.result?.vid || undefined;
 
-    if (createProjectResult.data?.updateProject?.result?.__typename === 'Error') {
-      const inlineUpdateProjectError = createProjectResult.data?.updateProject?.result;
+        localStorage.removeItem(BLANK_PROJECT_ID);
 
-      notifications.add({
-        key: `${inlineUpdateProjectError.code}-update-error`,
-        status: 'alert',
-        message: inlineUpdateProjectError.message,
-        onClose(item) {
-          notifications.remove(item.key);
-        },
-      });
-    }
-  };
+        setIsNavigationBlocked(false);
+
+        notifications.add({
+          key: `${projectId}-create`,
+          status: 'success',
+          autoClose: 3,
+          message: 'Проект успешно создан',
+          onClose(item) {
+            notifications.remove(item.key);
+          },
+        });
+
+        history.push(`/projects/show/${projectId}`);
+      }
+
+      if (createProjectResult.data?.updateProject?.result?.__typename === 'Error') {
+        const inlineUpdateProjectError = createProjectResult.data?.updateProject?.result;
+
+        if (inlineUpdateProjectError?.code === 'PROJECT_NAME_ALREADY_EXISTS') {
+          errors = { name: inlineUpdateProjectError.message };
+        }
+      }
+
+      return errors;
+    },
+    [blankProjectId, createProject, history, notifications],
+  );
 
   const handleCancel = () => {
     history.push('/projects');

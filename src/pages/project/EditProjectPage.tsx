@@ -75,76 +75,77 @@ export const EditProjectPage: React.FC<PageProps> = () => {
 
   const referenceData: ReferenceDataType = { regionList: queryRegionListData?.regionList };
 
-  const handleFormSubmit = async (values: FormValues, form: FormApi<FormValues>) => {
-    const state = form.getState();
+  const handleFormSubmit = React.useCallback(
+    async (values: FormValues, form: FormApi<FormValues>) => {
+      const state = form.getState();
+      const erros: Record<string, unknown> = {};
 
-    const changes = Object.keys(state.dirtyFields)
-      .map((key) => ({ key, value: getIn(values, key) }))
-      .reduce((acc, { key, value }) => setIn(acc, key, value), {});
+      const changes = Object.keys(state.dirtyFields)
+        .map((key) => ({ key, value: getIn(values, key) }))
+        .reduce((acc, { key, value }) => setIn(acc, key, value), {});
 
-    const version =
-      queryProjectData?.project?.__typename === 'Project' ? queryProjectData?.project?.version : 1;
+      const version =
+        queryProjectData?.project?.__typename === 'Project'
+          ? queryProjectData?.project?.version
+          : 1;
 
-    const updateProjectResult = await updateProject({
-      context: {
-        projectDiffResolving: {
-          maxAttempts: 5,
-          projectAccessor: {
-            fromDiffError: (data: UpdateProjectDiffResult) => ({
-              remote: data.result.remoteProject,
-              local: data.result.localProject,
-            }),
-            fromVariables: (vars: UpdateProjectFormVariables) => vars.data,
-            toVariables: (vars: UpdateProjectFormVariables, patch: ProjectUpdateType) => ({
-              ...vars,
-              data: { ...vars.data, ...patch },
-            }),
+      const updateProjectResult = await updateProject({
+        context: {
+          projectDiffResolving: {
+            maxAttempts: 5,
+            projectAccessor: {
+              fromDiffError: (data: UpdateProjectDiffResult) => ({
+                remote: data.result.remoteProject,
+                local: data.result.localProject,
+              }),
+              fromVariables: (vars: UpdateProjectFormVariables) => vars.data,
+              toVariables: (vars: UpdateProjectFormVariables, patch: ProjectUpdateType) => ({
+                ...vars,
+                data: { ...vars.data, ...patch },
+              }),
+            },
           },
         },
-      },
-      variables: {
-        vid: projectId,
-        data: {
-          ...changes,
-          version: version || 1,
-        },
-      },
-    });
-
-    if (updateProjectResult.data?.updateProject?.result?.__typename === 'Error') {
-      const inlineUpdateProjectError = updateProjectResult.data?.updateProject?.result;
-
-      notifications.add({
-        key: `${inlineUpdateProjectError.code}-update-error`,
-        status: 'alert',
-        message: inlineUpdateProjectError.message,
-        onClose(item) {
-          notifications.remove(item.key);
+        variables: {
+          vid: projectId,
+          data: {
+            ...changes,
+            version: version || 1,
+          },
         },
       });
-    }
 
-    if (updateProjectResult.data?.updateProject?.result?.__typename === 'Project') {
-      notifications.add({
-        key: `${projectId}-create`,
-        status: 'success',
-        autoClose: 3,
-        message: 'Изменения успешно сохранены',
-        onClose(item) {
-          notifications.remove(item.key);
-        },
-      });
-    }
+      if (updateProjectResult.data?.updateProject?.result?.__typename === 'Error') {
+        const inlineUpdateProjectError = updateProjectResult.data?.updateProject?.result;
 
-    form.initialize((v) => {
-      if (updateProjectResult.data?.updateProject?.result?.__typename === 'Project') {
-        const initials = getInitialValues(updateProjectResult.data.updateProject.result);
-        return { ...initials, ...v };
+        if (inlineUpdateProjectError?.code === 'PROJECT_NAME_ALREADY_EXISTS') {
+          erros.name = inlineUpdateProjectError.message;
+        }
       }
 
-      return v;
-    });
-  };
+      if (updateProjectResult.data?.updateProject?.result?.__typename === 'Project') {
+        notifications.add({
+          key: `${projectId}-create`,
+          status: 'success',
+          autoClose: 3,
+          message: 'Изменения успешно сохранены',
+          onClose(item) {
+            notifications.remove(item.key);
+          },
+        });
+      }
+
+      form.initialize((v) => {
+        if (updateProjectResult.data?.updateProject?.result?.__typename === 'Project') {
+          const initials = getInitialValues(updateProjectResult.data.updateProject.result);
+          return { ...initials, ...v };
+        }
+
+        return v;
+      });
+    },
+    [notifications, projectId, queryProjectData, updateProject],
+  );
 
   const apolloError = queryProjectError || queryRegionListError || updateProjectError;
 
