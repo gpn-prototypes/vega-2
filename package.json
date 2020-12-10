@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.2.2",
-    "@gpn-prototypes/vega-ui": "^2.12.3",
+    "@gpn-prototypes/vega-ui": "^2.15.11",
     "bem-cn": "^3.0.1",
     "final-form": "^4.20.1",
     "graphql": "^15.3.0",
