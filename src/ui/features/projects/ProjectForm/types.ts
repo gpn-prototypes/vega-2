@@ -17,4 +17,5 @@ export type FormProps = {
   initialValues?: FormValues;
   referenceData: ReferenceDataType;
   onSubmit: (values: FormValues) => void;
+  onCancel?: () => void;
 };

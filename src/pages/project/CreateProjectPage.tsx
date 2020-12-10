@@ -6,8 +6,14 @@ import { ProjectStatusEnum } from '../../__generated__/types';
 import { useSnackbar } from '../../providers/snackbar';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
-import { useCreateProject, useQueryRegionList, useUpdateProject2 } from './__generated__/project';
+import {
+  useCreateProject,
+  useDeleteProject2,
+  useQueryRegionList,
+  useUpdateProject2,
+} from './__generated__/project';
 import { cnPage } from './cn-page';
+import { RouteLeavingGuard } from './RouteLeavingGuard';
 import { ReferenceDataType } from './types';
 
 import './ProjectPage.css';
@@ -20,11 +26,15 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   const history = useHistory();
   const snackbar = useSnackbar();
 
+  const [isNavigationBlocked, setIsNavigationBlocked] = React.useState<boolean>(true);
+
   const [blankProjectId, setBlankProjectId] = useState<string | undefined>(undefined);
 
   const [createProject, { error: createProjectError }] = useCreateProject();
 
   const [updateProject, { error: updateProjectError }] = useUpdateProject2();
+
+  const [deleteProject, { error: deleteProjectError }] = useDeleteProject2();
 
   useEffect(() => {
     let isCancelled = false;
@@ -93,6 +103,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
       localStorage.removeItem(BLANK_PROJECT_ID);
 
+      setIsNavigationBlocked(false);
       history.push(`/projects/show/${projectId}`);
     }
 
@@ -107,9 +118,40 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     }
   };
 
-  if (createProjectError || updateProjectError || queryRegionListError) {
-    // eslint-disable-next-line no-console
-    console.log({ createProjectError, updateProjectError, queryRegionListError });
+  const handleCancel = () => {
+    history.push('/projects');
+  };
+
+  const handleNavigation = async (path: string | null) => {
+    const deleteProjectResult = await deleteProject({ variables: { vid: blankProjectId } });
+
+    if (deleteProjectResult.data?.deleteProject?.result?.__typename === 'Result') {
+      localStorage.removeItem(BLANK_PROJECT_ID);
+    }
+
+    if (deleteProjectResult.data?.deleteProject?.result?.__typename === 'Error') {
+      const inlineDeleteProjectError = deleteProjectResult.data?.deleteProject?.result;
+
+      snackbar.addItem({
+        key: `${inlineDeleteProjectError.code}-delete-error`,
+        status: 'alert',
+        message: inlineDeleteProjectError.message,
+      });
+    }
+
+    setIsNavigationBlocked(false);
+    history.push(path || '/projects');
+  };
+
+  const apolloError =
+    createProjectError || updateProjectError || deleteProjectError || queryRegionListError;
+
+  if (apolloError) {
+    snackbar.addItem({
+      key: `${apolloError.name}-apollo-error`,
+      status: 'alert',
+      message: apolloError.message,
+    });
 
     return null;
   }
@@ -120,7 +162,13 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
   return (
     <div className={cnPage()}>
-      <ProjectForm mode="create" referenceData={referenceData} onSubmit={handleFormSubmit} />
+      <ProjectForm
+        mode="create"
+        referenceData={referenceData}
+        onSubmit={handleFormSubmit}
+        onCancel={handleCancel}
+      />
+      <RouteLeavingGuard when={isNavigationBlocked} navigate={handleNavigation} />
     </div>
   );
 };

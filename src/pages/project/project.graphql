@@ -88,3 +88,16 @@ query QueryRegionList {
     }
   }
 }
+
+mutation DeleteProject2($vid: UUID) {
+  deleteProject(vid: $vid) {
+    result {
+      ... on Result {
+        vid
+      }
+      ... on Error {
+        ...commonError
+      }
+    }
+  }
+}

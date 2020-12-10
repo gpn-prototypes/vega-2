@@ -86,20 +86,32 @@ export const EditProjectPage: React.FC<PageProps> = () => {
     }
   };
 
-  if (queryProjectLoading || queryRegionListLoading) {
-    return <Loader />;
-  }
+  const apolloError = queryProjectError || queryRegionListError || updateProjectError;
 
-  if (queryProjectError || queryRegionListError || updateProjectError) {
-    // eslint-disable-next-line no-console
-    console.log({ queryProjectError, queryRegionListError, updateProjectError });
+  if (apolloError) {
+    snackbar.addItem({
+      key: `${apolloError.name}-apollo-error`,
+      status: 'alert',
+      message: apolloError.message,
+    });
+
     return null;
   }
 
   if (queryProjectData?.project?.__typename === 'Error') {
-    // eslint-disable-next-line no-console
-    console.log(queryProjectData.project);
+    const inlineQueryProjectError = queryProjectData.project;
+
+    snackbar.addItem({
+      key: `${inlineQueryProjectError.code}-query-error`,
+      status: 'alert',
+      message: inlineQueryProjectError.message,
+    });
+
     return null;
+  }
+
+  if (queryProjectLoading || queryRegionListLoading) {
+    return <Loader />;
   }
 
   const initialValues =

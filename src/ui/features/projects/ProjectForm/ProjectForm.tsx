@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Form } from 'react-final-form';
-import { useHistory } from 'react-router-dom';
 import { Form as VegaForm, NavigationList } from '@gpn-prototypes/vega-ui';
 import createDecorator from 'final-form-focus';
 
@@ -33,11 +32,9 @@ const validator = createValidate<Partial<FormValues>>({
 const steps = [{ title: 'Описание проекта', content: DescriptionStep }];
 
 export const ProjectForm: React.FC<FormProps> = (formProps) => {
-  const { mode, initialValues, referenceData, onSubmit } = formProps;
+  const { mode, initialValues, referenceData, onSubmit, onCancel } = formProps;
 
   const [activeStepIndex, setActiveStepIndex] = useState(0);
-
-  const history = useHistory();
 
   const handleFormSubmit = (values: FormValues): void => {
     onSubmit(values);
@@ -48,14 +45,15 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
   };
 
   const handleCancel = () => {
-    history.push('/projects');
+    if (onCancel) {
+      onCancel();
+    }
   };
 
   const Step = steps[activeStepIndex].content;
 
   return (
     <Form
-      keepDirtyOnReinitialize
       initialValues={initialValues}
       validate={validator}
       decorators={[focusOnErrors]}
