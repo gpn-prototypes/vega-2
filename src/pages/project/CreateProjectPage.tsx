@@ -143,13 +143,14 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     history.push(path || '/projects');
   };
 
-  if (createProjectError || updateProjectError || deleteProjectError || queryRegionListError) {
-    // eslint-disable-next-line no-console
-    console.log({
-      createProjectError,
-      updateProjectError,
-      deleteProjectError,
-      queryRegionListError,
+  const apolloError =
+    createProjectError || updateProjectError || deleteProjectError || queryRegionListError;
+
+  if (apolloError) {
+    snackbar.addItem({
+      key: `${apolloError.name}-apollo-error`,
+      status: 'alert',
+      message: apolloError.message,
     });
 
     return null;
