@@ -37,21 +37,13 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   const [deleteProject, { error: deleteProjectError }] = useDeleteProject2();
 
   useEffect(() => {
-    let isCancelled = false;
-
-    const data = localStorage.getItem(BLANK_PROJECT_ID);
-
     const call = async () => {
       const createProjectResult = await createProject();
 
       if (createProjectResult.data?.createProject?.result?.__typename === 'Project') {
         const projectId = createProjectResult.data.createProject?.result?.vid || undefined;
 
-        localStorage.setItem(BLANK_PROJECT_ID, String(projectId));
-
-        if (!isCancelled) {
-          setBlankProjectId(projectId);
-        }
+        setBlankProjectId(projectId);
       }
 
       if (createProjectResult.data?.createProject?.result?.__typename === 'Error') {
@@ -68,16 +60,8 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       }
     };
 
-    if (data) {
-      setBlankProjectId(data);
-    } else {
-      call();
-    }
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [createProject, notifications]);
+    call();
+  }, []);
 
   const {
     data: queryRegionListData,
