@@ -104,7 +104,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
   const apolloError = queryProjectError || queryRegionListError || updateProjectError;
 
   if (apolloError) {
-    snackbar.addItem({
+    notifications.add({
       key: `${apolloError.name}-apollo-error`,
       status: 'alert',
       message: apolloError.message,
@@ -116,7 +116,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
   if (queryProjectData?.project?.__typename === 'Error') {
     const inlineQueryProjectError = queryProjectData.project;
 
-    snackbar.addItem({
+    notifications.add({
       key: `${inlineQueryProjectError.code}-query-error`,
       status: 'alert',
       message: inlineQueryProjectError.message,
