@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Loader } from '@gpn-prototypes/vega-ui';
+import { Loader, useMount } from '@gpn-prototypes/vega-ui';
 
 import { ProjectStatusEnum } from '../../__generated__/types';
 import { useNotifications } from '../../providers/notifications';
@@ -36,32 +36,32 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
   const [deleteProject, { error: deleteProjectError }] = useDeleteProject2();
 
-  useEffect(() => {
-    const call = async () => {
-      const createProjectResult = await createProject();
+  const call = async () => {
+    const createProjectResult = await createProject();
 
-      if (createProjectResult.data?.createProject?.result?.__typename === 'Project') {
-        const projectId = createProjectResult.data.createProject?.result?.vid || undefined;
+    if (createProjectResult.data?.createProject?.result?.__typename === 'Project') {
+      const projectId = createProjectResult.data.createProject?.result?.vid || undefined;
 
-        setBlankProjectId(projectId);
-      }
+      setBlankProjectId(projectId);
+    }
 
-      if (createProjectResult.data?.createProject?.result?.__typename === 'Error') {
-        const inlineCreateProjectError = createProjectResult.data?.createProject?.result;
+    if (createProjectResult.data?.createProject?.result?.__typename === 'Error') {
+      const inlineCreateProjectError = createProjectResult.data?.createProject?.result;
 
-        notifications.add({
-          key: `${inlineCreateProjectError.code}-create-error`,
-          status: 'alert',
-          message: inlineCreateProjectError.message,
-          onClose(item) {
-            notifications.remove(item.key);
-          },
-        });
-      }
-    };
+      notifications.add({
+        key: `${inlineCreateProjectError.code}-create-error`,
+        status: 'alert',
+        message: inlineCreateProjectError.message,
+        onClose(item) {
+          notifications.remove(item.key);
+        },
+      });
+    }
+  };
 
+  useMount(() => {
     call();
-  }, []);
+  });
 
   const {
     data: queryRegionListData,
