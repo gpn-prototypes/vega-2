@@ -20,7 +20,7 @@ fragment commonError on Error {
   payload
 }
 
-mutation CreateProject {
+mutation CreateBlankProject {
   createProject(data: {}) {
     result {
       ... on Project {
@@ -33,14 +33,15 @@ mutation CreateProject {
   }
 }
 
-mutation UpdateProject2(
-  $vid: UUID
-  $name: String
+
+mutation CreateProject(
+  $vid: UUID!
+  $name: String!
   $region: UUID
   $coordinates: String
   $description: String
-  $status: ProjectStatusEnum
-  $yearStart: Int
+  $status: ProjectStatusEnum!
+  $yearStart: Int!
   $version: Int!
 ) {
   updateProject(
@@ -58,6 +59,7 @@ mutation UpdateProject2(
     result {
       ... on Project {
         ...projectFormFields
+        status
       }
       ... on Error {
         ...commonError
@@ -65,8 +67,34 @@ mutation UpdateProject2(
     }
   }
 }
+mutation UpdateProjectForm(
+  $vid: UUID
+  $data: ProjectUpdateType
+) {
+  updateProject(
+    vid: $vid
+    data: $data
+  ) {
+    result {
+      ... on Project {
+        ...projectFormFields
+      }
+      ... on Error {
+        ...commonError
+      }
+      ... on UpdateProjectDiff {
+        remoteProject {
+          ...projectFormFields
+        }
+        localProject {
+          ...projectFormFields
+        }
+      }
+    }
+  }
+}
 
-query QueryProject($vid: UUID) {
+query ProjectFormFields($vid: UUID!) {
   project(vid: $vid) {
     ... on Project {
       ...projectFormFields
@@ -77,7 +105,7 @@ query QueryProject($vid: UUID) {
   }
 }
 
-query QueryRegionList {
+query ProjectFormRegionList {
   regionList {
     vid
     name
@@ -89,7 +117,7 @@ query QueryRegionList {
   }
 }
 
-mutation DeleteProject2($vid: UUID) {
+mutation DeleteBlankProject($vid: UUID) {
   deleteProject(vid: $vid) {
     result {
       ... on Result {

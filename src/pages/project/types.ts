@@ -1,5 +1,5 @@
-import { QueryRegionList } from './__generated__/project';
+import { ProjectFormRegionList } from './__generated__/project';
 
 export type ReferenceDataType = {
-  regionList: QueryRegionList['regionList'];
+  regionList: ProjectFormRegionList['regionList'];
 };

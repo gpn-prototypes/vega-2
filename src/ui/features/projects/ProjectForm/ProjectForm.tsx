@@ -13,7 +13,7 @@ import { FormProps, FormValues } from './types';
 
 import './ProjectForm.css';
 
-const focusOnErrors = createDecorator();
+const focusOnErrors = createDecorator<FormValues>();
 
 const validator = createValidate<Partial<FormValues>>({
   name: [
@@ -36,10 +36,6 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
 
   const [activeStepIndex, setActiveStepIndex] = useState(0);
 
-  const handleFormSubmit = (values: FormValues): void => {
-    onSubmit(values);
-  };
-
   const handleStepChange = (step: number) => {
     setActiveStepIndex(step);
   };
@@ -57,7 +53,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
       initialValues={initialValues}
       validate={validator}
       decorators={[focusOnErrors]}
-      onSubmit={handleFormSubmit}
+      onSubmit={onSubmit}
       render={({ handleSubmit, dirty, form }): React.ReactNode => (
         <>
           <Banner referenceData={referenceData} />

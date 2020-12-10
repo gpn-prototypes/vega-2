@@ -1,12 +1,24 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Loader } from '@gpn-prototypes/vega-ui';
+import { FormApi, getIn, setIn } from 'final-form';
 
-import { Project, ProjectStatusEnum } from '../../__generated__/types';
+import {
+  Project,
+  ProjectTypeEnum,
+  ProjectUpdateType,
+  UpdateProject,
+  UpdateProjectDiff,
+} from '../../__generated__/types';
 import { useNotifications } from '../../providers/notifications';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
-import { useQueryProject, useQueryRegionList, useUpdateProject2 } from './__generated__/project';
+import {
+  UpdateProjectFormVariables,
+  useProjectFormFields,
+  useProjectFormRegionList,
+  useUpdateProjectForm,
+} from './__generated__/project';
 import { cnPage } from './cn-page';
 import { ReferenceDataType } from './types';
 
@@ -23,14 +35,18 @@ type ProjectType = Pick<
   'vid' | 'name' | 'type' | 'region' | 'coordinates' | 'description' | 'yearStart'
 >;
 
-const getInitialValues = (project: ProjectType): FormValues => {
+interface UpdateProjectDiffResult extends UpdateProject {
+  result: Required<UpdateProjectDiff>;
+}
+
+const getInitialValues = (project: ProjectType): Partial<FormValues> => {
   return {
-    name: project.name || undefined,
-    type: project.type || undefined,
-    region: project.region?.vid || undefined,
-    coordinates: project.coordinates || undefined,
-    description: project.description || undefined,
-    yearStart: project.yearStart || undefined,
+    name: project.name ?? '',
+    type: project.type ?? ProjectTypeEnum.Geo,
+    region: project.region?.vid ?? null,
+    coordinates: project.coordinates ?? '',
+    description: project.description ?? '',
+    yearStart: project.yearStart ?? undefined,
   };
 };
 
@@ -42,36 +58,56 @@ export const EditProjectPage: React.FC<PageProps> = () => {
     data: queryProjectData,
     loading: queryProjectLoading,
     error: queryProjectError,
-  } = useQueryProject({
+  } = useProjectFormFields({
+    pollInterval: 1000 * 30,
     variables: {
       vid: projectId,
     },
   });
 
-  const [updateProject, { error: updateProjectError }] = useUpdateProject2();
+  const [updateProject, { error: updateProjectError }] = useUpdateProjectForm();
 
   const {
     data: queryRegionListData,
     loading: queryRegionListLoading,
     error: queryRegionListError,
-  } = useQueryRegionList();
+  } = useProjectFormRegionList();
 
   const referenceData: ReferenceDataType = { regionList: queryRegionListData?.regionList };
 
-  const handleFormSubmit = async (values: FormValues) => {
+  const handleFormSubmit = async (values: FormValues, form: FormApi<FormValues>) => {
+    const state = form.getState();
+
+    const changes = Object.keys(state.dirtyFields)
+      .map((key) => ({ key, value: getIn(values, key) }))
+      .reduce((acc, { key, value }) => setIn(acc, key, value), {});
+
     const version =
       queryProjectData?.project?.__typename === 'Project' ? queryProjectData?.project?.version : 1;
 
     const updateProjectResult = await updateProject({
+      context: {
+        projectDiffResolving: {
+          maxAttempts: 5,
+          projectAccessor: {
+            fromDiffError: (data: UpdateProjectDiffResult) => ({
+              remote: data.result.remoteProject,
+              local: data.result.localProject,
+            }),
+            fromVariables: (vars: UpdateProjectFormVariables) => vars.data,
+            toVariables: (vars: UpdateProjectFormVariables, patch: ProjectUpdateType) => ({
+              ...vars,
+              data: { ...vars.data, ...patch },
+            }),
+          },
+        },
+      },
       variables: {
         vid: projectId,
-        name: values.name,
-        region: values.region && values.region !== 'NOT_SELECTED' ? values.region : null,
-        coordinates: values.coordinates || null,
-        description: values.description || null,
-        yearStart: values.yearStart || null,
-        status: ProjectStatusEnum.Unpublished,
-        version: version || 1,
+        data: {
+          ...changes,
+          version: version || 1,
+        },
       },
     });
 
@@ -99,6 +135,15 @@ export const EditProjectPage: React.FC<PageProps> = () => {
         },
       });
     }
+
+    form.initialize((v) => {
+      if (updateProjectResult.data?.updateProject?.result?.__typename === 'Project') {
+        const initials = getInitialValues(updateProjectResult.data.updateProject.result);
+        return { ...initials, ...v };
+      }
+
+      return v;
+    });
   };
 
   const apolloError = queryProjectError || queryRegionListError || updateProjectError;

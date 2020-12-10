@@ -2,8 +2,6 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Loader, Text } from '@gpn-prototypes/vega-ui';
 
-import { ProjectUpdateType } from '../../__generated__/types';
-
 import { TableRow } from './ProjectsTable/types';
 import { cnProjectsPage as cn } from './cn-projects-page';
 import { ProjectsTable } from './ProjectsTable';
@@ -17,7 +15,7 @@ const testId = {
 type Props = {
   projects: TableRow[];
   isLoading: boolean;
-  onFavorite(id: string, payload: ProjectUpdateType): void;
+  onFavorite(id: string, payload: { isFavorite: boolean; version: number }): void;
 };
 
 export const ProjectsPageView: React.FC<Props> = (props) => {

@@ -7,10 +7,10 @@ import { useNotifications } from '../../providers/notifications';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
 import {
+  useCreateBlankProject,
   useCreateProject,
-  useDeleteProject2,
-  useQueryRegionList,
-  useUpdateProject2,
+  useDeleteBlankProject,
+  useProjectFormRegionList,
 } from './__generated__/project';
 import { cnPage } from './cn-page';
 import { RouteLeavingGuard } from './RouteLeavingGuard';
@@ -29,25 +29,25 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   const [blankProjectId, setBlankProjectId] = useState<string | undefined>(undefined);
 
   const [
-    createProject,
-    { error: createProjectError, loading: createProjectLoading },
-  ] = useCreateProject();
+    createBlankProject,
+    { error: createBlankProjectError, loading: createBlankProjectLoading },
+  ] = useCreateBlankProject();
 
-  const [updateProject, { error: updateProjectError }] = useUpdateProject2();
+  const [createProject, { error: createProjectError }] = useCreateProject();
 
-  const [deleteProject, { error: deleteProjectError }] = useDeleteProject2();
+  const [deleteProject, { error: deleteProjectError }] = useDeleteBlankProject();
 
   const call = async () => {
-    const createProjectResult = await createProject();
+    const createBlankProjectResult = await createBlankProject();
 
-    if (createProjectResult.data?.createProject?.result?.__typename === 'Project') {
-      const projectId = createProjectResult.data.createProject?.result?.vid || undefined;
+    if (createBlankProjectResult.data?.createProject?.result?.__typename === 'Project') {
+      const projectId = createBlankProjectResult.data.createProject?.result?.vid || undefined;
 
       setBlankProjectId(projectId);
     }
 
-    if (createProjectResult.data?.createProject?.result?.__typename === 'Error') {
-      const inlineCreateProjectError = createProjectResult.data?.createProject?.result;
+    if (createBlankProjectResult.data?.createProject?.result?.__typename === 'Error') {
+      const inlineCreateProjectError = createBlankProjectResult.data?.createProject?.result;
 
       notifications.add({
         key: `${inlineCreateProjectError.code}-create-error`,
@@ -68,16 +68,16 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     data: queryRegionListData,
     loading: queryRegionListLoading,
     error: queryRegionListError,
-  } = useQueryRegionList();
+  } = useProjectFormRegionList();
 
   const referenceData: ReferenceDataType = { regionList: queryRegionListData?.regionList };
 
   const handleFormSubmit = async (values: FormValues) => {
-    const updateProjectResult = await updateProject({
+    const createProjectResult = await createProject({
       variables: {
         vid: blankProjectId,
         name: values.name,
-        region: values.region && values.region !== 'NOT_SELECTED' ? values.region : undefined,
+        region: values.region,
         coordinates: values.coordinates,
         description: values.description,
         yearStart: values.yearStart,
@@ -86,8 +86,8 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       },
     });
 
-    if (updateProjectResult.data?.updateProject?.result?.__typename === 'Project') {
-      const projectId = updateProjectResult.data.updateProject?.result?.vid || undefined;
+    if (createProjectResult.data?.updateProject?.result?.__typename === 'Project') {
+      const projectId = createProjectResult.data.updateProject?.result?.vid || undefined;
 
       setIsNavigationBlocked(false);
 
@@ -104,8 +104,8 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       history.push(`/projects/show/${projectId}`);
     }
 
-    if (updateProjectResult.data?.updateProject?.result?.__typename === 'Error') {
-      const inlineUpdateProjectError = updateProjectResult.data?.updateProject?.result;
+    if (createProjectResult.data?.updateProject?.result?.__typename === 'Error') {
+      const inlineUpdateProjectError = createProjectResult.data?.updateProject?.result;
 
       notifications.add({
         key: `${inlineUpdateProjectError.code}-update-error`,
@@ -140,7 +140,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   };
 
   const apolloError =
-    createProjectError || updateProjectError || deleteProjectError || queryRegionListError;
+    createBlankProjectError || createProjectError || deleteProjectError || queryRegionListError;
 
   if (apolloError) {
     notifications.add({
@@ -152,7 +152,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     return null;
   }
 
-  if (createProjectLoading || queryRegionListLoading) {
+  if (createBlankProjectLoading || queryRegionListLoading) {
     return <Loader />;
   }
 
