@@ -1,7 +1,7 @@
 {
   "extends": "@gpn-prototypes/frontend-configs/tsconfig",
   "shouldExtractLiteralValuesFromEnum": true,
-  "files": ["./types/assets.d.ts"],
+  "files": ["./types/assets.d.ts", "./types/notifications.d.ts"],
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules", "**/dist/**/*"],
   "compilerOptions": {

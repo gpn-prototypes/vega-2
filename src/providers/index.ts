@@ -1,1 +1,1 @@
-export * from './snackbar';
+export * from './notifications';

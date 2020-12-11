@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Loader } from '@gpn-prototypes/vega-ui';
 
 import { Project, ProjectStatusEnum } from '../../__generated__/types';
-import { useSnackbar } from '../../providers/snackbar';
+import { useNotifications } from '../../providers/notifications';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
 import { useQueryProject, useQueryRegionList, useUpdateProject2 } from './__generated__/project';
@@ -36,7 +36,7 @@ const getInitialValues = (project: ProjectType): FormValues => {
 
 export const EditProjectPage: React.FC<PageProps> = () => {
   const { projectId } = useParams<ParamsType>();
-  const snackbar = useSnackbar();
+  const notifications = useNotifications();
 
   const {
     data: queryProjectData,
@@ -78,10 +78,25 @@ export const EditProjectPage: React.FC<PageProps> = () => {
     if (updateProjectResult.data?.updateProject?.result?.__typename === 'Error') {
       const inlineUpdateProjectError = updateProjectResult.data?.updateProject?.result;
 
-      snackbar.addItem({
+      notifications.add({
         key: `${inlineUpdateProjectError.code}-update-error`,
         status: 'alert',
         message: inlineUpdateProjectError.message,
+        onClose(item) {
+          notifications.remove(item.key);
+        },
+      });
+    }
+
+    if (updateProjectResult.data?.updateProject?.result?.__typename === 'Project') {
+      notifications.add({
+        key: `${projectId}-create`,
+        status: 'success',
+        autoClose: 3,
+        message: 'Изменения успешно сохранены',
+        onClose(item) {
+          notifications.remove(item.key);
+        },
       });
     }
   };
@@ -89,7 +104,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
   const apolloError = queryProjectError || queryRegionListError || updateProjectError;
 
   if (apolloError) {
-    snackbar.addItem({
+    notifications.add({
       key: `${apolloError.name}-apollo-error`,
       status: 'alert',
       message: apolloError.message,
@@ -101,7 +116,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
   if (queryProjectData?.project?.__typename === 'Error') {
     const inlineQueryProjectError = queryProjectData.project;
 
-    snackbar.addItem({
+    notifications.add({
       key: `${inlineQueryProjectError.code}-query-error`,
       status: 'alert',
       message: inlineQueryProjectError.message,

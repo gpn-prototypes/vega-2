@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { Loader } from '@gpn-prototypes/vega-ui';
 
 import { ProjectStatusEnum } from '../../__generated__/types';
-import { useSnackbar } from '../../providers/snackbar';
+import { useNotifications } from '../../providers/notifications';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
 import {
@@ -24,7 +24,7 @@ type PageProps = Record<string, unknown>;
 
 export const CreateProjectPage: React.FC<PageProps> = () => {
   const history = useHistory();
-  const snackbar = useSnackbar();
+  const notifications = useNotifications();
 
   const [isNavigationBlocked, setIsNavigationBlocked] = React.useState<boolean>(true);
 
@@ -57,10 +57,13 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       if (createProjectResult.data?.createProject?.result?.__typename === 'Error') {
         const inlineCreateProjectError = createProjectResult.data?.createProject?.result;
 
-        snackbar.addItem({
+        notifications.add({
           key: `${inlineCreateProjectError.code}-create-error`,
           status: 'alert',
           message: inlineCreateProjectError.message,
+          onClose(item) {
+            notifications.remove(item.key);
+          },
         });
       }
     };
@@ -74,7 +77,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     return () => {
       isCancelled = true;
     };
-  }, [createProject, snackbar]);
+  }, [createProject, notifications]);
 
   const {
     data: queryRegionListData,
@@ -104,16 +107,30 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       localStorage.removeItem(BLANK_PROJECT_ID);
 
       setIsNavigationBlocked(false);
+
+      notifications.add({
+        key: `${projectId}-create`,
+        status: 'success',
+        autoClose: 3,
+        message: 'Проект успешно создан',
+        onClose(item) {
+          notifications.remove(item.key);
+        },
+      });
+
       history.push(`/projects/show/${projectId}`);
     }
 
     if (updateProjectResult.data?.updateProject?.result?.__typename === 'Error') {
       const inlineUpdateProjectError = updateProjectResult.data?.updateProject?.result;
 
-      snackbar.addItem({
+      notifications.add({
         key: `${inlineUpdateProjectError.code}-update-error`,
         status: 'alert',
         message: inlineUpdateProjectError.message,
+        onClose(item) {
+          notifications.remove(item.key);
+        },
       });
     }
   };
@@ -132,7 +149,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     if (deleteProjectResult.data?.deleteProject?.result?.__typename === 'Error') {
       const inlineDeleteProjectError = deleteProjectResult.data?.deleteProject?.result;
 
-      snackbar.addItem({
+      notifications.add({
         key: `${inlineDeleteProjectError.code}-delete-error`,
         status: 'alert',
         message: inlineDeleteProjectError.message,
@@ -147,7 +164,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     createProjectError || updateProjectError || deleteProjectError || queryRegionListError;
 
   if (apolloError) {
-    snackbar.addItem({
+    notifications.add({
       key: `${apolloError.name}-apollo-error`,
       status: 'alert',
       message: apolloError.message,

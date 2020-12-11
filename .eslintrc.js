@@ -1,5 +1,5 @@
 module.exports = {
-  extends: [require.resolve('@gpn-prototypes/frontend-configs/.eslintrc')],
+  extends: [require.resolve('@gpn-prototypes/frontend-configs/.eslintrc.js')],
   overrides: [
     {
       files: ['./src/**/index.stories.tsx'],
