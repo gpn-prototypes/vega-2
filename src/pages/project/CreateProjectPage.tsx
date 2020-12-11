@@ -28,7 +28,10 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
   const [blankProjectId, setBlankProjectId] = useState<string | undefined>(undefined);
 
-  const [createProject, { error: createProjectError }] = useCreateProject();
+  const [
+    createProject,
+    { error: createProjectError, loading: createProjectLoading },
+  ] = useCreateProject();
 
   const [updateProject, { error: updateProjectError }] = useUpdateProject2();
 
@@ -149,7 +152,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     return null;
   }
 
-  if (!blankProjectId || queryRegionListLoading) {
+  if (createProjectLoading || queryRegionListLoading) {
     return <Loader />;
   }
 
