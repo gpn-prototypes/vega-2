@@ -18,8 +18,6 @@ import { ReferenceDataType } from './types';
 
 import './ProjectPage.css';
 
-const BLANK_PROJECT_ID = 'blank-project-id';
-
 type PageProps = Record<string, unknown>;
 
 export const CreateProjectPage: React.FC<PageProps> = () => {
@@ -88,8 +86,6 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     if (updateProjectResult.data?.updateProject?.result?.__typename === 'Project') {
       const projectId = updateProjectResult.data.updateProject?.result?.vid || undefined;
 
-      localStorage.removeItem(BLANK_PROJECT_ID);
-
       setIsNavigationBlocked(false);
 
       notifications.add({
@@ -125,10 +121,6 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
   const handleNavigation = async (path: string | null) => {
     const deleteProjectResult = await deleteProject({ variables: { vid: blankProjectId } });
-
-    if (deleteProjectResult.data?.deleteProject?.result?.__typename === 'Result') {
-      localStorage.removeItem(BLANK_PROJECT_ID);
-    }
 
     if (deleteProjectResult.data?.deleteProject?.result?.__typename === 'Error') {
       const inlineDeleteProjectError = deleteProjectResult.data?.deleteProject?.result;
