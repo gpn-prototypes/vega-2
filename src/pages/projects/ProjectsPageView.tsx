@@ -1,7 +1,13 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { IconProps } from '@gpn-design/uikit/Icon';
-import { Button, ChoiceGroup, IconBookmarkFilled, Text, TextField } from '@gpn-prototypes/vega-ui';
+import {
+  Button,
+  ChoiceGroup,
+  IconBookmarkFilled,
+  IconProps,
+  Text,
+  TextField,
+} from '@gpn-prototypes/vega-ui';
 
 import { GetProjects } from './__generated__/projects';
 import { cnProjectsPage as cn } from './cn-projects-page';
