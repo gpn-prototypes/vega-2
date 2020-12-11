@@ -5,10 +5,18 @@
   height: 100%;
 
   &__Modal {
+    z-index: 102;
+
     width: 480px;
+
+    .VegaModal__Body {
+      justify-content: left;
+    }
   }
 
   &__Modal ~ button {
+    z-index: 101;
+
     border: none;
     outline: none;
   }

@@ -16,6 +16,10 @@ export const RouteLeavingGuard: React.FC<Props> = ({ when, navigate }) => {
   const [lastLocation, setLastLocation] = useState<Location | null>(null);
 
   const handleBlockedNavigation = (nextLocation: Location): boolean => {
+    if (nextLocation.pathname === '/login') {
+      return true;
+    }
+
     setIsModalOpen(true);
     setLastLocation(nextLocation);
 
