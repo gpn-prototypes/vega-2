@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Field } from 'react-final-form';
-import { BasicSelect, Combobox, Form as VegaForm, Text, TextField } from '@gpn-prototypes/vega-ui';
+import { Combobox, Form as VegaForm, Text, TextField } from '@gpn-prototypes/vega-ui';
 
 import { ProjectTypeEnum } from '../../../../../../__generated__/types';
 import { ReferenceDataType } from '../../../../../../pages/project/types';
@@ -24,7 +24,7 @@ const getYearStartOptions = (): SelectOption[] => {
   const currentYear = new Date().getFullYear();
   const options = [];
 
-  for (let i = -1; i < 6; i += 1) {
+  for (let i = -1; i < 11; i += 1) {
     const year = currentYear + i;
     const option = {
       label: `${year}`,
@@ -49,10 +49,14 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
       value: region?.vid || '',
     })) || [];
 
-  const yearStartOptions = getYearStartOptions();
+  const [yearStartOptions, setYearStartOptions] = useState(getYearStartOptions());
   const yearStartInitialValue = mode === 'create' ? yearStartOptions[2].value : undefined;
 
   const getItemLabel = (option: SelectOption): string => option.label;
+
+  const updateYearStartOptions = (option: string): void => {
+    setYearStartOptions([{ label: option, value: option }, ...yearStartOptions]);
+  };
 
   return (
     <div className={cnProjectForm('Step').mix(cnDescriptionStep())}>
@@ -105,7 +109,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           <Field
             name="region"
             render={({ input }): React.ReactNode => (
-              <BasicSelect
+              <Combobox
                 id="region"
                 size="s"
                 options={
@@ -116,11 +120,10 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 getOptionLabel={getItemLabel}
                 placeholder="Выберите регион"
                 value={regionOptions.find(({ value }) => value === input.value)}
-                onChange={(value: SelectOption | null): void => {
+                onChange={(value): void => {
                   input.onChange(value?.value);
                 }}
-                // TODO исправить вместе с задачей: https://jira.csssr.io/browse/VEGA-698
-                // onBlur={input.onBlur}
+                onBlur={input.onBlur}
                 onFocus={input.onFocus}
               />
             )}
@@ -144,7 +147,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 placeholder="Выберите тип проекта"
                 disabled
                 value={typeOptions.find(({ value }) => value === input.value)}
-                onChange={(value: SelectOption | null): void => {
+                onChange={(value): void => {
                   input.onChange(value?.value);
                 }}
                 onBlur={input.onBlur}
@@ -186,21 +189,27 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           <Field
             name="yearStart"
             initialValue={yearStartInitialValue}
-            render={({ input }): React.ReactNode => (
-              <BasicSelect
-                id="yearStart"
-                size="s"
-                options={yearStartOptions}
-                getOptionLabel={getItemLabel}
-                placeholder="Выберите год"
-                value={yearStartOptions.find(({ value }) => value === input.value)}
-                onChange={(value: SelectOption | null): void => {
-                  input.onChange(value?.value);
-                }}
-                onBlur={input.onBlur}
-                onFocus={input.onFocus}
-              />
-            )}
+            render={({ input }): React.ReactNode => {
+              return (
+                <Combobox
+                  id="yearStart"
+                  size="s"
+                  options={yearStartOptions}
+                  getOptionLabel={getItemLabel}
+                  onCreate={(option) => {
+                    updateYearStartOptions(option);
+                    input.onChange(option);
+                  }}
+                  placeholder="Выберите год"
+                  value={yearStartOptions.find(({ value }) => value === input.value)}
+                  onChange={(value: SelectOption | null): void => {
+                    input.onChange(value?.value);
+                  }}
+                  onBlur={input.onBlur}
+                  onFocus={input.onFocus}
+                />
+              );
+            }}
           />
         </VegaForm.Field>
       </VegaForm.Row>
