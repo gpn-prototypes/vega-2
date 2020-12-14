@@ -12,6 +12,7 @@ import {
   UpdateProject,
   UpdateProjectDiff,
 } from '../../__generated__/types';
+import { useBrowserTabActivity } from '../../hooks';
 import { useNotifications } from '../../providers/notifications';
 
 import {
@@ -89,6 +90,8 @@ const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): Tab
   });
 };
 
+const TABLE_POLLING_INTERVAL_MS = 1000 * 30;
+
 export const ProjectsPage = (): React.ReactElement => {
   const [isOpenModal, setIsOpenModal] = React.useState<boolean>(false);
   const [dataDeleteProject, setDataDeleteProject] = React.useState<TableRow | null>(null);
@@ -101,8 +104,19 @@ export const ProjectsPage = (): React.ReactElement => {
     awaitRefetchQueries: true,
   });
 
-  const { data, loading } = useProjectsTableList({
+  const { data, loading, startPolling, stopPolling, refetch } = useProjectsTableList({
     fetchPolicy: 'network-only',
+    pollInterval: TABLE_POLLING_INTERVAL_MS,
+  });
+
+  useBrowserTabActivity({
+    onActivated() {
+      refetch();
+      startPolling(TABLE_POLLING_INTERVAL_MS);
+    },
+    onHidden() {
+      stopPolling();
+    },
   });
 
   const [toggleFavorite] = useProjectToggleFavorite({

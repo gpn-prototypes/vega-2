@@ -10,6 +10,7 @@ import {
   UpdateProject,
   UpdateProjectDiff,
 } from '../../__generated__/types';
+import { useBrowserTabActivity } from '../../hooks';
 import { useNotifications } from '../../providers/notifications';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
@@ -50,6 +51,8 @@ const getInitialValues = (project: ProjectType): Partial<FormValues> => {
   };
 };
 
+const FORM_FIELDS_POLLING_MS = 1000 * 30;
+
 export const EditProjectPage: React.FC<PageProps> = () => {
   const { projectId } = useParams<ParamsType>();
   const notifications = useNotifications();
@@ -59,10 +62,22 @@ export const EditProjectPage: React.FC<PageProps> = () => {
     loading: queryProjectLoading,
     refetch: refetchProjectFormFields,
     error: queryProjectError,
+    startPolling,
+    stopPolling,
   } = useProjectFormFields({
-    pollInterval: 1000 * 30,
+    pollInterval: FORM_FIELDS_POLLING_MS,
     variables: {
       vid: projectId,
+    },
+  });
+
+  useBrowserTabActivity({
+    onActivated() {
+      refetchProjectFormFields();
+      startPolling(FORM_FIELDS_POLLING_MS);
+    },
+    onHidden() {
+      stopPolling();
     },
   });
 
