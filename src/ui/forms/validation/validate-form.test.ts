@@ -237,6 +237,20 @@ describe('Валидация полей по схеме', () => {
       expect(validate('1')).toBe(null);
       expect(validate('')).toBe(null);
     });
+
+    test('isNumber', () => {
+      const validate = validators.isNumber();
+      expect(validate('123')).toBe(null);
+      expect(validate(123)).toBe(null);
+      expect(validate('333fff')).not.toBe(null);
+      expect(validate(' ')).not.toBe(null);
+      expect(validate(null)).not.toBe(null);
+      expect(validate('')).not.toBe(null);
+      expect(validate(undefined)).not.toBe(null);
+      expect(validate([])).not.toBe(null);
+      expect(validate(false)).not.toBe(null);
+      expect(validate(NaN)).not.toBe(null);
+    });
   });
 });
 
