@@ -64,7 +64,8 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     return () => {
       isCancelled = true;
     };
-  }, [createProject, snackbar]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [createProject]);
 
   const {
     data: queryRegionListData,
