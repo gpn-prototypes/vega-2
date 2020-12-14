@@ -1,2 +1,2 @@
 export { ProjectForm } from './ProjectForm';
-export { FormValues } from './types';
+export type { FormValues } from './types';

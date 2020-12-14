@@ -1,4 +1,4 @@
-query GetProjects {
+query ProjectsTableList {
   projects: projectList {
     ... on ProjectList {
       data: projectList {
@@ -36,20 +36,33 @@ query GetProjects {
   }
 }
 
-mutation UpdateProject($vid: UUID, $data: ProjectUpdateType) {
-  updateProject(data: $data, vid: $vid) {
+mutation ProjectToggleFavorite(
+  $vid: UUID!
+  $isFavorite: Boolean!
+  $version: Int!
+) {
+  updateProject(data: { isFavorite: $isFavorite, version: $version }, vid: $vid) {
     result {
       ... on Project {
         vid
         isFavorite
-        status
         version
       }
       ... on Error {
         code
         message
-        details
-        payload
+      }
+      ... on UpdateProjectDiff {
+        localProject {
+          vid
+          isFavorite
+          version
+        }
+        remoteProject {
+          vid
+          isFavorite
+          version
+        }
       }
     }
   }

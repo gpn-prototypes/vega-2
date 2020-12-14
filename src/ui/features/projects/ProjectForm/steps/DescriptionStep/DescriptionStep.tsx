@@ -120,8 +120,14 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 getOptionLabel={getItemLabel}
                 placeholder="Выберите регион"
                 value={regionOptions.find(({ value }) => value === input.value)}
-                onChange={(value): void => {
-                  input.onChange(value?.value);
+                onChange={(option: SelectOption | null): void => {
+                  let value = null;
+
+                  if (option !== null && option.value !== 'NOT_SELECTED') {
+                    value = option.value;
+                  }
+
+                  input.onChange(value);
                 }}
                 onBlur={input.onBlur}
                 onFocus={input.onFocus}
@@ -164,6 +170,8 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           </VegaForm.Label>
           <Field
             name="coordinates"
+            allowNull
+            parse={(v) => v}
             render={({ input }): React.ReactNode => (
               <TextField
                 id="coordinates"
@@ -220,6 +228,8 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           </VegaForm.Label>
           <Field
             name="description"
+            allowNull
+            parse={(v) => v}
             render={({ input }): React.ReactNode => (
               <TextField
                 id="description"

@@ -6,16 +6,29 @@ import utc from 'dayjs/plugin/utc';
 
 import 'dayjs/locale/ru';
 
-import { Project } from '../../__generated__/types';
+import {
+  namedOperations,
+  Project,
+  UpdateProject,
+  UpdateProjectDiff,
+} from '../../__generated__/types';
 import { useNotifications } from '../../providers/notifications';
 
-import { useDeleteProject, useGetProjects, useUpdateProject } from './__generated__/projects';
+import {
+  useDeleteProject,
+  useProjectsTableList,
+  useProjectToggleFavorite,
+} from './__generated__/projects';
 import { MenuItemProps, TableRow } from './ProjectsTable/types';
 import { cnProjectsPage as cn } from './cn-projects-page';
 import { ProjectsPageView } from './ProjectsPageView';
 
 dayjs.locale('ru');
 dayjs.extend(utc);
+
+interface UpdateProjectDiffResult extends UpdateProject {
+  result: Required<UpdateProjectDiff>;
+}
 
 type ProjectsMapper = Pick<
   Project,
@@ -84,20 +97,39 @@ export const ProjectsPage = (): React.ReactElement => {
   const history = useHistory();
 
   const [deleteProject] = useDeleteProject({
-    refetchQueries: [`GetProjects`],
-    awaitRefetchQueries: true,
-  });
-  const { data, loading } = useGetProjects({
-    fetchPolicy: 'network-only',
-  });
-  const [updateProject] = useUpdateProject({
-    refetchQueries: [`GetProjects`],
+    refetchQueries: [namedOperations.Query.ProjectsTableList],
     awaitRefetchQueries: true,
   });
 
-  const addToFavorite = React.useCallback(
-    async (id, payload) => {
-      const addToFavoriteResult = await updateProject({ variables: { vid: id, data: payload } });
+  const { data, loading } = useProjectsTableList({
+    fetchPolicy: 'network-only',
+  });
+
+  const [toggleFavorite] = useProjectToggleFavorite({
+    refetchQueries: [namedOperations.Query.ProjectsTableList],
+    awaitRefetchQueries: true,
+  });
+
+  const handelToggleFavorite = React.useCallback(
+    async (id: string, payload: { isFavorite: boolean; version: number }) => {
+      const addToFavoriteResult = await toggleFavorite({
+        context: {
+          projectDiffResolving: {
+            maxAttempts: 5,
+            projectAccessor: {
+              fromDiffError: (mutationData: UpdateProjectDiffResult) => ({
+                local: mutationData.result.localProject,
+                remote: mutationData.result.remoteProject,
+              }),
+            },
+          },
+        },
+        variables: {
+          vid: id,
+          isFavorite: payload.isFavorite,
+          version: payload.version,
+        },
+      });
 
       if (addToFavoriteResult.data?.updateProject?.result?.__typename === 'Error') {
         const addToFavoriteError = addToFavoriteResult.data?.updateProject?.result;
@@ -112,7 +144,7 @@ export const ProjectsPage = (): React.ReactElement => {
         });
       }
     },
-    [notifications, updateProject],
+    [notifications, toggleFavorite],
   );
 
   const isLoading = loading && !data?.projects;
@@ -171,7 +203,11 @@ export const ProjectsPage = (): React.ReactElement => {
 
   return (
     <>
-      <ProjectsPageView projects={projects} isLoading={isLoading} onFavorite={addToFavorite} />
+      <ProjectsPageView
+        projects={projects}
+        isLoading={isLoading}
+        onFavorite={handelToggleFavorite}
+      />
       <Modal
         hasOverlay
         hasCloseButton
