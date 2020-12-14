@@ -57,6 +57,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
   const {
     data: queryProjectData,
     loading: queryProjectLoading,
+    refetch: refetchProjectFormFields,
     error: queryProjectError,
   } = useProjectFormFields({
     pollInterval: 1000 * 30,
@@ -198,6 +199,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
         mode="edit"
         referenceData={referenceData}
         initialValues={initialValues}
+        onCancel={refetchProjectFormFields}
         onSubmit={handleFormSubmit}
       />
     </div>

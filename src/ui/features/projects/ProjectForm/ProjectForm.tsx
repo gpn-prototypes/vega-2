@@ -106,6 +106,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
                   handleCancel();
                 } else {
                   form.reset();
+                  handleCancel();
                 }
               }}
             />
