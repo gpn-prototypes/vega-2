@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Loader } from '@gpn-prototypes/vega-ui';
+import { Loader, useMount } from '@gpn-prototypes/vega-ui';
 
 import { ProjectStatusEnum } from '../../__generated__/types';
 import { useNotifications } from '../../providers/notifications';
@@ -18,8 +18,6 @@ import { ReferenceDataType } from './types';
 
 import './ProjectPage.css';
 
-const BLANK_PROJECT_ID = 'blank-project-id';
-
 type PageProps = Record<string, unknown>;
 
 export const CreateProjectPage: React.FC<PageProps> = () => {
@@ -30,54 +28,41 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
   const [blankProjectId, setBlankProjectId] = useState<string | undefined>(undefined);
 
-  const [createProject, { error: createProjectError }] = useCreateProject();
+  const [
+    createProject,
+    { error: createProjectError, loading: createProjectLoading },
+  ] = useCreateProject();
 
   const [updateProject, { error: updateProjectError }] = useUpdateProject2();
 
   const [deleteProject, { error: deleteProjectError }] = useDeleteProject2();
 
-  useEffect(() => {
-    let isCancelled = false;
+  const call = async () => {
+    const createProjectResult = await createProject();
 
-    const data = localStorage.getItem(BLANK_PROJECT_ID);
+    if (createProjectResult.data?.createProject?.result?.__typename === 'Project') {
+      const projectId = createProjectResult.data.createProject?.result?.vid || undefined;
 
-    const call = async () => {
-      const createProjectResult = await createProject();
-
-      if (createProjectResult.data?.createProject?.result?.__typename === 'Project') {
-        const projectId = createProjectResult.data.createProject?.result?.vid || undefined;
-
-        localStorage.setItem(BLANK_PROJECT_ID, String(projectId));
-
-        if (!isCancelled) {
-          setBlankProjectId(projectId);
-        }
-      }
-
-      if (createProjectResult.data?.createProject?.result?.__typename === 'Error') {
-        const inlineCreateProjectError = createProjectResult.data?.createProject?.result;
-
-        notifications.add({
-          key: `${inlineCreateProjectError.code}-create-error`,
-          status: 'alert',
-          message: inlineCreateProjectError.message,
-          onClose(item) {
-            notifications.remove(item.key);
-          },
-        });
-      }
-    };
-
-    if (data) {
-      setBlankProjectId(data);
-    } else {
-      call();
+      setBlankProjectId(projectId);
     }
 
-    return () => {
-      isCancelled = true;
-    };
-  }, [createProject, notifications]);
+    if (createProjectResult.data?.createProject?.result?.__typename === 'Error') {
+      const inlineCreateProjectError = createProjectResult.data?.createProject?.result;
+
+      notifications.add({
+        key: `${inlineCreateProjectError.code}-create-error`,
+        status: 'alert',
+        message: inlineCreateProjectError.message,
+        onClose(item) {
+          notifications.remove(item.key);
+        },
+      });
+    }
+  };
+
+  useMount(() => {
+    call();
+  });
 
   const {
     data: queryRegionListData,
@@ -103,8 +88,6 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
     if (updateProjectResult.data?.updateProject?.result?.__typename === 'Project') {
       const projectId = updateProjectResult.data.updateProject?.result?.vid || undefined;
-
-      localStorage.removeItem(BLANK_PROJECT_ID);
 
       setIsNavigationBlocked(false);
 
@@ -142,10 +125,6 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   const handleNavigation = async (path: string | null) => {
     const deleteProjectResult = await deleteProject({ variables: { vid: blankProjectId } });
 
-    if (deleteProjectResult.data?.deleteProject?.result?.__typename === 'Result') {
-      localStorage.removeItem(BLANK_PROJECT_ID);
-    }
-
     if (deleteProjectResult.data?.deleteProject?.result?.__typename === 'Error') {
       const inlineDeleteProjectError = deleteProjectResult.data?.deleteProject?.result;
 
@@ -173,7 +152,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     return null;
   }
 
-  if (!blankProjectId || queryRegionListLoading) {
+  if (createProjectLoading || queryRegionListLoading) {
     return <Loader />;
   }
 
