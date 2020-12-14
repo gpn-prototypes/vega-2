@@ -18,6 +18,6 @@ export type FormProps = {
   mode: FormMode;
   initialValues?: Partial<FormValues>;
   referenceData: ReferenceDataType;
-  onCancel?: () => void;
+  onCancel?: (formApi: FormApi<FormValues>) => void;
   onSubmit: (values: FormValues, api: FormApi<FormValues>) => void;
 };

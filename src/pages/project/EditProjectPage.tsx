@@ -199,7 +199,10 @@ export const EditProjectPage: React.FC<PageProps> = () => {
         mode="edit"
         referenceData={referenceData}
         initialValues={initialValues}
-        onCancel={refetchProjectFormFields}
+        onCancel={(form) => {
+          form.reset();
+          refetchProjectFormFields();
+        }}
         onSubmit={handleFormSubmit}
       />
     </div>

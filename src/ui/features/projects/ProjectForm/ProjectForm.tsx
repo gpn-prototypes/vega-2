@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Form } from 'react-final-form';
+import { Form, FormSpy } from 'react-final-form';
 import { Form as VegaForm, NavigationList } from '@gpn-prototypes/vega-ui';
-import { createForm } from 'final-form';
+import { createForm, FormApi } from 'final-form';
 import createDecorator from 'final-form-focus';
 
 import { createValidate, validators } from '../../../forms/validation';
@@ -51,6 +51,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     onSubmit,
   ]);
 
+  const hasUnsavedChanges = React.useRef<boolean>(false);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
 
   const undecorate = React.useMemo(() => focusOnErrors(form), [form]);
@@ -61,9 +62,10 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     setActiveStepIndex(step);
   };
 
-  const handleCancel = () => {
-    if (onCancel) {
-      onCancel();
+  const handleCancel = (formApi: FormApi<FormValues>) => {
+    hasUnsavedChanges.current = false;
+    if (typeof onCancel === 'function') {
+      onCancel(formApi);
     }
   };
 
@@ -72,6 +74,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
   return (
     <Form
       form={form}
+      keepDirtyOnReinitialize={hasUnsavedChanges.current}
       onSubmit={onSubmit}
       render={({ handleSubmit, dirty }): React.ReactNode => (
         <>
@@ -102,12 +105,13 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
               stepsAmount={steps.length}
               onStepChange={handleStepChange}
               onCancel={() => {
-                if (mode === 'create') {
-                  handleCancel();
-                } else {
-                  form.reset();
-                  handleCancel();
-                }
+                handleCancel(form);
+              }}
+            />
+            <FormSpy
+              subscription={{ dirtyFields: true }}
+              onChange={(formState) => {
+                hasUnsavedChanges.current = Object.keys(formState.dirtyFields).length > 0;
               }}
             />
           </VegaForm>
