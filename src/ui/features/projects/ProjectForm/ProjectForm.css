@@ -59,6 +59,10 @@
   &__ErrorText {
     margin-top: var(--space-2xs);
   }
+
+  &__ComboboxError .Select-Control {
+    border-color: var(--color-bg-alert);
+  }
 }
 
 .ProjectForm-DocumentStep {

@@ -74,7 +74,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
   const handleFormSubmit = React.useCallback(
     async (values: FormValues) => {
-      let errors = {};
+      const errors: Record<string, unknown> = {};
 
       const createProjectResult = await createProject({
         variables: {
@@ -90,9 +90,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       });
 
       if (createProjectResult.data?.updateProject?.result?.__typename === 'Project') {
-        const projectId = updateProjectResult.data.updateProject?.result?.vid || undefined;
-
-        localStorage.removeItem(BLANK_PROJECT_ID);
+        const projectId = createProjectResult.data.updateProject?.result?.vid || undefined;
 
         setIsNavigationBlocked(false);
 
@@ -113,7 +111,11 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
         const inlineUpdateProjectError = createProjectResult.data?.updateProject?.result;
 
         if (inlineUpdateProjectError?.code === 'PROJECT_NAME_ALREADY_EXISTS') {
-          errors = { name: inlineUpdateProjectError.message };
+          errors.name = inlineUpdateProjectError.message;
+        }
+
+        if (inlineUpdateProjectError?.code === 'PROJECT_YEARSTART_CANNOT_BE_NULL') {
+          errors.yearStart = inlineUpdateProjectError.message;
         }
       }
 

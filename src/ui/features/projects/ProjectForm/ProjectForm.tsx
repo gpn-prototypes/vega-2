@@ -16,6 +16,8 @@ import './ProjectForm.css';
 
 const focusOnErrors = createDecorator<FormValues>();
 
+const currentYear = new Date().getFullYear();
+
 const validator = createValidate<Partial<FormValues>>({
   name: [
     validators.required(undefined, () => 'Заполните обязательное поле'),
@@ -29,6 +31,14 @@ const validator = createValidate<Partial<FormValues>>({
     ),
   ],
   coordinates: [validators.maxLength(2000, () => 'Координаты не могут быть более 2000 символов')],
+  yearStart: [
+    validators.required(undefined, () => 'Заполните обязательное поле'),
+    validators.isNumber(undefined, () => 'Значение должно быть годом'),
+    validators.min(
+      currentYear - 1,
+      () => 'Год начала планирования не может быть раньше предыдущего',
+    ),
+  ],
 });
 
 const steps = [{ title: 'Описание проекта', content: DescriptionStep }];

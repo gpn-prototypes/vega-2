@@ -78,7 +78,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
   const handleFormSubmit = React.useCallback(
     async (values: FormValues, form: FormApi<FormValues>) => {
       const state = form.getState();
-      const erros: Record<string, unknown> = {};
+      const errors: Record<string, unknown> = {};
 
       const changes = Object.keys(state.dirtyFields)
         .map((key) => ({ key, value: getIn(values, key) }))
@@ -119,7 +119,11 @@ export const EditProjectPage: React.FC<PageProps> = () => {
         const inlineUpdateProjectError = updateProjectResult.data?.updateProject?.result;
 
         if (inlineUpdateProjectError?.code === 'PROJECT_NAME_ALREADY_EXISTS') {
-          erros.name = inlineUpdateProjectError.message;
+          errors.name = inlineUpdateProjectError.message;
+        }
+
+        if (inlineUpdateProjectError?.code === 'PROJECT_YEARSTART_CANNOT_BE_NULL') {
+          errors.yearStart = inlineUpdateProjectError.message;
         }
       }
 

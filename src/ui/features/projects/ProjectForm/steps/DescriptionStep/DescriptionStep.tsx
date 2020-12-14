@@ -34,7 +34,7 @@ const getYearStartOptions = (): SelectOption[] => {
     const year = currentYear + i;
     const option = {
       label: `${year}`,
-      value: year,
+      value: year.toString(),
     };
 
     options.push(option);
@@ -222,25 +222,45 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           <Field
             name="yearStart"
             initialValue={yearStartInitialValue}
-            render={({ input }): React.ReactNode => {
+            render={({ input, meta }): React.ReactNode => {
+              const submitErrorText =
+                meta.submitError && !meta.dirtySinceLastSubmit ? meta.submitError : undefined;
+              const showError = Boolean(meta.error || submitErrorText) && meta.submitFailed;
+              const errorText = meta.error || submitErrorText;
+
               return (
-                <Combobox
-                  id="yearStart"
-                  size="s"
-                  options={yearStartOptions}
-                  getOptionLabel={getItemLabel}
-                  onCreate={(option) => {
-                    updateYearStartOptions(option);
-                    input.onChange(option);
-                  }}
-                  placeholder="Выберите год"
-                  value={yearStartOptions.find(({ value }) => value === input.value)}
-                  onChange={(value: SelectOption | null): void => {
-                    input.onChange(value?.value);
-                  }}
-                  onBlur={input.onBlur}
-                  onFocus={input.onFocus}
-                />
+                <>
+                  <Combobox
+                    id="yearStart"
+                    className={
+                      showError ? cnDescriptionStep('ComboboxError').toString() : undefined
+                    }
+                    size="s"
+                    options={yearStartOptions}
+                    getOptionLabel={getItemLabel}
+                    onCreate={(option) => {
+                      updateYearStartOptions(option);
+                      input.onChange(option);
+                    }}
+                    placeholder="Выберите год"
+                    value={yearStartOptions.find(({ value }) => value === input.value)}
+                    onChange={(value: SelectOption | null): void => {
+                      input.onChange(value?.value);
+                    }}
+                    onBlur={input.onBlur}
+                    onFocus={input.onFocus}
+                  />
+                  {showError && (
+                    <Text
+                      size="xs"
+                      lineHeight="xs"
+                      view="alert"
+                      className={cnDescriptionStep('ErrorText').toString()}
+                    >
+                      {errorText}
+                    </Text>
+                  )}
+                </>
               );
             }}
           />
