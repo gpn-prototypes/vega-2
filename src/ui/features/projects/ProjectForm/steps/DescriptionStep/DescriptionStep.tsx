@@ -7,6 +7,7 @@ import {
   Text,
   TextField as BaseTextField,
 } from '@gpn-prototypes/vega-ui';
+import { FormApi } from 'final-form';
 
 import { ProjectTypeEnum } from '../../../../../../__generated__/types';
 import { ReferenceDataType } from '../../../../../../pages/project/types';
@@ -21,6 +22,7 @@ type SelectOption = {
 type StepProps = {
   mode: FormMode;
   referenceData: ReferenceDataType;
+  form: FormApi;
 };
 
 const typeOptions = [{ label: 'Геологоразведочный', value: ProjectTypeEnum.Geo }];
@@ -90,7 +92,7 @@ const TextField: React.FC<TextFieldProps> = (props) => {
 };
 
 export const DescriptionStep: React.FC<StepProps> = (props) => {
-  const { mode, referenceData } = props;
+  const { mode, referenceData, form } = props;
   const { regionList } = referenceData;
 
   const regionOptions =
@@ -107,6 +109,21 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
   const updateYearStartOptions = (option: string): void => {
     setYearStartOptions([{ label: option, value: option }, ...yearStartOptions]);
   };
+
+  React.useEffect(() => {
+    const year = form.getFieldState('yearStart');
+    const inList = yearStartOptions.find(
+      ({ value }) => value.toString() === year?.initial.toString(),
+    );
+
+    if (year?.initial && !inList) {
+      setYearStartOptions([
+        { label: year.initial.toString(), value: year.initial.toString() },
+        ...yearStartOptions,
+      ]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className={cnProjectForm('Step').mix(cnDescriptionStep())}>
@@ -243,7 +260,9 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                       input.onChange(option);
                     }}
                     placeholder="Выберите год"
-                    value={yearStartOptions.find(({ value }) => value === input.value)}
+                    value={yearStartOptions.find(
+                      ({ value }) => value.toString() === input.value.toString(),
+                    )}
                     onChange={(value: SelectOption | null): void => {
                       input.onChange(value?.value);
                     }}

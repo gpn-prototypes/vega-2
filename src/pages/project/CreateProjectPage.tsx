@@ -110,12 +110,27 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       if (createProjectResult.data?.updateProject?.result?.__typename === 'Error') {
         const inlineUpdateProjectError = createProjectResult.data?.updateProject?.result;
 
-        if (inlineUpdateProjectError?.code === 'PROJECT_NAME_ALREADY_EXISTS') {
+        const projectNameExists = inlineUpdateProjectError?.code === 'PROJECT_NAME_ALREADY_EXISTS';
+        const projectYearStartNull =
+          inlineUpdateProjectError?.code === 'PROJECT_YEARSTART_CANNOT_BE_NULL';
+
+        if (projectNameExists) {
           errors.name = inlineUpdateProjectError.message;
         }
 
-        if (inlineUpdateProjectError?.code === 'PROJECT_YEARSTART_CANNOT_BE_NULL') {
+        if (projectYearStartNull) {
           errors.yearStart = inlineUpdateProjectError.message;
+        }
+
+        if (!projectNameExists && !projectYearStartNull) {
+          notifications.add({
+            key: `${inlineUpdateProjectError.code}-create`,
+            status: 'alert',
+            message: inlineUpdateProjectError.message,
+            onClose(item) {
+              notifications.remove(item.key);
+            },
+          });
         }
       }
 

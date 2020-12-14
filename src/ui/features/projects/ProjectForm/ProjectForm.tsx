@@ -93,7 +93,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
                   </NavigationList.Item>
                 ))}
               </NavigationList>
-              <Step mode={mode} referenceData={referenceData} />
+              <Step mode={mode} referenceData={referenceData} form={form} />
             </div>
             <Footer
               mode={mode}

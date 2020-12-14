@@ -147,6 +147,8 @@ export const EditProjectPage: React.FC<PageProps> = () => {
 
         return v;
       });
+
+      return errors;
     },
     [notifications, projectId, queryProjectData, updateProject],
   );
