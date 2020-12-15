@@ -260,7 +260,6 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                     getOptionLabel={getItemLabel}
                     onCreate={(option) => {
                       if (option.length !== 4) {
-                        // form.change('yearStart', option);
                         input.onChange(option);
                         input.onBlur();
                         return;
