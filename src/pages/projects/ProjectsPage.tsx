@@ -221,7 +221,9 @@ export const ProjectsPage = (): React.ReactElement => {
           <Text size="xs">Удаление проекта</Text>
         </Modal.Header>
         <Modal.Body>
-          <Text>{`Вы уверены, что хотите удалить проект «${dataDeleteProject?.name}» из системы?`}</Text>
+          <Text
+            className={cn('ModalContent').toString()}
+          >{`Вы уверены, что хотите удалить проект «${dataDeleteProject?.name}» из\u00A0системы?`}</Text>
         </Modal.Body>
         <Modal.Footer className={cn('ModalFooter').toString()}>
           <Button

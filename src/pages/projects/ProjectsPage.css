@@ -106,9 +106,10 @@
     width: 480px;
   }
 
-  &__Modal ~ button {
-    border: none;
-    outline: none;
+  &__ModalContent {
+    align-items: center;
+
+    text-align: center;
   }
 
   &__ModalFooter {

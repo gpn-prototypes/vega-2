@@ -14,13 +14,6 @@
     }
   }
 
-  &__Modal ~ button {
-    z-index: 101;
-
-    border: none;
-    outline: none;
-  }
-
   &__ModalFooter {
     display: flex;
     justify-content: flex-end;
@@ -28,5 +21,11 @@
 
   &__ButtonClose {
     margin-right: var(--space-xs);
+  }
+
+  &__ModalContent {
+    align-items: center;
+
+    text-align: center;
   }
 }
