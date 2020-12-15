@@ -17,8 +17,8 @@ export const required = createValidator<void, AnyValue>({
       return value;
     }
 
-    if (typeof value === 'number' && Number.isNaN(value)) {
-      return false;
+    if (typeof value === 'number') {
+      return !Number.isNaN(value);
     }
 
     return typeof value === 'string' && value.trim() !== '';

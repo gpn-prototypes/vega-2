@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Form } from 'react-final-form';
+import { Form, FormSpy } from 'react-final-form';
 import { Form as VegaForm, NavigationList } from '@gpn-prototypes/vega-ui';
-import { createForm } from 'final-form';
+import { FormApi } from 'final-form';
 import createDecorator from 'final-form-focus';
 
 import { createValidate, validators } from '../../../forms/validation';
@@ -17,6 +17,7 @@ import './ProjectForm.css';
 const focusOnErrors = createDecorator<FormValues>();
 
 const currentYear = new Date().getFullYear();
+const minYearStart = currentYear - 1;
 
 const validator = createValidate<Partial<FormValues>>({
   name: [
@@ -35,8 +36,8 @@ const validator = createValidate<Partial<FormValues>>({
     validators.required(undefined, () => 'Заполните обязательное поле'),
     validators.isNumber(undefined, () => 'Значение должно быть годом'),
     validators.min(
-      currentYear - 1,
-      () => 'Год начала планирования не может быть раньше предыдущего',
+      minYearStart,
+      () => `Год начала планирования не может быть раньше ${minYearStart} г.`,
     ),
   ],
 });
@@ -45,25 +46,27 @@ const steps = [{ title: 'Описание проекта', content: DescriptionS
 
 export const ProjectForm: React.FC<FormProps> = (formProps) => {
   const { mode, initialValues, referenceData, onSubmit, onCancel } = formProps;
-
-  const form = React.useMemo(() => createForm({ onSubmit, initialValues, validate: validator }), [
-    initialValues,
-    onSubmit,
-  ]);
-
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
 
-  const undecorate = React.useMemo(() => focusOnErrors(form), [form]);
-
-  React.useEffect(() => () => undecorate(), [undecorate]);
+  const submit = React.useCallback(
+    (values: FormValues, formApi: FormApi<FormValues>) => {
+      return onSubmit(values, formApi).then((errors) => {
+        setHasUnsavedChanges(false);
+        return errors;
+      });
+    },
+    [onSubmit],
+  );
 
   const handleStepChange = (step: number) => {
     setActiveStepIndex(step);
   };
 
-  const handleCancel = () => {
-    if (onCancel) {
-      onCancel();
+  const handleCancel = (formApi: FormApi<FormValues>) => {
+    setHasUnsavedChanges(false);
+    if (typeof onCancel === 'function') {
+      onCancel(formApi);
     }
   };
 
@@ -71,9 +74,12 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
 
   return (
     <Form
-      form={form}
-      onSubmit={onSubmit}
-      render={({ handleSubmit, dirty }): React.ReactNode => (
+      initialValues={initialValues}
+      keepDirtyOnReinitialize={hasUnsavedChanges}
+      validate={validator}
+      decorators={[focusOnErrors]}
+      onSubmit={submit}
+      render={({ form, handleSubmit, dirty }): React.ReactNode => (
         <>
           <Banner referenceData={referenceData} />
           <VegaForm onSubmit={handleSubmit} className={cnProjectForm()}>
@@ -102,11 +108,13 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
               stepsAmount={steps.length}
               onStepChange={handleStepChange}
               onCancel={() => {
-                if (mode === 'create') {
-                  handleCancel();
-                } else {
-                  form.reset();
-                }
+                handleCancel(form);
+              }}
+            />
+            <FormSpy
+              subscription={{ dirtyFields: true }}
+              onChange={(formState) => {
+                setHasUnsavedChanges(Object.keys(formState.dirtyFields).length > 0);
               }}
             />
           </VegaForm>
