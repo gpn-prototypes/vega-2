@@ -54,7 +54,14 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
 
   const submit = React.useCallback(
     (values: FormValues, formApi: FormApi<FormValues>) => {
-      return onSubmit(values, formApi).then((errors) => {
+      const data = {
+        ...values,
+        name: values.name?.trim(),
+        description: values.description?.trim(),
+        coordinates: values.coordinates?.trim(),
+      };
+
+      return onSubmit(data, formApi).then((errors) => {
         setHasUnsavedChanges(false);
         return errors;
       });
