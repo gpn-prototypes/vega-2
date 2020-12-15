@@ -168,6 +168,12 @@ export const EditProjectPage: React.FC<PageProps> = () => {
   if (queryProjectData?.project?.__typename === 'Error') {
     const inlineQueryProjectError = queryProjectData.project;
 
+    const is404 = inlineQueryProjectError.code === 'PROJECT_NOT_FOUND';
+
+    if (is404) {
+      return null;
+    }
+
     notifications.add({
       key: `${inlineQueryProjectError.code}-query-error`,
       status: 'alert',
