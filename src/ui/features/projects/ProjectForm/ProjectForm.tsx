@@ -35,6 +35,7 @@ const validator = createValidate<Partial<FormValues>>({
   yearStart: [
     validators.required(undefined, () => 'Заполните обязательное поле'),
     validators.isNumber(undefined, () => 'Значение должно быть годом'),
+    validators.minLength(4, () => 'Год начала планирования проекта должен быть четырехзначным'),
     validators.min(
       minYearStart,
       () => `Год начала планирования не может быть раньше ${minYearStart} г.`,
