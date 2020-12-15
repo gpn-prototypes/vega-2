@@ -215,8 +215,9 @@ export const EditProjectPage: React.FC<PageProps> = () => {
         referenceData={referenceData}
         initialValues={initialValues}
         onCancel={(form) => {
-          form.reset();
-          refetchProjectFormFields();
+          refetchProjectFormFields().then(() => {
+            form.reset();
+          });
         }}
         onSubmit={handleFormSubmit}
       />

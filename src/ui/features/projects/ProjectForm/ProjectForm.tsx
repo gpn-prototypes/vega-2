@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, FormSpy } from 'react-final-form';
 import { Form as VegaForm, NavigationList } from '@gpn-prototypes/vega-ui';
-import { createForm, FormApi } from 'final-form';
+import { FormApi } from 'final-form';
 import createDecorator from 'final-form-focus';
 
 import { createValidate, validators } from '../../../forms/validation';
@@ -46,25 +46,25 @@ const steps = [{ title: 'Описание проекта', content: DescriptionS
 
 export const ProjectForm: React.FC<FormProps> = (formProps) => {
   const { mode, initialValues, referenceData, onSubmit, onCancel } = formProps;
-
-  const form = React.useMemo(() => createForm({ onSubmit, initialValues, validate: validator }), [
-    initialValues,
-    onSubmit,
-  ]);
-
-  const hasUnsavedChanges = React.useRef<boolean>(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
 
-  const undecorate = React.useMemo(() => focusOnErrors(form), [form]);
-
-  React.useEffect(() => () => undecorate(), [undecorate]);
+  const submit = React.useCallback(
+    (values: FormValues, formApi: FormApi<FormValues>) => {
+      return onSubmit(values, formApi).then((errors) => {
+        setHasUnsavedChanges(false);
+        return errors;
+      });
+    },
+    [onSubmit],
+  );
 
   const handleStepChange = (step: number) => {
     setActiveStepIndex(step);
   };
 
   const handleCancel = (formApi: FormApi<FormValues>) => {
-    hasUnsavedChanges.current = false;
+    setHasUnsavedChanges(false);
     if (typeof onCancel === 'function') {
       onCancel(formApi);
     }
@@ -74,10 +74,12 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
 
   return (
     <Form
-      form={form}
-      keepDirtyOnReinitialize={hasUnsavedChanges.current}
-      onSubmit={onSubmit}
-      render={({ handleSubmit, dirty }): React.ReactNode => (
+      initialValues={initialValues}
+      keepDirtyOnReinitialize={hasUnsavedChanges}
+      validate={validator}
+      decorators={[focusOnErrors]}
+      onSubmit={submit}
+      render={({ form, handleSubmit, dirty }): React.ReactNode => (
         <>
           <Banner referenceData={referenceData} />
           <VegaForm onSubmit={handleSubmit} className={cnProjectForm()}>
@@ -112,7 +114,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
             <FormSpy
               subscription={{ dirtyFields: true }}
               onChange={(formState) => {
-                hasUnsavedChanges.current = Object.keys(formState.dirtyFields).length > 0;
+                setHasUnsavedChanges(Object.keys(formState.dirtyFields).length > 0);
               }}
             />
           </VegaForm>

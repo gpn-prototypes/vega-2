@@ -1,4 +1,4 @@
-import { FormApi } from 'final-form';
+import { FormApi, SubmissionErrors } from 'final-form';
 
 import { ProjectTypeEnum } from '../../../../__generated__/types';
 import { ReferenceDataType } from '../../../../pages/project/types';
@@ -19,5 +19,5 @@ export type FormProps = {
   initialValues?: Partial<FormValues>;
   referenceData: ReferenceDataType;
   onCancel?: (formApi: FormApi<FormValues>) => void;
-  onSubmit: (values: FormValues, api: FormApi<FormValues>) => void;
+  onSubmit: (values: FormValues, api: FormApi<FormValues>) => Promise<SubmissionErrors>;
 };

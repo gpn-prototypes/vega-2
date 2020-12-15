@@ -263,8 +263,8 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                     value={yearStartOptions.find(
                       ({ value }) => value.toString() === input.value.toString(),
                     )}
-                    onChange={(value: SelectOption | null): void => {
-                      input.onChange(value?.value);
+                    onChange={(option: SelectOption | null): void => {
+                      input.onChange(option?.value);
                     }}
                     onBlur={input.onBlur}
                     onFocus={input.onFocus}
