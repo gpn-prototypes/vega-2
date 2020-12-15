@@ -168,6 +168,9 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       key: `${apolloError.name}-apollo-error`,
       status: 'alert',
       message: apolloError.message,
+      onClose: (item) => {
+        notifications.remove(item.key);
+      },
     });
 
     return null;
