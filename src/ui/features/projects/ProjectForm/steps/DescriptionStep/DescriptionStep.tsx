@@ -12,7 +12,7 @@ import { FormApi } from 'final-form';
 import { ProjectTypeEnum } from '../../../../../../__generated__/types';
 import { ReferenceDataType } from '../../../../../../pages/project/types';
 import { cnDescriptionStep, cnProjectForm } from '../../cn-form';
-import { FormMode } from '../../types';
+import { FormMode, FormValues } from '../../types';
 
 type SelectOption = {
   label: string;
@@ -22,7 +22,7 @@ type SelectOption = {
 type StepProps = {
   mode: FormMode;
   referenceData: ReferenceDataType;
-  form: FormApi;
+  form: FormApi<FormValues>;
 };
 
 const typeOptions = [{ label: 'Геологоразведочный', value: ProjectTypeEnum.Geo }];
@@ -113,7 +113,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
   React.useEffect(() => {
     const year = form.getFieldState('yearStart');
     const inList = yearStartOptions.find(
-      ({ value }) => value.toString() === year?.initial.toString(),
+      ({ value }) => value.toString() === year?.initial?.toString(),
     );
 
     if (year?.initial && !inList) {
