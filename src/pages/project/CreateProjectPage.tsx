@@ -72,51 +72,72 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
   const referenceData: ReferenceDataType = { regionList: queryRegionListData?.regionList };
 
-  const handleFormSubmit = async (values: FormValues) => {
-    const createProjectResult = await createProject({
-      variables: {
-        vid: blankProjectId,
-        name: values.name,
-        region: values.region,
-        coordinates: values.coordinates,
-        description: values.description,
-        yearStart: values.yearStart,
-        status: ProjectStatusEnum.Unpublished,
-        version: 1,
-      },
-    });
+  const handleFormSubmit = React.useCallback(
+    async (values: FormValues) => {
+      const errors: Record<string, unknown> = {};
 
-    if (createProjectResult.data?.updateProject?.result?.__typename === 'Project') {
-      const projectId = createProjectResult.data.updateProject?.result?.vid || undefined;
-
-      setIsNavigationBlocked(false);
-
-      notifications.add({
-        key: `${projectId}-create`,
-        status: 'success',
-        autoClose: 3,
-        message: 'Проект успешно создан',
-        onClose(item) {
-          notifications.remove(item.key);
+      const createProjectResult = await createProject({
+        variables: {
+          vid: blankProjectId,
+          name: values.name,
+          region: values.region,
+          coordinates: values.coordinates,
+          description: values.description,
+          yearStart: values.yearStart,
+          status: ProjectStatusEnum.Unpublished,
+          version: 1,
         },
       });
 
-      history.push(`/projects/show/${projectId}`);
-    }
+      if (createProjectResult.data?.updateProject?.result?.__typename === 'Project') {
+        const projectId = createProjectResult.data.updateProject?.result?.vid || undefined;
 
-    if (createProjectResult.data?.updateProject?.result?.__typename === 'Error') {
-      const inlineUpdateProjectError = createProjectResult.data?.updateProject?.result;
+        setIsNavigationBlocked(false);
 
-      notifications.add({
-        key: `${inlineUpdateProjectError.code}-update-error`,
-        status: 'alert',
-        message: inlineUpdateProjectError.message,
-        onClose(item) {
-          notifications.remove(item.key);
-        },
-      });
-    }
-  };
+        notifications.add({
+          key: `${projectId}-create`,
+          status: 'success',
+          autoClose: 3,
+          message: 'Проект успешно создан',
+          onClose(item) {
+            notifications.remove(item.key);
+          },
+        });
+
+        history.push(`/projects/show/${projectId}`);
+      }
+
+      if (createProjectResult.data?.updateProject?.result?.__typename === 'Error') {
+        const inlineUpdateProjectError = createProjectResult.data?.updateProject?.result;
+
+        const projectNameExists = inlineUpdateProjectError?.code === 'PROJECT_NAME_ALREADY_EXISTS';
+        const projectYearStartNull =
+          inlineUpdateProjectError?.code === 'PROJECT_YEARSTART_CANNOT_BE_NULL';
+
+        if (projectNameExists) {
+          errors.name = inlineUpdateProjectError.message;
+        }
+
+        if (projectYearStartNull) {
+          errors.yearStart = inlineUpdateProjectError.message;
+        }
+
+        if (!projectNameExists && !projectYearStartNull) {
+          notifications.add({
+            key: `${inlineUpdateProjectError.code}-create`,
+            status: 'alert',
+            message: inlineUpdateProjectError.message,
+            onClose(item) {
+              notifications.remove(item.key);
+            },
+          });
+        }
+      }
+
+      return errors;
+    },
+    [blankProjectId, createProject, history, notifications],
+  );
 
   const handleCancel = () => {
     history.push('/projects');

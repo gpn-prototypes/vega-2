@@ -53,6 +53,28 @@ export const maxLength = createValidator<number, string>({
   validate: (value, length) => value.length <= length,
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const isNumber = createValidator<void, any>({
+  messageFn: () => 'Значение не число',
+  strictValidate(value) {
+    if (value === undefined || value === null) {
+      return false;
+    }
+
+    if (typeof value === 'boolean') {
+      return false;
+    }
+
+    const str = value.toString();
+
+    if (str.trim() === '') {
+      return false;
+    }
+
+    return !Number.isNaN(Number(str));
+  },
+});
+
 export const validators = {
   required,
   pattern,
@@ -61,4 +83,5 @@ export const validators = {
   max,
   minLength,
   maxLength,
+  isNumber,
 };

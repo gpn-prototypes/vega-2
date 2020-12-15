@@ -1,6 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
-import { Field } from 'react-final-form';
-import { Combobox, Form as VegaForm, Text, TextField } from '@gpn-prototypes/vega-ui';
+import { Field, FieldInputProps, FieldMetaState } from 'react-final-form';
+import {
+  Combobox,
+  Form as VegaForm,
+  Text,
+  TextField as BaseTextField,
+} from '@gpn-prototypes/vega-ui';
+import { FormApi } from 'final-form';
 
 import { ProjectTypeEnum } from '../../../../../../__generated__/types';
 import { ReferenceDataType } from '../../../../../../pages/project/types';
@@ -15,6 +22,7 @@ type SelectOption = {
 type StepProps = {
   mode: FormMode;
   referenceData: ReferenceDataType;
+  form: FormApi;
 };
 
 const typeOptions = [{ label: 'Геологоразведочный', value: ProjectTypeEnum.Geo }];
@@ -28,7 +36,7 @@ const getYearStartOptions = (): SelectOption[] => {
     const year = currentYear + i;
     const option = {
       label: `${year}`,
-      value: year,
+      value: year.toString(),
     };
 
     options.push(option);
@@ -39,8 +47,52 @@ const getYearStartOptions = (): SelectOption[] => {
 
 const notSelectedOption = { label: 'Не выбрано', value: 'NOT_SELECTED' };
 
+type TextFieldProps<T = any> = {
+  name: string;
+  placeholder: string;
+  input: FieldInputProps<T>;
+  meta: FieldMetaState<T>;
+};
+
+const TextField: React.FC<TextFieldProps> = (props) => {
+  const { input, meta, name, placeholder } = props;
+
+  const submitErrorText =
+    meta.submitError && !meta.dirtySinceLastSubmit ? meta.submitError : undefined;
+  const showError = Boolean(meta.error || submitErrorText) && meta.submitFailed;
+  const errorText = meta.error || submitErrorText;
+
+  return (
+    <>
+      <BaseTextField
+        id={name}
+        size="s"
+        width="full"
+        name={input.name}
+        state={showError ? 'alert' : undefined}
+        placeholder={placeholder}
+        autoComplete="off"
+        value={input.value}
+        onChange={({ e }): void => input.onChange(e)}
+        onBlur={input.onBlur}
+        onFocus={input.onFocus}
+      />
+      {showError && (
+        <Text
+          size="xs"
+          lineHeight="xs"
+          view="alert"
+          className={cnDescriptionStep('ErrorText').toString()}
+        >
+          {errorText}
+        </Text>
+      )}
+    </>
+  );
+};
+
 export const DescriptionStep: React.FC<StepProps> = (props) => {
-  const { mode, referenceData } = props;
+  const { mode, referenceData, form } = props;
   const { regionList } = referenceData;
 
   const regionOptions =
@@ -58,6 +110,21 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
     setYearStartOptions([{ label: option, value: option }, ...yearStartOptions]);
   };
 
+  React.useEffect(() => {
+    const year = form.getFieldState('yearStart');
+    const inList = yearStartOptions.find(
+      ({ value }) => value.toString() === year?.initial.toString(),
+    );
+
+    if (year?.initial && !inList) {
+      setYearStartOptions([
+        { label: year.initial.toString(), value: year.initial.toString() },
+        ...yearStartOptions,
+      ]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className={cnProjectForm('Step').mix(cnDescriptionStep())}>
       <VegaForm.Row space="m">
@@ -68,34 +135,13 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           <Field
             name="name"
             render={({ input, meta }): React.ReactNode => {
-              const showError = meta.error && meta.submitFailed;
-
               return (
-                <>
-                  <TextField
-                    id="name"
-                    size="s"
-                    width="full"
-                    name={input.name}
-                    state={showError ? 'alert' : undefined}
-                    placeholder="Придумайте название проекта"
-                    autoComplete="off"
-                    value={input.value}
-                    onChange={({ e }): void => input.onChange(e)}
-                    onBlur={input.onBlur}
-                    onFocus={input.onFocus}
-                  />
-                  {showError && (
-                    <Text
-                      size="xs"
-                      lineHeight="xs"
-                      view="alert"
-                      className={cnDescriptionStep('ErrorText').toString()}
-                    >
-                      {meta.error}
-                    </Text>
-                  )}
-                </>
+                <TextField
+                  input={input}
+                  meta={meta}
+                  name="name"
+                  placeholder="Придумайте название проекта"
+                />
               );
             }}
           />
@@ -169,23 +215,19 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
             Система координат
           </VegaForm.Label>
           <Field
-            name="coordinates"
             allowNull
             parse={(v) => v}
-            render={({ input }): React.ReactNode => (
-              <TextField
-                id="coordinates"
-                size="s"
-                width="full"
-                placeholder="Укажите систему координат"
-                autoComplete="off"
-                name={input.name}
-                value={input.value}
-                onChange={({ e }): void => input.onChange(e)}
-                onBlur={input.onBlur}
-                onFocus={input.onFocus}
-              />
-            )}
+            name="coordinates"
+            render={({ input, meta }): React.ReactNode => {
+              return (
+                <TextField
+                  input={input}
+                  meta={meta}
+                  name="coordinates"
+                  placeholder="Укажите систему координат"
+                />
+              );
+            }}
           />
         </VegaForm.Field>
       </VegaForm.Row>
@@ -197,25 +239,47 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           <Field
             name="yearStart"
             initialValue={yearStartInitialValue}
-            render={({ input }): React.ReactNode => {
+            render={({ input, meta }): React.ReactNode => {
+              const submitErrorText =
+                meta.submitError && !meta.dirtySinceLastSubmit ? meta.submitError : undefined;
+              const showError = Boolean(meta.error || submitErrorText) && meta.submitFailed;
+              const errorText = meta.error || submitErrorText;
+
               return (
-                <Combobox
-                  id="yearStart"
-                  size="s"
-                  options={yearStartOptions}
-                  getOptionLabel={getItemLabel}
-                  onCreate={(option) => {
-                    updateYearStartOptions(option);
-                    input.onChange(option);
-                  }}
-                  placeholder="Выберите год"
-                  value={yearStartOptions.find(({ value }) => value === input.value)}
-                  onChange={(value: SelectOption | null): void => {
-                    input.onChange(value?.value);
-                  }}
-                  onBlur={input.onBlur}
-                  onFocus={input.onFocus}
-                />
+                <>
+                  <Combobox
+                    id="yearStart"
+                    className={
+                      showError ? cnDescriptionStep('ComboboxError').toString() : undefined
+                    }
+                    size="s"
+                    options={yearStartOptions}
+                    getOptionLabel={getItemLabel}
+                    onCreate={(option) => {
+                      updateYearStartOptions(option);
+                      input.onChange(option);
+                    }}
+                    placeholder="Выберите год"
+                    value={yearStartOptions.find(
+                      ({ value }) => value.toString() === input.value.toString(),
+                    )}
+                    onChange={(value: SelectOption | null): void => {
+                      input.onChange(value?.value);
+                    }}
+                    onBlur={input.onBlur}
+                    onFocus={input.onFocus}
+                  />
+                  {showError && (
+                    <Text
+                      size="xs"
+                      lineHeight="xs"
+                      view="alert"
+                      className={cnDescriptionStep('ErrorText').toString()}
+                    >
+                      {errorText}
+                    </Text>
+                  )}
+                </>
               );
             }}
           />
@@ -231,7 +295,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
             allowNull
             parse={(v) => v}
             render={({ input }): React.ReactNode => (
-              <TextField
+              <BaseTextField
                 id="description"
                 type="textarea"
                 minRows={3}
