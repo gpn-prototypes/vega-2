@@ -17,6 +17,7 @@ import './ProjectForm.css';
 const focusOnErrors = createDecorator<FormValues>();
 
 const currentYear = new Date().getFullYear();
+const minYearStart = currentYear - 1;
 
 const validator = createValidate<Partial<FormValues>>({
   name: [
@@ -35,8 +36,8 @@ const validator = createValidate<Partial<FormValues>>({
     validators.required(undefined, () => 'Заполните обязательное поле'),
     validators.isNumber(undefined, () => 'Значение должно быть годом'),
     validators.min(
-      currentYear - 1,
-      () => 'Год начала планирования не может быть раньше предыдущего',
+      minYearStart,
+      () => `Год начала планирования не может быть раньше ${minYearStart} г.`,
     ),
   ],
 });

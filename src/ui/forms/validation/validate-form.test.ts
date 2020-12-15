@@ -194,6 +194,8 @@ describe('Валидация полей по схеме', () => {
       expect(validate([])).not.toBe(null);
       expect(validate(false)).not.toBe(null);
       expect(validate(NaN)).not.toBe(null);
+      expect(validate(1)).toBe(null);
+      expect(validate('test')).toBe(null);
     });
 
     test('pattern', () => {
