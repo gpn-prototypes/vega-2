@@ -39,6 +39,9 @@ const validator = createValidate<Partial<FormValues>>({
       () => 'Год начала планирования не может быть раньше предыдущего',
     ),
   ],
+  description: [
+    validators.maxLength(2000, () => 'Описание проекта не может быть более 2000 символов'),
+  ],
 });
 
 const steps = [{ title: 'Описание проекта', content: DescriptionStep }];

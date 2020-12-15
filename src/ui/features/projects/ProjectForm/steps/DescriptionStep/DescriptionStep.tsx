@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import { Field, FieldInputProps, FieldMetaState } from 'react-final-form';
+import { TextFieldProps as BaseTextFieldProps } from '@consta/uikit/TextField';
 import {
   Combobox,
   Form as VegaForm,
@@ -52,10 +53,10 @@ type TextFieldProps<T = any> = {
   placeholder: string;
   input: FieldInputProps<T>;
   meta: FieldMetaState<T>;
-};
+} & Partial<BaseTextFieldProps>;
 
 const TextField: React.FC<TextFieldProps> = (props) => {
-  const { input, meta, name, placeholder } = props;
+  const { input, meta, name, placeholder, ...rest } = props;
 
   const submitErrorText =
     meta.submitError && !meta.dirtySinceLastSubmit ? meta.submitError : undefined;
@@ -76,6 +77,7 @@ const TextField: React.FC<TextFieldProps> = (props) => {
         onChange={({ e }): void => input.onChange(e)}
         onBlur={input.onBlur}
         onFocus={input.onFocus}
+        {...rest}
       />
       {showError && (
         <Text
@@ -294,20 +296,18 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
             name="description"
             allowNull
             parse={(v) => v}
-            render={({ input }): React.ReactNode => (
-              <BaseTextField
+            render={({ input, meta }): React.ReactNode => (
+              <TextField
                 id="description"
                 type="textarea"
                 minRows={3}
                 maxRows={9}
+                input={input}
+                meta={meta}
+                name={input.name}
                 size="s"
                 width="full"
                 placeholder="Краткое описание проекта поможет отличать ваши проекты среди остальных и находить похожие"
-                name={input.name}
-                value={input.value}
-                onChange={({ e }): void => input.onChange(e)}
-                onBlur={input.onBlur}
-                onFocus={input.onFocus}
               />
             )}
           />
