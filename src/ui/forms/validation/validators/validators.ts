@@ -43,14 +43,14 @@ export const max = createValidator<number, number | string>({
   validate: (value, maxValue) => maxValue >= Number(value),
 });
 
-export const minLength = createValidator<number, string>({
+export const minLength = createValidator<number | string, string>({
   messageFn: (length) => `Минимальное количество символов ${length}`,
-  validate: (value, length) => value.length >= length,
+  validate: (value, length) => value.toString().length >= length,
 });
 
-export const maxLength = createValidator<number, string>({
+export const maxLength = createValidator<number | string, string>({
   messageFn: (length) => `Максимальное количество символов ${length}`,
-  validate: (value, length) => value.length <= length,
+  validate: (value, length) => value.toString().length <= length,
 });
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
