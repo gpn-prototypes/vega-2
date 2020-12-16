@@ -244,7 +244,8 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
             render={({ input, meta }): React.ReactNode => {
               const submitErrorText =
                 meta.submitError && !meta.dirtySinceLastSubmit ? meta.submitError : undefined;
-              const showError = Boolean(meta.error || submitErrorText) && meta.submitFailed;
+              const showError =
+                Boolean(meta.error || submitErrorText) && (meta.touched || meta.submitFailed);
               const errorText = meta.error || submitErrorText;
 
               return (
@@ -258,6 +259,11 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                     options={yearStartOptions}
                     getOptionLabel={getItemLabel}
                     onCreate={(option) => {
+                      if (option.length !== 4) {
+                        input.onChange(option);
+                        input.onBlur();
+                        return;
+                      }
                       updateYearStartOptions(option);
                       input.onChange(option);
                     }}
