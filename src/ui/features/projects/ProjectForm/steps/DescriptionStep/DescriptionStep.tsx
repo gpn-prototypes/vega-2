@@ -93,6 +93,8 @@ const TextField: React.FC<TextFieldProps> = (props) => {
   );
 };
 
+const isValidYear = (str: string): boolean => /^\d{4}$/.test(str);
+
 export const DescriptionStep: React.FC<StepProps> = (props) => {
   const { mode, referenceData, form } = props;
   const { regionList } = referenceData;
@@ -258,8 +260,8 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                     size="s"
                     options={yearStartOptions}
                     getOptionLabel={getItemLabel}
-                    onCreate={(option) => {
-                      if (option.length !== 4) {
+                    onCreate={(option): void => {
+                      if (!isValidYear(option)) {
                         input.onChange(option);
                         input.onBlur();
                         return;
