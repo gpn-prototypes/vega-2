@@ -6,16 +6,12 @@ import utc from 'dayjs/plugin/utc';
 
 import 'dayjs/locale/ru';
 
-import {
-  namedOperations,
-  Project,
-  UpdateProject,
-  UpdateProjectDiff,
-} from '../../__generated__/types';
+import { namedOperations, UpdateProject, UpdateProjectDiff } from '../../__generated__/types';
 import { useBrowserTabActivity } from '../../hooks';
 import { useNotifications } from '../../providers/notifications';
 
 import {
+  ProjectsTableList,
   useDeleteProject,
   useProjectsTableList,
   useProjectToggleFavorite,
@@ -31,25 +27,12 @@ interface UpdateProjectDiffResult extends UpdateProject {
   result: Required<UpdateProjectDiff>;
 }
 
-type ProjectsMapper = Pick<
-  Project,
-  | 'vid'
-  | 'name'
-  | 'isFavorite'
-  | 'region'
-  | 'attendees'
-  | 'createdBy'
-  | 'createdAt'
-  | 'editedAt'
-  | 'version'
-  | 'status'
-  | 'description'
-> | null;
-
-const projectsMapper = (projects: ProjectsMapper[] | undefined | null = []): TableRow[] => {
-  if (!projects) {
+const projectsMapper = (updateProjectData: ProjectsTableList): TableRow[] => {
+  if (updateProjectData.projects?.__typename !== 'ProjectList') {
     return [];
   }
+
+  const projects = updateProjectData.projects.data ?? [];
 
   return projects?.flatMap((project) => {
     if (project === null) {
@@ -163,8 +146,7 @@ export const ProjectsPage = (): React.ReactElement => {
 
   const isLoading = loading && !data?.projects;
 
-  const mappedProjects =
-    data?.projects?.__typename !== 'ProjectList' ? [] : projectsMapper(data?.projects.data);
+  const mappedProjects = data?.projects?.__typename !== 'ProjectList' ? [] : projectsMapper(data);
 
   const projects = mappedProjects.map((project) => {
     const edit = ({ close, ...rest }: MenuItemProps) => {
