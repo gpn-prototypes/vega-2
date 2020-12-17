@@ -4,7 +4,6 @@ import { Loader } from '@gpn-prototypes/vega-ui';
 import { FormApi, getIn, setIn } from 'final-form';
 
 import {
-  Project,
   ProjectTypeEnum,
   ProjectUpdateType,
   UpdateProject,
@@ -15,6 +14,7 @@ import { useNotifications } from '../../providers/notifications';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
 import {
+  projectFormFields,
   UpdateProjectFormVariables,
   useProjectFormFields,
   useProjectFormRegionList,
@@ -31,23 +31,20 @@ type ParamsType = {
 
 type PageProps = Record<string, unknown>;
 
-type ProjectType = Pick<
-  Project,
-  'vid' | 'name' | 'type' | 'region' | 'coordinates' | 'description' | 'yearStart'
->;
+type ProjectFormFields = projectFormFields;
 
 interface UpdateProjectDiffResult extends UpdateProject {
   result: Required<UpdateProjectDiff>;
 }
 
-const getInitialValues = (project: ProjectType): Partial<FormValues> => {
+const getInitialValues = (project: ProjectFormFields): FormValues => {
   return {
     name: project.name ?? '',
     type: project.type ?? ProjectTypeEnum.Geo,
     region: project.region?.vid ?? null,
     coordinates: project.coordinates ?? '',
     description: project.description ?? '',
-    yearStart: project.yearStart ?? undefined,
+    yearStart: project.yearStart ?? new Date().getFullYear(),
   };
 };
 
@@ -96,7 +93,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
   const handleFormSubmit = React.useCallback(
     async (values: FormValues, form: FormApi<FormValues>) => {
       const state = form.getState();
-      const errors: Record<string, unknown> = {};
+      const errors: Record<string, string> = {};
 
       const changes = Object.keys(state.dirtyFields)
         .map((key) => ({ key, value: getIn(values, key) }))
