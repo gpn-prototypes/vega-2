@@ -1,6 +1,6 @@
 overwrite: true
 schema:
-  - "${BASE_API_URL}/graphql":
+  - ${VEGA_SCHEMA_PATH}:
       headers:
         Authorization: Bearer ${AUTH_TOKEN}
 documents: 'src/**/*.graphql'
