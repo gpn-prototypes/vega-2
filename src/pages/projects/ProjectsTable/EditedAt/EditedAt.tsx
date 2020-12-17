@@ -19,7 +19,7 @@ type EditedAtProps = {
   date?: string | React.ReactElement;
   menu?: MenuItem[];
   isVisible: boolean;
-  onClickItem?: VoidFunction;
+  onMenuToggle(isMenuShowed: boolean): void;
 };
 
 const testId = {
@@ -32,9 +32,15 @@ type EditedAtType = React.FC<EditedAtProps> & {
   testId: typeof testId;
 };
 
-export const EditedAt: EditedAtType = ({ date, menu, isVisible, onClickItem }) => {
+export const EditedAt: EditedAtType = ({ date, menu, isVisible, onMenuToggle }) => {
   const anchorRef = React.createRef<HTMLButtonElement>();
   const [isPopoverVisible, setIsPopoverVisible] = React.useState(false);
+
+  const showPopover = (needShow: boolean) => {
+    onMenuToggle(needShow);
+    setIsPopoverVisible(needShow);
+  };
+
   return (
     <div className={styles.root}>
       <Text size="s" className={styles.editedTime} data-testid={testId.dateEdit}>
@@ -54,7 +60,7 @@ export const EditedAt: EditedAtType = ({ date, menu, isVisible, onClickItem }) =
               data-testid={testId.buttonMenu}
               onClick={(e) => {
                 e.stopPropagation();
-                setIsPopoverVisible(!isPopoverVisible);
+                showPopover(!isPopoverVisible);
               }}
             />
           )}
@@ -65,7 +71,7 @@ export const EditedAt: EditedAtType = ({ date, menu, isVisible, onClickItem }) =
             direction="downLeft"
             offset={6}
             anchorRef={anchorRef}
-            onClickOutside={() => setIsPopoverVisible(false)}
+            onClickOutside={() => showPopover(false)}
           >
             <NavigationList className={styles.navigation} data-testid={testId.menuList}>
               {menu.map(({ Element, key }) => {
@@ -75,10 +81,7 @@ export const EditedAt: EditedAtType = ({ date, menu, isVisible, onClickItem }) =
                       return (
                         <Element
                           close={() => {
-                            setIsPopoverVisible(false);
-                            if (onClickItem) {
-                              onClickItem();
-                            }
+                            showPopover(false);
                           }}
                           className={`${className} ${styles.navigationItem}`}
                           data-testid="ds"

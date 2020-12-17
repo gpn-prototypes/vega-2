@@ -92,8 +92,18 @@ const COLUMNS: React.ComponentProps<typeof Table>['columns'] = [
 export const ProjectsTable: ProjectsTableType = (props) => {
   const placeholder = props.placeholder ?? <Text size="s">Пока нет ни одного проекта :(</Text>;
   const [idMenuVisible, setIdMenuVisible] = React.useState<string | undefined>(undefined);
+  const [idActiveRow, setIdActiveRow] = React.useState<string | undefined>(undefined);
 
   const history = useHistory();
+
+  const handleShowMenu = (shouldSetActiveRow: boolean, id: string): void => {
+    if (shouldSetActiveRow) {
+      setIdActiveRow(id);
+    } else {
+      setIdMenuVisible(undefined);
+      setIdActiveRow(undefined);
+    }
+  };
 
   const rows =
     props.rows?.map((project) => {
@@ -152,7 +162,7 @@ export const ProjectsTable: ProjectsTableType = (props) => {
             date={project.editedAt}
             menu={project.menu}
             isVisible={isVisible}
-            onClickItem={() => setIdMenuVisible(undefined)}
+            onShowMenu={(isMenuShowed) => handleShowMenu(isMenuShowed, project.id)}
           />
         ),
       };
@@ -166,13 +176,15 @@ export const ProjectsTable: ProjectsTableType = (props) => {
       verticalAlign="center"
       emptyRowsPlaceholder={placeholder}
       activeRow={{
-        id: undefined,
+        id: idActiveRow,
         onChange: (id) => {
           history.push(`/projects/show/${id}`);
         },
       }}
       onRowHover={({ id }) => {
-        setIdMenuVisible(id);
+        if (!idActiveRow) {
+          setIdMenuVisible(id);
+        }
       }}
     />
   );

@@ -172,7 +172,7 @@ export const ProjectsPage = (): React.ReactElement => {
           <span className={cn('MenuIcon')}>
             <IconEdit size="s" />
           </span>
-          <Text>Редактировать</Text>
+          <Text as="span">Редактировать</Text>
         </button>
       );
     };
@@ -193,7 +193,7 @@ export const ProjectsPage = (): React.ReactElement => {
           <span className={cn('MenuIcon')}>
             <IconTrash size="s" />
           </span>
-          <Text>Удалить</Text>
+          <Text as="span">Удалить</Text>
         </button>
       );
     };
