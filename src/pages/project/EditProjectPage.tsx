@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Loader } from '@gpn-prototypes/vega-ui';
 import { FormApi, getIn, setIn } from 'final-form';
@@ -56,6 +56,8 @@ const FORM_FIELDS_POLLING_MS = 1000 * 30;
 export const EditProjectPage: React.FC<PageProps> = () => {
   const { projectId } = useParams<ParamsType>();
   const notifications = useNotifications();
+
+  const [unsavedChanges, setUnsavedChanges] = useState<Partial<FormValues>>({});
 
   const {
     data: queryProjectData,
@@ -125,6 +127,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
         variables: {
           vid: projectId,
           data: {
+            ...unsavedChanges,
             ...changes,
             version: version || 1,
           },
@@ -132,6 +135,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
       });
 
       if (updateProjectResult.data?.updateProject?.result?.__typename === 'Error') {
+        setUnsavedChanges({ ...unsavedChanges, ...changes });
         const inlineUpdateProjectError = updateProjectResult.data?.updateProject?.result;
 
         if (inlineUpdateProjectError?.code === 'PROJECT_NAME_ALREADY_EXISTS') {
@@ -144,6 +148,9 @@ export const EditProjectPage: React.FC<PageProps> = () => {
       }
 
       if (updateProjectResult.data?.updateProject?.result?.__typename === 'Project') {
+        if (Object.keys(unsavedChanges).length > 0) {
+          setUnsavedChanges({});
+        }
         notifications.add({
           key: `${projectId}-create`,
           status: 'success',
@@ -166,7 +173,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
 
       return errors;
     },
-    [notifications, projectId, queryProjectData, updateProject],
+    [notifications, projectId, unsavedChanges, queryProjectData, updateProject],
   );
 
   const apolloError = queryProjectError || queryRegionListError || updateProjectError;
