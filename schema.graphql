@@ -1,0 +1,814 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Activity {
+  category: ActivityLibraryCategory
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+  title: String
+  description: String
+}
+
+type ActivityLibraryCategory {
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  name: String
+  parent: ActivityLibraryCategory
+}
+
+type AddAttendees {
+  result: AttendeeListOrError
+}
+
+type Assembly {
+  category: AssemblyLibraryCategory
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+  title: String
+  description: String
+}
+
+type AssemblyLibraryCategory {
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  name: String
+  parent: AssemblyLibraryCategory
+}
+
+type Attachment {
+  extension: String
+  uri: String
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+  createdBy: User
+  editedBy: User
+  comment: String
+  category: AttachmentType
+  contentType: String
+  status: Int
+  projectId: ID
+  size: Int
+}
+
+type AttachmentType {
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+}
+
+type Attendee {
+  user: User
+  roles: [ProjectRole]
+}
+
+input AttendeeInputType {
+  user: UUID!
+  roles: [UUID]!
+}
+
+type AttendeeList {
+  attendeeList: [Attendee]
+}
+
+union AttendeeListOrError = AttendeeList | UpdateProjectDiff | Error
+
+enum AttendeeOrderBy {
+  FIRST_NAME
+  PATRONYM
+  LAST_NAME
+  NAME
+  ROLE
+}
+
+union AttendeeTypeOrError = Attendee | UpdateProjectDiff | Error
+
+type Component {
+  category: ComponentLibraryCategory
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+  title: String
+  description: String
+}
+
+type ComponentLibraryCategory {
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  name: String
+  parent: ComponentLibraryCategory
+}
+
+type Country {
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+  coordinateSystems: [String]
+}
+
+type CreateActivity {
+  result: Activity
+}
+
+type CreateActivityCategories {
+  result: ActivityLibraryCategory
+}
+
+type CreateAssembly {
+  result: Assembly
+}
+
+type CreateAssemblyCategories {
+  result: AssemblyLibraryCategory
+}
+
+type CreateAttachment {
+  result: Attachment
+}
+
+type CreateAttachmentType {
+  result: AttachmentType
+}
+
+type CreateComponent {
+  result: Component
+}
+
+type CreateComponentCategories {
+  result: ComponentLibraryCategory
+}
+
+type CreateCountry {
+  result: Country
+}
+
+type CreateDomainEntity {
+  result: DomainEntity
+}
+
+type CreateDomainTemplate {
+  result: DomainTemplate
+}
+
+type CreateDomainTemplateCategories {
+  result: DomainTemplateLibraryCategory
+}
+
+type CreateOrganization {
+  result: Organization
+}
+
+type CreateOrganizationUnit {
+  result: OrganizationUnit
+}
+
+type CreateProject {
+  result: ProjectOrError
+}
+
+type CreateProjectLibrary {
+  result: ProjectLibrary
+}
+
+type CreateProjectLibraryCategories {
+  result: ProjectLibraryCategory
+}
+
+type CreateProjectRole {
+  result: ProjectRole
+}
+
+type CreateRegion {
+  result: Region
+}
+
+type CreateUser {
+  result: User
+}
+
+type CreateUserGroup {
+  result: UserGroup
+}
+
+scalar DateTime
+
+type DeleteActivity {
+  result: Boolean
+}
+
+type DeleteActivityCategories {
+  result: Boolean
+}
+
+type DeleteAssembly {
+  result: Boolean
+}
+
+type DeleteAssemblyCategories {
+  result: Boolean
+}
+
+type DeleteAttachment {
+  result: Boolean
+}
+
+type DeleteAttachmentType {
+  result: Boolean
+}
+
+type DeleteComponent {
+  result: Boolean
+}
+
+type DeleteComponentCategories {
+  result: Boolean
+}
+
+type DeleteCountry {
+  result: Boolean
+}
+
+type DeleteDomainEntity {
+  result: Boolean
+}
+
+type DeleteDomainTemplate {
+  result: Boolean
+}
+
+type DeleteDomainTemplateCategories {
+  result: Boolean
+}
+
+type DeleteOrganization {
+  result: Boolean
+}
+
+type DeleteOrganizationUnit {
+  result: Boolean
+}
+
+type DeleteProject {
+  result: UuidOrError
+}
+
+type DeleteProjectLibrary {
+  result: Boolean
+}
+
+type DeleteProjectLibraryCategories {
+  result: Boolean
+}
+
+type DeleteProjectRole {
+  result: Boolean
+}
+
+type DeleteRegion {
+  result: Boolean
+}
+
+type DeleteUser {
+  result: Boolean
+}
+
+type DeleteUserGroup {
+  result: Boolean
+}
+
+scalar DictType
+
+type DomainEntity {
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+}
+
+type DomainEntityImage {
+  vid: ID
+  code: String
+  title: String
+  name: String
+  entity: DomainEntity
+  attributes: [PropertyMeta]
+  description: String
+}
+
+type DomainSchema {
+  entityImages: [DomainEntityImage]
+  version: String
+}
+
+type DomainTemplate {
+  category: DomainTemplateLibraryCategory
+  entity: DomainEntity
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+  title: String
+  description: String
+  attributes: [PropertyMeta]
+}
+
+type DomainTemplateLibraryCategory {
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  name: String
+  parent: DomainTemplateLibraryCategory
+}
+
+type Error implements ErrorInterface {
+  code: ErrorCodes!
+  message: String!
+  details: String
+  payload: DictType
+}
+
+enum ErrorCodes {
+  PROJECT_NOT_FOUND
+  PROJECT_UPDATE_ERROR
+  REFERENCE_ITEM_NOT_FOUND
+  ERROR
+  INCORRECT_PROJECT_VERSION
+  PROJECT_VERSION_DIFF_ERROR
+  PROJECT_NAME_ALREADY_EXISTS
+  EMPTY_PROJECT_NAME
+  TOO_LONG_PROJECT_NAME
+  TOO_SHORT_PROJECT_NAME
+  YEAR_START_ERROR
+  YEARS_COUNT_ERROR
+  NO_RIGHTS
+  OBJECT_NOT_FOUND
+  EMPTY_ATTENDEE_ROLE
+  NO_ATTENDEE_TO_REMOVE
+  INCORRECT_UUID
+  PROJECT_STATUS_CANNOT_BE_NULL
+  PROJECT_ATTENDEE_NOT_FOUND
+  PROJECT_ATTENDEE_ALREADY_HAS_ROLE
+  PROJECT_ATTENDEE_USER_ROLE_NOT_FOUND
+  PROJECT_MANAGER_NOT_FOUND
+  CANNOT_BRING_BLANK_BACK
+  PROJECT_YEARSTART_CANNOT_BE_NULL
+}
+
+interface ErrorInterface {
+  code: ErrorCodes!
+  message: String!
+  details: String
+  payload: DictType
+}
+
+type Mutation {
+  createProjectLibrary(category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, isDeleted: Boolean, name: String, title: String, vid: UUID): CreateProjectLibrary
+  deleteProjectLibrary(vid: UUID): DeleteProjectLibrary
+  updateProjectLibrary(category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, isDeleted: Boolean, name: String, title: String, vid: UUID): UpdateProjectLibrary
+  createProjectLibraryCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): CreateProjectLibraryCategories
+  deleteProjectLibraryCategories(vid: UUID): DeleteProjectLibraryCategories
+  updateProjectLibraryCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): UpdateProjectLibraryCategories
+  createComponent(category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, isDeleted: Boolean, name: String, title: String, vid: UUID): CreateComponent
+  deleteComponent(vid: UUID): DeleteComponent
+  updateComponent(category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, isDeleted: Boolean, name: String, title: String, vid: UUID): UpdateComponent
+  createComponentCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): CreateComponentCategories
+  deleteComponentCategories(vid: UUID): DeleteComponentCategories
+  updateComponentCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): UpdateComponentCategories
+  createAssembly(category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, isDeleted: Boolean, name: String, title: String, vid: UUID): CreateAssembly
+  deleteAssembly(vid: UUID): DeleteAssembly
+  updateAssembly(category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, isDeleted: Boolean, name: String, title: String, vid: UUID): UpdateAssembly
+  createAssemblyCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): CreateAssemblyCategories
+  deleteAssemblyCategories(vid: UUID): DeleteAssemblyCategories
+  updateAssemblyCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): UpdateAssemblyCategories
+  createActivity(category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, isDeleted: Boolean, name: String, title: String, vid: UUID): CreateActivity
+  deleteActivity(vid: UUID): DeleteActivity
+  updateActivity(category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, isDeleted: Boolean, name: String, title: String, vid: UUID): UpdateActivity
+  createActivityCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): CreateActivityCategories
+  deleteActivityCategories(vid: UUID): DeleteActivityCategories
+  updateActivityCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): UpdateActivityCategories
+  createDomainTemplate(attributes: [PropertyMetaInputType], category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, entity: UUID, isDeleted: Boolean, name: String, title: String, vid: UUID): CreateDomainTemplate
+  deleteDomainTemplate(vid: UUID): DeleteDomainTemplate
+  updateDomainTemplate(attributes: [PropertyMetaInputType], category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, entity: UUID, isDeleted: Boolean, name: String, title: String, vid: UUID): UpdateDomainTemplate
+  createDomainTemplateCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): CreateDomainTemplateCategories
+  deleteDomainTemplateCategories(vid: UUID): DeleteDomainTemplateCategories
+  updateDomainTemplateCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): UpdateDomainTemplateCategories
+  createUser(adId: String, code: String, createdAt: DateTime, editedAt: DateTime, favoriteProjects: [UUID], firstName: String, groups: [UUID], isDeleted: Boolean, lastName: String, login: String, name: String, organizationUnits: [UUID], patronym: String, role: String, tokenJti: String, vid: UUID): CreateUser
+  deleteUser(vid: UUID): DeleteUser
+  updateUser(adId: String, code: String, createdAt: DateTime, editedAt: DateTime, favoriteProjects: [UUID], firstName: String, groups: [UUID], isDeleted: Boolean, lastName: String, login: String, name: String, organizationUnits: [UUID], patronym: String, role: String, tokenJti: String, vid: UUID): UpdateUser
+  createProjectRole(code: String, createdAt: DateTime, defaultAttachmentType: UUID, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): CreateProjectRole
+  deleteProjectRole(vid: UUID): DeleteProjectRole
+  updateProjectRole(code: String, createdAt: DateTime, defaultAttachmentType: UUID, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): UpdateProjectRole
+  createAttachmentType(code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): CreateAttachmentType
+  deleteAttachmentType(vid: UUID): DeleteAttachmentType
+  updateAttachmentType(code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): UpdateAttachmentType
+  createUserGroup(code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, project: UUID, vid: UUID): CreateUserGroup
+  deleteUserGroup(vid: UUID): DeleteUserGroup
+  updateUserGroup(code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, project: UUID, vid: UUID): UpdateUserGroup
+  createOrganization(code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): CreateOrganization
+  deleteOrganization(vid: UUID): DeleteOrganization
+  updateOrganization(code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): UpdateOrganization
+  createOrganizationUnit(adId: String, code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, organization: UUID, parentOu: UUID, vid: UUID): CreateOrganizationUnit
+  deleteOrganizationUnit(vid: UUID): DeleteOrganizationUnit
+  updateOrganizationUnit(adId: String, code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, organization: UUID, parentOu: UUID, vid: UUID): UpdateOrganizationUnit
+  createCountry(code: String, coordinateSystems: [String], createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): CreateCountry
+  deleteCountry(vid: UUID): DeleteCountry
+  updateCountry(code: String, coordinateSystems: [String], createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): UpdateCountry
+  createRegion(code: String, country: UUID, createdAt: DateTime, editedAt: DateTime, fullName: String, isDeleted: Boolean, name: String, vid: UUID): CreateRegion
+  deleteRegion(vid: UUID): DeleteRegion
+  updateRegion(code: String, country: UUID, createdAt: DateTime, editedAt: DateTime, fullName: String, isDeleted: Boolean, name: String, vid: UUID): UpdateRegion
+  createAttachment(category: UUID, code: String, comment: String, contentType: String, createdAt: DateTime, createdBy: UUID, editedAt: DateTime, editedBy: UUID, isDeleted: Boolean, name: String, projectId: UUID, size: Int, status: Int, vid: UUID): CreateAttachment
+  deleteAttachment(vid: UUID): DeleteAttachment
+  updateAttachment(category: UUID, code: String, comment: String, contentType: String, createdAt: DateTime, createdBy: UUID, editedAt: DateTime, editedBy: UUID, isDeleted: Boolean, name: String, projectId: UUID, size: Int, status: Int, vid: UUID): UpdateAttachment
+  createDomainEntity(code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): CreateDomainEntity
+  deleteDomainEntity(vid: UUID): DeleteDomainEntity
+  updateDomainEntity(code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): UpdateDomainEntity
+  createProject(data: ProjectInputType): CreateProject
+  deleteProject(vid: UUID): DeleteProject
+  updateProject(data: ProjectUpdateType, vid: UUID): UpdateProject
+  addAttendees(attendees: [AttendeeInputType]!, projectId: UUID!, version: Int!): AddAttendees
+  removeAttendees(attendees: [UUID]!, projectId: UUID!, version: Int!): RemoveAttendees
+  addAttendeeRole(projectId: UUID!, role: UUID!, user: UUID!, version: Int!): AttendeeTypeOrError
+  removeAttendeeRole(projectId: UUID!, role: UUID!, user: UUID!, version: Int!): AttendeeTypeOrError
+}
+
+type Organization {
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+}
+
+type OrganizationUnit {
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+  organization: Organization
+  parentOu: OrganizationUnit
+  adId: String
+}
+
+type Project {
+  isFavorite: Boolean
+  attendeesTotal: Int
+  filesTotal: Int
+  files: [Attachment]
+  attendees(orderBy: [AttendeeOrderBy] = [NAME], sortBy: SortType = ASC): [Attendee]
+  yearEnd: Int
+  domainSchema: DomainSchema
+  versions: [Int]!
+  myRoles: [ProjectRole]
+  recentlyEdited: Boolean!
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  name: String
+  createdAt: DateTime
+  editedAt: DateTime
+  type: ProjectTypeEnum
+  createdBy: User
+  editedBy: User
+  adId: String
+  authorOu: OrganizationUnit
+  region: Region
+  coordinates: String
+  coordinateSystem: String
+  description: String
+  rootEntity: String
+  status: ProjectStatusEnum
+  resourceId: String
+  yearStart: Int
+  years: Int
+  version: Int
+}
+
+union ProjectDiffOrError = Project | UpdateProjectDiff | Error
+
+input ProjectInputType {
+  name: String
+  type: ProjectTypeEnum = GEO
+  region: ID
+  coordinateSystem: String
+  coordinates: String
+  description: String
+  resourceId: String
+  yearStart: Int = 2021
+  years: Int = 25
+}
+
+type ProjectLibrary {
+  category: ProjectLibraryCategory
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+  title: String
+  description: String
+}
+
+type ProjectLibraryCategory {
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  name: String
+  parent: ProjectLibraryCategory
+}
+
+type ProjectList {
+  projectList: [Project]
+}
+
+union ProjectListOrError = ProjectList | Error
+
+union ProjectOrError = Project | Error
+
+type ProjectRole {
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+  defaultAttachmentType: AttachmentType
+}
+
+enum ProjectStatusEnum {
+  BLANK
+  UNPUBLISHED
+}
+
+enum ProjectTypeEnum {
+  GEO
+}
+
+input ProjectUpdateType {
+  name: String
+  region: UUID
+  coordinateSystem: String
+  coordinates: String
+  description: String
+  status: ProjectStatusEnum
+  isFavorite: Boolean
+  resourceId: String
+  yearStart: Int
+  years: Int
+  version: Int!
+}
+
+type PropertyMeta {
+  title: String
+  name: String
+  entity: DomainEntity
+  attrType: String
+  unit: String
+  validationRules: ValidationRules
+  description: String
+  required: Boolean
+}
+
+input PropertyMetaInputType {
+  title: String
+  name: String
+  entity: UUID
+  attrType: String
+  unit: String
+  validationRules: ValidationRulesInputType
+  description: String
+  required: Boolean
+}
+
+type Query {
+  projectLibrarylist: [ProjectLibrary]
+  projectLibrary(vid: UUID): ProjectLibrary
+  projectLibraryCategoriesList: [ProjectLibraryCategory]
+  projectLibraryCategories(vid: UUID): ProjectLibraryCategory
+  componentList: [Component]
+  component(vid: UUID): Component
+  componentCategoriesList: [ComponentLibraryCategory]
+  componentCategories(vid: UUID): ComponentLibraryCategory
+  assemblyList: [Assembly]
+  assembly(vid: UUID): Assembly
+  assemblyCategoriesList: [AssemblyLibraryCategory]
+  assemblyCategories(vid: UUID): AssemblyLibraryCategory
+  activityList: [Activity]
+  activity(vid: UUID): Activity
+  activityCategoriesList: [ActivityLibraryCategory]
+  activityCategories(vid: UUID): ActivityLibraryCategory
+  domainTemplatelist: [DomainTemplate]
+  domainTemplate(vid: UUID): DomainTemplate
+  domainTemplateCategoriesList: [DomainTemplateLibraryCategory]
+  domainTemplateCategories(vid: UUID): DomainTemplateLibraryCategory
+  userList: [User]
+  user(vid: UUID): User
+  projectRoleList: [ProjectRole]
+  projectRole(vid: UUID): ProjectRole
+  attachmentTypeList: [AttachmentType]
+  attachmentType(vid: UUID): AttachmentType
+  userGroupList: [UserGroup]
+  userGroup(vid: UUID): UserGroup
+  organizationList: [Organization]
+  organization(vid: UUID): Organization
+  organizationUnitList: [OrganizationUnit]
+  organizationUnit(vid: UUID): OrganizationUnit
+  countryList: [Country]
+  country(vid: UUID): Country
+  regionList: [Region]
+  region(vid: UUID): Region
+  attachmentList: [Attachment]
+  attachment(vid: UUID): Attachment
+  domainEntityList: [DomainEntity]
+  domainEntity(vid: UUID): DomainEntity
+  project(vid: UUID, version: Int): ProjectOrError
+  projectList(includeBlank: Boolean = false): ProjectListOrError
+  me: User
+}
+
+type Region {
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+  fullName: String
+  country: Country
+}
+
+type RemoveAttendees {
+  result: AttendeeListOrError
+}
+
+type Result {
+  vid: UUID
+}
+
+enum SortType {
+  ASC
+  DESC
+}
+
+scalar UUID
+
+type UpdateActivity {
+  result: Activity
+}
+
+type UpdateActivityCategories {
+  result: Activity
+}
+
+type UpdateAssembly {
+  result: Assembly
+}
+
+type UpdateAssemblyCategories {
+  result: Assembly
+}
+
+type UpdateAttachment {
+  result: Attachment
+}
+
+type UpdateAttachmentType {
+  result: AttachmentType
+}
+
+type UpdateComponent {
+  result: Component
+}
+
+type UpdateComponentCategories {
+  result: Component
+}
+
+type UpdateCountry {
+  result: Country
+}
+
+type UpdateDomainEntity {
+  result: DomainEntity
+}
+
+type UpdateDomainTemplate {
+  result: DomainTemplate
+}
+
+type UpdateDomainTemplateCategories {
+  result: DomainTemplate
+}
+
+type UpdateOrganization {
+  result: Organization
+}
+
+type UpdateOrganizationUnit {
+  result: OrganizationUnit
+}
+
+type UpdateProject {
+  result: ProjectDiffOrError
+}
+
+type UpdateProjectDiff {
+  remoteProject: Project
+  localProject: Project
+  message: String
+}
+
+type UpdateProjectLibrary {
+  result: ProjectLibrary
+}
+
+type UpdateProjectLibraryCategories {
+  result: ProjectLibrary
+}
+
+type UpdateProjectRole {
+  result: ProjectRole
+}
+
+type UpdateRegion {
+  result: Region
+}
+
+type UpdateUser {
+  result: User
+}
+
+type UpdateUserGroup {
+  result: UserGroup
+}
+
+type User {
+  name: String
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  login: String
+  firstName: String
+  patronym: String
+  lastName: String
+  adId: String
+  role: String
+  favoriteProjects: [ID]
+  organizationUnits: [OrganizationUnit]
+  groups: [UserGroup]
+  tokenJti: String
+}
+
+type UserGroup {
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+  project: ID
+}
+
+union UuidOrError = Result | Error
+
+type ValidationRules {
+  rules: [String]
+}
+
+input ValidationRulesInputType {
+  rules: [String]
+}

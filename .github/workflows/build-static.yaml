@@ -37,8 +37,6 @@ jobs:
       - run: yarn generate:types
         working-directory: vega
         env:
-          BASE_API_URL: http://integration-csssr-vega-builder.code013.org:38080
-          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
           VEGA_SCHEMA_PATH: graphql.schema.json
 
       - uses: docker://quay.csssr.cloud/csssr/github-info:v1
