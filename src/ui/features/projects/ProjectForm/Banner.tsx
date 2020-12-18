@@ -30,10 +30,7 @@ export const Banner: React.FC<BannerProps> = (props) => {
   const { values } = useFormState();
 
   const title = values.name ? values.name : undefined;
-  const description =
-    values.region && values.region !== 'NOT_SELECTED'
-      ? getDescription(values.region, regionList)
-      : undefined;
+  const description = values.region ? getDescription(values.region, regionList) : undefined;
 
   return <PageBanner title={title} description={description} />;
 };
