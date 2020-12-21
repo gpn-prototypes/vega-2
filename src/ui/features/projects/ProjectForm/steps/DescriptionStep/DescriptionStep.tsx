@@ -46,8 +46,6 @@ const getYearStartOptions = (): SelectOption[] => {
   return options;
 };
 
-const notSelectedOption = { label: 'Не выбрано', value: 'NOT_SELECTED' };
-
 type TextFieldProps<T = any> = {
   name: string;
   placeholder: string;
@@ -162,18 +160,14 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
               <Combobox
                 id="region"
                 size="s"
-                options={
-                  input.value && input.value !== 'NOT_SELECTED'
-                    ? [notSelectedOption, ...regionOptions]
-                    : regionOptions
-                }
+                options={regionOptions}
                 getOptionLabel={getItemLabel}
                 placeholder="Выберите регион"
                 value={regionOptions.find(({ value }) => value === input.value)}
                 onChange={(option: SelectOption | null): void => {
                   let value = null;
 
-                  if (option !== null && option.value !== 'NOT_SELECTED') {
+                  if (option !== null) {
                     value = option.value;
                   }
 
