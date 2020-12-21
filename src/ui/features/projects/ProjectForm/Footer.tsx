@@ -1,5 +1,8 @@
 import React from 'react';
+import { useForm } from 'react-final-form';
 import { Button, IconBackward, IconForward, PageFooter } from '@gpn-prototypes/vega-ui';
+
+import { ProjectStatusEnum } from '../../../../__generated__/types';
 
 import { cnProjectForm } from './cn-form';
 import { FormMode } from './types';
@@ -15,6 +18,7 @@ export type FooterProps = {
 
 export const Footer: React.FC<FooterProps> = (props) => {
   const { mode, isFormDirty, activeStep, stepsAmount, onStepChange, onCancel } = props;
+  const form = useForm();
 
   const isCreateMode = mode === 'create';
   const isEditMode = mode === 'edit';
@@ -54,7 +58,17 @@ export const Footer: React.FC<FooterProps> = (props) => {
             onClick={handleNextStep}
           />
         )}
-        {isLastStep && <Button size="s" view="primary" label="Создать проект" type="submit" />}
+        {isLastStep && (
+          <Button
+            size="s"
+            view="primary"
+            label="Создать проект"
+            type="submit"
+            onClick={() => {
+              form.change('status', ProjectStatusEnum.Unpublished);
+            }}
+          />
+        )}
       </div>
     </PageFooter>
   );

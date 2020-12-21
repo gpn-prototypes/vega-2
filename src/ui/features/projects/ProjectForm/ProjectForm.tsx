@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Form, FormSpy } from 'react-final-form';
 import { Form as VegaForm, NavigationList } from '@gpn-prototypes/vega-ui';
 import { FormApi } from 'final-form';
@@ -81,6 +81,32 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     }
   };
 
+  const [state, setState] = useState<{
+    active?: keyof FormValues;
+    values: FormValues | Record<string, unknown>;
+  }>({
+    active: undefined,
+    values: {},
+  });
+
+  const autoSave = useCallback(
+    (form: FormApi<FormValues>) => {
+      const { values, active, dirty } = form.getState();
+      const isBlurEvent = (state.active && state.active !== active) || !active;
+
+      if (isBlurEvent) {
+        setState({ active, values });
+
+        if (dirty) {
+          form.submit();
+        }
+      } else {
+        setState({ ...state, active });
+      }
+    },
+    [state],
+  );
+
   const Step = steps[activeStepIndex].content;
 
   return (
@@ -123,9 +149,12 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
               }}
             />
             <FormSpy
-              subscription={{ dirtyFields: true }}
+              subscription={{ dirtyFields: true, values: true, active: true }}
               onChange={(formState) => {
                 setHasUnsavedChanges(Object.keys(formState.dirtyFields).length > 0);
+                if (mode === 'create') {
+                  autoSave(form);
+                }
               }}
             />
           </VegaForm>
