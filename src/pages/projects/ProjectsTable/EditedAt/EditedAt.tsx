@@ -3,17 +3,7 @@ import { Button, IconKebab, NavigationList, Popover, Text } from '@gpn-prototype
 
 import { MenuItem } from '../types';
 
-import './EditedAt.css';
-
-const blockName = 'ProjectsTable-EditedAt';
-const styles = {
-  root: `${blockName}__root`,
-  editedTime: `${blockName}__editedTime`,
-  menu: `${blockName}__menu`,
-  navigation: `${blockName}__navigation`,
-  navigationItem: `${blockName}__navigationItem`,
-  iconWrap: `${blockName}__iconWrap`,
-};
+import { cnEditedAt } from './cn-edited-at';
 
 type EditedAtProps = {
   date?: string | React.ReactElement;
@@ -42,12 +32,12 @@ export const EditedAt: EditedAtType = ({ date, menu, isVisible, onMenuToggle }) 
   };
 
   return (
-    <div className={styles.root}>
-      <Text size="s" className={styles.editedTime} data-testid={testId.dateEdit}>
+    <div className={cnEditedAt('root')}>
+      <Text size="s" className={cnEditedAt('editedTime')} data-testid={testId.dateEdit}>
         {date}
       </Text>
-      <div className={styles.menu}>
-        <div className={styles.iconWrap}>
+      <div className={cnEditedAt('menu')}>
+        <div className={cnEditedAt('iconWrap')}>
           {isVisible && (
             <Button
               label="Меню"
@@ -71,9 +61,13 @@ export const EditedAt: EditedAtType = ({ date, menu, isVisible, onMenuToggle }) 
             direction="downLeft"
             offset={6}
             anchorRef={anchorRef}
-            onClickOutside={() => showPopover(false)}
+            onClickOutside={() => {
+              if (isPopoverVisible) {
+                showPopover(false);
+              }
+            }}
           >
-            <NavigationList className={styles.navigation} data-testid={testId.menuList}>
+            <NavigationList className={cnEditedAt('navigation')} data-testid={testId.menuList}>
               {menu.map(({ Element, key }) => {
                 return (
                   <NavigationList.Item key={key}>
@@ -83,7 +77,7 @@ export const EditedAt: EditedAtType = ({ date, menu, isVisible, onMenuToggle }) 
                           close={() => {
                             showPopover(false);
                           }}
-                          className={`${className} ${styles.navigationItem}`}
+                          className={cnEditedAt('navigationItem').mix([className])}
                           data-testid="ds"
                         />
                       );
