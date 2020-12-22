@@ -26,9 +26,13 @@ const testId = {
   buttonMenu: 'ProjectsPage:button:menu.trigger',
   menuList: 'ProjectsPage:menu',
   dateEdit: 'ProjectsPage:text:edited',
+} as const;
+
+type EditedAtType = React.FC<EditedAtProps> & {
+  testId: typeof testId;
 };
 
-export const EditedAt: React.FC<EditedAtProps> = ({ date, menu, isVisible, onClickItem }) => {
+export const EditedAt: EditedAtType = ({ date, menu, isVisible, onClickItem }) => {
   const anchorRef = React.createRef<HTMLButtonElement>();
   const [isPopoverVisible, setIsPopoverVisible] = React.useState(false);
   return (
@@ -91,3 +95,5 @@ export const EditedAt: React.FC<EditedAtProps> = ({ date, menu, isVisible, onCli
     </div>
   );
 };
+
+EditedAt.testId = testId;

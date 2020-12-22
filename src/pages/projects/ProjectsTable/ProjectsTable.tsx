@@ -25,12 +25,16 @@ const styles = {
 const testId = {
   favorite: 'ProjectsPage:button:favorite',
   projectName: 'ProjectsPage:cell:name',
-};
+} as const;
 
 type Props = {
   rows?: TableRow[];
   placeholder?: string | React.ReactElement;
   onFavorite(id: string, payload: { isFavorite: boolean; version: number }): void;
+};
+
+type ProjectsTableType = React.FC<Props> & {
+  testId: typeof testId;
 };
 
 const COLUMNS: React.ComponentProps<typeof Table>['columns'] = [
@@ -85,7 +89,7 @@ const COLUMNS: React.ComponentProps<typeof Table>['columns'] = [
   },
 ];
 
-export const ProjectsTable: React.FC<Props> = (props) => {
+export const ProjectsTable: ProjectsTableType = (props) => {
   const placeholder = props.placeholder ?? <Text size="s">Пока нет ни одного проекта :(</Text>;
   const [idMenuVisible, setIdMenuVisible] = React.useState<string | undefined>(undefined);
 
@@ -173,3 +177,5 @@ export const ProjectsTable: React.FC<Props> = (props) => {
     />
   );
 };
+
+ProjectsTable.testId = testId;
