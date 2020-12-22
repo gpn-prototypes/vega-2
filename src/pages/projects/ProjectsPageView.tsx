@@ -21,7 +21,11 @@ type Props = {
   onFavorite(id: string, payload: { isFavorite: boolean; version: number }): void;
 };
 
-export const ProjectsPageView: React.FC<Props> = (props) => {
+type ProjectsPageViewType = React.FC<Props> & {
+  testId: typeof testId;
+};
+
+export const ProjectsPageView: ProjectsPageViewType = (props) => {
   // TODO: Поправить условие, когда можно будет получить общее количество проектов и сделают пагинацию
   // const visibleLoadMore = props.projects.length > 20;
 
@@ -83,3 +87,5 @@ export const ProjectsPageView: React.FC<Props> = (props) => {
     </div>
   );
 };
+
+ProjectsPageView.testId = testId;
