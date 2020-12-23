@@ -138,10 +138,6 @@ export const EditProjectPage: React.FC<PageProps> = () => {
         if (inlineUpdateProjectError?.code === 'PROJECT_NAME_ALREADY_EXISTS') {
           errors.name = inlineUpdateProjectError.message;
         }
-
-        if (inlineUpdateProjectError?.code === 'PROJECT_YEARSTART_CANNOT_BE_NULL') {
-          errors.yearStart = inlineUpdateProjectError.message;
-        }
       }
 
       if (updateProjectResult.data?.updateProject?.result?.__typename === 'Project') {
