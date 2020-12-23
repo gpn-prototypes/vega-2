@@ -111,18 +111,12 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
         const inlineUpdateProjectError = createProjectResult.data?.updateProject?.result;
 
         const projectNameExists = inlineUpdateProjectError?.code === 'PROJECT_NAME_ALREADY_EXISTS';
-        const projectYearStartNull =
-          inlineUpdateProjectError?.code === 'PROJECT_YEARSTART_CANNOT_BE_NULL';
 
         if (projectNameExists) {
           errors.name = inlineUpdateProjectError.message;
         }
 
-        if (projectYearStartNull) {
-          errors.yearStart = inlineUpdateProjectError.message;
-        }
-
-        if (!projectNameExists && !projectYearStartNull) {
+        if (!projectNameExists) {
           notifications.add({
             key: `${inlineUpdateProjectError.code}-create`,
             status: 'alert',
