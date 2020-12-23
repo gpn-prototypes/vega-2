@@ -33,6 +33,10 @@ export const Footer: React.FC<FooterProps> = (props) => {
     onStepChange(activeStep - 1);
   };
 
+  const { valid, dirtySinceLastSubmit, hasValidationErrors } = form.getState();
+
+  const isSubmitButtonDisabled = (!valid && !dirtySinceLastSubmit) || hasValidationErrors;
+
   const createProjectFormFooter = (
     <PageFooter className={cnProjectForm('Footer', { content: 'space-between' })}>
       <Button size="s" view="ghost" label="Отмена" type="button" onClick={onCancel} />
@@ -67,6 +71,7 @@ export const Footer: React.FC<FooterProps> = (props) => {
             onClick={() => {
               form.change('status', ProjectStatusEnum.Unpublished);
             }}
+            disabled={isSubmitButtonDisabled}
           />
         )}
       </div>
