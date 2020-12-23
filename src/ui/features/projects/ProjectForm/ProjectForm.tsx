@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Form, FormSpy } from 'react-final-form';
 import { Form as VegaForm, NavigationList } from '@gpn-prototypes/vega-ui';
 import { FormApi } from 'final-form';
@@ -89,23 +89,20 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     values: {},
   });
 
-  const autoSave = useCallback(
-    (form: FormApi<FormValues>) => {
-      const { values, active, dirty } = form.getState();
-      const isBlurEvent = (state.active && state.active !== active) || !active;
+  const autoSave = (form: FormApi<FormValues>) => {
+    const { values, active, dirty } = form.getState();
+    const isBlurEvent = (state.active && state.active !== active) || !active;
 
-      if (isBlurEvent) {
-        setState({ active, values });
+    if (isBlurEvent) {
+      setState({ active, values });
 
-        if (dirty) {
-          form.submit();
-        }
-      } else {
-        setState({ ...state, active });
+      if (dirty) {
+        form.submit();
       }
-    },
-    [state],
-  );
+    } else {
+      setState({ ...state, active });
+    }
+  };
 
   const Step = steps[activeStepIndex].content;
 

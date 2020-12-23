@@ -4,7 +4,6 @@ import { Loader, useMount } from '@gpn-prototypes/vega-ui';
 import { FormApi, getIn, setIn } from 'final-form';
 
 import {
-  Project,
   ProjectStatusEnum,
   ProjectTypeEnum,
   ProjectUpdateType,
@@ -16,12 +15,13 @@ import { useNotifications } from '../../providers/notifications';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
 import {
+  projectFormFields,
   UpdateProjectFormVariables,
   useCreateBlankProject,
   useDeleteBlankProject,
   useProjectFormFields,
   useProjectFormRegionList,
-  useUpdateProjectBlank,
+  useUpdateProjectForm,
 } from './__generated__/project';
 import { cnPage } from './cn-page';
 import { RouteLeavingGuard } from './RouteLeavingGuard';
@@ -31,10 +31,7 @@ import './ProjectPage.css';
 
 type PageProps = Record<string, unknown>;
 
-type ProjectType = Pick<
-  Project,
-  'vid' | 'name' | 'type' | 'region' | 'coordinates' | 'description' | 'yearStart' | 'status'
->;
+type ProjectType = projectFormFields;
 interface UpdateProjectDiffResult extends UpdateProject {
   result: Required<UpdateProjectDiff>;
 }
@@ -120,7 +117,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     },
   });
 
-  const [updateProjectBlank, { error: updateProjectBlankError }] = useUpdateProjectBlank();
+  const [updateProjectBlank, { error: updateProjectBlankError }] = useUpdateProjectForm();
 
   const {
     data: queryRegionListData,
@@ -197,7 +194,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
           key: `${blankProjectId}-create`,
           status: 'success',
           autoClose: 3,
-          message: 'Изменения успешно сохранены',
+          message: 'Проект успешно создан',
           onClose(item) {
             notifications.remove(item.key);
           },
