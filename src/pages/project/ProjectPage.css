@@ -22,10 +22,4 @@
   &__ButtonClose {
     margin-right: var(--space-xs);
   }
-
-  &__ModalContent {
-    align-items: center;
-
-    text-align: center;
-  }
 }

@@ -1,16 +1,27 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Loader, useMount } from '@gpn-prototypes/vega-ui';
+import { FormApi, getIn, setIn } from 'final-form';
 
-import { ProjectStatusEnum } from '../../__generated__/types';
+import {
+  ProjectStatusEnum,
+  ProjectTypeEnum,
+  ProjectUpdateType,
+  UpdateProject,
+  UpdateProjectDiff,
+} from '../../__generated__/types';
+import { useBrowserTabActivity } from '../../hooks';
 import { useNotifications } from '../../providers/notifications';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
 import {
+  projectFormFields,
+  UpdateProjectFormVariables,
   useCreateBlankProject,
-  useCreateProject,
   useDeleteBlankProject,
+  useProjectFormFields,
   useProjectFormRegionList,
+  useUpdateProjectForm,
 } from './__generated__/project';
 import { cnPage } from './cn-page';
 import { RouteLeavingGuard } from './RouteLeavingGuard';
@@ -19,6 +30,25 @@ import { ReferenceDataType } from './types';
 import './ProjectPage.css';
 
 type PageProps = Record<string, unknown>;
+
+type ProjectType = projectFormFields;
+interface UpdateProjectDiffResult extends UpdateProject {
+  result: Required<UpdateProjectDiff>;
+}
+
+const getInitialValues = (project: ProjectType): Partial<FormValues> => {
+  return {
+    name: project.name ?? '',
+    type: project.type ?? ProjectTypeEnum.Geo,
+    region: project.region?.vid ?? null,
+    coordinates: project.coordinates ?? '',
+    description: project.description ?? '',
+    yearStart: project.yearStart ?? undefined,
+    status: project.status ?? ProjectStatusEnum.Blank,
+  };
+};
+
+const FORM_FIELDS_POLLING_MS = 1000 * 30;
 
 export const CreateProjectPage: React.FC<PageProps> = () => {
   const history = useHistory();
@@ -32,8 +62,6 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     createBlankProject,
     { error: createBlankProjectError, loading: createBlankProjectLoading },
   ] = useCreateBlankProject();
-
-  const [createProject, { error: createProjectError }] = useCreateProject();
 
   const [deleteProject, { error: deleteProjectError }] = useDeleteBlankProject();
 
@@ -65,6 +93,33 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   });
 
   const {
+    data: queryProjectData,
+    loading: queryProjectLoading,
+    refetch: refetchProjectFormFields,
+    error: queryProjectError,
+    startPolling,
+    stopPolling,
+  } = useProjectFormFields({
+    pollInterval: FORM_FIELDS_POLLING_MS,
+    variables: {
+      vid: blankProjectId,
+    },
+    skip: !blankProjectId,
+  });
+
+  useBrowserTabActivity({
+    onActivated() {
+      refetchProjectFormFields();
+      startPolling(FORM_FIELDS_POLLING_MS);
+    },
+    onHidden() {
+      stopPolling();
+    },
+  });
+
+  const [updateProjectBlank, { error: updateProjectBlankError }] = useUpdateProjectForm();
+
+  const {
     data: queryRegionListData,
     loading: queryRegionListLoading,
     error: queryRegionListError,
@@ -73,29 +128,66 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   const referenceData: ReferenceDataType = { regionList: queryRegionListData?.regionList };
 
   const handleFormSubmit = React.useCallback(
-    async (values: FormValues) => {
+    async (values: FormValues, form: FormApi<FormValues>) => {
+      const state = form.getState();
       const errors: Record<string, unknown> = {};
 
-      const createProjectResult = await createProject({
+      const changes = Object.keys(state.dirtyFields)
+        .map((key) => ({ key, value: getIn(values, key) }))
+        .reduce((acc, { key, value }) => setIn(acc, key, value), {});
+
+      const version =
+        queryProjectData?.project?.__typename === 'Project'
+          ? queryProjectData?.project?.version
+          : 1;
+
+      const status =
+        values.status === ProjectStatusEnum.Unpublished
+          ? { status: ProjectStatusEnum.Unpublished }
+          : {};
+
+      const updateProjectBlankResult = await updateProjectBlank({
+        context: {
+          projectDiffResolving: {
+            maxAttempts: 5,
+            projectAccessor: {
+              fromDiffError: (data: UpdateProjectDiffResult) => ({
+                remote: data.result.remoteProject,
+                local: data.result.localProject,
+              }),
+              fromVariables: (vars: UpdateProjectFormVariables) => vars.data,
+              toVariables: (vars: UpdateProjectFormVariables, patch: ProjectUpdateType) => ({
+                ...vars,
+                data: { ...vars.data, ...patch },
+              }),
+            },
+          },
+        },
         variables: {
           vid: blankProjectId,
-          name: values.name,
-          region: values.region,
-          coordinates: values.coordinates,
-          description: values.description,
-          yearStart: values.yearStart,
-          status: ProjectStatusEnum.Unpublished,
-          version: 1,
+          data: {
+            ...changes,
+            ...status,
+            version: version || 1,
+          },
         },
       });
 
-      if (createProjectResult.data?.updateProject?.result?.__typename === 'Project') {
-        const projectId = createProjectResult.data.updateProject?.result?.vid || undefined;
+      if (updateProjectBlankResult.data?.updateProject?.result?.__typename === 'Error') {
+        const inlineUpdateProjectError = updateProjectBlankResult.data?.updateProject?.result;
 
-        setIsNavigationBlocked(false);
+        if (inlineUpdateProjectError?.code === 'PROJECT_NAME_ALREADY_EXISTS') {
+          errors.name = inlineUpdateProjectError.message;
+        }
+      }
 
+      const shouldProjectCreate =
+        updateProjectBlankResult.data?.updateProject?.result?.__typename === 'Project' &&
+        values.status === ProjectStatusEnum.Unpublished;
+
+      if (shouldProjectCreate) {
         notifications.add({
-          key: `${projectId}-create`,
+          key: `${blankProjectId}-create`,
           status: 'success',
           autoClose: 3,
           message: 'Проект успешно создан',
@@ -103,34 +195,22 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
             notifications.remove(item.key);
           },
         });
-
-        history.push(`/projects/show/${projectId}`);
+        setIsNavigationBlocked(false);
+        history.push(`/projects/show/${blankProjectId}`);
       }
 
-      if (createProjectResult.data?.updateProject?.result?.__typename === 'Error') {
-        const inlineUpdateProjectError = createProjectResult.data?.updateProject?.result;
-
-        const projectNameExists = inlineUpdateProjectError?.code === 'PROJECT_NAME_ALREADY_EXISTS';
-
-        if (projectNameExists) {
-          errors.name = inlineUpdateProjectError.message;
+      form.initialize((v) => {
+        if (updateProjectBlankResult.data?.updateProject?.result?.__typename === 'Project') {
+          const initials = getInitialValues(updateProjectBlankResult.data.updateProject.result);
+          return { ...initials, ...v };
         }
 
-        if (!projectNameExists) {
-          notifications.add({
-            key: `${inlineUpdateProjectError.code}-create`,
-            status: 'alert',
-            message: inlineUpdateProjectError.message,
-            onClose(item) {
-              notifications.remove(item.key);
-            },
-          });
-        }
-      }
+        return v;
+      });
 
       return errors;
     },
-    [blankProjectId, createProject, history, notifications],
+    [blankProjectId, history, notifications, queryProjectData, updateProjectBlank],
   );
 
   const handleCancel = () => {
@@ -155,7 +235,11 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   };
 
   const apolloError =
-    createBlankProjectError || createProjectError || deleteProjectError || queryRegionListError;
+    createBlankProjectError ||
+    deleteProjectError ||
+    queryRegionListError ||
+    updateProjectBlankError ||
+    queryProjectError;
 
   if (apolloError) {
     notifications.add({
@@ -170,15 +254,39 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     return null;
   }
 
-  if (createBlankProjectLoading || queryRegionListLoading) {
+  if (queryProjectLoading || createBlankProjectLoading || queryRegionListLoading) {
     return <Loader />;
   }
+
+  if (queryProjectData?.project?.__typename === 'Error') {
+    const inlineQueryProjectError = queryProjectData.project;
+
+    const is404 = inlineQueryProjectError.code === 'PROJECT_NOT_FOUND';
+
+    if (is404) {
+      return null;
+    }
+
+    notifications.add({
+      key: `${inlineQueryProjectError.code}-query-error`,
+      status: 'alert',
+      message: inlineQueryProjectError.message,
+    });
+
+    return null;
+  }
+
+  const initialValues =
+    queryProjectData?.project?.__typename !== 'Project' || !queryProjectData?.project
+      ? undefined
+      : getInitialValues(queryProjectData?.project);
 
   return (
     <div className={cnPage()}>
       <ProjectForm
         mode="create"
         referenceData={referenceData}
+        initialValues={initialValues}
         onSubmit={handleFormSubmit}
         onCancel={handleCancel}
       />

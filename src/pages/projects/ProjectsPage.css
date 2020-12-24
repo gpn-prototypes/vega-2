@@ -106,12 +106,6 @@
     width: 480px;
   }
 
-  &__ModalContent {
-    align-items: center;
-
-    text-align: center;
-  }
-
   &__ModalFooter {
     display: flex;
     justify-content: flex-end;

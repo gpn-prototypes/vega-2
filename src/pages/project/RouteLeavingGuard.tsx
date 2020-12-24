@@ -51,9 +51,7 @@ export const RouteLeavingGuard: React.FC<Props> = ({ when, navigate }) => {
           <Text size="xs">Создание проекта</Text>
         </Modal.Header>
         <Modal.Body>
-          <Text className={cnPage('ModalContent')}>
-            Вы уверены, что хотите прервать создание проекта?
-          </Text>
+          <Text>Вы уверены, что хотите прервать создание проекта?</Text>
         </Modal.Body>
         <Modal.Footer className={cnPage('ModalFooter').toString()}>
           <Button
