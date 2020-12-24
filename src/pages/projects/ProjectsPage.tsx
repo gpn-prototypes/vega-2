@@ -29,8 +29,8 @@ interface UpdateProjectDiffResult extends UpdateProject {
 
 const testId = {
   modal: 'ProjectsPage:modal',
-  modalCancel: 'ProjectsPage:button:modal.cancel',
-  modalConfirm: 'ProjectsPage:button:modal.confirm',
+  modalCancel: 'ProjectsPage:modal:button.cancel',
+  modalConfirm: 'ProjectsPage:modal:button.confirm',
   projectRemove: 'ProjectsPage:button:remove',
   projectEdit: 'ProjectsPage:button:edit',
 } as const;
