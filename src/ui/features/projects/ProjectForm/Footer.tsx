@@ -97,8 +97,8 @@ export const Footer: FooterType = (props) => {
             onClick={() => {
               form.change('status', ProjectStatusEnum.Unpublished);
             }}
-            disabled={isSubmitButtonDisabled}
             data-testId={testId.createButton}
+            disabled={isSubmitButtonDisabled}
           />
         )}
       </div>
