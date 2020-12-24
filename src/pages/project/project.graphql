@@ -11,6 +11,7 @@ fragment projectFormFields on Project {
   description
   yearStart
   version
+  status
 }
 
 fragment commonError on Error {
@@ -33,48 +34,8 @@ mutation CreateBlankProject {
   }
 }
 
-
-mutation CreateProject(
-  $vid: UUID!
-  $name: String!
-  $region: UUID
-  $coordinates: String
-  $description: String
-  $status: ProjectStatusEnum!
-  $yearStart: Int!
-  $version: Int!
-) {
-  updateProject(
-    vid: $vid
-    data: {
-      name: $name
-      region: $region
-      coordinates: $coordinates
-      description: $description
-      status: $status
-      yearStart: $yearStart
-      version: $version
-    }
-  ) {
-    result {
-      ... on Project {
-        ...projectFormFields
-        status
-      }
-      ... on Error {
-        ...commonError
-      }
-    }
-  }
-}
-mutation UpdateProjectForm(
-  $vid: UUID
-  $data: ProjectUpdateType
-) {
-  updateProject(
-    vid: $vid
-    data: $data
-  ) {
+mutation UpdateProjectForm($vid: UUID, $data: ProjectUpdateType) {
+  updateProject(vid: $vid, data: $data) {
     result {
       ... on Project {
         ...projectFormFields

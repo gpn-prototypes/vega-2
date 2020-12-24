@@ -1,6 +1,6 @@
 import { FormApi, SubmissionErrors } from 'final-form';
 
-import { ProjectTypeEnum } from '../../../../__generated__/types';
+import { ProjectStatusEnum, ProjectTypeEnum } from '../../../../__generated__/types';
 import { ReferenceDataType } from '../../../../pages/project/types';
 
 export type FormMode = 'create' | 'edit';
@@ -12,6 +12,7 @@ export type FormValues = {
   coordinates: string;
   yearStart: number;
   description: string;
+  status: ProjectStatusEnum;
 };
 
 export type FormProps = {

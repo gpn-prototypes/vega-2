@@ -4,6 +4,7 @@ import { Form as VegaForm, NavigationList } from '@gpn-prototypes/vega-ui';
 import { FormApi } from 'final-form';
 import createDecorator from 'final-form-focus';
 
+import { ProjectStatusEnum } from '../../../../__generated__/types';
 import { createValidate, validators } from '../../../forms/validation';
 
 import { Banner } from './Banner';
@@ -81,6 +82,36 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     }
   };
 
+  const [state, setState] = useState<{
+    active?: keyof FormValues;
+    values: FormValues | Record<string, unknown>;
+  }>({
+    active: undefined,
+    values: {},
+  });
+
+  const autoSave = (form: FormApi<FormValues>) => {
+    const { values, active, dirty, valid, validating, dirtySinceLastSubmit } = form.getState();
+    const isBlurEvent = (state.active && state.active !== active) || !active;
+    if (values.status === ProjectStatusEnum.Unpublished) {
+      form.change('status', ProjectStatusEnum.Blank);
+    }
+
+    if ((!valid || validating) && !dirtySinceLastSubmit) {
+      return;
+    }
+
+    if (isBlurEvent) {
+      setState({ active, values });
+
+      if (dirty) {
+        form.submit();
+      }
+    } else {
+      setState({ ...state, active });
+    }
+  };
+
   const Step = steps[activeStepIndex].content;
 
   return (
@@ -123,9 +154,12 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
               }}
             />
             <FormSpy
-              subscription={{ dirtyFields: true }}
+              subscription={{ dirtyFields: true, values: true, active: true }}
               onChange={(formState) => {
                 setHasUnsavedChanges(Object.keys(formState.dirtyFields).length > 0);
+                if (mode === 'create') {
+                  autoSave(form);
+                }
               }}
             />
           </VegaForm>
