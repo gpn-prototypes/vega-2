@@ -93,7 +93,8 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
   const autoSave = (form: FormApi<FormValues>) => {
     const { values, active, dirty, valid, validating, dirtySinceLastSubmit } = form.getState();
     const isBlurEvent = (state.active && state.active !== active) || !active;
-    if (values.status === ProjectStatusEnum.Unpublished) {
+
+    if (values.status === ProjectStatusEnum.Unpublished && active) {
       form.change('status', ProjectStatusEnum.Blank);
     }
 
