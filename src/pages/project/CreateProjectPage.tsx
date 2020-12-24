@@ -217,7 +217,9 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   };
 
   const handleNavigation = async (path: string | null) => {
-    const deleteProjectResult = await deleteProject({ variables: { vid: blankProjectId } });
+    const deleteProjectResult = await deleteProject({
+      variables: { vid: blankProjectId, cancellation: true },
+    });
 
     if (deleteProjectResult.data?.deleteProject?.result?.__typename === 'Error') {
       const inlineDeleteProjectError = deleteProjectResult.data?.deleteProject?.result;

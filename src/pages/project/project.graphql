@@ -78,8 +78,8 @@ query ProjectFormRegionList {
   }
 }
 
-mutation DeleteBlankProject($vid: UUID) {
-  deleteProject(vid: $vid) {
+mutation DeleteBlankProject($vid: UUID, $cancellation: Boolean) {
+  deleteProject(vid: $vid, cancellation: $cancellation) {
     result {
       ... on Result {
         vid
