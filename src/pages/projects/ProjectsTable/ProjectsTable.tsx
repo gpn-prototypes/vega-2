@@ -96,8 +96,8 @@ export const ProjectsTable: ProjectsTableType = (props) => {
 
   const history = useHistory();
 
-  const handleShowMenu = (shouldSetActiveRow: boolean, id: string): void => {
-    if (shouldSetActiveRow) {
+  const handleShowMenu = (isMenuShowed: boolean, id: string): void => {
+    if (isMenuShowed) {
       setIdActiveRow(id);
     } else {
       setIdMenuVisible(undefined);
@@ -162,7 +162,7 @@ export const ProjectsTable: ProjectsTableType = (props) => {
             date={project.editedAt}
             menu={project.menu}
             isVisible={isVisible}
-            onShowMenu={(isMenuShowed) => handleShowMenu(isMenuShowed, project.id)}
+            onMenuToggle={(isMenuShowed) => handleShowMenu(isMenuShowed, project.id)}
           />
         ),
       };
