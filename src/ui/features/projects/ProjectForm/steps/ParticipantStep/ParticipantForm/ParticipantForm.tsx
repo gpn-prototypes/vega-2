@@ -44,6 +44,17 @@ const users = [
 
 const getItemLabel = (option: SelectOption): string => option.label;
 
+const testId = {
+  modal: 'ParticipantStep:modal',
+  modalForm: 'ParticipantStep:modal:form',
+  userLabel: 'ParticipantStep:label:user',
+  user: 'ParticipantStep:field:user',
+  rolesLabel: 'ParticipantStep:label:roles',
+  roles: 'ParticipantStep:field:roles',
+  buttonInvite: 'ParticipantStep:button:invite',
+  buttonCancel: 'ParticipantStep:button:cancel',
+};
+
 export const ParticipantForm: React.FC<ParticipantProps> = (props) => {
   const { onClose, isOpen } = props;
 
@@ -52,7 +63,14 @@ export const ParticipantForm: React.FC<ParticipantProps> = (props) => {
   };
 
   return (
-    <Modal hasOverlay hasCloseButton onClose={onClose} isOpen={isOpen} className={cn.root}>
+    <Modal
+      hasOverlay
+      hasCloseButton
+      onClose={onClose}
+      isOpen={isOpen}
+      className={cn.root}
+      data-test={testId.modal}
+    >
       <Modal.Header>
         <Text size="xs">Добавить участника</Text>
       </Modal.Header>
@@ -63,10 +81,10 @@ export const ParticipantForm: React.FC<ParticipantProps> = (props) => {
           return (
             <>
               <Modal.Body>
-                <VegaForm>
+                <VegaForm data-testid={testId.modalForm}>
                   <VegaForm.Row space="m">
                     <VegaForm.Field>
-                      <VegaForm.Label htmlFor="user" space="2xs">
+                      <VegaForm.Label htmlFor="user" space="2xs" data-testid={testId.userLabel}>
                         Пользователь
                       </VegaForm.Label>
                       <Field
@@ -80,6 +98,7 @@ export const ParticipantForm: React.FC<ParticipantProps> = (props) => {
                             onChange={(value: SelectOption | null): void => {
                               input.onChange(value);
                             }}
+                            data-testid={testId.user}
                           />
                         )}
                       />
@@ -87,7 +106,7 @@ export const ParticipantForm: React.FC<ParticipantProps> = (props) => {
                   </VegaForm.Row>
                   <VegaForm.Row space="m">
                     <VegaForm.Field>
-                      <VegaForm.Label htmlFor="roles" space="2xs">
+                      <VegaForm.Label htmlFor="roles" space="2xs" data-testid={testId.rolesLabel}>
                         Доступ
                       </VegaForm.Label>
                       <Field
@@ -101,6 +120,7 @@ export const ParticipantForm: React.FC<ParticipantProps> = (props) => {
                             onChange={(value: SelectOption[] | null): void => {
                               input.onChange(value);
                             }}
+                            data-testid={testId.roles}
                           />
                         )}
                       />
@@ -116,6 +136,7 @@ export const ParticipantForm: React.FC<ParticipantProps> = (props) => {
                   label="Пригласить в проект"
                   onClick={handleSubmit}
                   className={cn.footerItem}
+                  data-testid={testId.buttonInvite}
                 />
                 <Button
                   size="m"
@@ -123,6 +144,7 @@ export const ParticipantForm: React.FC<ParticipantProps> = (props) => {
                   label="Отмена"
                   onClick={onClose}
                   className={cn.footerItem}
+                  data-testId={testId.buttonCancel}
                 />
               </Modal.Footer>
             </>
