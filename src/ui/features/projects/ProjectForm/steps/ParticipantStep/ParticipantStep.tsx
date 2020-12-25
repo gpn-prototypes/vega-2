@@ -18,6 +18,10 @@ const cn = {
   rowAvatar: cnParticipantStep('rowAvatar').toString(),
 };
 
+const testId = {
+  addUser: 'ParticipantStep:button:addUser',
+};
+
 export const ParticipantStep: React.FC<StepProps> = () => {
   const columns = [
     { title: 'Имя', accessor: 'name' },
@@ -51,7 +55,13 @@ export const ParticipantStep: React.FC<StepProps> = () => {
       <div className={cn.root}>
         <Table columns={columns} rows={rows} className={cn.table} verticalAlign="center" />
         <div className={cn.footer}>
-          <Button type="button" label="+ Добавить участника" view="ghost" onClick={open} />
+          <Button
+            type="button"
+            label="+ Добавить участника"
+            view="ghost"
+            onClick={open}
+            data-testid={testId.addUser}
+          />
           <ParticipantForm isOpen={isOpen} onClose={close} onSubmit={handleSubmit} />
         </div>
       </div>

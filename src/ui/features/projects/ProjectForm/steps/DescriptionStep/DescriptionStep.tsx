@@ -93,6 +93,22 @@ const TextField: React.FC<TextFieldProps> = (props) => {
 
 const isValidYear = (str: string): boolean => /^\d{4}$/.test(str);
 
+const testId = {
+  name: 'ProjectForm:field:name',
+  nameLabel: 'ProjectForm:label:name',
+  nameError: 'ProjectForm:text:error.name',
+  region: 'ProjectForm:field:region',
+  regionLabel: 'ProjectForm:label:region',
+  coordinates: 'ProjectForm:field:coordinates',
+  coordinatesLabel: 'ProjectForm:label:coordinates',
+  type: 'ProjectForm:field:type',
+  typeLabel: 'ProjectForm:label:type',
+  yearStart: 'ProjectForm:field:yearStart',
+  yearStartLabel: 'ProjectForm:label:yearStart',
+  description: 'ProjectForm:field:description',
+  descriptionLabel: 'ProjectForm:label:description',
+};
+
 export const DescriptionStep: React.FC<StepProps> = (props) => {
   const { mode, referenceData, form } = props;
   const { regionList } = referenceData;
@@ -131,7 +147,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
     <div className={cnProjectForm('Step').mix(cnDescriptionStep())}>
       <VegaForm.Row space="m">
         <VegaForm.Field>
-          <VegaForm.Label htmlFor="name" space="2xs">
+          <VegaForm.Label htmlFor="name" space="2xs" data-testid={testId.nameLabel}>
             Название проекта
           </VegaForm.Label>
           <Field
@@ -143,6 +159,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                   meta={meta}
                   name="name"
                   placeholder="Придумайте название проекта"
+                  data-testid={testId.name}
                 />
               );
             }}
@@ -151,7 +168,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
       </VegaForm.Row>
       <VegaForm.Row space="m">
         <VegaForm.Field>
-          <VegaForm.Label htmlFor="region" space="2xs">
+          <VegaForm.Label htmlFor="region" space="2xs" data-testid={testId.regionLabel}>
             Регион
           </VegaForm.Label>
           <Field
@@ -175,6 +192,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 }}
                 onBlur={input.onBlur}
                 onFocus={input.onFocus}
+                data-testid={testId.region}
               />
             )}
           />
@@ -182,7 +200,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
       </VegaForm.Row>
       <VegaForm.Row space="m">
         <VegaForm.Field>
-          <VegaForm.Label htmlFor="type" space="2xs">
+          <VegaForm.Label htmlFor="type" space="2xs" data-testid={testId.typeLabel}>
             Тип проекта
           </VegaForm.Label>
           <Field
@@ -202,6 +220,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 }}
                 onBlur={input.onBlur}
                 onFocus={input.onFocus}
+                data-testid={testId.type}
               />
             )}
           />
@@ -209,7 +228,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
       </VegaForm.Row>
       <VegaForm.Row space="m">
         <VegaForm.Field>
-          <VegaForm.Label htmlFor="coordinates" space="2xs">
+          <VegaForm.Label htmlFor="coordinates" space="2xs" data-testid={testId.coordinatesLabel}>
             Система координат
           </VegaForm.Label>
           <Field
@@ -223,6 +242,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                   meta={meta}
                   name="coordinates"
                   placeholder="Укажите систему координат"
+                  data-testid={testId.coordinates}
                 />
               );
             }}
@@ -231,7 +251,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
       </VegaForm.Row>
       <VegaForm.Row space="m">
         <VegaForm.Field>
-          <VegaForm.Label htmlFor="yearStart" space="2xs">
+          <VegaForm.Label htmlFor="yearStart" space="2xs" data-testid={testId.yearStartLabel}>
             Год начала планирования
           </VegaForm.Label>
           <Field
@@ -272,6 +292,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                     }}
                     onBlur={input.onBlur}
                     onFocus={input.onFocus}
+                    data-testid={testId.yearStart}
                   />
                   {showError && (
                     <Text
@@ -291,7 +312,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
       </VegaForm.Row>
       <VegaForm.Row space="m">
         <VegaForm.Field>
-          <VegaForm.Label htmlFor="description" space="2xs">
+          <VegaForm.Label htmlFor="description" space="2xs" data-testid={testId.descriptionLabel}>
             Описание проекта
           </VegaForm.Label>
           <Field
@@ -310,6 +331,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 size="s"
                 width="full"
                 placeholder="Краткое описание проекта поможет отличать ваши проекты среди остальных и находить похожие"
+                data-testid={testId.description}
               />
             )}
           />

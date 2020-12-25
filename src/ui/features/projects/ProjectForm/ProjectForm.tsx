@@ -49,6 +49,11 @@ const validator = createValidate<Partial<FormValues>>({
 
 const steps = [{ title: 'Описание проекта', content: DescriptionStep }];
 
+const testId = {
+  form: 'ProjectForm:form',
+  stepList: 'ProjectForm:stepList',
+};
+
 export const ProjectForm: React.FC<FormProps> = (formProps) => {
   const { mode, initialValues, referenceData, onSubmit, onCancel } = formProps;
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -125,9 +130,9 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
       render={({ form, handleSubmit, dirty }): React.ReactNode => (
         <>
           <Banner referenceData={referenceData} />
-          <VegaForm onSubmit={handleSubmit} className={cnProjectForm()}>
+          <VegaForm onSubmit={handleSubmit} className={cnProjectForm()} data-testId={testId.form}>
             <div className={cnProjectForm('Content')}>
-              <NavigationList className={cnProjectForm('Navigation')}>
+              <NavigationList className={cnProjectForm('Navigation')} data-testId={testId.stepList}>
                 {steps.map(({ title }, index) => (
                   <NavigationList.Item key={title}>
                     {(props): React.ReactNode => (

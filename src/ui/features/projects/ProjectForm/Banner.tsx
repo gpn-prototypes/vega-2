@@ -7,6 +7,13 @@ import { ReferenceDataType } from '../../../../pages/project/types';
 type BannerProps = {
   referenceData: ReferenceDataType;
 };
+const testId = {
+  banner: 'ProjectForm:banner',
+  bannerEmpty: 'ProjectForm:banner.empty',
+};
+type BannerType = React.FC<BannerProps> & {
+  testId: typeof testId;
+};
 
 const getDescription = (
   regionVid: string | undefined,
@@ -24,7 +31,7 @@ const getDescription = (
   return `${countryName}, ${regionName}`;
 };
 
-export const Banner: React.FC<BannerProps> = (props) => {
+export const Banner: BannerType = (props) => {
   const { regionList } = props.referenceData;
 
   const { values } = useFormState();
@@ -32,5 +39,7 @@ export const Banner: React.FC<BannerProps> = (props) => {
   const title = values.name ? values.name : undefined;
   const description = values.region ? getDescription(values.region, regionList) : undefined;
 
-  return <PageBanner title={title} description={description} />;
+  return <PageBanner title={title} description={description} testId={testId.banner} />;
 };
+
+Banner.testId = testId;

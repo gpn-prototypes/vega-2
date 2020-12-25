@@ -16,6 +16,10 @@ type SidebarItemProps = {
 const EXCLUDED_EXTENSIONS = ['', 'exe'];
 const SIZE_LIMIT = 100 * 1024 * 1024; // 100 Мб
 
+const testId = {
+  attach: 'DocumentStep:field:attach',
+};
+
 export const SidebarItem: React.FC<SidebarItemProps> = ({ name, size, timestamp, onRemove }) => {
   const formatedSize = formatBytes(size, 1);
   const formatedDate = new Date(timestamp).toLocaleString('ru-RU', {
@@ -54,6 +58,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({ name, size, timestamp,
           e.stopPropagation();
           onRemove(nameWithoutDots);
         }}
+        data-testid={testId.attach}
       />
       <Field
         name={`${nameWithoutDots}.category`}
@@ -68,6 +73,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({ name, size, timestamp,
             onChange={({ e }): void => input.onChange(e)}
             onBlur={input.onBlur}
             onFocus={input.onFocus}
+            data-testid={`DocumentStep:field:file.${name}.category`}
           />
         )}
       />
@@ -84,6 +90,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({ name, size, timestamp,
             onChange={({ e }): void => input.onChange(e)}
             onBlur={input.onBlur}
             onFocus={input.onFocus}
+            data-testid={`DocumentStep:field:file.${name}.comment`}
           />
         )}
       />
