@@ -22,12 +22,22 @@ type EditedAtProps = {
   onClickItem?: VoidFunction;
 };
 
-export const EditedAt: React.FC<EditedAtProps> = ({ date, menu, isVisible, onClickItem }) => {
+const testId = {
+  buttonMenu: 'ProjectsPage:button:menu.trigger',
+  menuList: 'ProjectsPage:menu',
+  dateEdit: 'ProjectsPage:text:edited',
+} as const;
+
+type EditedAtType = React.FC<EditedAtProps> & {
+  testId: typeof testId;
+};
+
+export const EditedAt: EditedAtType = ({ date, menu, isVisible, onClickItem }) => {
   const anchorRef = React.createRef<HTMLButtonElement>();
   const [isPopoverVisible, setIsPopoverVisible] = React.useState(false);
   return (
     <div className={styles.root}>
-      <Text size="s" className={styles.editedTime}>
+      <Text size="s" className={styles.editedTime} data-testid={testId.dateEdit}>
         {date}
       </Text>
       <div className={styles.menu}>
@@ -41,6 +51,7 @@ export const EditedAt: React.FC<EditedAtProps> = ({ date, menu, isVisible, onCli
               view="clear"
               size="xs"
               ref={anchorRef}
+              data-testid={testId.buttonMenu}
               onClick={(e) => {
                 e.stopPropagation();
                 setIsPopoverVisible(!isPopoverVisible);
@@ -56,7 +67,7 @@ export const EditedAt: React.FC<EditedAtProps> = ({ date, menu, isVisible, onCli
             anchorRef={anchorRef}
             onClickOutside={() => setIsPopoverVisible(false)}
           >
-            <NavigationList className={styles.navigation}>
+            <NavigationList className={styles.navigation} data-testid={testId.menuList}>
               {menu.map(({ Element, key }) => {
                 return (
                   <NavigationList.Item key={key}>
@@ -70,6 +81,7 @@ export const EditedAt: React.FC<EditedAtProps> = ({ date, menu, isVisible, onCli
                             }
                           }}
                           className={`${className} ${styles.navigationItem}`}
+                          data-testid="ds"
                         />
                       );
                     }}
@@ -83,3 +95,5 @@ export const EditedAt: React.FC<EditedAtProps> = ({ date, menu, isVisible, onCli
     </div>
   );
 };
+
+EditedAt.testId = testId;
