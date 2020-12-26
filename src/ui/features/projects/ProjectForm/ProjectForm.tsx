@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Form, FormSpy } from 'react-final-form';
 import { Form as VegaForm, NavigationList } from '@gpn-prototypes/vega-ui';
 import { FormApi } from 'final-form';
@@ -83,12 +83,14 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
 
   const Step = steps[activeStepIndex].content;
 
+  const decorators = useMemo(() => [focusOnErrors], []);
+
   return (
     <Form
       initialValues={initialValues}
       keepDirtyOnReinitialize={hasUnsavedChanges}
       validate={validator}
-      decorators={[focusOnErrors]}
+      decorators={decorators}
       onSubmit={submit}
       render={({ form, handleSubmit, dirty }): React.ReactNode => (
         <>
