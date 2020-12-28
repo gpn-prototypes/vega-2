@@ -211,6 +211,15 @@ export const EditProjectPage: React.FC<PageProps> = () => {
       ? undefined
       : getInitialValues(queryProjectData?.project);
 
+  const resetFormInInitialValues = (form: FormApi<FormValues>) => {
+    if (!initialValues) {
+      return;
+    }
+
+    form.reset();
+    form.initialize(initialValues as FormValues);
+  };
+
   return (
     <div className={cnPage()}>
       <ProjectForm
@@ -219,7 +228,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
         initialValues={initialValues}
         onCancel={(form) => {
           refetchProjectFormFields().then(() => {
-            form.reset();
+            resetFormInInitialValues(form);
           });
         }}
         onSubmit={handleFormSubmit}

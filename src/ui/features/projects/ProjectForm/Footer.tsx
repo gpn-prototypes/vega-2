@@ -121,6 +121,7 @@ export const Footer: FooterType = (props) => {
         view="primary"
         label="Сохранить изменения"
         type="submit"
+        disabled={isSubmitButtonDisabled}
         data-testid={testId.saveEdit}
       />
     </PageFooter>
@@ -129,7 +130,7 @@ export const Footer: FooterType = (props) => {
   return (
     <>
       {isCreateMode && createProjectFormFooter}
-      {isEditMode && isFormDirty && editProjectFromFooter}
+      {isEditMode && (isFormDirty || (!valid && !dirtySinceLastSubmit)) && editProjectFromFooter}
     </>
   );
 };
