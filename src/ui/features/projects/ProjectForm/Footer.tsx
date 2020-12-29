@@ -127,10 +127,12 @@ export const Footer: FooterType = (props) => {
     </PageFooter>
   );
 
+  const isEditFormDirty = isFormDirty || (!valid && !dirtySinceLastSubmit);
+
   return (
     <>
       {isCreateMode && createProjectFormFooter}
-      {isEditMode && (isFormDirty || (!valid && !dirtySinceLastSubmit)) && editProjectFromFooter}
+      {isEditMode && isEditFormDirty && editProjectFromFooter}
     </>
   );
 };
