@@ -24,10 +24,10 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: yarn generate:types
+      - name: Генерация типов
+        run: yarn generate:types
         env:
-          BASE_API_URL: http://integration-csssr-vega-builder.code013.org:38080
-          AUTH_TOKEN: ${{ secrets.AUTH_TOKEN }}
+          VEGA_SCHEMA_PATH: graphql.schema.json
         if: always()
 
       - run: yarn test
