@@ -3136,6 +3136,18 @@
             "args": [],
             "type": {
               "kind": "SCALAR",
+              "name": "Boolean",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "createdAt",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
               "name": "DateTime",
               "ofType": null
             },
@@ -7199,7 +7211,7 @@
                 "description": null,
                 "type": {
                   "kind": "SCALAR",
-                  "name": "String",
+                  "name": "UUID",
                   "ofType": null
                 },
                 "defaultValue": null
@@ -7213,7 +7225,20 @@
                   "ofType": null
                 },
                 "defaultValue": null
-              },
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "CreateRegion",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "deleteRegion",
+            "description": null,
+            "args": [
               {
                 "name": "vid",
                 "description": null,
@@ -7231,7 +7256,7 @@
             ],
             "type": {
               "kind": "OBJECT",
-              "name": "UpdateRegion",
+              "name": "DeleteRegion",
               "ofType": null
             },
             "isDeprecated": false,
@@ -7246,7 +7271,7 @@
                 "description": null,
                 "type": {
                   "kind": "SCALAR",
-                  "name": "UUID",
+                  "name": "String",
                   "ofType": null
                 },
                 "defaultValue": null
