@@ -7,18 +7,15 @@ type UploadStatisticsType = {
 };
 
 export const getUploadStatistics = (fileList: File[]): UploadStatisticsType => {
-  const filePluralForms = ['файл', 'файла', 'файлов'];
-  const timePluralForms = ['минута', 'минуты', 'минут'];
+  const filePluralForm = getPluralForm(['файл', 'файла', 'файлов'], { includeNumber: true });
+  const timePluralForm = getPluralForm(['минута', 'минуты', 'минут'], { includeNumber: true });
 
   const filesLeft = fileList.length;
   const timeLeft = 2; // заглушка
   const progressPercent = 66; // заглушка
 
-  const filesLeftMessage = `Загружается ${filesLeft} ${getPluralForm(filesLeft, filePluralForms)}`;
-  const timeLeftMessage = `Осталось ориентировочно ${timeLeft} ${getPluralForm(
-    timeLeft,
-    timePluralForms,
-  )}`;
+  const filesLeftMessage = `Загружается ${filePluralForm(filesLeft)}`;
+  const timeLeftMessage = `Осталось ориентировочно ${timePluralForm(timeLeft)}`;
 
   return { filesLeftMessage, timeLeftMessage, progressPercent };
 };
