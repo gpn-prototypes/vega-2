@@ -51,10 +51,11 @@ type TextFieldProps<T = any> = {
   placeholder: string;
   input: FieldInputProps<T>;
   meta: FieldMetaState<T>;
+  errorTestId?: string;
 } & Partial<BaseTextFieldProps>;
 
 const TextField: React.FC<TextFieldProps> = (props) => {
-  const { input, meta, name, placeholder, ...rest } = props;
+  const { input, meta, name, placeholder, errorTestId, ...rest } = props;
 
   const submitErrorText =
     meta.submitError && !meta.dirtySinceLastSubmit ? meta.submitError : undefined;
@@ -83,6 +84,7 @@ const TextField: React.FC<TextFieldProps> = (props) => {
           lineHeight="xs"
           view="alert"
           className={cnDescriptionStep('ErrorText').toString()}
+          data-testid={errorTestId}
         >
           {errorText}
         </Text>
@@ -101,12 +103,15 @@ const testId = {
   regionLabel: 'ProjectForm:label:region',
   coordinates: 'ProjectForm:field:coordinates',
   coordinatesLabel: 'ProjectForm:label:coordinates',
+  coordinatesError: 'ProjectForm:text:error:coordinates',
   type: 'ProjectForm:field:type',
   typeLabel: 'ProjectForm:label:type',
   yearStart: 'ProjectForm:field:yearStart',
   yearStartLabel: 'ProjectForm:label:yearStart',
+  yearStartError: 'ProjectForm:text:error:yearStart',
   description: 'ProjectForm:field:description',
   descriptionLabel: 'ProjectForm:label:description',
+  descriptionError: 'ProjectForm:text:error:description',
 };
 
 export const DescriptionStep: React.FC<StepProps> = (props) => {
@@ -160,6 +165,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                   name="name"
                   placeholder="Придумайте название проекта"
                   data-testid={testId.name}
+                  errorTestId={testId.nameError}
                 />
               );
             }}
@@ -243,6 +249,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                   name="coordinates"
                   placeholder="Укажите систему координат"
                   data-testid={testId.coordinates}
+                  errorTestId={testId.coordinatesError}
                 />
               );
             }}
@@ -300,6 +307,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                       lineHeight="xs"
                       view="alert"
                       className={cnDescriptionStep('ErrorText').toString()}
+                      data-testid={testId.yearStartError}
                     >
                       {errorText}
                     </Text>
@@ -332,6 +340,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 width="full"
                 placeholder="Краткое описание проекта поможет отличать ваши проекты среди остальных и находить похожие"
                 data-testid={testId.description}
+                errorTestId={testId.descriptionError}
               />
             )}
           />
