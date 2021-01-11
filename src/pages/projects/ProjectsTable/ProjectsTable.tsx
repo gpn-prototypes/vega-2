@@ -23,7 +23,8 @@ const styles = {
 };
 
 const testId = {
-  favorite: 'ProjectsPage:button:favorite',
+  favoriteSelectedButton: 'ProjectsPage:button:favoriteSelectedButton',
+  favoriteNotSelectedButton: 'ProjectsPage:button:favoriteNotSelectedButton',
   projectName: 'ProjectsPage:cell:name',
 } as const;
 
@@ -139,7 +140,11 @@ export const ProjectsTable: ProjectsTableType = (props) => {
                   view="clear"
                   size="xs"
                   form="round"
-                  data-testid={testId.favorite}
+                  data-testid={
+                    project.isFavorite
+                      ? testId.favoriteSelectedButton
+                      : testId.favoriteNotSelectedButton
+                  }
                   onClick={(e) => {
                     e.stopPropagation();
                     if (project.id && project.status && project.version) {
