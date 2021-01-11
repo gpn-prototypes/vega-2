@@ -107,7 +107,6 @@ const testId = {
   typeLabel: 'ProjectForm:label:type',
   yearStart: 'ProjectForm:field:yearStart',
   yearStartLabel: 'ProjectForm:label:yearStart',
-  yearStartError: 'ProjectForm:text:yearStart:error',
   description: 'ProjectForm:field:description',
   descriptionLabel: 'ProjectForm:label:description',
 };
@@ -303,7 +302,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                       lineHeight="xs"
                       view="alert"
                       className={cnDescriptionStep('ErrorText').toString()}
-                      data-testid={testId.yearStartError}
+                      data-testid={`${testId.yearStart}:error`}
                     >
                       {errorText}
                     </Text>
