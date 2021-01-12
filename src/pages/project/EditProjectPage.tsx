@@ -4,6 +4,7 @@ import { Loader } from '@gpn-prototypes/vega-ui';
 import { FormApi, getIn, setIn } from 'final-form';
 
 import {
+  ProjectStatusEnum,
   ProjectTypeEnum,
   ProjectUpdateType,
   UpdateProject,
@@ -37,7 +38,7 @@ interface UpdateProjectDiffResult extends UpdateProject {
   result: Required<UpdateProjectDiff>;
 }
 
-const getInitialValues = (project: ProjectFormFields): Partial<FormValues> => {
+const getInitialValues = (project: ProjectFormFields): FormValues => {
   return {
     name: project.name ?? '',
     type: project.type ?? ProjectTypeEnum.Geo,
@@ -45,6 +46,7 @@ const getInitialValues = (project: ProjectFormFields): Partial<FormValues> => {
     coordinates: project.coordinates ?? '',
     description: project.description ?? '',
     yearStart: project.yearStart ?? undefined,
+    status: project.status ?? ProjectStatusEnum.Unpublished,
   };
 };
 
@@ -217,7 +219,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
     }
 
     form.reset();
-    form.initialize(initialValues as FormValues);
+    form.initialize(initialValues);
   };
 
   return (
