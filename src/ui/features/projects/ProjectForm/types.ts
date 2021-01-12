@@ -10,7 +10,7 @@ export type FormValues = {
   region: string | null;
   type: ProjectTypeEnum;
   coordinates: string;
-  yearStart: number;
+  yearStart: number | undefined;
   description: string;
   status: ProjectStatusEnum;
 };

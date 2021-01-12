@@ -36,7 +36,7 @@ interface UpdateProjectDiffResult extends UpdateProject {
   result: Required<UpdateProjectDiff>;
 }
 
-const getInitialValues = (project: ProjectType): Partial<FormValues> => {
+const getInitialValues = (project: ProjectType): FormValues => {
   return {
     name: project.name ?? '',
     type: project.type ?? ProjectTypeEnum.Geo,
