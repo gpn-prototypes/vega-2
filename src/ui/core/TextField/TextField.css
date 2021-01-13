@@ -1,0 +1,5 @@
+.VegaTextField {
+  &__ErrorText {
+    margin-top: var(--space-2xs);
+  }
+}

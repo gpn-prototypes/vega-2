@@ -1,17 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
-import { Field, FieldInputProps, FieldMetaState } from 'react-final-form';
-import { TextFieldProps as BaseTextFieldProps } from '@consta/uikit/TextField';
-import {
-  Combobox,
-  Form as VegaForm,
-  Text,
-  TextField as BaseTextField,
-} from '@gpn-prototypes/vega-ui';
+import { Field } from 'react-final-form';
+import { Combobox, Form as VegaForm, Text } from '@gpn-prototypes/vega-ui';
 import { FormApi } from 'final-form';
 
 import { ProjectTypeEnum } from '../../../../../../__generated__/types';
 import { ReferenceDataType } from '../../../../../../pages/project/types';
+import { TextField } from '../../../../../core';
 import { cnDescriptionStep, cnProjectForm } from '../../cn-form';
 import { FormMode, FormValues } from '../../types';
 
@@ -46,57 +41,9 @@ const getYearStartOptions = (): SelectOption[] => {
   return options;
 };
 
-type TextFieldProps<T = any> = {
-  name: string;
-  placeholder: string;
-  input: FieldInputProps<T>;
-  meta: FieldMetaState<T>;
-  testId?: string;
-} & Partial<BaseTextFieldProps>;
-
-const TextField: React.FC<TextFieldProps> = (props) => {
-  const { input, meta, name, placeholder, testId, ...rest } = props;
-
-  const submitErrorText =
-    meta.submitError && !meta.dirtySinceLastSubmit ? meta.submitError : undefined;
-  const showError = Boolean(meta.error || submitErrorText) && meta.submitFailed;
-  const errorText = meta.error || submitErrorText;
-
-  return (
-    <>
-      <BaseTextField
-        id={name}
-        size="s"
-        width="full"
-        name={input.name}
-        state={showError ? 'alert' : undefined}
-        placeholder={placeholder}
-        autoComplete="off"
-        value={input.value}
-        onChange={({ e }): void => input.onChange(e)}
-        onBlur={input.onBlur}
-        onFocus={input.onFocus}
-        data-testid={testId}
-        {...rest}
-      />
-      {showError && (
-        <Text
-          size="xs"
-          lineHeight="xs"
-          view="alert"
-          className={cnDescriptionStep('ErrorText').toString()}
-          data-testid={`${testId}:error`}
-        >
-          {errorText}
-        </Text>
-      )}
-    </>
-  );
-};
-
 const isValidYear = (str: string): boolean => /^\d{4}$/.test(str);
 
-const testID = {
+const testId = {
   name: 'ProjectForm:field:name',
   nameLabel: 'ProjectForm:label:name',
   region: 'ProjectForm:field:region',
@@ -149,7 +96,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
     <div className={cnProjectForm('Step').mix(cnDescriptionStep())}>
       <VegaForm.Row space="m">
         <VegaForm.Field>
-          <VegaForm.Label htmlFor="name" space="2xs" data-testid={testID.nameLabel}>
+          <VegaForm.Label htmlFor="name" space="2xs" data-testid={testId.nameLabel}>
             Название проекта
           </VegaForm.Label>
           <Field
@@ -161,7 +108,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                   meta={meta}
                   name="name"
                   placeholder="Придумайте название проекта"
-                  testId={testID.name}
+                  testId={testId.name}
                 />
               );
             }}
@@ -170,7 +117,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
       </VegaForm.Row>
       <VegaForm.Row space="m">
         <VegaForm.Field>
-          <VegaForm.Label htmlFor="region" space="2xs" data-testid={testID.regionLabel}>
+          <VegaForm.Label htmlFor="region" space="2xs" data-testid={testId.regionLabel}>
             Регион
           </VegaForm.Label>
           <Field
@@ -194,7 +141,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 }}
                 onBlur={input.onBlur}
                 onFocus={input.onFocus}
-                data-testid={testID.region}
+                data-testid={testId.region}
               />
             )}
           />
@@ -202,7 +149,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
       </VegaForm.Row>
       <VegaForm.Row space="m">
         <VegaForm.Field>
-          <VegaForm.Label htmlFor="type" space="2xs" data-testid={testID.typeLabel}>
+          <VegaForm.Label htmlFor="type" space="2xs" data-testid={testId.typeLabel}>
             Тип проекта
           </VegaForm.Label>
           <Field
@@ -222,7 +169,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 }}
                 onBlur={input.onBlur}
                 onFocus={input.onFocus}
-                data-testid={testID.type}
+                data-testid={testId.type}
               />
             )}
           />
@@ -230,7 +177,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
       </VegaForm.Row>
       <VegaForm.Row space="m">
         <VegaForm.Field>
-          <VegaForm.Label htmlFor="coordinates" space="2xs" data-testid={testID.coordinatesLabel}>
+          <VegaForm.Label htmlFor="coordinates" space="2xs" data-testid={testId.coordinatesLabel}>
             Система координат
           </VegaForm.Label>
           <Field
@@ -244,7 +191,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                   meta={meta}
                   name="coordinates"
                   placeholder="Укажите систему координат"
-                  testId={testID.coordinates}
+                  testId={testId.coordinates}
                 />
               );
             }}
@@ -253,7 +200,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
       </VegaForm.Row>
       <VegaForm.Row space="m">
         <VegaForm.Field>
-          <VegaForm.Label htmlFor="yearStart" space="2xs" data-testid={testID.yearStartLabel}>
+          <VegaForm.Label htmlFor="yearStart" space="2xs" data-testid={testId.yearStartLabel}>
             Год начала планирования
           </VegaForm.Label>
           <Field
@@ -294,7 +241,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                     }}
                     onBlur={input.onBlur}
                     onFocus={input.onFocus}
-                    data-testid={testID.yearStart}
+                    data-testid={testId.yearStart}
                   />
                   {showError && (
                     <Text
@@ -302,7 +249,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                       lineHeight="xs"
                       view="alert"
                       className={cnDescriptionStep('ErrorText').toString()}
-                      data-testid={`${testID.yearStart}:error`}
+                      data-testid={`${testId.yearStart}:error`}
                     >
                       {errorText}
                     </Text>
@@ -315,7 +262,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
       </VegaForm.Row>
       <VegaForm.Row space="m">
         <VegaForm.Field>
-          <VegaForm.Label htmlFor="description" space="2xs" data-testid={testID.descriptionLabel}>
+          <VegaForm.Label htmlFor="description" space="2xs" data-testid={testId.descriptionLabel}>
             Описание проекта
           </VegaForm.Label>
           <Field
@@ -334,7 +281,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 size="s"
                 width="full"
                 placeholder="Краткое описание проекта поможет отличать ваши проекты среди остальных и находить похожие"
-                testId={testID.description}
+                testId={testId.description}
               />
             )}
           />
