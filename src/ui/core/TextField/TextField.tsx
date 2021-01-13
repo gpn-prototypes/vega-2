@@ -1,51 +1,59 @@
 import React from 'react';
-import { Field, FieldMetaState, FieldProps, FieldRenderProps } from 'react-final-form';
-import { TextField as VegaTextField } from '@gpn-prototypes/vega-ui';
+import { FieldInputProps, FieldMetaState } from 'react-final-form';
+import { Text, TextField as BaseTextField } from '@gpn-prototypes/vega-ui';
+import cn from 'bem-cn';
 
-type VegaTextFieldProps = Omit<
-  React.ComponentProps<typeof VegaTextField>,
-  'defaultValue' | 'value' | 'state'
->;
-type FinalFormFieldProps = Pick<FieldProps<string, FieldRenderProps<string>>, 'validate' | 'value'>;
+import './TextField.css';
 
-interface TextFieldProps extends VegaTextFieldProps, FinalFormFieldProps {
+type BaseTextFieldProps = React.ComponentProps<typeof BaseTextField>;
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type TextFieldProps<T = any> = {
   name: string;
-  validateOnTouched?: boolean;
-  permanentValidation?: boolean;
-}
+  placeholder: string;
+  input: FieldInputProps<T>;
+  meta: FieldMetaState<T>;
+  testId?: string;
+} & Partial<BaseTextFieldProps>;
 
-type TextFieldState = React.ComponentProps<typeof VegaTextField>['state'];
-
-type TextFieldMeta = FieldMetaState<string>;
+const cnTextField = cn('VegaTextField');
 
 export const TextField: React.FC<TextFieldProps> = (props) => {
-  const { validateOnTouched = false, permanentValidation, ...restProps } = props;
+  const { input, meta, name, placeholder, testId, ...rest } = props;
 
-  const getFieldState = (meta: TextFieldMeta): TextFieldState => {
-    const { error, touched, submitFailed } = meta;
-    if (error) {
-      if ((validateOnTouched && touched) || submitFailed || permanentValidation) {
-        return 'alert';
-      }
-    }
-    return undefined;
-  };
+  const submitErrorText =
+    meta.submitError && !meta.dirtySinceLastSubmit ? meta.submitError : undefined;
+  const showError = Boolean(meta.error || submitErrorText) && meta.submitFailed;
+  const errorText = meta.error || submitErrorText;
 
   return (
-    <Field
-      {...restProps}
-      render={({ input, meta, ...rest }): React.ReactNode => (
-        <VegaTextField
-          {...rest}
-          value={input.value}
-          name={input.name}
-          type={input.type}
-          onChange={({ e }): void => input.onChange(e)}
-          state={getFieldState(meta)}
-          onBlur={input.onBlur}
-          onFocus={input.onFocus}
-        />
+    <>
+      <BaseTextField
+        id={name}
+        size="s"
+        width="full"
+        name={input.name}
+        state={showError ? 'alert' : undefined}
+        placeholder={placeholder}
+        autoComplete="off"
+        value={input.value}
+        onChange={({ e }): void => input.onChange(e)}
+        onBlur={input.onBlur}
+        onFocus={input.onFocus}
+        data-testid={testId}
+        {...rest}
+      />
+      {showError && (
+        <Text
+          size="xs"
+          lineHeight="xs"
+          view="alert"
+          className={cnTextField('ErrorText').toString()}
+          data-testid={testId ? `${testId}:error` : undefined}
+        >
+          {errorText}
+        </Text>
       )}
-    />
+    </>
   );
 };

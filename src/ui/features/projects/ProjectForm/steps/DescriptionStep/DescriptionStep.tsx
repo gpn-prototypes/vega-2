@@ -1,17 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
-import { Field, FieldInputProps, FieldMetaState } from 'react-final-form';
-import { TextFieldProps as BaseTextFieldProps } from '@consta/uikit/TextField';
-import {
-  Combobox,
-  Form as VegaForm,
-  Text,
-  TextField as BaseTextField,
-} from '@gpn-prototypes/vega-ui';
+import { Field } from 'react-final-form';
+import { Combobox, Form as VegaForm, Text } from '@gpn-prototypes/vega-ui';
 import { FormApi } from 'final-form';
 
 import { ProjectTypeEnum } from '../../../../../../__generated__/types';
 import { ReferenceDataType } from '../../../../../../pages/project/types';
+import { TextField } from '../../../../../core';
 import { cnDescriptionStep, cnProjectForm } from '../../cn-form';
 import { FormMode, FormValues } from '../../types';
 
@@ -46,57 +41,11 @@ const getYearStartOptions = (): SelectOption[] => {
   return options;
 };
 
-type TextFieldProps<T = any> = {
-  name: string;
-  placeholder: string;
-  input: FieldInputProps<T>;
-  meta: FieldMetaState<T>;
-} & Partial<BaseTextFieldProps>;
-
-const TextField: React.FC<TextFieldProps> = (props) => {
-  const { input, meta, name, placeholder, ...rest } = props;
-
-  const submitErrorText =
-    meta.submitError && !meta.dirtySinceLastSubmit ? meta.submitError : undefined;
-  const showError = Boolean(meta.error || submitErrorText) && meta.submitFailed;
-  const errorText = meta.error || submitErrorText;
-
-  return (
-    <>
-      <BaseTextField
-        id={name}
-        size="s"
-        width="full"
-        name={input.name}
-        state={showError ? 'alert' : undefined}
-        placeholder={placeholder}
-        autoComplete="off"
-        value={input.value}
-        onChange={({ e }): void => input.onChange(e)}
-        onBlur={input.onBlur}
-        onFocus={input.onFocus}
-        {...rest}
-      />
-      {showError && (
-        <Text
-          size="xs"
-          lineHeight="xs"
-          view="alert"
-          className={cnDescriptionStep('ErrorText').toString()}
-        >
-          {errorText}
-        </Text>
-      )}
-    </>
-  );
-};
-
 const isValidYear = (str: string): boolean => /^\d{4}$/.test(str);
 
 const testId = {
   name: 'ProjectForm:field:name',
   nameLabel: 'ProjectForm:label:name',
-  nameError: 'ProjectForm:text:error.name',
   region: 'ProjectForm:field:region',
   regionLabel: 'ProjectForm:label:region',
   coordinates: 'ProjectForm:field:coordinates',
@@ -159,7 +108,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                   meta={meta}
                   name="name"
                   placeholder="Придумайте название проекта"
-                  data-testid={testId.name}
+                  testId={testId.name}
                 />
               );
             }}
@@ -242,7 +191,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                   meta={meta}
                   name="coordinates"
                   placeholder="Укажите систему координат"
-                  data-testid={testId.coordinates}
+                  testId={testId.coordinates}
                 />
               );
             }}
@@ -300,6 +249,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                       lineHeight="xs"
                       view="alert"
                       className={cnDescriptionStep('ErrorText').toString()}
+                      data-testid={`${testId.yearStart}:error`}
                     >
                       {errorText}
                     </Text>
@@ -331,7 +281,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 size="s"
                 width="full"
                 placeholder="Краткое описание проекта поможет отличать ваши проекты среди остальных и находить похожие"
-                data-testid={testId.description}
+                testId={testId.description}
               />
             )}
           />

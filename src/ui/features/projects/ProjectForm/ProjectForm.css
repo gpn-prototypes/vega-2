@@ -56,10 +56,6 @@
 .ProjectForm-DescriptionStep {
   width: 480px;
 
-  &__ErrorText {
-    margin-top: var(--space-2xs);
-  }
-
   &__ComboboxError .Select-Control {
     border-color: var(--color-bg-alert);
   }
