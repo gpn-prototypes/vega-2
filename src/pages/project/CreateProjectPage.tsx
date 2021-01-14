@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Loader, useMount } from '@gpn-prototypes/vega-ui';
 import { FormApi, getIn, setIn } from 'final-form';
@@ -116,6 +116,16 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     },
   });
 
+  useEffect(() => {
+    if (
+      queryProjectData?.project?.__typename === 'Project' &&
+      queryProjectData.project.status === ProjectStatusEnum.Unpublished
+    ) {
+      setIsNavigationBlocked(false);
+      history.push(`/projects/show/${blankProjectId}`);
+    }
+  }, [queryProjectData, history, blankProjectId, isNavigationBlocked]);
+
   const [updateProjectBlank, { error: updateProjectBlankError }] = useUpdateProjectForm();
 
   const {
@@ -194,8 +204,6 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
             notifications.remove(item.key);
           },
         });
-        setIsNavigationBlocked(false);
-        history.push(`/projects/show/${blankProjectId}`);
       }
 
       form.initialize((v) => {
@@ -209,7 +217,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
       return errors;
     },
-    [blankProjectId, history, notifications, queryProjectData, updateProjectBlank],
+    [blankProjectId, notifications, queryProjectData, updateProjectBlank],
   );
 
   const handleCancel = () => {
