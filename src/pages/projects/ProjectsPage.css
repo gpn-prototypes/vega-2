@@ -104,6 +104,8 @@
 
   &__Modal {
     width: 480px;
+
+    word-break: break-word;
   }
 
   &__ModalFooter {
