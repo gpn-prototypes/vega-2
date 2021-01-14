@@ -11,6 +11,7 @@ import {
   UpdateProjectDiff,
 } from '../../__generated__/types';
 import { useBrowserTabActivity } from '../../hooks';
+import { useBus } from '../../providers/bus';
 import { useNotifications } from '../../providers/notifications';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
@@ -53,6 +54,7 @@ const FORM_FIELDS_POLLING_MS = 1000 * 30;
 export const CreateProjectPage: React.FC<PageProps> = () => {
   const history = useHistory();
   const notifications = useNotifications();
+  const bus = useBus();
 
   const [blankProjectId, setBlankProjectId] = useState<string | undefined>(undefined);
   const [isNavigationBlocked, setIsNavigationBlocked] = React.useState<boolean>(true);
@@ -88,7 +90,16 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   };
 
   useMount(() => {
+    const draftUnsub = bus.subscribe({ channel: 'project-draft', topic: 'delete' }, () => {
+      setIsNavigationBlocked(false);
+      history.push('/projects');
+    });
+
     call();
+
+    return () => {
+      draftUnsub();
+    };
   });
 
   const {
@@ -236,6 +247,13 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
         message: inlineDeleteProjectError.message,
       });
     }
+
+    bus.send({
+      channel: 'project-draft',
+      topic: 'delete',
+      self: false,
+      broadcast: true,
+    });
 
     setIsNavigationBlocked(false);
     history.push(path || '/projects');

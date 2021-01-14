@@ -2,8 +2,9 @@ import React from 'react';
 import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/client';
 import { History } from 'history';
 
+import { Bus } from '../../types/bus';
 import { Notifications } from '../../types/notifications';
-import { NotificationsProvider } from '../providers';
+import { BusProvider, NotificationsProvider } from '../providers';
 
 import { AppView } from './AppView';
 
@@ -13,15 +14,18 @@ type AppProps = {
   graphqlClient: ApolloClient<NormalizedCacheObject>;
   history: History;
   notifications?: Notifications;
+  bus?: Bus;
 };
 
 export const App = (props: AppProps): React.ReactElement => {
-  const { graphqlClient, notifications, history } = props;
+  const { graphqlClient, notifications, history, bus } = props;
 
   return (
     <ApolloProvider client={graphqlClient}>
       <NotificationsProvider notifications={notifications}>
-        <AppView history={history} />
+        <BusProvider bus={bus}>
+          <AppView history={history} />
+        </BusProvider>
       </NotificationsProvider>
     </ApolloProvider>
   );
