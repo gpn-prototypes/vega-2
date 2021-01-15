@@ -24,6 +24,7 @@
     "test:watch": "jest --watch",
     "format": "prettier --write '{src,types,scripts}/**/*.{json,{j,t}s{,x},css,}'",
     "coverage": "jest --all --coverage",
+    "coverage:changes": "jest --coverage --onlyChanged",
     "lint:ts": "eslint --ext=.ts,.tsx .",
     "lint:ts:fix": "eslint --ext=.ts,.tsx . --fix",
     "lint:css": "stylelint ./src/**/*.css",
