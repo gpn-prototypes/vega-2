@@ -746,7 +746,6 @@ type UpdateProject {
 
 type UpdateProjectDiff {
   remoteProject: Project
-  localProject: Project
   message: String
 }
 

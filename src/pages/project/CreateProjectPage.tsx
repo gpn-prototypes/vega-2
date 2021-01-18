@@ -152,7 +152,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
             projectAccessor: {
               fromDiffError: (data: UpdateProjectDiffResult) => ({
                 remote: data.result.remoteProject,
-                local: data.result.localProject,
+                local: queryProjectData?.project,
               }),
               fromVariables: (vars: UpdateProjectFormVariables) => vars.data,
               toVariables: (vars: UpdateProjectFormVariables, patch: ProjectUpdateType) => ({
