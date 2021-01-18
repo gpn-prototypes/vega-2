@@ -110,4 +110,11 @@ describe('ProjectsPageView', () => {
       expect(loadButton).not.toBeInTheDocument();
     });
   });
+
+  test('отображается индикатор загрузки', () => {
+    const component = renderComponent({ isLoading: true, onFavorite: noop, projects: [] });
+    const loader = component.getByTestId(ProjectsPageView.testId.loader);
+    expect(loader).toBeInTheDocument();
+    expect(component.queryByTestId(ProjectsPageView.testId.table)).toBeNull();
+  });
 });
