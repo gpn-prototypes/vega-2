@@ -8,8 +8,8 @@ type ComponentProps = {
 };
 
 const eventNamesMap = {
-  focus: ['onFocus', 'onActivated'],
-  blur: ['onBlur', 'onDeactivated'],
+  focus: { first: 'onFocus', second: 'onActivated' },
+  blur: { first: 'onBlur', second: 'onDeactivated' },
 };
 
 const TestComponent = (props: ComponentProps): React.ReactElement | null => {
@@ -35,30 +35,48 @@ const renderComponent = (props: ComponentProps): RenderResult => {
   return render(<TestComponent {...props} />);
 };
 
+enum ORDER {
+  first = 'first',
+  second = 'second',
+  third = 'third',
+  fourth = 'fourth',
+}
+
 describe('useBrowserTabActivity', () => {
   describe('срабатывание слушателей при изменении видимости таба', () => {
-    test.each(['onVisible', 'onActivated'])('при становлении таба видимым вызывается %s', (key) => {
-      const handleVisible = jest.fn();
+    test('при становлении таба видимым обработчики срабатывают в правильном порядке', () => {
+      const calls: string[] = [];
+      const onVisible = jest.fn(() => calls.push(ORDER.first));
+      const onActivated = jest.fn(() => calls.push(ORDER.second));
+      const onVisibilityChange = jest.fn(() => calls.push(ORDER.third));
+      const onActivityChange = jest.fn(() => calls.push(ORDER.fourth));
 
-      renderComponent({ observer: { [key]: handleVisible } });
+      renderComponent({
+        observer: { onVisible, onActivated, onVisibilityChange, onActivityChange },
+      });
 
       changeVisibilityState('visible');
 
-      expect(handleVisible).toBeCalledTimes(1);
+      expect(calls).toEqual([ORDER.first, ORDER.second, ORDER.third, ORDER.fourth]);
     });
 
-    test.each(['onHidden', 'onDeactivated'])('при скрытии таба вызывается %s', (key) => {
-      const handleHidden = jest.fn();
-
-      renderComponent({ observer: { [key]: handleHidden } });
+    test('при скрытии таба обработчики срабатывают в правильном порядке', () => {
+      const calls: string[] = [];
+      const onHidden = jest.fn(() => calls.push(ORDER.first));
+      const onDeactivated = jest.fn(() => calls.push(ORDER.second));
+      const onVisibilityChange = jest.fn(() => calls.push(ORDER.third));
+      const onActivityChange = jest.fn(() => calls.push(ORDER.fourth));
+      renderComponent({
+        observer: { onHidden, onDeactivated, onVisibilityChange, onActivityChange },
+      });
 
       changeVisibilityState('hidden');
 
-      expect(handleHidden).toBeCalledTimes(1);
+      expect(calls).toEqual([ORDER.first, ORDER.second, ORDER.third, ORDER.fourth]);
     });
 
     test.each(['onVisibilityChange', 'onActivityChange'])(
-      'при смене состояния таба вызывается %s',
+      'при смене состояния таба вызывается %s с корректными аргументами',
       (key) => {
         const handleVisibilityChange = jest.fn();
 
@@ -90,17 +108,22 @@ describe('useBrowserTabActivity', () => {
     (eventName) => {
       const eventNames = eventNamesMap[eventName as 'blur' | 'focus'];
 
-      test.each(eventNames)(`при событии ${eventName} вызывается %s`, (key) => {
-        const handleEvent = jest.fn();
+      test(`при событии ${eventName} обработчики вызываются в правильном порядке`, () => {
+        const calls: string[] = [];
+        const handlers = {
+          [eventNames.first]: jest.fn(() => calls.push(ORDER.first)),
+          [eventNames.second]: jest.fn(() => calls.push(ORDER.second)),
+          onActivityChange: jest.fn(() => calls.push(ORDER.third)),
+        };
 
-        renderComponent({ observer: { [key]: handleEvent } });
+        renderComponent({ observer: { ...handlers } });
 
         global.dispatchEvent(new Event(eventName));
 
-        expect(handleEvent).toBeCalledTimes(1);
+        expect(calls).toEqual([ORDER.first, ORDER.second, ORDER.third]);
       });
 
-      test(`при событии ${eventName} вызывается onActivityChange`, () => {
+      test(`при событии ${eventName} вызывается onActivityChange с корректными аргументами`, () => {
         const handleActivityChange = jest.fn();
 
         renderComponent({ observer: { onActivityChange: handleActivityChange } });
