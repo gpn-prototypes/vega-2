@@ -88,7 +88,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     }
   };
 
-  const autoSaveDebounced = useDebouncedFunction((form: FormApi<FormValues>) => {
+  const autoSaveDebounced = useDebouncedFunction(300, (form: FormApi<FormValues>) => {
     const { values, active, dirty, valid, validating, dirtySinceLastSubmit } = form.getState();
 
     if (values.status === ProjectStatusEnum.Unpublished && active) {
@@ -102,7 +102,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     if (dirty) {
       form.submit();
     }
-  }, 300);
+  });
 
   const Step = steps[activeStepIndex].content;
 
