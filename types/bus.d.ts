@@ -35,7 +35,5 @@ export interface QueuePattern {
 
 export declare type Bus = {
   send(message: MessageInput): void;
-  peek(pattern: QueuePattern): QueueMessage | void;
-  log(pattern: QueuePattern): QueueMessage[];
   subscribe<P>(pattern: QueuePattern, cb: QueueListener<P>): VoidFunction;
 };

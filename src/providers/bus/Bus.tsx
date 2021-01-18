@@ -2,44 +2,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 
-import { Bus, MessageInput, QueueListener, QueueMessage, QueuePattern } from '../../../types/bus';
+import { Bus } from '../../../types/bus';
 
-type ContextValues = Bus;
+type ContextValues = Bus | null;
 
-const noop = (): void => {};
-
-const BusContext = React.createContext<ContextValues>({
-  send(message: MessageInput) {},
-  peek(pattern: QueuePattern) {},
-  log(pattern: QueuePattern) {
-    const res: QueueMessage[] = [];
-    return res;
-  },
-  subscribe(pattern: QueuePattern, cb: QueueListener) {
-    return noop;
-  },
-});
+const BusContext = React.createContext<ContextValues>(null);
 
 export const useBus = (): Bus => {
-  return React.useContext(BusContext);
+  const ctx = React.useContext(BusContext);
+
+  if (ctx === null) {
+    throw new Error('Отсутствует context, проверьте BusProvider');
+  }
+
+  return ctx;
 };
 
 type BusProps = {
-  bus?: Bus;
+  bus: Bus;
 };
 
 export const BusProvider: React.FC<BusProps> = ({ bus, children }) => {
-  const value = bus || {
-    send(message: MessageInput) {},
-    subscribe(pattern: QueuePattern, cb: QueueListener) {
-      return noop;
-    },
-    peek(pattern: QueuePattern) {},
-    log(pattern: QueuePattern) {
-      const res: QueueMessage[] = [];
-      return res;
-    },
-  };
-
-  return <BusContext.Provider value={value}>{children}</BusContext.Provider>;
+  return <BusContext.Provider value={bus}>{children}</BusContext.Provider>;
 };
