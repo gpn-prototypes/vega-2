@@ -5,7 +5,7 @@ import { MenuItem } from '../types';
 
 import { cnEditedAt } from './cn-edited-at';
 
-type EditedAtProps = {
+export type EditedAtProps = {
   date?: string | React.ReactElement;
   menu?: MenuItem[];
   onMenuToggle(isMenuShowed: boolean): void;
@@ -60,6 +60,7 @@ export const EditedAt: EditedAtType = ({ date, menu, onMenuToggle }) => {
             offset={6}
             anchorRef={anchorRef}
             onClickOutside={() => {
+              console.log('click');
               if (isPopoverVisible) {
                 showPopover(false);
               }
@@ -76,7 +77,7 @@ export const EditedAt: EditedAtType = ({ date, menu, onMenuToggle }) => {
                             showPopover(false);
                           }}
                           className={cnEditedAt('navigationItem').mix([className])}
-                          data-testid="ds"
+                          data-testid={`${testId.menuList}:${key}`}
                         />
                       );
                     }}

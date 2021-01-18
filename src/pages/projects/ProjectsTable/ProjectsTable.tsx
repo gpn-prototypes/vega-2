@@ -28,15 +28,16 @@ const testId = {
   favoriteSelectedButton: 'ProjectsPage:button:favoriteSelectedButton',
   favoriteNotSelectedButton: 'ProjectsPage:button:favoriteNotSelectedButton',
   projectName: 'ProjectsPage:cell:name',
+  placeholder: 'ProjectsPage:table:placeholder',
 } as const;
 
-type Props = {
+export type ProjectsTableProps = {
   rows?: TableRow[];
   placeholder?: string | React.ReactElement;
   onFavorite(id: string, payload: { isFavorite: boolean; version: number }): void;
 };
 
-type ProjectsTableType = React.FC<Props> & {
+type ProjectsTableType = React.FC<ProjectsTableProps> & {
   testId: typeof testId;
 };
 
@@ -93,7 +94,12 @@ const COLUMNS: React.ComponentProps<typeof Table>['columns'] = [
 ];
 
 export const ProjectsTable: ProjectsTableType = (props) => {
-  const placeholder = props.placeholder ?? <Text size="s">Пока нет ни одного проекта :(</Text>;
+  const placeholder = props.placeholder ?? (
+    <Text size="s" data-testid={testId.placeholder}>
+      Пока нет ни одного проекта :(
+    </Text>
+  );
+  const [idMenuVisible, setIdMenuVisible] = React.useState<string | undefined>(undefined);
   const [idActiveRow, setIdActiveRow] = React.useState<string | undefined>(undefined);
 
   const history = useHistory();

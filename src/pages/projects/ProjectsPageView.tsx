@@ -13,15 +13,16 @@ const testId = {
   rootTitle: 'ProjectsPage:root:title',
   create: 'ProjectsPage:link:create',
   table: 'ProjectsPage:table',
+  loader: 'ProjectsPage:loader',
 };
 
-type Props = {
+export type ProjectsPageViewProps = {
   projects: TableRow[];
   isLoading: boolean;
   onFavorite(id: string, payload: { isFavorite: boolean; version: number }): void;
 };
 
-type ProjectsPageViewType = React.FC<Props> & {
+type ProjectsPageViewType = React.FC<ProjectsPageViewProps> & {
   testId: typeof testId;
 };
 
@@ -34,7 +35,6 @@ export const ProjectsPageView: ProjectsPageViewType = (props) => {
       <ProjectsTable
         rows={props.projects}
         onFavorite={(id, payload) => {
-          // eslint-disable-next-line no-console
           props.onFavorite(id, payload);
         }}
       />
@@ -77,7 +77,7 @@ export const ProjectsPageView: ProjectsPageViewType = (props) => {
         /> */}
 
         {props.isLoading ? (
-          <div className={cn('Loader')}>
+          <div className={cn('Loader')} data-testid={testId.loader}>
             <Loader />
           </div>
         ) : (
