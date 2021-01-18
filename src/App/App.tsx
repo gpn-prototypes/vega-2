@@ -14,7 +14,7 @@ type AppProps = {
   graphqlClient: ApolloClient<NormalizedCacheObject>;
   history: History;
   notifications?: Notifications;
-  bus?: Bus;
+  bus: Bus;
 };
 
 export const App = (props: AppProps): React.ReactElement => {
