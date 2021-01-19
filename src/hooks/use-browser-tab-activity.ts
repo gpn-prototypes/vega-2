@@ -3,19 +3,19 @@ import { merge } from 'ramda';
 
 const noop = () => {};
 
-interface State {
+export interface State {
   visible: boolean;
   hidden: boolean;
   focus: boolean;
   blur: boolean;
 }
 
-interface InnerState {
+export interface InnerState {
   visible: boolean;
   active: boolean;
 }
 
-interface Observer {
+export interface Observer {
   onVisible(): void;
   onHidden(): void;
   onActivated(): void;
@@ -37,15 +37,17 @@ const withDefaulHandlers = merge({
   onVisibilityChange: noop,
 });
 
+export type InputObserver = Partial<Observer> | VoidFunction;
+
 const defaultObserver = withDefaulHandlers({});
 
-function useObserverRef(observer: Partial<Observer>): React.MutableRefObject<Observer> {
+export function useObserverRef(observer: InputObserver): React.MutableRefObject<Observer> {
   const result = useRef<Observer>(defaultObserver);
 
   result.current =
     typeof observer !== 'function'
       ? withDefaulHandlers(observer)
-      : withDefaulHandlers({ onChange: observer });
+      : withDefaulHandlers({ onActivityChange: observer });
 
   return result;
 }
@@ -59,7 +61,7 @@ function computeState(state: InnerState): State {
   };
 }
 
-export function useBrowserTabActivity(inputObserver: Partial<Observer>): void {
+export function useBrowserTabActivity(inputObserver: InputObserver): void {
   const stateRef = useRef<InnerState>({
     visible: true,
     active: true,
