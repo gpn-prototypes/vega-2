@@ -47,7 +47,13 @@ export const Footer: FooterType = (props) => {
     onStepChange(activeStep - 1);
   };
 
-  const { valid, dirtySinceLastSubmit, hasValidationErrors } = form.getState();
+  const {
+    valid,
+    dirtySinceLastSubmit,
+    hasValidationErrors,
+    hasSubmitErrors,
+    dirty,
+  } = form.getState();
 
   const isSubmitButtonDisabled = (!valid && !dirtySinceLastSubmit) || hasValidationErrors;
 
@@ -127,7 +133,8 @@ export const Footer: FooterType = (props) => {
     </PageFooter>
   );
 
-  const isEditFormDirty = isFormDirty || (!valid && !dirtySinceLastSubmit);
+  const isEditFormDirty =
+    isFormDirty || (!valid && !dirtySinceLastSubmit) || (hasSubmitErrors && dirty);
 
   return (
     <>
