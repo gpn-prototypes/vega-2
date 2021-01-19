@@ -47,9 +47,6 @@ mutation UpdateProjectForm($vid: UUID, $data: ProjectUpdateType) {
         remoteProject {
           ...projectFormFields
         }
-        localProject {
-          ...projectFormFields
-        }
       }
     }
   }

@@ -123,7 +123,7 @@ export const ProjectsPage = (): React.ReactElement => {
             maxAttempts: 5,
             projectAccessor: {
               fromDiffError: (mutationData: UpdateProjectDiffResult) => ({
-                local: mutationData.result.localProject,
+                local: { vid: id, isFavorite: !payload.isFavorite, version: payload.version },
                 remote: mutationData.result.remoteProject,
               }),
             },
