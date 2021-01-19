@@ -53,11 +53,6 @@ mutation ProjectToggleFavorite(
         message
       }
       ... on UpdateProjectDiff {
-        localProject {
-          vid
-          isFavorite
-          version
-        }
         remoteProject {
           vid
           isFavorite

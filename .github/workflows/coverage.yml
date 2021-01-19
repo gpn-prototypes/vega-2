@@ -23,7 +23,7 @@ jobs:
         env:
           VEGA_SCHEMA_PATH: graphql.schema.json
 
-      - run: yarn coverage:changes
+      - run: yarn coverage
         if: always()
 
       - uses: Inzephirum/gha-test-coverage-check@v1
