@@ -117,4 +117,18 @@ describe('ProjectsPageView', () => {
     expect(loader).toBeInTheDocument();
     expect(component.queryByTestId(ProjectsPageView.testId.table)).toBeNull();
   });
+
+  test('отображается индикатор загрузки', () => {
+    const func = jest.fn();
+    const pageView = renderComponent({
+      isLoading: false,
+      onFavorite: func,
+      projects: projectRowMock,
+    });
+
+    tl.fireEvent.mouseOver(pageView.getByText(projectRowMock[0].name));
+    tl.fireEvent.click(pageView.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton));
+
+    expect(func).toBeCalledTimes(1);
+  });
 });
