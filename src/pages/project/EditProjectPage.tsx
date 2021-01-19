@@ -135,6 +135,12 @@ export const EditProjectPage: React.FC<PageProps> = () => {
 
       if (updateProjectResult.data?.updateProject?.result?.__typename === 'Error') {
         setUnsavedChanges({ ...unsavedChanges, ...changes });
+        const actual = await refetchProjectFormFields();
+
+        if (actual.data.project?.__typename === 'Project') {
+          form.initialize(getInitialValues(actual.data.project));
+        }
+
         const inlineUpdateProjectError = updateProjectResult.data?.updateProject?.result;
 
         if (inlineUpdateProjectError?.code === 'PROJECT_NAME_ALREADY_EXISTS') {
@@ -155,20 +161,20 @@ export const EditProjectPage: React.FC<PageProps> = () => {
             notifications.remove(item.key);
           },
         });
+
+        form.initialize(getInitialValues(updateProjectResult.data.updateProject.result));
       }
-
-      form.initialize((v) => {
-        if (updateProjectResult.data?.updateProject?.result?.__typename === 'Project') {
-          const initials = getInitialValues(updateProjectResult.data.updateProject.result);
-          return { ...initials, ...v };
-        }
-
-        return v;
-      });
 
       return errors;
     },
-    [notifications, projectId, unsavedChanges, queryProjectData, updateProject],
+    [
+      notifications,
+      projectId,
+      unsavedChanges,
+      queryProjectData,
+      updateProject,
+      refetchProjectFormFields,
+    ],
   );
 
   const apolloError = queryProjectError || queryRegionListError || updateProjectError;
@@ -213,13 +219,9 @@ export const EditProjectPage: React.FC<PageProps> = () => {
       ? undefined
       : getInitialValues(queryProjectData?.project);
 
-  const resetFormInInitialValues = (form: FormApi<FormValues>) => {
-    if (!initialValues) {
-      return;
-    }
-
+  const resetFormInInitialValues = (form: FormApi<FormValues>, values: FormValues) => {
     form.reset();
-    form.initialize(initialValues);
+    form.initialize(values);
   };
 
   return (
@@ -229,8 +231,10 @@ export const EditProjectPage: React.FC<PageProps> = () => {
         referenceData={referenceData}
         initialValues={initialValues}
         onCancel={(form) => {
-          refetchProjectFormFields().then(() => {
-            resetFormInInitialValues(form);
+          refetchProjectFormFields().then((response) => {
+            if (response.data?.project?.__typename === 'Project') {
+              resetFormInInitialValues(form, getInitialValues(response.data.project));
+            }
           });
         }}
         onSubmit={handleFormSubmit}
