@@ -29,26 +29,29 @@ const EditButton = ({ close, ...rest }: { close(): void }) => {
 
 const menu = [{ key: 'edit', Element: EditButton }];
 
+const date = {
+  date: '12 ноября 2020',
+  time: '3:00',
+};
+
 describe('EditedAt', () => {
   test('рендерится без ошибок', () => {
     const func = jest.fn();
-    const date = '2020-11-12T00:00:00';
+
     const component = renderComponent({ isVisible: false, onMenuToggle: func, date });
 
-    expect(component.getByText(date)).toBeInTheDocument();
+    expect(component.getByText(date.date)).toBeInTheDocument();
   });
 
   test('рендерится кнопка «меню»', () => {
     const func = jest.fn();
-    const date = '2020-11-12T00:00:00';
     const component = renderComponent({ isVisible: true, onMenuToggle: func, date });
 
-    expect(component.getByText(date)).toBeInTheDocument();
+    expect(component.getByText(date.date)).toBeInTheDocument();
   });
 
   test('рендерится всплывающий блок', () => {
     const func = jest.fn();
-    const date = '2020-11-12T00:00:00';
     const component = renderComponent({ isVisible: true, onMenuToggle: func, date, menu });
 
     tl.fireEvent.click(component.getByTestId(EditedAt.testId.buttonMenu));
@@ -58,7 +61,6 @@ describe('EditedAt', () => {
 
   test('всплывающий блок закрывается при клике на пункт меню', () => {
     const func = jest.fn();
-    const date = '2020-11-12T00:00:00';
     const component = renderComponent({ isVisible: true, onMenuToggle: func, date, menu });
 
     tl.fireEvent.click(component.getByTestId(EditedAt.testId.buttonMenu));
@@ -74,7 +76,6 @@ describe('EditedAt', () => {
 
   test.skip('всплывающий блок закрывается при клике вне меню', () => {
     const func = jest.fn();
-    const date = '2020-11-12T00:00:00';
     const component = renderComponent({ isVisible: true, onMenuToggle: func, date, menu });
 
     tl.fireEvent.click(component.getByTestId(EditedAt.testId.buttonMenu));

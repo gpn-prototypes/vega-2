@@ -8,6 +8,12 @@ import { ProjectsTable, ProjectsTableProps } from './ProjectsTable';
 
 const noop = () => {};
 
+// const renderWithRouter = (ui: React.ReactElement, { route = '/' } = {}) => {
+//   window.history.pushState({}, 'Test page', route);
+
+//   return tl.render(ui, { wrapper: BrowserRouter });
+// };
+
 const projectRowMock = [
   {
     id: 'id-0',
@@ -27,7 +33,11 @@ const projectRowMock = [
 
 function renderComponent(props: ProjectsTableProps): tl.RenderResult {
   const { placeholder, onFavorite = noop, rows = [] } = props;
-  return tl.render(<ProjectsTable rows={rows} placeholder={placeholder} onFavorite={onFavorite} />);
+  return tl.render(
+    <>
+      <ProjectsTable rows={rows} placeholder={placeholder} onFavorite={onFavorite} />
+    </>,
+  );
 }
 
 describe('ProjectsTable', () => {

@@ -2,12 +2,15 @@ import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import * as tl from '@testing-library/react';
 
+import { ProjectStatusEnum } from '../../__generated__/types';
+
 import { ProjectsPageView, ProjectsPageViewProps } from './ProjectsPageView';
+import { ProjectsTable } from './ProjectsTable';
 
 const noop = () => {};
 
 function renderComponent(props: ProjectsPageViewProps): tl.RenderResult {
-  const { isLoading = false, onFavorite = noop, projects = [] } = props;
+  const { isLoading = false, onFavorite, projects = [] } = props;
   return tl.render(
     <Router>
       <ProjectsPageView projects={projects} isLoading={isLoading} onFavorite={onFavorite} />
@@ -15,9 +18,20 @@ function renderComponent(props: ProjectsPageViewProps): tl.RenderResult {
   );
 }
 
-describe('ProjectsPage', () => {
-  test.skip('рендерится без ошибок', () => {
-    expect(renderComponent).not.toThrow();
+const projectRowMock = [
+  {
+    id: 'id-0',
+    isFavorite: false,
+    name: 'name 1',
+    version: 0,
+    status: ProjectStatusEnum.Unpublished,
+  },
+];
+
+describe('ProjectsPageView', () => {
+  test('рендерится без ошибок', () => {
+    const component = renderComponent({ isLoading: false, onFavorite: noop, projects: [] });
+    expect(component.getByText('Название')).toBeInTheDocument();
   });
 
   test('отображается индикатор загрузки', () => {
@@ -25,5 +39,19 @@ describe('ProjectsPage', () => {
     const loader = component.getByTestId(ProjectsPageView.testId.loader);
     expect(loader).toBeInTheDocument();
     expect(component.queryByTestId(ProjectsPageView.testId.table)).toBeNull();
+  });
+
+  test('отображается индикатор загрузки', () => {
+    const func = jest.fn();
+    const pageView = renderComponent({
+      isLoading: false,
+      onFavorite: func,
+      projects: projectRowMock,
+    });
+
+    tl.fireEvent.mouseOver(pageView.getByText(projectRowMock[0].name));
+    tl.fireEvent.click(pageView.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton));
+
+    expect(func).toBeCalledTimes(1);
   });
 });

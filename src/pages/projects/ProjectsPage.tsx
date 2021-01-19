@@ -1,85 +1,30 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button, IconEdit, IconTrash, Modal, Text } from '@gpn-prototypes/vega-ui';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-
-import 'dayjs/locale/ru';
+import { IconEdit, IconTrash, Text } from '@gpn-prototypes/vega-ui';
 
 import { namedOperations, UpdateProject, UpdateProjectDiff } from '../../__generated__/types';
 import { useBrowserTabActivity } from '../../hooks';
 import { useNotifications } from '../../providers/notifications';
+import { projectsMapper } from '../../utils/projects-mapper';
 
 import {
-  ProjectsTableList,
   useDeleteProject,
   useProjectsTableList,
   useProjectToggleFavorite,
 } from './__generated__/projects';
 import { MenuItemProps, TableRow } from './ProjectsTable/types';
 import { cnProjectsPage as cn } from './cn-projects-page';
+import { ModalDeleteProject } from './ModalDeleteProject';
 import { ProjectsPageView } from './ProjectsPageView';
-
-dayjs.locale('ru');
-dayjs.extend(utc);
 
 interface UpdateProjectDiffResult extends UpdateProject {
   result: Required<UpdateProjectDiff>;
 }
 
 const testId = {
-  modal: 'ProjectsPage:modal',
-  modalCancel: 'ProjectsPage:modal:button.cancel',
-  modalConfirm: 'ProjectsPage:modal:button.confirm',
   projectRemove: 'ProjectsPage:button:remove',
   projectEdit: 'ProjectsPage:button:edit',
 } as const;
-
-const projectsMapper = (updateProjectData: ProjectsTableList): TableRow[] => {
-  if (updateProjectData.projects?.__typename !== 'ProjectList') {
-    return [];
-  }
-
-  const projects = updateProjectData.projects.data ?? [];
-
-  return projects?.flatMap((project) => {
-    if (project === null) {
-      return [];
-    }
-
-    const roles = project.attendees
-      ?.map((a) => a?.roles)
-      ?.map((rs) => rs?.map((r) => r?.name).join(''))
-      .join(', ');
-
-    const createdAt = project.createdAt
-      ? dayjs.utc(project.createdAt).local().format('D MMMM YYYY')
-      : undefined;
-
-    const editedAt = project.editedAt ? (
-      <div className={cn('EditedAt')}>
-        <Text size="s">{dayjs.utc(project.editedAt).local().format('D MMMM YYYY')}</Text>
-        <Text size="s" view="secondary">
-          {dayjs.utc(project.editedAt).local().format(', H:mm')}
-        </Text>
-      </div>
-    ) : undefined;
-
-    return {
-      id: project.vid ?? 'wtf-id',
-      name: project.name ?? undefined,
-      version: project.version ?? undefined,
-      status: project.status ?? undefined,
-      description: project.description ?? undefined,
-      isFavorite: project.isFavorite ?? undefined,
-      region: project.region?.name ?? undefined,
-      roles: roles ?? undefined,
-      createdBy: project?.createdBy?.name ?? undefined,
-      createdAt,
-      editedAt,
-    };
-  });
-};
 
 const TABLE_POLLING_INTERVAL_MS = 1000 * 30;
 
@@ -207,6 +152,34 @@ export const ProjectsPage = (): React.ReactElement => {
     };
   });
 
+  const handleCloseModal = () => {
+    setIsOpenModal(false);
+  };
+
+  const handleCancelDelete = () => {
+    setIsOpenModal(false);
+    setDataDeleteProject(null);
+  };
+
+  const handleDeleteProject = () => {
+    /* istanbul ignore else */
+    if (dataDeleteProject) {
+      deleteProject({ variables: { vid: dataDeleteProject.id } }).then(() => {
+        setIsOpenModal(false);
+        notifications.add({
+          autoClose: 3,
+          key: `${dataDeleteProject.id}-system`,
+          status: 'success',
+          message: `Проект «${dataDeleteProject.name}» успешно удален.`,
+          onClose(item) {
+            notifications.remove(item.key);
+          },
+        });
+        setDataDeleteProject(null);
+      });
+    }
+  };
+
   return (
     <>
       <ProjectsPageView
@@ -214,59 +187,13 @@ export const ProjectsPage = (): React.ReactElement => {
         isLoading={isLoading}
         onFavorite={handelToggleFavorite}
       />
-      <Modal
-        hasOverlay
-        hasCloseButton
+      <ModalDeleteProject
+        projectName={dataDeleteProject?.name}
         isOpen={isOpenModal}
-        onClose={() => {
-          setIsOpenModal(false);
-        }}
-        className={cn('Modal').toString()}
-        data-testid={testId.modal}
-      >
-        <Modal.Header>
-          <Text size="xs">Удаление проекта</Text>
-        </Modal.Header>
-        <Modal.Body>
-          <Text>{`Вы уверены, что хотите удалить проект «${dataDeleteProject?.name}» из\u00A0системы?`}</Text>
-        </Modal.Body>
-        <Modal.Footer className={cn('ModalFooter').toString()}>
-          <Button
-            size="m"
-            onClick={() => {
-              setIsOpenModal(false);
-              setDataDeleteProject(null);
-            }}
-            view="primary"
-            label="Нет, оставить"
-            className={cn('ButtonCancel').toString()}
-            data-testid={testId.modalCancel}
-          />
-          <Button
-            size="m"
-            onClick={() => {
-              if (dataDeleteProject) {
-                deleteProject({ variables: { vid: dataDeleteProject.id } }).then(() => {
-                  setIsOpenModal(false);
-                  notifications.add({
-                    autoClose: 3,
-                    key: `${dataDeleteProject.id}-system`,
-                    status: 'success',
-                    message: `Проект «${dataDeleteProject.name}» успешно удален.`,
-                    onClose(item) {
-                      notifications.remove(item.key);
-                    },
-                  });
-                  setDataDeleteProject(null);
-                });
-              }
-            }}
-            view="ghost"
-            label="Да, удалить"
-            data-testid={testId.modalConfirm}
-          />
-        </Modal.Footer>
-      </Modal>
+        onClose={handleCloseModal}
+        onCancelDelete={handleCancelDelete}
+        onDeleteProject={handleDeleteProject}
+      />
     </>
   );
 };
