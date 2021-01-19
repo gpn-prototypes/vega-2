@@ -9,6 +9,12 @@ import { ProjectsTable, ProjectsTableProps } from './ProjectsTable';
 
 const noop = () => {};
 
+// const renderWithRouter = (ui: React.ReactElement, { route = '/' } = {}) => {
+//   window.history.pushState({}, 'Test page', route);
+
+//   return tl.render(ui, { wrapper: BrowserRouter });
+// };
+
 const projectRowMock = [
   {
     id: 'id-0',

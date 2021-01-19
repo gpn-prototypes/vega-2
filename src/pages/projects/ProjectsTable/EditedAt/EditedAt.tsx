@@ -67,7 +67,6 @@ export const EditedAt: EditedAtType = ({ date, menu, onMenuToggle }) => {
             offset={6}
             anchorRef={anchorRef}
             onClickOutside={() => {
-              console.log('click');
               if (isPopoverVisible) {
                 showPopover(false);
               }
