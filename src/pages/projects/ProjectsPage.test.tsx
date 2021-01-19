@@ -10,6 +10,12 @@ import { ProjectsPage } from './ProjectsPage';
 import { ProjectsPageView } from './ProjectsPageView';
 import { ProjectsTable } from './ProjectsTable';
 
+function openModalRemoveProject(projectName: string) {
+  tl.fireEvent.mouseOver(tl.screen.getByText(projectName));
+  tl.fireEvent.click(tl.screen.getByTestId(EditedAt.testId.buttonMenu));
+  tl.fireEvent.click(tl.screen.getByTestId(ProjectsPage.testId.projectRemove));
+}
+
 describe('ProjectsPage', () => {
   test('Отрисовывается страница c данными', async () => {
     const defaultMock = mocks.default;
@@ -45,9 +51,7 @@ describe('ProjectsPage', () => {
 
     const nameProject = deleteProjectMock[0].result.data.projects?.data[0].name ?? '';
 
-    tl.fireEvent.mouseOver($.getByText(nameProject));
-    tl.fireEvent.click($.getByTestId(EditedAt.testId.buttonMenu));
-    tl.fireEvent.click($.getByTestId(ProjectsPage.testId.projectRemove));
+    openModalRemoveProject(nameProject);
 
     expect($.getByTestId(ModalDeleteProject.testId.modal)).toBeInTheDocument();
 
@@ -74,9 +78,7 @@ describe('ProjectsPage', () => {
 
     const nameProject = deleteProjectMock[0].result.data.projects?.data[0].name ?? '';
 
-    tl.fireEvent.mouseOver($.getByText(nameProject));
-    tl.fireEvent.click($.getByTestId(EditedAt.testId.buttonMenu));
-    tl.fireEvent.click($.getByTestId(ProjectsPage.testId.projectRemove));
+    openModalRemoveProject(nameProject);
 
     const modal = $.getByTestId(ModalDeleteProject.testId.modal);
 
@@ -97,9 +99,7 @@ describe('ProjectsPage', () => {
 
     const nameProject = deleteProjectMock[0].result.data.projects?.data[0].name ?? '';
 
-    tl.fireEvent.mouseOver($.getByText(nameProject));
-    tl.fireEvent.click($.getByTestId(EditedAt.testId.buttonMenu));
-    tl.fireEvent.click($.getByTestId(ProjectsPage.testId.projectRemove));
+    openModalRemoveProject(nameProject);
 
     const modal = $.getByTestId(ModalDeleteProject.testId.modal);
 
