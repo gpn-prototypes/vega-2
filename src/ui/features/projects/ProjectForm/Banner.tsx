@@ -4,18 +4,20 @@ import { PageBanner } from '@gpn-prototypes/vega-ui';
 
 import { ReferenceDataType } from '../../../../pages/project/types';
 
-type BannerProps = {
+export type BannerProps = {
   referenceData: ReferenceDataType;
 };
+
 const testId = {
   banner: 'ProjectForm:banner',
   bannerEmpty: 'ProjectForm:banner.empty',
 };
-type BannerType = React.FC<BannerProps> & {
+
+export type BannerType = React.FC<BannerProps> & {
   testId: typeof testId;
 };
 
-const getDescription = (
+export const getDescription = (
   regionVid: string | undefined,
   regionList: ReferenceDataType['regionList'],
 ): string | undefined => {
