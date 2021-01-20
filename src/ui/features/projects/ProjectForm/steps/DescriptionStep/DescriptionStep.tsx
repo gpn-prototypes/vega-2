@@ -15,7 +15,7 @@ type SelectOption = {
   value: string | number;
 };
 
-type StepProps = {
+export type StepProps = {
   mode: FormMode;
   referenceData: ReferenceDataType;
   form: FormApi<FormValues>;
@@ -24,7 +24,7 @@ type StepProps = {
 const typeOptions = [{ label: 'Геологоразведочный', value: ProjectTypeEnum.Geo }];
 const typeInitialValue = typeOptions[0].value;
 
-const getYearStartOptions = (): SelectOption[] => {
+export const getYearStartOptions = (): SelectOption[] => {
   const currentYear = new Date().getFullYear();
   const options = [];
 
@@ -41,7 +41,7 @@ const getYearStartOptions = (): SelectOption[] => {
   return options;
 };
 
-const isValidYear = (str: string): boolean => /^\d{4}$/.test(str);
+export const isValidYear = (str: string): boolean => /^\d{4}$/.test(str);
 
 const testId = {
   name: 'ProjectForm:field:name',
@@ -56,17 +56,21 @@ const testId = {
   yearStartLabel: 'ProjectForm:label:yearStart',
   description: 'ProjectForm:field:description',
   descriptionLabel: 'ProjectForm:label:description',
+} as const;
+
+type DescriptionStepType = React.FC<StepProps> & {
+  testId: typeof testId;
 };
 
-export const DescriptionStep: React.FC<StepProps> = (props) => {
+export const DescriptionStep: DescriptionStepType = (props) => {
   const { mode, referenceData, form } = props;
   const { regionList } = referenceData;
 
   const regionOptions =
     regionList?.map((region) => ({
-      label: region?.name || '',
-      value: region?.vid || '',
-    })) || [];
+      label: region?.name || /* istanbul ignore next */ '',
+      value: region?.vid || /* istanbul ignore next */ '',
+    })) || /* istanbul ignore next */ [];
 
   const [yearStartOptions, setYearStartOptions] = useState(getYearStartOptions());
   const yearStartInitialValue = mode === 'create' ? yearStartOptions[2].value : undefined;
@@ -130,15 +134,12 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 getOptionLabel={getItemLabel}
                 placeholder="Выберите регион"
                 value={regionOptions.find(({ value }) => value === input.value)}
-                onChange={(option: SelectOption | null): void => {
-                  let value = null;
-
-                  if (option !== null) {
-                    value = option.value;
+                onChange={
+                  /* istanbul ignore next */
+                  (option: SelectOption | null): void => {
+                    input.onChange(option?.value);
                   }
-
-                  input.onChange(value);
-                }}
+                }
                 onBlur={input.onBlur}
                 onFocus={input.onFocus}
                 data-testid={testId.region}
@@ -164,9 +165,12 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 placeholder="Выберите тип проекта"
                 disabled
                 value={typeOptions.find(({ value }) => value === input.value)}
-                onChange={(value): void => {
-                  input.onChange(value?.value);
-                }}
+                onChange={
+                  /* istanbul ignore next */
+                  (value): void => {
+                    input.onChange(value?.value);
+                  }
+                }
                 onBlur={input.onBlur}
                 onFocus={input.onFocus}
                 data-testid={testId.type}
@@ -182,7 +186,10 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           </VegaForm.Label>
           <Field
             allowNull
-            parse={(v) => v}
+            parse={
+              /* istanbul ignore next */
+              (v) => v
+            }
             name="coordinates"
             render={({ input, meta }): React.ReactNode => {
               return (
@@ -215,7 +222,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
               const errorText = meta.error || submitErrorText;
 
               return (
-                <>
+                <div data-testid={`${testId.yearStart}:wrapper`}>
                   <Combobox
                     id="yearStart"
                     className={
@@ -255,7 +262,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                       {errorText}
                     </Text>
                   )}
-                </>
+                </div>
               );
             }}
           />
@@ -269,7 +276,10 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           <Field
             name="description"
             allowNull
-            parse={(v) => v}
+            parse={
+              /* istanbul ignore next */
+              (v) => v
+            }
             render={({ input, meta }): React.ReactNode => (
               <TextField
                 id="description"
@@ -291,3 +301,5 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
     </div>
   );
 };
+
+DescriptionStep.testId = testId;

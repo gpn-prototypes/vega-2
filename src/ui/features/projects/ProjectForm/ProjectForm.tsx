@@ -21,7 +21,7 @@ const focusOnErrors = createDecorator<FormValues>();
 const currentYear = new Date().getFullYear();
 const minYearStart = currentYear - 1;
 
-const validator = createValidate<Partial<FormValues>>({
+export const validator = createValidate<Partial<FormValues>>({
   name: [
     validators.required(undefined, () => 'Заполните обязательное поле'),
     validators.minLength(
