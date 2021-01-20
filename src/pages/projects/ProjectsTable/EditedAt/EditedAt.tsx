@@ -35,13 +35,12 @@ export const EditedAt: EditedAtType = ({ date, menu, onMenuToggle }) => {
       <Text size="s" className={cnEditedAt('editedTime').toString()} data-testid={testId.dateEdit}>
         {date && (
           <>
-            <Text size="s">{date.date}</Text>{' '}
+            <Text size="s">{date.date}</Text>
             <Text size="s" view="secondary">
-              {date.time}{' '}
+              {date.time}
             </Text>
           </>
         )}
-        {/* // {date} */}
       </Text>
       <div className={cnEditedAt('menu')}>
         <div className={cnEditedAt('iconWrap')}>
