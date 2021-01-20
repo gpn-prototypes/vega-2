@@ -4,25 +4,15 @@ import { act, fireEvent, render, RenderResult, screen } from '@testing-library/r
 import { createForm } from 'final-form';
 import { merge } from 'ramda';
 
-import { ProjectStatusEnum, ProjectTypeEnum } from '../../../../__generated__/types';
+import { ProjectStatusEnum } from '../../../../__generated__/types';
 
+import { initializeProjectForm } from './__tests__/utils';
 import { Footer, FooterProps } from './Footer';
 import { FormValues } from './types';
 
 type Props = Omit<FooterProps, 'isFormDirty'> & {
   onSubmit(values: FormValues): void;
 };
-
-const initialize = (fields?: FormValues): FormValues =>
-  fields ?? {
-    name: '',
-    description: '',
-    region: null,
-    status: ProjectStatusEnum.Blank,
-    coordinates: '',
-    yearStart: undefined,
-    type: ProjectTypeEnum.Geo,
-  };
 
 type RenderComponentResult = {
   component: RenderResult;
@@ -47,7 +37,7 @@ const renderComponent = (props?: Partial<Props>): RenderComponentResult => {
 
   const form = createForm<FormValues>({
     onSubmit,
-    initialValues: initialize(),
+    initialValues: initializeProjectForm(),
     validate: (values) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const errors: Record<any, string> = {};

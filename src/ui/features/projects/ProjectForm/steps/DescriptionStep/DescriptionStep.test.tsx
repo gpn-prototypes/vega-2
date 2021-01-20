@@ -1,27 +1,15 @@
 import React from 'react';
 import { Form } from 'react-final-form';
 import { act, render, RenderResult, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { createForm, FormApi } from 'final-form';
 import { merge } from 'ramda';
 
-import { ProjectStatusEnum, ProjectTypeEnum } from '../../../../../../__generated__/types';
-import { ReferenceDataType } from '../../../../../../pages/project/types';
+import { referenceData as defaultReferenceData } from '../../__tests__/data';
+import { initializeProjectForm, useCombobox } from '../../__tests__/utils';
 import { validator } from '../../ProjectForm';
 import { FormValues } from '../../types';
 
 import { DescriptionStep, getYearStartOptions, isValidYear, StepProps } from './DescriptionStep';
-
-const initialize = (fields?: FormValues): FormValues =>
-  fields ?? {
-    name: '',
-    description: '',
-    region: null,
-    status: ProjectStatusEnum.Blank,
-    coordinates: '',
-    yearStart: undefined,
-    type: ProjectTypeEnum.Geo,
-  };
 
 type RenderComponentResult = {
   component: RenderResult;
@@ -33,85 +21,11 @@ type Props = StepProps & {
   onSubmit(): void;
 };
 
-const defaultReferenceData: ReferenceDataType = {
-  regionList: [
-    {
-      __typename: 'Region',
-      name: 'europe',
-      vid: '123',
-      country: { __typename: 'Country', vid: 'c-123', name: 'russia' },
-    },
-    {
-      __typename: 'Region',
-      name: 'russian',
-      vid: '123',
-      country: { __typename: 'Country', vid: 'c-123', name: 'russia' },
-    },
-  ],
-};
-
 const defaultProps: Omit<Props, 'form'> = {
   mode: 'create',
   referenceData: defaultReferenceData,
-  initialValue: initialize(),
+  initialValue: initializeProjectForm(),
   onSubmit: () => {},
-};
-
-type ResultCombobox = {
-  buttons(): NodeListOf<HTMLButtonElement>;
-  input(): HTMLInputElement | null;
-  options(): HTMLElement[];
-  type(val: string): void;
-  selectOption(opt: number): void;
-  awaitAnimation(): void;
-  toggle(): void;
-  clear(): void;
-};
-
-const useCombobox = (combobox: HTMLElement): ResultCombobox => {
-  const buttons = () => combobox.querySelectorAll('button');
-  const input = () => combobox.querySelector('input');
-  const options = () => screen.queryAllByRole('option');
-  const awaitAnimation = () => {
-    act(() => {
-      jest.runAllTimers();
-    });
-  };
-
-  return {
-    buttons,
-    input,
-    options,
-    type: (val) => {
-      const inpt = input();
-      if (inpt) {
-        userEvent.type(inpt, val);
-      }
-      awaitAnimation();
-    },
-    selectOption: (opt: number) => {
-      const opts = options();
-      userEvent.click(opts[opt]);
-      awaitAnimation();
-    },
-    awaitAnimation,
-    toggle: () => {
-      const btns = buttons();
-      if (btns.length === 2) {
-        userEvent.click(btns[1]);
-      } else {
-        userEvent.click(btns[0]);
-      }
-      awaitAnimation();
-    },
-    clear: () => {
-      const btns = buttons();
-      if (btns.length === 2) {
-        userEvent.click(btns[0]);
-      }
-      awaitAnimation();
-    },
-  };
 };
 
 const renderComponent = (props?: Partial<Props>): RenderComponentResult => {
@@ -197,7 +111,7 @@ describe('DescriptionStep', () => {
 
       const list = screen.getByRole('listbox');
 
-      expect(list.textContent).toContain('europerussia');
+      expect(list.textContent).toContain('ЕвропаРоссия');
     });
   });
 
