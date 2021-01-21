@@ -1,11 +1,13 @@
-import { Item } from '@consta/uikit/SnackBar';
+import { SnackBarProps } from '@gpn-prototypes/vega-ui/dist/components/snack-bar/SnackBar';
 
 export interface Unsubscribe {
   (): void;
 }
 
+type SnackBarItem = Pick<SnackBarProps, 'items'>['items'][number];
+
 export declare type Notifications = {
-  add(item: Item): void;
+  add(item: SnackBarItem): void;
   remove(key: string | number): void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   subscribe(topic: string, payload: any): Unsubscribe;

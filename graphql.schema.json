@@ -4123,7 +4123,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "ErrorCodes",
+                "name": "ErrorCodesEnum",
                 "ofType": null
               }
             },
@@ -4196,7 +4196,7 @@
               "name": null,
               "ofType": {
                 "kind": "ENUM",
-                "name": "ErrorCodes",
+                "name": "ErrorCodesEnum",
                 "ofType": null
               }
             },
@@ -4257,7 +4257,7 @@
       },
       {
         "kind": "ENUM",
-        "name": "ErrorCodes",
+        "name": "ErrorCodesEnum",
         "description": "Error codes list.",
         "fields": null,
         "inputFields": null,
