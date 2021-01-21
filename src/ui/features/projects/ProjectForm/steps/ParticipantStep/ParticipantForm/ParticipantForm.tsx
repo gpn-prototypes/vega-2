@@ -1,8 +1,13 @@
 import React from 'react';
 import { Field, Form } from 'react-final-form';
-import { Combobox } from '@consta/uikit/Combobox';
-import { MultiCombobox } from '@consta/uikit/MultiCombobox';
-import { Button, Form as VegaForm, Modal, Text } from '@gpn-prototypes/vega-ui';
+import {
+  Button,
+  Combobox,
+  Form as VegaForm,
+  Modal,
+  MultiCombobox,
+  Text,
+} from '@gpn-prototypes/vega-ui';
 
 import { cnParticipantForm } from './cn-participant-form';
 
