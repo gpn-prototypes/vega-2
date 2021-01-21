@@ -5,7 +5,7 @@ import { FormApi } from 'final-form';
 import createDecorator from 'final-form-focus';
 
 import { ProjectStatusEnum } from '../../../../__generated__/types';
-import { debounce } from '../../../../utils/debounce';
+import { useDebouncedFunction } from '../../../../hooks/use-debounced-function';
 import { createValidate, validators } from '../../../forms/validation';
 
 import { Banner } from './Banner';
@@ -88,7 +88,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     }
   };
 
-  const autoSaveDebounced = debounce((form: FormApi<FormValues>) => {
+  const autoSaveDebounced = useDebouncedFunction(300, (form: FormApi<FormValues>) => {
     const { values, active, dirty, valid, validating, dirtySinceLastSubmit } = form.getState();
 
     if (values.status === ProjectStatusEnum.Unpublished && active) {
@@ -102,7 +102,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     if (dirty) {
       form.submit();
     }
-  }, 300);
+  });
 
   const Step = steps[activeStepIndex].content;
 
