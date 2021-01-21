@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Loader, useMount } from '@gpn-prototypes/vega-ui';
 import { FormApi, getIn, setIn } from 'final-form';
@@ -11,6 +11,7 @@ import {
   UpdateProjectDiff,
 } from '../../__generated__/types';
 import { useBrowserTabActivity } from '../../hooks';
+import { useBus } from '../../providers/bus';
 import { useNotifications } from '../../providers/notifications';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
@@ -53,6 +54,7 @@ const FORM_FIELDS_POLLING_MS = 1000 * 30;
 export const CreateProjectPage: React.FC<PageProps> = () => {
   const history = useHistory();
   const notifications = useNotifications();
+  const bus = useBus();
 
   const [blankProjectId, setBlankProjectId] = useState<string | undefined>(undefined);
   const [isNavigationBlocked, setIsNavigationBlocked] = React.useState<boolean>(true);
@@ -88,7 +90,16 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   };
 
   useMount(() => {
+    const draftUnsub = bus.subscribe({ channel: 'project-draft', topic: 'delete' }, () => {
+      setIsNavigationBlocked(false);
+      history.push('/projects');
+    });
+
     call();
+
+    return () => {
+      draftUnsub();
+    };
   });
 
   const {
@@ -115,6 +126,16 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       stopPolling();
     },
   });
+
+  useEffect(() => {
+    if (
+      queryProjectData?.project?.__typename === 'Project' &&
+      queryProjectData.project.status === ProjectStatusEnum.Unpublished
+    ) {
+      setIsNavigationBlocked(false);
+      history.push(`/projects/show/${blankProjectId}`);
+    }
+  }, [queryProjectData, history, blankProjectId, isNavigationBlocked]);
 
   const [updateProjectBlank, { error: updateProjectBlankError }] = useUpdateProjectForm();
 
@@ -194,8 +215,6 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
             notifications.remove(item.key);
           },
         });
-        setIsNavigationBlocked(false);
-        history.push(`/projects/show/${blankProjectId}`);
       }
 
       form.initialize((v) => {
@@ -209,7 +228,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
       return errors;
     },
-    [blankProjectId, history, notifications, queryProjectData, updateProjectBlank],
+    [blankProjectId, notifications, queryProjectData, updateProjectBlank],
   );
 
   const handleCancel = () => {
@@ -228,6 +247,13 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
         message: inlineDeleteProjectError.message,
       });
     }
+
+    bus.send({
+      channel: 'project-draft',
+      topic: 'delete',
+      self: false,
+      broadcast: true,
+    });
 
     setIsNavigationBlocked(false);
     history.push(path || '/projects');

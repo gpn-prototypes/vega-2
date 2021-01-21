@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
 import { createBrowserHistory } from 'history';
 
+import { Bus } from '../../types/bus';
+
 import { App } from './App';
 
 import './App.css';
@@ -20,6 +22,13 @@ const authToken = localStorage.getItem('auth-token');
 
 const history = createBrowserHistory();
 
+const bus: Bus = {
+  send() {},
+  subscribe() {
+    return () => {};
+  },
+};
+
 const client = new ApolloClient({
   cache: new InMemoryCache({
     typePolicies: {
@@ -36,4 +45,7 @@ const client = new ApolloClient({
   }),
 });
 
-ReactDOM.render(<App history={history} graphqlClient={client} />, document.getElementById('root'));
+ReactDOM.render(
+  <App history={history} graphqlClient={client} bus={bus} />,
+  document.getElementById('root'),
+);
