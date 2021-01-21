@@ -12,8 +12,8 @@ export type EditedAtProps = {
 };
 
 const testId = {
-  buttonMenu: 'ProjectsPage:button:menu.trigger',
   menuList: 'ProjectsPage:menu',
+  buttonMenu: 'ProjectsPage:button:menu.trigger',
   dateEdit: 'ProjectsPage:text:edited',
 } as const;
 
