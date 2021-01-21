@@ -182,7 +182,7 @@ export const ProjectsTable: ProjectsTableType = (props) => {
       emptyRowsPlaceholder={placeholder}
       activeRow={{
         id: idActiveRow,
-        onChange: (id) => {
+        onChange: ({ id }) => {
           history.push(`/projects/show/${id}`);
         },
       }}
