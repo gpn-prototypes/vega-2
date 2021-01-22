@@ -77,6 +77,7 @@ describe('ProjectsPage', () => {
     await waitRequest();
 
     const newNameCells = await tl.waitFor(() => $.getAllByTestId(ProjectsTable.testId.projectName));
+
     const firstProjectName = newNameCells[0].textContent;
 
     const nextProjectName = deleteProjectMock[2].result.data.projects?.data[0].name;
