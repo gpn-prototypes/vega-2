@@ -21,8 +21,13 @@ function renderComponent(fn: (e: React.SyntheticEvent) => void): tl.RenderResult
 }
 
 describe('checkClickableElementInBubble', () => {
+  let has = false;
+
+  beforeEach(() => {
+    has = false;
+  });
+
   test('возвращает true если клик был по кнопке', () => {
-    let has = false;
     const func = (e: React.SyntheticEvent) => {
       has = checkClickableElementInBubble(e);
     };
@@ -35,7 +40,6 @@ describe('checkClickableElementInBubble', () => {
   });
 
   test('возвращает false если клик был по div', () => {
-    let has = false;
     const func = (e: React.SyntheticEvent) => {
       has = checkClickableElementInBubble(e);
     };
@@ -48,7 +52,6 @@ describe('checkClickableElementInBubble', () => {
   });
 
   test('возвращает false если клик был по header', () => {
-    let has = false;
     const func = (e: React.SyntheticEvent) => {
       has = checkClickableElementInBubble(e);
     };
@@ -61,7 +64,6 @@ describe('checkClickableElementInBubble', () => {
   });
 
   test('возвращает true если клик был по input', () => {
-    let has = false;
     const func = (e: React.SyntheticEvent) => {
       has = checkClickableElementInBubble(e);
     };
