@@ -210,7 +210,8 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
               const submitErrorText =
                 meta.submitError && !meta.dirtySinceLastSubmit ? meta.submitError : undefined;
               const showError =
-                Boolean(meta.error || submitErrorText) && (meta.touched || meta.submitFailed);
+                Boolean(meta.error || submitErrorText) &&
+                (meta.touched || meta.submitFailed || meta.dirty);
               const errorText = meta.error || submitErrorText;
 
               return (
