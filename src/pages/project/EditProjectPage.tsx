@@ -134,7 +134,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
       });
 
       if (updateProjectResult.data?.updateProject?.result?.__typename === 'Error') {
-        setUnsavedChanges({ ...unsavedChanges, ...changes });
+        const updatedUnsavedChanges = { ...unsavedChanges, ...changes };
         const actual = await refetchProjectFormFields();
 
         if (actual.data.project?.__typename === 'Project') {
@@ -144,8 +144,13 @@ export const EditProjectPage: React.FC<PageProps> = () => {
         const inlineUpdateProjectError = updateProjectResult.data?.updateProject?.result;
 
         if (inlineUpdateProjectError?.code === 'PROJECT_NAME_ALREADY_EXISTS') {
+          if (updatedUnsavedChanges.name !== undefined) {
+            delete updatedUnsavedChanges.name;
+          }
           errors.name = inlineUpdateProjectError.message;
         }
+
+        setUnsavedChanges(updatedUnsavedChanges);
       }
 
       if (updateProjectResult.data?.updateProject?.result?.__typename === 'Project') {
