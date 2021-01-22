@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Loader, useMount } from '@gpn-prototypes/vega-ui';
 
-import { ProjectStatusEnum } from '../../__generated__/types';
+import { ErrorInterface, ProjectStatusEnum } from '../../__generated__/types';
 import { useNotifications } from '../../providers/notifications';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
@@ -107,31 +107,32 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
         history.push(`/projects/show/${projectId}`);
       }
 
-      if (createProjectResult.data?.updateProject?.result?.__typename === 'Error') {
-        const inlineUpdateProjectError = createProjectResult.data?.updateProject?.result;
+      const commonError = createProjectResult.data?.updateProject?.result as ErrorInterface;
+      const typename = createProjectResult.data?.updateProject?.result?.__typename;
 
-        const projectNameExists = inlineUpdateProjectError?.code === 'PROJECT_NAME_ALREADY_EXISTS';
-        const projectYearStartNull = false;
-        // inlineUpdateProjectError?.code === 'PROJECT_YEARSTART_CANNOT_BE_NULL';
+      let errorsDisplayed = false;
+      const requestHasError = typename === 'ValidationError' || typename === 'Error';
 
-        if (projectNameExists) {
-          errors.name = inlineUpdateProjectError.message;
-        }
+      if (createProjectResult.data?.updateProject?.result?.__typename === 'ValidationError') {
+        const inlineUpdateProjectValidationError = createProjectResult.data?.updateProject?.result;
+        inlineUpdateProjectValidationError.items?.forEach((i) => {
+          const path = i?.path ?? [];
+          if (path.length === 2 && path[0] === 'data' && path[1]) {
+            errors[path[1]] = i?.message || i?.code;
+            errorsDisplayed = true;
+          }
+        });
+      }
 
-        if (projectYearStartNull) {
-          errors.yearStart = inlineUpdateProjectError.message;
-        }
-
-        if (!projectNameExists && !projectYearStartNull) {
-          notifications.add({
-            key: `${inlineUpdateProjectError.code}-create`,
-            status: 'alert',
-            message: inlineUpdateProjectError.message,
-            onClose(item) {
-              notifications.remove(item.key);
-            },
-          });
-        }
+      if (requestHasError && !errorsDisplayed) {
+        notifications.add({
+          key: `${commonError.code}-create`,
+          status: 'alert',
+          message: commonError.message,
+          onClose(item) {
+            notifications.remove(item.key);
+          },
+        });
       }
 
       return errors;

@@ -26,7 +26,7 @@ mutation CreateBlankProject {
       ... on Project {
         ...projectFormFields
       }
-      ... on Error {
+      ... on ErrorInterface {
         ...commonError
       }
     }
@@ -61,7 +61,14 @@ mutation CreateProject(
         ...projectFormFields
         status
       }
-      ... on Error {
+      ... on ValidationError {
+        items {
+          code
+          message
+          path
+        }
+      }
+      ... on ErrorInterface {
         ...commonError
       }
     }
@@ -79,7 +86,14 @@ mutation UpdateProjectForm(
       ... on Project {
         ...projectFormFields
       }
-      ... on Error {
+      ... on ValidationError {
+        items {
+          code
+          message
+          path
+        }
+      }
+      ... on ErrorInterface {
         ...commonError
       }
       ... on UpdateProjectDiff {

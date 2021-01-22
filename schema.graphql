@@ -179,6 +179,10 @@ type CreateDomainTemplateCategories {
   result: DomainTemplateLibraryCategory
 }
 
+type CreateJtiBlackListEntry {
+  result: JtiBlackListEntry
+}
+
 type CreateOrganization {
   result: Organization
 }
@@ -262,6 +266,10 @@ type DeleteDomainTemplate {
 }
 
 type DeleteDomainTemplateCategories {
+  result: Boolean
+}
+
+type DeleteJtiBlackListEntry {
   result: Boolean
 }
 
@@ -350,13 +358,13 @@ type DomainTemplateLibraryCategory {
 }
 
 type Error implements ErrorInterface {
-  code: ErrorCodes!
+  code: ErrorCodesEnum!
   message: String!
   details: String
   payload: DictType
 }
 
-enum ErrorCodes {
+enum ErrorCodesEnum {
   PROJECT_NOT_FOUND
   PROJECT_UPDATE_ERROR
   REFERENCE_ITEM_NOT_FOUND
@@ -364,93 +372,102 @@ enum ErrorCodes {
   INCORRECT_PROJECT_VERSION
   PROJECT_VERSION_DIFF_ERROR
   PROJECT_NAME_ALREADY_EXISTS
-  EMPTY_PROJECT_NAME
-  TOO_LONG_PROJECT_NAME
-  TOO_SHORT_PROJECT_NAME
-  YEAR_START_ERROR
-  YEARS_COUNT_ERROR
   NO_RIGHTS
   OBJECT_NOT_FOUND
   EMPTY_ATTENDEE_ROLE
   NO_ATTENDEE_TO_REMOVE
   INCORRECT_UUID
-  PROJECT_STATUS_CANNOT_BE_NULL
   PROJECT_ATTENDEE_NOT_FOUND
   PROJECT_ATTENDEE_ALREADY_HAS_ROLE
   PROJECT_ATTENDEE_USER_ROLE_NOT_FOUND
   PROJECT_MANAGER_NOT_FOUND
   CANNOT_BRING_BLANK_BACK
-  PROJECT_YEARSTART_CANNOT_BE_NULL
+  INVALID_PAGE_NUMBER
+  VALIDATION
 }
 
 interface ErrorInterface {
-  code: ErrorCodes!
+  code: ErrorCodesEnum!
   message: String!
   details: String
   payload: DictType
 }
 
+type JtiBlackListEntry {
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+  jti: String
+  exp: Int
+}
+
 type Mutation {
-  createProjectLibrary(category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, isDeleted: Boolean, name: String, title: String, vid: UUID): CreateProjectLibrary
-  deleteProjectLibrary(vid: UUID): DeleteProjectLibrary
-  updateProjectLibrary(category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, isDeleted: Boolean, name: String, title: String, vid: UUID): UpdateProjectLibrary
-  createProjectLibraryCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): CreateProjectLibraryCategories
-  deleteProjectLibraryCategories(vid: UUID): DeleteProjectLibraryCategories
-  updateProjectLibraryCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): UpdateProjectLibraryCategories
-  createComponent(category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, isDeleted: Boolean, name: String, title: String, vid: UUID): CreateComponent
-  deleteComponent(vid: UUID): DeleteComponent
-  updateComponent(category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, isDeleted: Boolean, name: String, title: String, vid: UUID): UpdateComponent
-  createComponentCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): CreateComponentCategories
-  deleteComponentCategories(vid: UUID): DeleteComponentCategories
-  updateComponentCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): UpdateComponentCategories
-  createAssembly(category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, isDeleted: Boolean, name: String, title: String, vid: UUID): CreateAssembly
-  deleteAssembly(vid: UUID): DeleteAssembly
-  updateAssembly(category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, isDeleted: Boolean, name: String, title: String, vid: UUID): UpdateAssembly
-  createAssemblyCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): CreateAssemblyCategories
-  deleteAssemblyCategories(vid: UUID): DeleteAssemblyCategories
-  updateAssemblyCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): UpdateAssemblyCategories
-  createActivity(category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, isDeleted: Boolean, name: String, title: String, vid: UUID): CreateActivity
-  deleteActivity(vid: UUID): DeleteActivity
-  updateActivity(category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, isDeleted: Boolean, name: String, title: String, vid: UUID): UpdateActivity
-  createActivityCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): CreateActivityCategories
-  deleteActivityCategories(vid: UUID): DeleteActivityCategories
-  updateActivityCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): UpdateActivityCategories
-  createDomainTemplate(attributes: [PropertyMetaInputType], category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, entity: UUID, isDeleted: Boolean, name: String, title: String, vid: UUID): CreateDomainTemplate
-  deleteDomainTemplate(vid: UUID): DeleteDomainTemplate
-  updateDomainTemplate(attributes: [PropertyMetaInputType], category: UUID, code: String, createdAt: DateTime, description: String, editedAt: DateTime, entity: UUID, isDeleted: Boolean, name: String, title: String, vid: UUID): UpdateDomainTemplate
-  createDomainTemplateCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): CreateDomainTemplateCategories
-  deleteDomainTemplateCategories(vid: UUID): DeleteDomainTemplateCategories
-  updateDomainTemplateCategories(code: String, isDeleted: Boolean, name: String, parent: UUID, vid: UUID): UpdateDomainTemplateCategories
-  createUser(adId: String, code: String, createdAt: DateTime, editedAt: DateTime, favoriteProjects: [UUID], firstName: String, groups: [UUID], isDeleted: Boolean, lastName: String, login: String, name: String, organizationUnits: [UUID], patronym: String, role: String, tokenJti: String, vid: UUID): CreateUser
-  deleteUser(vid: UUID): DeleteUser
-  updateUser(adId: String, code: String, createdAt: DateTime, editedAt: DateTime, favoriteProjects: [UUID], firstName: String, groups: [UUID], isDeleted: Boolean, lastName: String, login: String, name: String, organizationUnits: [UUID], patronym: String, role: String, tokenJti: String, vid: UUID): UpdateUser
-  createProjectRole(code: String, createdAt: DateTime, defaultAttachmentType: UUID, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): CreateProjectRole
-  deleteProjectRole(vid: UUID): DeleteProjectRole
-  updateProjectRole(code: String, createdAt: DateTime, defaultAttachmentType: UUID, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): UpdateProjectRole
-  createAttachmentType(code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): CreateAttachmentType
-  deleteAttachmentType(vid: UUID): DeleteAttachmentType
-  updateAttachmentType(code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): UpdateAttachmentType
-  createUserGroup(code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, project: UUID, vid: UUID): CreateUserGroup
-  deleteUserGroup(vid: UUID): DeleteUserGroup
-  updateUserGroup(code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, project: UUID, vid: UUID): UpdateUserGroup
-  createOrganization(code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): CreateOrganization
-  deleteOrganization(vid: UUID): DeleteOrganization
-  updateOrganization(code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): UpdateOrganization
-  createOrganizationUnit(adId: String, code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, organization: UUID, parentOu: UUID, vid: UUID): CreateOrganizationUnit
-  deleteOrganizationUnit(vid: UUID): DeleteOrganizationUnit
-  updateOrganizationUnit(adId: String, code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, organization: UUID, parentOu: UUID, vid: UUID): UpdateOrganizationUnit
-  createCountry(code: String, coordinateSystems: [String], createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): CreateCountry
-  deleteCountry(vid: UUID): DeleteCountry
-  updateCountry(code: String, coordinateSystems: [String], createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): UpdateCountry
-  createRegion(code: String, country: UUID, createdAt: DateTime, editedAt: DateTime, fullName: String, isDeleted: Boolean, name: String, vid: UUID): CreateRegion
-  deleteRegion(vid: UUID): DeleteRegion
-  updateRegion(code: String, country: UUID, createdAt: DateTime, editedAt: DateTime, fullName: String, isDeleted: Boolean, name: String, vid: UUID): UpdateRegion
-  createAttachment(category: UUID, code: String, comment: String, contentType: String, createdAt: DateTime, createdBy: UUID, editedAt: DateTime, editedBy: UUID, isDeleted: Boolean, name: String, projectId: UUID, size: Int, status: Int, vid: UUID): CreateAttachment
-  deleteAttachment(vid: UUID): DeleteAttachment
-  updateAttachment(category: UUID, code: String, comment: String, contentType: String, createdAt: DateTime, createdBy: UUID, editedAt: DateTime, editedBy: UUID, isDeleted: Boolean, name: String, projectId: UUID, size: Int, status: Int, vid: UUID): UpdateAttachment
-  createDomainEntity(code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): CreateDomainEntity
-  deleteDomainEntity(vid: UUID): DeleteDomainEntity
-  updateDomainEntity(code: String, createdAt: DateTime, editedAt: DateTime, isDeleted: Boolean, name: String, vid: UUID): UpdateDomainEntity
+  createProjectLibrary(category: UUID, code: String, description: String, name: String, title: String): CreateProjectLibrary
+  deleteProjectLibrary(vid: UUID!): DeleteProjectLibrary
+  updateProjectLibrary(category: UUID, code: String, description: String, name: String, title: String, vid: UUID!): UpdateProjectLibrary
+  createProjectLibraryCategories(code: String, name: String, parent: UUID): CreateProjectLibraryCategories
+  deleteProjectLibraryCategories(vid: UUID!): DeleteProjectLibraryCategories
+  updateProjectLibraryCategories(code: String, name: String, parent: UUID, vid: UUID!): UpdateProjectLibraryCategories
+  createComponent(category: UUID, code: String, description: String, name: String, title: String): CreateComponent
+  deleteComponent(vid: UUID!): DeleteComponent
+  updateComponent(category: UUID, code: String, description: String, name: String, title: String, vid: UUID!): UpdateComponent
+  createComponentCategories(code: String, name: String, parent: UUID): CreateComponentCategories
+  deleteComponentCategories(vid: UUID!): DeleteComponentCategories
+  updateComponentCategories(code: String, name: String, parent: UUID, vid: UUID!): UpdateComponentCategories
+  createAssembly(category: UUID, code: String, description: String, name: String, title: String): CreateAssembly
+  deleteAssembly(vid: UUID!): DeleteAssembly
+  updateAssembly(category: UUID, code: String, description: String, name: String, title: String, vid: UUID!): UpdateAssembly
+  createAssemblyCategories(code: String, name: String, parent: UUID): CreateAssemblyCategories
+  deleteAssemblyCategories(vid: UUID!): DeleteAssemblyCategories
+  updateAssemblyCategories(code: String, name: String, parent: UUID, vid: UUID!): UpdateAssemblyCategories
+  createActivity(category: UUID, code: String, description: String, name: String, title: String): CreateActivity
+  deleteActivity(vid: UUID!): DeleteActivity
+  updateActivity(category: UUID, code: String, description: String, name: String, title: String, vid: UUID!): UpdateActivity
+  createActivityCategories(code: String, name: String, parent: UUID): CreateActivityCategories
+  deleteActivityCategories(vid: UUID!): DeleteActivityCategories
+  updateActivityCategories(code: String, name: String, parent: UUID, vid: UUID!): UpdateActivityCategories
+  createDomainTemplate(attributes: [PropertyMetaInputType], category: UUID, code: String, description: String, entity: UUID, name: String, title: String): CreateDomainTemplate
+  deleteDomainTemplate(vid: UUID!): DeleteDomainTemplate
+  updateDomainTemplate(attributes: [PropertyMetaInputType], category: UUID, code: String, description: String, entity: UUID, name: String, title: String, vid: UUID!): UpdateDomainTemplate
+  createDomainTemplateCategories(code: String, name: String, parent: UUID): CreateDomainTemplateCategories
+  deleteDomainTemplateCategories(vid: UUID!): DeleteDomainTemplateCategories
+  updateDomainTemplateCategories(code: String, name: String, parent: UUID, vid: UUID!): UpdateDomainTemplateCategories
+  createUser(adId: String, code: String, favoriteProjects: [ID], firstName: String, groups: [UUID], lastName: String, login: String, name: String, organizationUnits: [UUID], patronym: String, role: String): CreateUser
+  deleteUser(vid: UUID!): DeleteUser
+  updateUser(adId: String, code: String, favoriteProjects: [ID], firstName: String, groups: [UUID], lastName: String, login: String, name: String, organizationUnits: [UUID], patronym: String, role: String, vid: UUID!): UpdateUser
+  createProjectRole(code: String, defaultAttachmentType: UUID, name: String): CreateProjectRole
+  deleteProjectRole(vid: UUID!): DeleteProjectRole
+  updateProjectRole(code: String, defaultAttachmentType: UUID, name: String, vid: UUID!): UpdateProjectRole
+  createAttachmentType(code: String, name: String): CreateAttachmentType
+  deleteAttachmentType(vid: UUID!): DeleteAttachmentType
+  updateAttachmentType(code: String, name: String, vid: UUID!): UpdateAttachmentType
+  createUserGroup(code: String, name: String, project: ID): CreateUserGroup
+  deleteUserGroup(vid: UUID!): DeleteUserGroup
+  updateUserGroup(code: String, name: String, project: ID, vid: UUID!): UpdateUserGroup
+  createOrganization(code: String, name: String): CreateOrganization
+  deleteOrganization(vid: UUID!): DeleteOrganization
+  updateOrganization(code: String, name: String, vid: UUID!): UpdateOrganization
+  createOrganizationUnit(adId: String, code: String, name: String, organization: UUID, parentOu: UUID): CreateOrganizationUnit
+  deleteOrganizationUnit(vid: UUID!): DeleteOrganizationUnit
+  updateOrganizationUnit(adId: String, code: String, name: String, organization: UUID, parentOu: UUID, vid: UUID!): UpdateOrganizationUnit
+  createCountry(code: String, coordinateSystems: [String], name: String): CreateCountry
+  deleteCountry(vid: UUID!): DeleteCountry
+  updateCountry(code: String, coordinateSystems: [String], name: String, vid: UUID!): UpdateCountry
+  createRegion(code: String, country: UUID, fullName: String, name: String): CreateRegion
+  deleteRegion(vid: UUID!): DeleteRegion
+  updateRegion(code: String, country: UUID, fullName: String, name: String, vid: UUID!): UpdateRegion
+  createAttachment(category: UUID, code: String, comment: String, contentType: String, name: String, projectId: ID, status: Int): CreateAttachment
+  deleteAttachment(vid: UUID!): DeleteAttachment
+  updateAttachment(category: UUID, code: String, comment: String, contentType: String, name: String, projectId: ID, status: Int, vid: UUID!): UpdateAttachment
+  createJtiBlackListEntry(code: String, exp: Int, jti: String, name: String): CreateJtiBlackListEntry
+  deleteJtiBlackListEntry(vid: UUID!): DeleteJtiBlackListEntry
+  updateJtiBlackListEntry(code: String, exp: Int, jti: String, name: String, vid: UUID!): UpdateJtiBlackListEntry
+  createDomainEntity(code: String, name: String): CreateDomainEntity
+  deleteDomainEntity(vid: UUID!): DeleteDomainEntity
+  updateDomainEntity(code: String, name: String, vid: UUID!): UpdateDomainEntity
   createProject(data: ProjectInputType): CreateProject
   deleteProject(vid: UUID): DeleteProject
   updateProject(data: ProjectUpdateType, vid: UUID): UpdateProject
@@ -487,7 +504,6 @@ type Project {
   filesTotal: Int
   files: [Attachment]
   attendees(orderBy: [AttendeeOrderBy] = [NAME], sortBy: SortType = ASC): [Attendee]
-  yearEnd: Int
   domainSchema: DomainSchema
   versions: [Int]!
   myRoles: [ProjectRole]
@@ -511,22 +527,22 @@ type Project {
   status: ProjectStatusEnum
   resourceId: String
   yearStart: Int
-  years: Int
+  yearEnd: Int
   version: Int
 }
 
-union ProjectDiffOrError = Project | UpdateProjectDiff | Error
+union ProjectDiffOrError = Project | UpdateProjectDiff | Error | ValidationError
 
 input ProjectInputType {
   name: String
+  region: UUID
   type: ProjectTypeEnum = GEO
-  region: ID
   coordinateSystem: String
   coordinates: String
   description: String
   resourceId: String
-  yearStart: Int = 2021
-  years: Int = 25
+  yearStart: Int = 2022
+  yearEnd: Int
 }
 
 type ProjectLibrary {
@@ -551,11 +567,12 @@ type ProjectLibraryCategory {
 
 type ProjectList {
   projectList: [Project]
+  itemsTotal: Int
 }
 
 union ProjectListOrError = ProjectList | Error
 
-union ProjectOrError = Project | Error
+union ProjectOrError = Project | Error | ValidationError
 
 type ProjectRole {
   vid: ID
@@ -586,7 +603,7 @@ input ProjectUpdateType {
   isFavorite: Boolean
   resourceId: String
   yearStart: Int
-  years: Int
+  yearEnd: Int
   version: Int!
 }
 
@@ -651,10 +668,12 @@ type Query {
   region(vid: UUID): Region
   attachmentList: [Attachment]
   attachment(vid: UUID): Attachment
+  jtiBlackListEntryList: [JtiBlackListEntry]
+  jtiBlackListEntry(vid: UUID): JtiBlackListEntry
   domainEntityList: [DomainEntity]
   domainEntity(vid: UUID): DomainEntity
   project(vid: UUID, version: Int): ProjectOrError
-  projectList(includeBlank: Boolean = false): ProjectListOrError
+  projectList(includeBlank: Boolean = false, pageNumber: Int = 1, pageSize: Int = 20): ProjectListOrError
   me: User
 }
 
@@ -732,6 +751,10 @@ type UpdateDomainTemplateCategories {
   result: DomainTemplate
 }
 
+type UpdateJtiBlackListEntry {
+  result: JtiBlackListEntry
+}
+
 type UpdateOrganization {
   result: Organization
 }
@@ -790,7 +813,6 @@ type User {
   favoriteProjects: [ID]
   organizationUnits: [OrganizationUnit]
   groups: [UserGroup]
-  tokenJti: String
 }
 
 type UserGroup {
@@ -804,6 +826,36 @@ type UserGroup {
 }
 
 union UuidOrError = Result | Error
+
+type ValidationError implements ErrorInterface {
+  code: ErrorCodesEnum!
+  message: String!
+  details: String
+  payload: DictType
+  items: [ValidationErrorItemType]
+}
+
+enum ValidationErrorCode {
+  NUMBER_TOO_LARGE
+  NUMBER_TOO_LOW
+  NUMBER_IS_NEGATIVE
+  STRING_TOO_LONG
+  STRING_TOO_SHORT
+  STRING_DOES_NOT_MATCH_PATTERN
+  ARRAY_IS_EMPTY
+  ARRAY_TOO_SHORT
+  ARRAY_TOO_LONG
+  OBJECT_KEY_NOT_FOUND
+  VALUE_IS_EMPTY
+  VALUE_HAS_WRONG_TYPE
+  NOT_UNIQUE
+}
+
+type ValidationErrorItemType {
+  path: [String]
+  code: ValidationErrorCode!
+  message: String!
+}
 
 type ValidationRules {
   rules: [String]

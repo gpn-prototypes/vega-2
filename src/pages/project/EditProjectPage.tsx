@@ -4,6 +4,7 @@ import { Loader } from '@gpn-prototypes/vega-ui';
 import { FormApi, getIn, setIn } from 'final-form';
 
 import {
+  ErrorInterface,
   ProjectTypeEnum,
   ProjectUpdateType,
   UpdateProject,
@@ -93,7 +94,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
   const handleFormSubmit = React.useCallback(
     async (values: FormValues, form: FormApi<FormValues>) => {
       const state = form.getState();
-      const errors: Record<string, string> = {};
+      const errors: Record<string, unknown> = {};
 
       const changes = Object.keys(state.dirtyFields)
         .map((key) => ({ key, value: getIn(values, key) }))
@@ -131,17 +132,36 @@ export const EditProjectPage: React.FC<PageProps> = () => {
         },
       });
 
-      if (updateProjectResult.data?.updateProject?.result?.__typename === 'Error') {
+      const commonError = updateProjectResult.data?.updateProject?.result as ErrorInterface;
+      const typename = updateProjectResult.data?.updateProject?.result?.__typename;
+
+      let errorsDisplayed = false;
+      const requestHasError = typename === 'ValidationError' || typename === 'Error';
+
+      if (updateProjectResult.data?.updateProject?.result?.__typename === 'ValidationError') {
         setUnsavedChanges({ ...unsavedChanges, ...changes });
-        const inlineUpdateProjectError = updateProjectResult.data?.updateProject?.result;
 
-        if (inlineUpdateProjectError?.code === 'PROJECT_NAME_ALREADY_EXISTS') {
-          errors.name = inlineUpdateProjectError.message;
-        }
+        const inlineUpdateProjectValidationError = updateProjectResult.data?.updateProject?.result;
+        inlineUpdateProjectValidationError.items?.forEach((i) => {
+          const path = i?.path ?? [];
+          if (path.length === 2 && path[0] === 'data' && path[1]) {
+            errors[path[1]] = i?.message || i?.code;
+            errorsDisplayed = true;
+          }
+        });
+      }
 
-        // if (inlineUpdateProjectError?.code === 'PROJECT_YEARSTART_CANNOT_BE_NULL') {
-        //   errors.yearStart = inlineUpdateProjectError.message;
-        // }
+      if (requestHasError && !errorsDisplayed) {
+        setUnsavedChanges({ ...unsavedChanges, ...changes });
+
+        notifications.add({
+          key: `${commonError.code}-create`,
+          status: 'alert',
+          message: commonError.message,
+          onClose(item) {
+            notifications.remove(item.key);
+          },
+        });
       }
 
       if (updateProjectResult.data?.updateProject?.result?.__typename === 'Project') {
