@@ -86,9 +86,11 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     [onSubmit],
   );
 
-  const handleStepChange = (step: number) => {
-    setActiveStepIndex(step);
-  };
+  const handleStepChange =
+    /* istanbul ignore next */
+    (step: number) => {
+      setActiveStepIndex(step);
+    };
 
   const handleCancel = (formApi: FormApi<FormValues>) => {
     setHasUnsavedChanges(false);
@@ -158,15 +160,18 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
       render={({ form, handleSubmit, dirty }): React.ReactNode => (
         <>
           <Banner referenceData={referenceData} />
-          <VegaForm onSubmit={handleSubmit} className={cnProjectForm()} data-testId={testId.form}>
+          <VegaForm onSubmit={handleSubmit} className={cnProjectForm()} data-testid={testId.form}>
             <div className={cnProjectForm('Content')}>
-              <NavigationList className={cnProjectForm('Navigation')} data-testId={testId.stepList}>
+              <NavigationList className={cnProjectForm('Navigation')} data-testid={testId.stepList}>
                 {steps.map(({ title }, index) => (
                   <NavigationList.Item key={title}>
                     {(props): React.ReactNode => (
                       <button
                         type="button"
-                        onClick={(): void => setActiveStepIndex(index)}
+                        onClick={
+                          /* istanbul ignore next */
+                          (): void => setActiveStepIndex(index)
+                        }
                         className={cnProjectForm('NavigationButton').mix(props.className)}
                       >
                         {title}

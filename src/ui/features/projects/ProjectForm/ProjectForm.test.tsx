@@ -1,0 +1,174 @@
+import React from 'react';
+import { act, fireEvent, render, RenderResult, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { SubmissionErrors } from 'final-form';
+import { merge } from 'ramda';
+
+import { ProjectStatusEnum } from '../../../../__generated__/types';
+
+import { referenceData as defaultReferenceData } from './__tests__/data';
+import { initializeProjectForm } from './__tests__/utils';
+import { ProjectForm } from './ProjectForm';
+import { DescriptionStep } from './steps';
+import { FormProps } from './types';
+
+type Props = FormProps;
+
+const defaultProps: Props = {
+  mode: 'create',
+  referenceData: defaultReferenceData,
+  initialValues: initializeProjectForm(),
+  onCancel: () => {},
+  onSubmit: () => {
+    return new Promise<SubmissionErrors>((resolve) => resolve({}));
+  },
+};
+
+const getInput = (testid: string): HTMLInputElement => {
+  const field = screen.getByTestId(testid);
+  const input = field.querySelector('input');
+  if (input === null) {
+    throw new Error('input not found');
+  }
+
+  return input;
+};
+
+const submitForm = () => {
+  const submitElement = screen.getByText('Создать проект');
+
+  userEvent.click(submitElement);
+};
+
+const renderComponent = (props?: Partial<Props>): RenderResult => {
+  const withDefaults = merge(defaultProps);
+  const { mode, referenceData, initialValues, onSubmit, onCancel } = props
+    ? withDefaults(props)
+    : defaultProps;
+
+  return render(
+    <ProjectForm
+      mode={mode}
+      referenceData={referenceData}
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      onCancel={onCancel}
+    />,
+  );
+};
+
+describe('ProjectForm', () => {
+  it('рендерит без ошибок', () => {
+    expect(renderComponent).not.toThrow();
+  });
+
+  it('вызывает onSubmit', async () => {
+    const onSubmit = jest.fn().mockImplementation((values) => Promise.resolve(values));
+    renderComponent({ onSubmit });
+
+    const nameInput = getInput(DescriptionStep.testId.name);
+    userEvent.type(nameInput, 'projectName');
+
+    await act(async () => {
+      await submitForm();
+    });
+
+    expect(onSubmit).toBeCalled();
+  });
+
+  it('вызывает onCancel', () => {
+    const onCancel = jest.fn();
+    renderComponent({ onCancel });
+
+    const cancelButton = screen.getByText('Отмена');
+
+    const nameInput = getInput(DescriptionStep.testId.name);
+    userEvent.type(nameInput, 'projectName');
+
+    act(() => {
+      userEvent.click(cancelButton);
+    });
+
+    expect(onCancel).toBeCalled();
+  });
+
+  it.todo('происходит смена шага');
+
+  describe('автосохранение', () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    it('происходит смена статус на Blank, если статус был Unpublished', async () => {
+      const onSubmit = jest.fn().mockImplementation((values) => Promise.resolve(values));
+      const initialValues = {
+        ...initializeProjectForm(),
+        status: ProjectStatusEnum.Unpublished,
+      };
+
+      renderComponent({ initialValues, onSubmit });
+
+      const nameInput = getInput(DescriptionStep.testId.name);
+      userEvent.type(nameInput, 'projectName');
+
+      await act(async () => {
+        jest.runAllTimers();
+        expect(onSubmit).toBeCalled();
+        expect(onSubmit.mock.calls[0][0]).toEqual(
+          expect.objectContaining({ status: ProjectStatusEnum.Blank }),
+        );
+      });
+    });
+
+    it('не происходит автосохранение, если форма невалидна', async () => {
+      const onSubmit = jest.fn().mockImplementation((values) => Promise.resolve(values));
+      const initialValues = {
+        ...initializeProjectForm(),
+        status: ProjectStatusEnum.Unpublished,
+      };
+
+      renderComponent({ initialValues, onSubmit });
+
+      const nameInput = getInput(DescriptionStep.testId.name);
+      fireEvent.change(nameInput, {
+        target: {
+          value:
+            'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, s',
+        },
+      });
+
+      await act(async () => {
+        jest.runAllTimers();
+        expect(onSubmit).not.toBeCalled();
+      });
+    });
+  });
+
+  describe('валидация полей', () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    describe('создание проекта', () => {
+      it.todo('название проекта');
+      it.todo('система координат');
+      it.todo('год начала планирования');
+      it.todo('описание проекта');
+    });
+
+    describe('редактирование проекта', () => {
+      it.todo('название проекта');
+      it.todo('система координат');
+      it.todo('год начала планирования');
+      it.todo('описание проекта');
+    });
+  });
+});
