@@ -52,7 +52,7 @@ describe('ProjectsPage', () => {
     await waitRequest();
 
     const nameProject = deleteProjectMock[0].result.data.projects?.data[0].name ?? '';
-    const nameCells = $.getAllByTestId(ProjectsTable.testId.projectName);
+    const nameCells = await tl.waitFor(() => $.getAllByTestId(ProjectsTable.testId.projectName));
 
     openModalRemoveProject(nameProject);
 
@@ -65,7 +65,7 @@ describe('ProjectsPage', () => {
 
     await waitRequest();
 
-    const newNameCells = $.getAllByTestId(ProjectsTable.testId.projectName);
+    const newNameCells = await tl.waitFor(() => $.getAllByTestId(ProjectsTable.testId.projectName));
 
     const firstProjectName = newNameCells[0].textContent;
 
