@@ -39,8 +39,7 @@ const renderComponent = (props?: Partial<Props>): RenderComponentResult => {
     onSubmit,
     initialValues: initializeProjectForm(),
     validate: (values) => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const errors: Record<any, string> = {};
+      const errors: Record<string, string> = {};
 
       if (values.name === 'invalid') {
         errors.name = 'invalid';
@@ -87,8 +86,8 @@ describe('Footer', () => {
     expect(renderComponent).not.toThrow();
   });
 
-  describe('моды', function () {
-    it('показывает футер для создания проекта', function () {
+  describe('моды', () => {
+    it('показывает футер для создания проекта', () => {
       renderComponent();
 
       const rootCreate = screen.queryByTestId(Footer.testId.footerCreate);
@@ -98,7 +97,7 @@ describe('Footer', () => {
       expect(rootEdit).not.toBeInTheDocument();
     });
 
-    it('показывает футер для редактирования проекта, если в форме были изменения', function () {
+    it('показывает футер для редактирования проекта, если в форме были изменения', () => {
       const { dirtyForm } = renderComponent({
         mode: 'edit',
       });
@@ -114,7 +113,7 @@ describe('Footer', () => {
       expect(rootCreate).not.toBeInTheDocument();
     });
 
-    it('скрывает футер для редактирования проекта, если в форме нет изменений', function () {
+    it('скрывает футер для редактирования проекта, если в форме нет изменений', () => {
       renderComponent({
         mode: 'edit',
       });
@@ -169,7 +168,7 @@ describe('Footer', () => {
       });
     });
 
-    it('выключает кнопку создания, если есть ошибки в форме', function () {
+    it('выключает кнопку создания, если есть ошибки в форме', () => {
       const { component, invalidForm } = renderComponent({
         activeStep: 2,
       });
@@ -183,7 +182,7 @@ describe('Footer', () => {
       expect(createButton).toBeDisabled();
     });
 
-    it('тригерит обработчик отмены создания', function () {
+    it('тригерит обработчик отмены создания', () => {
       const onCancel = jest.fn();
 
       const { component } = renderComponent({
@@ -198,7 +197,7 @@ describe('Footer', () => {
       expect(onCancel).toBeCalled();
     });
 
-    it('меняет статус при сабмите', function () {
+    it('меняет статус при сабмите', () => {
       const onSubmit = jest.fn((v) => v);
 
       const { component } = renderComponent({
@@ -216,7 +215,7 @@ describe('Footer', () => {
   });
 
   describe('редактирование проекта', () => {
-    it('тригерит обработчик отмены редактирования', function () {
+    it('тригерит обработчик отмены редактирования', () => {
       const onCancel = jest.fn();
 
       const { component, dirtyForm } = renderComponent({
@@ -236,7 +235,7 @@ describe('Footer', () => {
       expect(onCancel).toBeCalled();
     });
 
-    it('происходит сабмит формы', function () {
+    it('происходит сабмит формы', () => {
       const onSubmit = jest.fn();
 
       const { component, dirtyForm } = renderComponent({
@@ -255,7 +254,7 @@ describe('Footer', () => {
 
       expect(onSubmit).toBeCalled();
     });
-    it('выключает кнопку сохранения, если есть ошибки в форме', function () {
+    it('выключает кнопку сохранения, если есть ошибки в форме', () => {
       const { component, invalidForm } = renderComponent({
         mode: 'edit',
         activeStep: 2,
