@@ -5,7 +5,7 @@ import { createForm, FormApi } from 'final-form';
 import { merge } from 'ramda';
 
 import { referenceData as defaultReferenceData } from '../../__tests__/data';
-import { initializeProjectForm, useCombobox } from '../../__tests__/utils';
+import { getCombobox, initializeProjectForm } from '../../__tests__/utils';
 import { validator } from '../../ProjectForm';
 import { FormValues } from '../../types';
 
@@ -105,7 +105,7 @@ describe('DescriptionStep', () => {
     it('выставляет значение списка регионов по умолчанию', () => {
       renderComponent();
       const comboboxElement = screen.getByTestId(DescriptionStep.testId.region);
-      const combobox = useCombobox(comboboxElement);
+      const combobox = getCombobox(comboboxElement);
 
       combobox.toggle();
 
@@ -133,7 +133,7 @@ describe('DescriptionStep', () => {
     it('инициализирует значение в форме и добавляет в начало списка, если это форма создания проекта', () => {
       renderComponent({ initialValue: { yearStart: 2040 } });
       const comboboxElement = screen.getByTestId(DescriptionStep.testId.yearStart);
-      const combobox = useCombobox(comboboxElement);
+      const combobox = getCombobox(comboboxElement);
 
       combobox.toggle();
 
@@ -146,7 +146,7 @@ describe('DescriptionStep', () => {
     it('добавляет год в начало списка, если его нет в списке и он валидный', () => {
       renderComponent();
       const comboboxElement = screen.getByTestId(DescriptionStep.testId.yearStart);
-      const combobox = useCombobox(comboboxElement);
+      const combobox = getCombobox(comboboxElement);
 
       combobox.type('3020');
 
@@ -163,7 +163,7 @@ describe('DescriptionStep', () => {
     it('не добавляет невалидное значение в список', () => {
       renderComponent();
       const comboboxElement = screen.getByTestId(DescriptionStep.testId.yearStart);
-      const combobox = useCombobox(comboboxElement);
+      const combobox = getCombobox(comboboxElement);
 
       combobox.type('ff11');
 
@@ -179,7 +179,7 @@ describe('DescriptionStep', () => {
     it('показывает ошибку валидации после ввода', () => {
       renderComponent();
       const comboboxElement = screen.getByTestId(DescriptionStep.testId.yearStart);
-      const combobox = useCombobox(comboboxElement);
+      const combobox = getCombobox(comboboxElement);
 
       combobox.type('fffaa');
 

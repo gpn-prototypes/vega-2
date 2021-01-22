@@ -26,7 +26,7 @@ type ResultCombobox = {
   clear(): void;
 };
 
-export const useCombobox = (combobox: HTMLElement): ResultCombobox => {
+export const getCombobox = (combobox: HTMLElement): ResultCombobox => {
   const buttons = () => combobox.querySelectorAll('button');
   const input = () => combobox.querySelector('input');
   const options = () => screen.queryAllByRole('option');
