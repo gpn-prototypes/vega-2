@@ -17,6 +17,15 @@ function openModalRemoveProject(projectName: string) {
 }
 
 describe('ProjectsPage', () => {
+  test('Отрисовывается индикатор загрузки', async () => {
+    const defaultMock = mocks.default;
+    const { $ } = await mountApp(<ProjectsPage />, {
+      mocks: defaultMock,
+    });
+
+    expect($.getByTestId(ProjectsPageView.testId.loader)).toBeInTheDocument();
+  });
+
   test('Отрисовывается страница c данными', async () => {
     const defaultMock = mocks.default;
     const { $, waitRequest } = await mountApp(<ProjectsPage />, {
@@ -25,18 +34,11 @@ describe('ProjectsPage', () => {
 
     await waitRequest();
 
+    // await tl.waitFor(() => $.getByText(defaultMock[0].result.data.projects.data[2].name));
+
     expect($.getByTestId(ProjectsPageView.testId.rootTitle)).toBeInTheDocument();
     expect($.getByTestId(ProjectsPageView.testId.table)).toBeInTheDocument();
     expect($.getByText(defaultMock[0].result.data.projects.data[2].name)).toBeInTheDocument();
-  });
-
-  test('Отрисовывается индикатор загрузки', async () => {
-    const defaultMock = mocks.default;
-    const { $ } = await mountApp(<ProjectsPage />, {
-      mocks: defaultMock,
-    });
-
-    expect($.getByTestId(ProjectsPageView.testId.loader)).toBeInTheDocument();
   });
 
   test.todo('Проект помечается избранным');
@@ -50,9 +52,11 @@ describe('ProjectsPage', () => {
     await waitRequest();
 
     const nameProject = deleteProjectMock[0].result.data.projects?.data[0].name ?? '';
+    const nameCells = $.getAllByTestId(ProjectsTable.testId.projectName);
 
     openModalRemoveProject(nameProject);
 
+    expect(nameCells.length).toBe(3);
     expect($.getByTestId(ModalDeleteProject.testId.modal)).toBeInTheDocument();
 
     tl.act(() => {
@@ -61,11 +65,14 @@ describe('ProjectsPage', () => {
 
     await waitRequest();
 
-    const firstProjectName = $.getAllByTestId(ProjectsTable.testId.projectName)[0].textContent;
+    const newNameCells = $.getAllByTestId(ProjectsTable.testId.projectName);
+
+    const firstProjectName = newNameCells[0].textContent;
 
     const nextProjectName = deleteProjectMock[2].result.data.projects?.data[0].name;
 
     expect(firstProjectName).toBe(nextProjectName);
+    expect(newNameCells.length).toBe(2);
   });
 
   test('Модальное окно закрывается при отмене удаления', async () => {
