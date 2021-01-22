@@ -23,7 +23,7 @@ export const TextField: React.FC<TextFieldProps> = (props) => {
 
   const submitErrorText =
     meta.submitError && !meta.dirtySinceLastSubmit ? meta.submitError : undefined;
-  const showError = Boolean(meta.error || submitErrorText) && !meta.pristine;
+  const showError = (Boolean(meta.error || submitErrorText) && meta.submitFailed) || !meta.pristine;
   const errorText = meta.error || submitErrorText;
 
   return (

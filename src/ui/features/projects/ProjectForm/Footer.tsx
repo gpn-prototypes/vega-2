@@ -23,7 +23,7 @@ const testId = {
   saveEdit: 'ProjectForm:button:save.edit',
   nextStep: 'ProjectForm:button:nextStep',
   prevStep: 'ProjectForm:button:prevStep',
-  createButton: 'ProjectForm:button:сreate',
+  createButton: 'ProjectForm:button:create',
 } as const;
 
 type FooterType = React.FC<FooterProps> & {
@@ -47,15 +47,7 @@ export const Footer: FooterType = (props) => {
     onStepChange(activeStep - 1);
   };
 
-  const {
-    valid,
-    dirtySinceLastSubmit,
-    hasValidationErrors,
-    hasSubmitErrors,
-    dirty,
-  } = form.getState();
-
-  const isSubmitButtonDisabled = (!valid && !dirtySinceLastSubmit) || hasValidationErrors;
+  const { valid, dirtySinceLastSubmit, hasSubmitErrors, dirty } = form.getState();
 
   const createProjectFormFooter = (
     <PageFooter
@@ -104,7 +96,6 @@ export const Footer: FooterType = (props) => {
               form.change('status', ProjectStatusEnum.Unpublished);
             }}
             data-testId={testId.createButton}
-            disabled={isSubmitButtonDisabled}
           />
         )}
       </div>
@@ -127,7 +118,6 @@ export const Footer: FooterType = (props) => {
         view="primary"
         label="Сохранить изменения"
         type="submit"
-        disabled={isSubmitButtonDisabled}
         data-testid={testId.saveEdit}
       />
     </PageFooter>
