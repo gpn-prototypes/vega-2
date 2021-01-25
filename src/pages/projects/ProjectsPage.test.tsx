@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { ProjectStatusEnum } from '../../__generated__/types';
 import { mountApp } from '../../../test-utils';
 import { createProject } from '../../../test-utils/data-generators';
+import { MockNotifications } from '../../../test-utils/notificationsMock';
 
 import { ProjectsTableListDocument } from './__generated__/projects';
 import { mocks } from './__mocks__/mocks';
@@ -13,6 +14,11 @@ import { ModalDeleteProject } from './ModalDeleteProject';
 import { ProjectsPage } from './ProjectsPage';
 import { ProjectsPageView } from './ProjectsPageView';
 import { ProjectsTable } from './ProjectsTable';
+
+function openMenuProject(projectName: string) {
+  tl.fireEvent.mouseOver(tl.screen.getByText(projectName));
+  tl.fireEvent.click(tl.screen.getByTestId(EditedAt.testId.buttonMenu));
+}
 
 function openModalRemoveProject() {
   userEvent.click(tl.screen.getAllByTestId(EditedAt.testId.buttonMenu)[0]);
@@ -30,34 +36,98 @@ const generateProjects = (number: number) => {
 };
 
 describe('ProjectsPage', () => {
-  test('отрисовывается индикатор загрузки', async () => {
+  const addMock = jest.fn();
+  const removeMock = jest.fn();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('Отрисовывается индикатор загрузки', async () => {
     const defaultMock = mocks.default;
-    const { $ } = await mountApp(<ProjectsPage />, {
+    await mountApp(<ProjectsPage />, {
       mocks: defaultMock,
     });
 
-    expect($.getByTestId(ProjectsPageView.testId.loader)).toBeVisible();
+    expect(tl.screen.getByTestId(ProjectsPageView.testId.loader)).toBeInTheDocument();
   });
 
   test('отрисовывается страница c данными', async () => {
     const defaultMock = mocks.default;
-    const { $, waitRequest } = await mountApp(<ProjectsPage />, {
+    const { waitRequest } = await mountApp(<ProjectsPage />, {
       mocks: defaultMock,
     });
 
     await waitRequest();
 
-    expect($.getByTestId(ProjectsPageView.testId.rootTitle)).toBeVisible();
-    expect($.getByTestId(ProjectsPageView.testId.table)).toBeVisible();
-    expect($.getByText(defaultMock[0].result.data.projects.data[2].name)).toBeVisible();
+    expect(tl.screen.getByTestId(ProjectsPageView.testId.rootTitle)).toBeInTheDocument();
+    expect(tl.screen.getByTestId(ProjectsPageView.testId.table)).toBeInTheDocument();
+    expect(
+      tl.screen.getByText(defaultMock[0].result.data.projects.data[2].name),
+    ).toBeInTheDocument();
   });
 
-  test.todo('проект помечается избранным');
+  test.skip('Проект помечается избранным', async () => {
+    const favoriteProjectMock = mocks.favoriteProject;
+    const notifications = new MockNotifications({ addMock, removeMock });
+
+    const { waitRequest } = await mountApp(<ProjectsPage />, {
+      mocks: favoriteProjectMock,
+      notifications,
+    });
+
+    await waitRequest();
+
+    const nameProject = favoriteProjectMock[0].result.data.projects?.data[0].name ?? '';
+    tl.fireEvent.mouseOver(tl.screen.getByText(nameProject));
+
+    tl.act(() => {
+      tl.fireEvent.click(tl.screen.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton));
+    });
+
+    await waitRequest();
+
+    expect(tl.screen.getByTestId(ProjectsTable.testId.favoriteSelectedButton)).toBeInTheDocument();
+  });
+
+  test('Обрабатывается ошибка при добавление в избранное', async () => {
+    const favoriteErrorProjectMock = mocks.favoriteErrorProject;
+    const notifications = new MockNotifications({ addMock, removeMock });
+
+    const { waitRequest } = await mountApp(<ProjectsPage />, {
+      mocks: favoriteErrorProjectMock,
+      notifications,
+    });
+
+    await waitRequest();
+
+    const nameProject = favoriteErrorProjectMock[0].result.data.projects?.data[0].name ?? '';
+    tl.fireEvent.mouseOver(tl.screen.getByText(nameProject));
+
+    tl.act(() => {
+      tl.fireEvent.click(tl.screen.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton));
+    });
+
+    await waitRequest();
+
+    const call = addMock.mock.calls[0][0];
+
+    call.onClose(call);
+
+    expect(notifications.getAll().length).toBe(0);
+    expect(removeMock).toBeCalled();
+
+    expect(
+      tl.screen.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton),
+    ).toBeInTheDocument();
+  });
 
   test.skip('проект удаляется', async () => {
     const deleteProjectMock = mocks.deleteProject;
-    const { $, waitRequest } = await mountApp(<ProjectsPage />, {
+    const notifications = new MockNotifications({ addMock, removeMock });
+    const { waitRequest } = await mountApp(<ProjectsPage />, {
       mocks: deleteProjectMock,
+      notifications,
     });
 
     await waitRequest();
@@ -70,13 +140,17 @@ describe('ProjectsPage', () => {
     openModalRemoveProject();
 
     expect(nameCells.length).toBe(3);
-    expect($.getByTestId(ModalDeleteProject.testId.modal)).toBeVisible();
+    expect(tl.screen.getByTestId(ModalDeleteProject.testId.modal)).toBeInTheDocument();
 
-    userEvent.click($.getByTestId(ModalDeleteProject.testId.modalConfirm));
+    tl.act(() => {
+      tl.fireEvent.click(tl.screen.getByTestId(ModalDeleteProject.testId.modalConfirm));
+    });
 
     await waitRequest();
 
-    const newNameCells = await tl.waitFor(() => $.getAllByTestId(ProjectsTable.testId.projectName));
+    const newNameCells = await tl.waitFor(() =>
+      tl.screen.getAllByTestId(ProjectsTable.testId.projectName),
+    );
 
     const firstProjectName = newNameCells[0].textContent;
 
@@ -84,12 +158,26 @@ describe('ProjectsPage', () => {
 
     expect(firstProjectName).toBe(nextProjectName);
     expect(newNameCells.length).toBe(2);
+
+    expect(addMock).toBeCalled();
+    expect(notifications.getAll().length).toBe(1);
+
+    const call = addMock.mock.calls[0][0];
+
+    call.onClose(call);
+
+    expect(notifications.getAll().length).toBe(0);
+    expect(removeMock).toBeCalled();
   });
 
   test('модальное окно закрывается при отмене удаления', async () => {
     const deleteProjectMock = mocks.deleteProject;
+<<<<<<< HEAD
 
     const { $, waitRequest } = await mountApp(<ProjectsPage />, {
+=======
+    const { waitRequest } = await mountApp(<ProjectsPage />, {
+>>>>>>> test(mount-app): добавить обработку url, уведомления
       mocks: deleteProjectMock,
     });
 
@@ -97,18 +185,18 @@ describe('ProjectsPage', () => {
 
     openModalRemoveProject();
 
-    const modal = $.getByTestId(ModalDeleteProject.testId.modal);
+    const modal = tl.screen.getByTestId(ModalDeleteProject.testId.modal);
 
     expect(modal).toBeInTheDocument();
 
-    userEvent.click($.getByTestId(ModalDeleteProject.testId.modalCancel));
+    tl.fireEvent.click(tl.screen.getByTestId(ModalDeleteProject.testId.modalCancel));
 
     expect(modal).not.toBeInTheDocument();
   });
 
   test('модальное окно закрывается', async () => {
     const deleteProjectMock = mocks.deleteProject;
-    const { $, waitRequest } = await mountApp(<ProjectsPage />, {
+    const { waitRequest } = await mountApp(<ProjectsPage />, {
       mocks: deleteProjectMock,
     });
 
@@ -116,13 +204,56 @@ describe('ProjectsPage', () => {
 
     openModalRemoveProject();
 
-    const modal = $.getByTestId(ModalDeleteProject.testId.modal);
+    const modal = tl.screen.getByTestId(ModalDeleteProject.testId.modal);
 
     expect(modal).toBeInTheDocument();
 
-    userEvent.click($.getByLabelText('Кнопка закрытия модального окна'));
+    tl.fireEvent.click(tl.screen.getByLabelText('Кнопка закрытия модального окна'));
 
     expect(modal).not.toBeInTheDocument();
+  });
+
+  test('происходит переход после клика на строку', async () => {
+    const defaultMock = mocks.default;
+    const { waitRequest, history } = await mountApp(<ProjectsPage />, {
+      mocks: defaultMock,
+      url: '/projects',
+    });
+
+    await waitRequest();
+
+    expect(history.location.pathname).toBe('/projects');
+
+    tl.act(() => {
+      tl.fireEvent.click(tl.screen.getByText(defaultMock[0].result.data.projects.data[2].name));
+    });
+
+    const newUrl = `/projects/show/${defaultMock[0].result.data.projects.data[2].vid}`;
+
+    expect(history.location.pathname).toBe(newUrl);
+  });
+
+  test('происходит переход на страницу редактирования', async () => {
+    const defaultMock = mocks.default;
+    const { waitRequest, history } = await mountApp(<ProjectsPage />, {
+      mocks: defaultMock,
+      url: '/projects',
+    });
+
+    await waitRequest();
+
+    expect(history.location.pathname).toBe('/projects');
+
+    const nameProject = defaultMock[0].result.data.projects?.data[0].name ?? '';
+    const urlProjectForEdit = `/projects/show/${defaultMock[0].result.data.projects.data[0].vid}`;
+
+    openMenuProject(nameProject);
+
+    tl.act(() => {
+      tl.fireEvent.click(tl.screen.getByTestId(ProjectsPage.testId.projectEdit));
+    });
+
+    expect(history.location.pathname).toBe(urlProjectForEdit);
   });
 
   describe('пагинация', () => {
@@ -192,5 +323,5 @@ describe('ProjectsPage', () => {
       expect(tl.screen.queryByText(lastProjectName)).toBeInTheDocument();
       expect(loadMoreButton).not.toBeInTheDocument();
     });
-  });
+  })
 });

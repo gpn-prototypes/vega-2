@@ -15,6 +15,7 @@ const NotificationsContext = React.createContext<ContextValues>({
   add: noop,
   remove: noop,
   subscribe,
+  getAll: () => [],
 });
 
 type NotificationsProps = {
@@ -45,6 +46,13 @@ export const NotificationsProvider: React.FC<NotificationsProps> = ({
         return notifications.subscribe(topic, payload);
       }
       return subscribe;
+    },
+    getAll: () => {
+      if (notifications?.getAll) {
+        return notifications.getAll();
+      }
+
+      return [];
     },
   };
 
