@@ -4,12 +4,13 @@ import { act, render, RenderResult, screen } from '@testing-library/react';
 import { createForm, FormApi } from 'final-form';
 import { merge } from 'ramda';
 
-import { referenceData as defaultReferenceData } from '../../__tests__/data';
 import { getCombobox, initializeProjectForm } from '../../__tests__/utils';
 import { validator } from '../../ProjectForm';
 import { FormValues } from '../../types';
 
 import { DescriptionStep, getYearStartOptions, isValidYear, StepProps } from './DescriptionStep';
+
+import { Country, Region } from '@/__generated__/types';
 
 type RenderComponentResult = {
   component: RenderResult;
@@ -21,9 +22,48 @@ type Props = StepProps & {
   onSubmit(): void;
 };
 
+type CreateRegionProps = {
+  region: {
+    id: string;
+    name: string;
+    fullName?: string;
+  };
+  country?: {
+    id: string;
+    name: string;
+  };
+};
+
+type CreateRegionResult = { __typename: 'Region' } & Pick<Region, 'vid' | 'name' | 'fullName'> & {
+    country?: { __typename: 'Country' } & Pick<Country, 'vid' | 'name'>;
+  };
+
+export const createRegion = (props: CreateRegionProps): CreateRegionResult => {
+  const { region } = props;
+  return {
+    __typename: 'Region',
+    name: region.name,
+    fullName: region.fullName,
+    vid: region.id,
+    country: props.country
+      ? { __typename: 'Country', vid: props.country.id, name: props.country.name }
+      : undefined,
+  };
+};
+
 const defaultProps: Omit<Props, 'form'> = {
   mode: 'create',
-  referenceData: defaultReferenceData,
+  referenceData: {
+    regionList: [
+      createRegion({
+        region: {
+          id: 'region-1',
+          name: 'СССР',
+        },
+        country: { id: 'country-1', name: 'Москва' },
+      }),
+    ],
+  },
   initialValue: initializeProjectForm(),
   onSubmit: () => {},
 };
@@ -111,7 +151,7 @@ describe('DescriptionStep', () => {
 
       const list = screen.getByRole('listbox');
 
-      expect(list.textContent).toContain('ЕвропаРоссия');
+      expect(list.textContent).toContain('СССР');
     });
   });
 

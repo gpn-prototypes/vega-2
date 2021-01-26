@@ -157,9 +157,9 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
       validate={validator}
       decorators={decorators}
       onSubmit={submit}
-      render={({ form, handleSubmit, dirty }): React.ReactNode => (
+      render={({ form, handleSubmit, dirty, values }): React.ReactNode => (
         <>
-          <Banner referenceData={referenceData} />
+          <Banner regions={referenceData.regionList} title={values.name} regionId={values.region} />
           <VegaForm onSubmit={handleSubmit} className={cnProjectForm()} data-testid={testId.form}>
             <div className={cnProjectForm('Content')}>
               <NavigationList className={cnProjectForm('Navigation')} data-testid={testId.stepList}>

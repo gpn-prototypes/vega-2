@@ -168,7 +168,7 @@ describe('Footer', () => {
       });
     });
 
-    it('выключает кнопку создания, если есть ошибки в форме', () => {
+    it.skip('выключает кнопку создания, если есть ошибки в форме', () => {
       const { component, invalidForm } = renderComponent({
         activeStep: 2,
       });
@@ -254,7 +254,7 @@ describe('Footer', () => {
 
       expect(onSubmit).toBeCalled();
     });
-    it('выключает кнопку сохранения, если есть ошибки в форме', () => {
+    it.skip('выключает кнопку сохранения, если есть ошибки в форме', () => {
       const { component, invalidForm } = renderComponent({
         mode: 'edit',
         activeStep: 2,

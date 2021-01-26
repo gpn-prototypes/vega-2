@@ -1,11 +1,14 @@
 import React from 'react';
-import { useFormState } from 'react-final-form';
 import { PageBanner } from '@gpn-prototypes/vega-ui';
 
 import { ReferenceDataType } from '../../../../pages/project/types';
 
+import { ProjectFormRegionList } from '@/pages/project/__generated__/project';
+
 export type BannerProps = {
-  referenceData: ReferenceDataType;
+  regions: ProjectFormRegionList['regionList'];
+  regionId?: string | null;
+  title?: string;
 };
 
 const testId = {
@@ -18,28 +21,29 @@ export type BannerType = React.FC<BannerProps> & {
 };
 
 export const getDescription = (
-  regionVid: string | undefined,
+  regionVid: string,
   regionList: ReferenceDataType['regionList'],
 ): string | undefined => {
-  if (!regionVid) {
+  const region = regionList?.find((r) => r?.vid === regionVid);
+
+  if (!region) {
     return undefined;
   }
 
-  const region = regionList?.find((r) => r?.vid === regionVid);
-
   const countryName = region?.country?.name;
   const regionName = region?.fullName || region?.name;
+
+  if (!countryName || !regionName) {
+    return undefined;
+  }
 
   return `${countryName}, ${regionName}`;
 };
 
 export const Banner: BannerType = (props) => {
-  const { regionList } = props.referenceData;
+  const { regions, regionId, title } = props;
 
-  const { values } = useFormState();
-
-  const title = values.name ? values.name : undefined;
-  const description = values.region ? getDescription(values.region, regionList) : undefined;
+  const description = regionId ? getDescription(regionId, regions) : undefined;
 
   return <PageBanner title={title} description={description} testId={testId.banner} />;
 };

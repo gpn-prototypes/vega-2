@@ -4,9 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { SubmissionErrors } from 'final-form';
 import { merge } from 'ramda';
 
-import { ProjectStatusEnum } from '../../../../__generated__/types';
+import { Country, ProjectStatusEnum, Region } from '../../../../__generated__/types';
 
-import { referenceData as defaultReferenceData } from './__tests__/data';
 import { initializeProjectForm } from './__tests__/utils';
 import { ProjectForm } from './ProjectForm';
 import { DescriptionStep } from './steps';
@@ -14,9 +13,48 @@ import { FormProps } from './types';
 
 type Props = FormProps;
 
+type CreateRegionProps = {
+  region: {
+    id: string;
+    name: string;
+    fullName?: string;
+  };
+  country?: {
+    id: string;
+    name: string;
+  };
+};
+
+type CreateRegionResult = { __typename: 'Region' } & Pick<Region, 'vid' | 'name' | 'fullName'> & {
+    country?: { __typename: 'Country' } & Pick<Country, 'vid' | 'name'>;
+  };
+
+export const createRegion = (props: CreateRegionProps): CreateRegionResult => {
+  const { region } = props;
+  return {
+    __typename: 'Region',
+    name: region.name,
+    fullName: region.fullName,
+    vid: region.id,
+    country: props.country
+      ? { __typename: 'Country', vid: props.country.id, name: props.country.name }
+      : undefined,
+  };
+};
+
 const defaultProps: Props = {
   mode: 'create',
-  referenceData: defaultReferenceData,
+  referenceData: {
+    regionList: [
+      createRegion({
+        region: {
+          id: 'region-1',
+          name: 'СССР',
+        },
+        country: { id: 'country-1', name: 'Москва' },
+      }),
+    ],
+  },
   initialValues: initializeProjectForm(),
   onCancel: () => {},
   onSubmit: () => {
