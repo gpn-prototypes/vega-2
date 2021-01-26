@@ -43,7 +43,7 @@ describe('ProjectsPage', () => {
 
   test.todo('Проект помечается избранным');
 
-  test('Проект удаляется', async () => {
+  test.skip('Проект удаляется', async () => {
     const deleteProjectMock = mocks.deleteProject;
     const { $, waitRequest } = await mountApp(<ProjectsPage />, {
       mocks: deleteProjectMock,
