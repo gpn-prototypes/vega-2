@@ -1,84 +1,37 @@
 import React from 'react';
-import { Field, Form } from 'react-final-form';
-import { act, fireEvent, render, RenderResult, screen } from '@testing-library/react';
-import { createForm } from 'final-form';
+import { render, RenderResult, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { merge } from 'ramda';
 
-import { ProjectStatusEnum } from '../../../../__generated__/types';
-
-import { initializeProjectForm } from './__tests__/utils';
 import { Footer, FooterProps } from './Footer';
-import { FormValues } from './types';
 
-type Props = Omit<FooterProps, 'isFormDirty'> & {
-  onSubmit(values: FormValues): void;
-};
-
-type RenderComponentResult = {
-  component: RenderResult;
-  dirtyForm(): void;
-  invalidForm(): void;
-};
-
-const defaultProps: Props = {
+const defaultProps: FooterProps = {
   mode: 'create',
-  activeStep: 1,
+  activeStep: 0,
   stepsAmount: 3,
+  isVisibleEdit: false,
   onStepChange: () => {},
   onCancel: () => {},
-  onSubmit: () => {},
+  onCreate: () => {},
 };
 
-const renderComponent = (props?: Partial<Props>): RenderComponentResult => {
+const renderComponent = (props?: Partial<FooterProps>): RenderResult => {
   const withDefaults = merge(defaultProps);
-  const { mode, activeStep, stepsAmount, onStepChange, onSubmit, onCancel } = props
+  const { mode, activeStep, stepsAmount, onStepChange, onCreate, onCancel, isVisibleEdit } = props
     ? withDefaults(props)
     : defaultProps;
 
-  const form = createForm<FormValues>({
-    onSubmit,
-    initialValues: initializeProjectForm(),
-    validate: (values) => {
-      const errors: Record<string, string> = {};
-
-      if (values.name === 'invalid') {
-        errors.name = 'invalid';
-      }
-
-      return errors;
-    },
-  });
-
-  const component = render(
-    <Form form={form} onSubmit={onSubmit}>
-      {({ dirty, handleSubmit }) => {
-        return (
-          <form onSubmit={handleSubmit}>
-            {/* https://github.com/final-form/final-form/issues/169 */}
-            <Field name="name">{() => null}</Field>
-            <Footer
-              mode={mode}
-              isFormDirty={dirty}
-              activeStep={activeStep}
-              stepsAmount={stepsAmount}
-              onStepChange={onStepChange}
-              onCancel={onCancel}
-            />
-          </form>
-        );
-      }}
-    </Form>,
+  return render(
+    <Footer
+      onCreate={onCreate}
+      mode={mode}
+      isVisibleEdit={isVisibleEdit}
+      activeStep={activeStep}
+      stepsAmount={stepsAmount}
+      onStepChange={onStepChange}
+      onCancel={onCancel}
+    />,
   );
-
-  return {
-    component,
-    dirtyForm() {
-      form.change('name', 'testing');
-    },
-    invalidForm() {
-      form.change('name', 'invalid');
-    },
-  };
 };
 
 describe('Footer', () => {
@@ -90,39 +43,37 @@ describe('Footer', () => {
     it('показывает футер для создания проекта', () => {
       renderComponent();
 
-      const rootCreate = screen.queryByTestId(Footer.testId.footerCreate);
-      const rootEdit = screen.queryByTestId(Footer.testId.footerEdit);
+      const buttons = screen.getAllByRole('button');
 
-      expect(rootCreate).toBeInTheDocument();
-      expect(rootEdit).not.toBeInTheDocument();
+      const [cancel, next] = buttons;
+
+      expect(buttons.length).toEqual(2);
+      expect(cancel.textContent).toEqual('Отмена');
+      expect(next.textContent).toEqual('Далее');
     });
 
-    it('показывает футер для редактирования проекта, если в форме были изменения', () => {
-      const { dirtyForm } = renderComponent({
-        mode: 'edit',
-      });
+    it('показывает футер для редактирования проекта', () => {
+      const { rerender } = renderComponent({ mode: 'edit', isVisibleEdit: true });
 
-      act(() => {
-        dirtyForm();
-      });
+      const buttons = screen.getAllByRole('button');
 
-      const rootEdit = screen.queryByTestId(Footer.testId.footerEdit);
-      const rootCreate = screen.queryByTestId(Footer.testId.footerCreate);
+      const [cancel, save] = buttons;
 
-      expect(rootEdit).toBeInTheDocument();
-      expect(rootCreate).not.toBeInTheDocument();
+      expect(buttons.length).toEqual(2);
+      expect(cancel.textContent).toEqual('Отменить');
+      expect(save.textContent).toEqual('Сохранить изменения');
+
+      rerender(<Footer {...defaultProps} mode="edit" isVisibleEdit={false} />);
+
+      expect(screen.queryAllByRole('button').length).toEqual(0);
     });
 
-    it('скрывает футер для редактирования проекта, если в форме нет изменений', () => {
-      renderComponent({
-        mode: 'edit',
-      });
+    it('не показывает футер для редактирования проекта, если isVisibleEdit=false', () => {
+      renderComponent({ mode: 'edit', isVisibleEdit: false });
 
-      const rootEdit = screen.queryByTestId(Footer.testId.footerEdit);
-      const rootCreate = screen.queryByTestId(Footer.testId.footerCreate);
+      const buttons = screen.queryAllByRole('button');
 
-      expect(rootEdit).not.toBeInTheDocument();
-      expect(rootCreate).not.toBeInTheDocument();
+      expect(buttons.length).toEqual(0);
     });
   });
 
@@ -131,142 +82,90 @@ describe('Footer', () => {
       it('увеличивает шаг ', () => {
         const onStepChange = jest.fn();
 
-        const { component } = renderComponent({ onStepChange });
+        renderComponent({ onStepChange });
 
-        const nextStep = component.getByTestId(Footer.testId.nextStep);
+        const [, next] = screen.getAllByRole('button');
 
-        fireEvent.click(nextStep);
+        userEvent.click(next);
 
         expect(onStepChange).toBeCalledTimes(1);
-        expect(onStepChange).toHaveBeenCalledWith(2);
+        expect(onStepChange).toHaveBeenCalledWith(1);
       });
 
       it('уменьшает шаг ', () => {
         const onStepChange = jest.fn();
 
-        const { component } = renderComponent({
+        renderComponent({
           activeStep: 2,
           onStepChange,
         });
 
-        const prevStep = component.getByTestId(Footer.testId.prevStep);
+        const [, prev] = screen.getAllByRole('button');
 
-        fireEvent.click(prevStep);
+        userEvent.click(prev);
 
         expect(onStepChange).toBeCalledTimes(1);
         expect(onStepChange).toHaveBeenCalledWith(1);
       });
 
       it('показывает кнопку создания проекта, если шаг последний', () => {
-        const { component } = renderComponent({
+        renderComponent({
           activeStep: 2,
         });
 
-        const createButton = component.getByTestId(Footer.testId.createButton);
+        const [, create] = screen.getAllByRole('button');
 
-        expect(createButton).toBeInTheDocument();
+        expect(create).toBeInTheDocument();
       });
     });
 
-    it.skip('выключает кнопку создания, если есть ошибки в форме', () => {
-      const { component, invalidForm } = renderComponent({
-        activeStep: 2,
-      });
-
-      act(() => {
-        invalidForm();
-      });
-
-      const createButton = component.getByTestId(Footer.testId.createButton);
-
-      expect(createButton).toBeDisabled();
-    });
-
-    it('тригерит обработчик отмены создания', () => {
+    it('вызывает обработчик onCancel', () => {
       const onCancel = jest.fn();
 
-      const { component } = renderComponent({
-        activeStep: 2,
+      renderComponent({
+        activeStep: 1,
         onCancel,
       });
 
-      const cancelCreate = component.getByTestId(Footer.testId.cancelCreate);
+      const [cancel] = screen.getAllByRole('button');
 
-      fireEvent.click(cancelCreate);
+      userEvent.click(cancel);
 
       expect(onCancel).toBeCalled();
     });
 
-    it('меняет статус при сабмите', () => {
-      const onSubmit = jest.fn((v) => v);
+    it('вызывает обработчик onCreate', () => {
+      const onCreate = jest.fn();
 
-      const { component } = renderComponent({
+      renderComponent({
         activeStep: 2,
-        onSubmit: (values) => onSubmit(values.status),
+        onCreate,
       });
 
-      const createButton = component.getByTestId(Footer.testId.createButton);
+      const [, , create] = screen.getAllByRole('button');
 
-      fireEvent.click(createButton);
+      userEvent.click(create);
 
-      expect(onSubmit).toBeCalled();
-      expect(onSubmit).toHaveBeenCalledWith(ProjectStatusEnum.Unpublished);
+      expect(onCreate).toBeCalled();
     });
   });
 
   describe('редактирование проекта', () => {
-    it('тригерит обработчик отмены редактирования', () => {
+    it('вызывает обработчик onCancel', () => {
       const onCancel = jest.fn();
 
-      const { component, dirtyForm } = renderComponent({
+      renderComponent({
         mode: 'edit',
         activeStep: 2,
         onCancel,
+        isVisibleEdit: true,
       });
 
-      act(() => {
-        dirtyForm();
-      });
+      const [cancel] = screen.getAllByRole('button');
 
-      const cancelEdit = component.getByTestId(Footer.testId.cancelEdit);
-
-      fireEvent.click(cancelEdit);
+      userEvent.click(cancel);
 
       expect(onCancel).toBeCalled();
-    });
-
-    it('происходит сабмит формы', () => {
-      const onSubmit = jest.fn();
-
-      const { component, dirtyForm } = renderComponent({
-        mode: 'edit',
-        activeStep: 2,
-        onSubmit,
-      });
-
-      act(() => {
-        dirtyForm();
-      });
-
-      const saveEdit = component.getByTestId(Footer.testId.saveEdit);
-
-      fireEvent.submit(saveEdit);
-
-      expect(onSubmit).toBeCalled();
-    });
-    it.skip('выключает кнопку сохранения, если есть ошибки в форме', () => {
-      const { component, invalidForm } = renderComponent({
-        mode: 'edit',
-        activeStep: 2,
-      });
-
-      act(() => {
-        invalidForm();
-      });
-
-      const saveEdit = component.getByTestId(Footer.testId.saveEdit);
-
-      expect(saveEdit).toBeDisabled();
     });
   });
 });

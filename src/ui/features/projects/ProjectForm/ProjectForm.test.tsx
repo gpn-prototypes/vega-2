@@ -186,6 +186,8 @@ describe('ProjectForm', () => {
     });
   });
 
+  it.todo('скрывает футер для редактирования проекта, если в форме нет изменений');
+
   describe('валидация полей', () => {
     beforeEach(() => {
       jest.useFakeTimers();
