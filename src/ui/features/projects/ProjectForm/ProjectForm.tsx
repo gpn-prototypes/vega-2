@@ -157,7 +157,15 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
       validate={validator}
       decorators={decorators}
       onSubmit={submit}
-      render={({ form, handleSubmit, dirty, values }): React.ReactNode => (
+      render={({
+        form,
+        handleSubmit,
+        dirty,
+        values,
+        valid,
+        dirtySinceLastSubmit,
+        hasSubmitErrors,
+      }): React.ReactNode => (
         <>
           <Banner regions={referenceData.regionList} title={values.name} regionId={values.region} />
           <VegaForm onSubmit={handleSubmit} className={cnProjectForm()} data-testid={testId.form}>
@@ -184,9 +192,14 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
             </div>
             <Footer
               mode={mode}
-              isFormDirty={dirty}
+              onCreate={() => {
+                form.change('status', ProjectStatusEnum.Unpublished);
+              }}
               activeStep={activeStepIndex}
               stepsAmount={steps.length}
+              isVisibleEdit={
+                dirty || (!valid && !dirtySinceLastSubmit) || (hasSubmitErrors && dirty)
+              }
               onStepChange={handleStepChange}
               onCancel={() => {
                 handleCancel(form);

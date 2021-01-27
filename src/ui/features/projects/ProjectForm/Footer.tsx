@@ -1,19 +1,17 @@
 import React from 'react';
-import { useForm } from 'react-final-form';
 import { Button, IconBackward, IconForward, PageFooter } from '@gpn-prototypes/vega-ui';
-
-import { ProjectStatusEnum } from '../../../../__generated__/types';
 
 import { cnProjectForm } from './cn-form';
 import { FormMode } from './types';
 
 export type FooterProps = {
   mode: FormMode;
-  isFormDirty: boolean;
+  isVisibleEdit: boolean;
   activeStep: number;
   stepsAmount: number;
   onStepChange: (step: number) => void;
   onCancel: () => void;
+  onCreate: () => void;
 };
 
 const testId = {
@@ -32,12 +30,7 @@ type FooterType = React.FC<FooterProps> & {
 };
 
 export const Footer: FooterType = (props) => {
-  const { mode, isFormDirty, activeStep, stepsAmount, onStepChange, onCancel } = props;
-  /*
-    TODO: Убрать хук формы и просто прокидывать 2 доп. пропса. Компоненту незачем знать что-то о форме.
-     Так же это создает проблемы при unit тестировании. Приходится мокать форму и тестировать с ней.
-  */
-  const form = useForm();
+  const { mode, activeStep, stepsAmount, onStepChange, onCancel, onCreate, isVisibleEdit } = props;
 
   const isCreateMode = mode === 'create';
   const isEditMode = mode === 'edit';
@@ -51,8 +44,6 @@ export const Footer: FooterType = (props) => {
   const handlePrevStep = (): void => {
     onStepChange(activeStep - 1);
   };
-
-  const { valid, dirtySinceLastSubmit, hasSubmitErrors, dirty } = form.getState();
 
   const createProjectFormFooter = (
     <PageFooter
@@ -97,9 +88,7 @@ export const Footer: FooterType = (props) => {
             view="primary"
             label="Создать проект"
             type="submit"
-            onClick={() => {
-              form.change('status', ProjectStatusEnum.Unpublished);
-            }}
+            onClick={onCreate}
             data-testid={testId.createButton}
           />
         )}
@@ -131,13 +120,10 @@ export const Footer: FooterType = (props) => {
     </PageFooter>
   );
 
-  const isEditFormDirty =
-    isFormDirty || (!valid && !dirtySinceLastSubmit) || (hasSubmitErrors && dirty);
-
   return (
     <>
       {isCreateMode && createProjectFormFooter}
-      {isEditMode && isEditFormDirty && editProjectFromFooter}
+      {isEditMode && isVisibleEdit && editProjectFromFooter}
     </>
   );
 };
