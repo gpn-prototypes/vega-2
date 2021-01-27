@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 import { ProjectStatusEnum } from '../../__generated__/types';
 import { ProjectsTableList } from '../../pages/projects/__generated__/projects';
 
@@ -66,7 +68,7 @@ const mockedData: ProjectsTableList = {
         status: ProjectStatusEnum.Unpublished,
         attendees: [],
         region: null,
-        editedAt: '2021-01-18T07:11:53.076000',
+        editedAt: dayjs.utc('2021-01-18T07:11:53.076000'),
         createdAt: '2021-01-18T07:11:53.076000',
         createdBy: {
           name: 'Николай',
@@ -88,8 +90,11 @@ describe('projectsMapper', () => {
     expect(mappedProjects.length).toBe(3);
   });
 
-  test('возвращается массив с ожидаемы данными', () => {
+  test('возвращается массив с ожидаемыми данными', () => {
     const mappedProjects = projectsMapper(mockedData);
+
+    const date = mockedData.projects?.data[0].editedAt;
+
     const expected = {
       id: 'a3333333-b111-c111-d111-e00000000000',
       name: 'FEM Example Project',
@@ -101,7 +106,10 @@ describe('projectsMapper', () => {
       roles: 'Менеджер',
       createdBy: 'Николай',
       createdAt: '12 ноября 2020',
-      editedAt: { date: '12 ноября 2020', time: ', 3:00' },
+      editedAt: {
+        date: dayjs.utc(date).local().format('D MMMM YYYY'),
+        time: dayjs.utc(date).local().format(', H:mm'),
+      },
     };
 
     expect(mappedProjects[0]).toEqual(expected);
