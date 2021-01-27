@@ -22,8 +22,14 @@ export const TextField: React.FC<TextFieldProps> = (props) => {
   const { input, meta, name, placeholder, testId, ...rest } = props;
 
   const submitErrorText = meta.submitError ? meta.submitError : undefined;
-  const showError =
-    Boolean(meta.error || submitErrorText) && meta.touched && (meta.dirty || meta.submitFailed);
+  const clientErrorVaildation = Boolean(meta.error) && meta.touched && meta.dirty;
+  const serverErrorValidation =
+    Boolean(meta.submitError) &&
+    meta.touched &&
+    (meta.dirty || meta.submitFailed) &&
+    !meta.modifiedSinceLastSubmit;
+
+  const showError = clientErrorVaildation || serverErrorValidation;
   const errorText = meta.error || submitErrorText;
 
   return (
