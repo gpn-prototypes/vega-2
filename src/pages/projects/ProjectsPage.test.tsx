@@ -11,7 +11,7 @@ import { ProjectsPageView } from './ProjectsPageView';
 import { ProjectsTable } from './ProjectsTable';
 
 function openModalRemoveProject(projectName: string) {
-  tl.fireEvent.mouseOver(tl.screen.getByText(projectName));
+  userEvent.hover(tl.screen.getByText(projectName));
   tl.fireEvent.click(tl.screen.getByTestId(EditedAt.testId.buttonMenu));
   tl.fireEvent.click(tl.screen.getByTestId(ProjectsPage.testId.projectRemove));
 }
@@ -23,7 +23,7 @@ describe('ProjectsPage', () => {
       mocks: defaultMock,
     });
 
-    expect($.getByTestId(ProjectsPageView.testId.loader)).toBeInTheDocument();
+    expect($.getByTestId(ProjectsPageView.testId.loader)).toBeVisible();
   });
 
   test('Отрисовывается страница c данными', async () => {
@@ -34,11 +34,9 @@ describe('ProjectsPage', () => {
 
     await waitRequest();
 
-    // await tl.waitFor(() => $.getByText(defaultMock[0].result.data.projects.data[2].name));
-
-    expect($.getByTestId(ProjectsPageView.testId.rootTitle)).toBeInTheDocument();
-    expect($.getByTestId(ProjectsPageView.testId.table)).toBeInTheDocument();
-    expect($.getByText(defaultMock[0].result.data.projects.data[2].name)).toBeInTheDocument();
+    expect($.getByTestId(ProjectsPageView.testId.rootTitle)).toBeVisible();
+    expect($.getByTestId(ProjectsPageView.testId.table)).toBeVisible();
+    expect($.getByText(defaultMock[0].result.data.projects.data[2].name)).toBeVisible();
   });
 
   test.todo('Проект помечается избранным');
@@ -57,7 +55,7 @@ describe('ProjectsPage', () => {
     openModalRemoveProject(nameProject);
 
     expect(nameCells.length).toBe(3);
-    expect($.getByTestId(ModalDeleteProject.testId.modal)).toBeInTheDocument();
+    expect($.getByTestId(ModalDeleteProject.testId.modal)).toBeVisible();
 
     tl.act(() => {
       tl.fireEvent.click($.getByTestId(ModalDeleteProject.testId.modalConfirm));

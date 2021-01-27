@@ -45,7 +45,7 @@ describe('ProjectsTable', () => {
     const func = jest.fn();
     const table = renderComponent({ onFavorite: func });
 
-    expect(table.getByTestId(ProjectsTable.testId.placeholder)).toBeInTheDocument();
+    expect(table.getByText('Пока нет ни одного проекта :(')).toBeInTheDocument();
   });
 
   test('рендерится строка placeholder', () => {

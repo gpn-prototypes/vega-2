@@ -31,17 +31,17 @@ const projectRowMock = [
 describe('ProjectsPageView', () => {
   test('рендерится без ошибок', () => {
     const component = renderComponent({ isLoading: false, onFavorite: noop, projects: [] });
-    expect(component.getByText('Название')).toBeInTheDocument();
+    expect(component.getByText('Название')).toBeVisible();
   });
 
   test('отображается индикатор загрузки', () => {
     const component = renderComponent({ isLoading: true, onFavorite: noop, projects: [] });
     const loader = component.getByTestId(ProjectsPageView.testId.loader);
-    expect(loader).toBeInTheDocument();
-    expect(component.queryByTestId(ProjectsPageView.testId.table)).toBeNull();
+    expect(loader).toBeVisible();
+    expect(component.queryByTestId(ProjectsPageView.testId.table)).not.toBeVisible();
   });
 
-  test('отображается индикатор загрузки', () => {
+  test('срабатывает функция для добавления в избранное', () => {
     const func = jest.fn();
     const pageView = renderComponent({
       isLoading: false,
@@ -49,7 +49,7 @@ describe('ProjectsPageView', () => {
       projects: projectRowMock,
     });
 
-    tl.fireEvent.mouseOver(pageView.getByText(projectRowMock[0].name));
+    userEvent.hover(pageView.getByText(projectRowMock[0].name));
     tl.fireEvent.click(pageView.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton));
 
     expect(func).toBeCalledTimes(1);

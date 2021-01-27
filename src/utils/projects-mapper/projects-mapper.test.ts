@@ -88,6 +88,25 @@ describe('projectsMapper', () => {
     expect(mappedProjects.length).toBe(3);
   });
 
+  test('возвращается массив с ожидаемы данными', () => {
+    const mappedProjects = projectsMapper(mockedData);
+    const expected = {
+      id: 'a3333333-b111-c111-d111-e00000000000',
+      name: 'FEM Example Project',
+      version: 1,
+      status: 'UNPUBLISHED',
+      description: undefined,
+      isFavorite: false,
+      region: undefined,
+      roles: 'Менеджер',
+      createdBy: 'Николай',
+      createdAt: '12 ноября 2020',
+      editedAt: { date: '12 ноября 2020', time: ', 3:00' },
+    };
+
+    expect(mappedProjects[0]).toEqual(expected);
+  });
+
   test('возвращается пустой массив при отсутствии проектов', () => {
     const list = {
       ...mockedData,
@@ -98,7 +117,7 @@ describe('projectsMapper', () => {
     expect(mappedProjects.length).toBe(0);
   });
 
-  test('возвращается пустой массив при отсутствии проектов', () => {
+  test('возвращается пустой массив при отсутствии проектов (data[null])', () => {
     const list = {
       ...mockedData,
       ...{ projects: { data: [null], __typename: 'ProjectList' } },
@@ -108,7 +127,7 @@ describe('projectsMapper', () => {
     expect(mappedProjects.length).toBe(0);
   });
 
-  test('возвращается пустой массив при отсутствии проектов', () => {
+  test('возвращается пустой массив при отсутствии проектов (нет __typename)', () => {
     const list = {
       ...mockedData,
       ...{ projects: { data: [{}] } },
