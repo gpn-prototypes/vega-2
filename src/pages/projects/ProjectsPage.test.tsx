@@ -121,7 +121,6 @@ describe('ProjectsPage', () => {
     expect(modal).toBeInTheDocument();
 
     userEvent.click($.getByLabelText('Кнопка закрытия модального окна'));
-
     expect(modal).not.toBeInTheDocument();
   });
 
