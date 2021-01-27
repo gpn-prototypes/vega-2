@@ -1,5 +1,6 @@
 import React from 'react';
 import * as tl from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { mountApp } from '../../../test-utils';
 
@@ -49,7 +50,7 @@ describe('ProjectsPage', () => {
 
     await waitRequest();
 
-    const nameProject = deleteProjectMock[0].result.data.projects?.data[0].name ?? '';
+    const nameProject = deleteProjectMock[0].result.data.projects?.data[0].name as string;
     const nameCells = await tl.waitFor(() => $.getAllByTestId(ProjectsTable.testId.projectName));
 
     openModalRemoveProject(nameProject);
@@ -81,7 +82,7 @@ describe('ProjectsPage', () => {
 
     await waitRequest();
 
-    const nameProject = deleteProjectMock[0].result.data.projects?.data[0].name ?? '';
+    const nameProject = deleteProjectMock[0].result.data.projects?.data[0].name as string;
 
     openModalRemoveProject(nameProject);
 
@@ -102,7 +103,7 @@ describe('ProjectsPage', () => {
 
     await waitRequest();
 
-    const nameProject = deleteProjectMock[0].result.data.projects?.data[0].name ?? '';
+    const nameProject = deleteProjectMock[0].result.data.projects?.data[0].name as string;
 
     openModalRemoveProject(nameProject);
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import * as tl from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { ProjectStatusEnum } from '../../__generated__/types';
 
@@ -38,7 +39,7 @@ describe('ProjectsPageView', () => {
     const component = renderComponent({ isLoading: true, onFavorite: noop, projects: [] });
     const loader = component.getByTestId(ProjectsPageView.testId.loader);
     expect(loader).toBeVisible();
-    expect(component.queryByTestId(ProjectsPageView.testId.table)).not.toBeVisible();
+    expect(component.queryByTestId(ProjectsPageView.testId.table)).not.toBeInTheDocument();
   });
 
   test('срабатывает функция для добавления в избранное', () => {
