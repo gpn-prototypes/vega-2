@@ -5,7 +5,6 @@ import { FormApi } from 'final-form';
 import createDecorator from 'final-form-focus';
 
 import { ProjectStatusEnum } from '../../../../__generated__/types';
-import { useDebouncedFunction } from '../../../../hooks/use-debounced-function';
 import { createValidate, validators } from '../../../forms/validation';
 
 import { Banner } from './Banner';
@@ -88,8 +87,17 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     }
   };
 
-  const autoSaveDebounced = useDebouncedFunction(300, (form: FormApi<FormValues>) => {
+  const [state, setState] = useState<{
+    active?: keyof FormValues;
+    values: FormValues | Record<string, unknown>;
+  }>({
+    active: undefined,
+    values: {},
+  });
+
+  const autoSave = (form: FormApi<FormValues>) => {
     const { values, active, dirty, valid, validating, dirtySinceLastSubmit } = form.getState();
+    const isBlurEvent = (state.active && state.active !== active) || !active;
 
     if (values.status === ProjectStatusEnum.Unpublished && active) {
       form.change('status', ProjectStatusEnum.Blank);
@@ -99,10 +107,16 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
       return;
     }
 
-    if (dirty) {
-      form.submit();
+    if (isBlurEvent) {
+      setState({ active, values });
+
+      if (dirty) {
+        form.submit();
+      }
+    } else {
+      setState({ ...state, active });
     }
-  });
+  };
 
   const Step = steps[activeStepIndex].content;
 
@@ -152,7 +166,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
               onChange={(formState) => {
                 setHasUnsavedChanges(Object.keys(formState.dirtyFields).length > 0);
                 if (mode === 'create') {
-                  autoSaveDebounced(form);
+                  autoSave(form);
                 }
               }}
             />
