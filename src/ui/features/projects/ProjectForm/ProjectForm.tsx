@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { Form, FormSpy } from 'react-final-form';
 import { Form as VegaForm, NavigationList } from '@gpn-prototypes/vega-ui';
 import { FormApi } from 'final-form';
@@ -58,6 +58,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
   const { mode, initialValues, referenceData, onSubmit, onCancel } = formProps;
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const submitPromiseRef = useRef<Promise<unknown> | undefined>();
 
   const submit = React.useCallback(
     (values: FormValues, formApi: FormApi<FormValues>) => {
@@ -68,7 +69,15 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
         coordinates: values.coordinates?.trim(),
       };
 
-      return onSubmit(data, formApi).then((errors) => {
+      let activePromise = submitPromiseRef.current;
+
+      if (activePromise !== undefined) {
+        activePromise = activePromise.then(() => onSubmit(data, formApi));
+      } else {
+        activePromise = onSubmit(data, formApi);
+      }
+
+      return activePromise.then((errors) => {
         setHasUnsavedChanges(false);
         return errors;
       });
@@ -111,7 +120,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
       setState({ active, values });
 
       if (dirty) {
-        form.submit();
+        submitPromiseRef.current = form.submit();
       }
     } else {
       setState({ ...state, active });
