@@ -134,12 +134,9 @@ export const DescriptionStep: DescriptionStepType = (props) => {
                 getOptionLabel={getItemLabel}
                 placeholder="Выберите регион"
                 value={regionOptions.find(({ value }) => value === input.value)}
-                onChange={
-                  /* istanbul ignore next */
-                  (option: SelectOption | null): void => {
-                    input.onChange(option?.value);
-                  }
-                }
+                onChange={(option: SelectOption | null): void => {
+                  input.onChange(option?.value);
+                }}
                 onBlur={input.onBlur}
                 onFocus={input.onFocus}
                 data-testid={testId.region}
@@ -165,12 +162,9 @@ export const DescriptionStep: DescriptionStepType = (props) => {
                 placeholder="Выберите тип проекта"
                 disabled
                 value={typeOptions.find(({ value }) => value === input.value)}
-                onChange={
-                  /* istanbul ignore next */
-                  (value): void => {
-                    input.onChange(value?.value);
-                  }
-                }
+                onChange={(value): void => {
+                  input.onChange(value?.value);
+                }}
                 onBlur={input.onBlur}
                 onFocus={input.onFocus}
                 data-testid={testId.type}
@@ -186,10 +180,7 @@ export const DescriptionStep: DescriptionStepType = (props) => {
           </VegaForm.Label>
           <Field
             allowNull
-            parse={
-              /* istanbul ignore next */
-              (v) => v
-            }
+            parse={(v) => v}
             name="coordinates"
             render={({ input, meta }): React.ReactNode => {
               return (
@@ -229,6 +220,7 @@ export const DescriptionStep: DescriptionStepType = (props) => {
                       showError ? cnDescriptionStep('ComboboxError').toString() : undefined
                     }
                     size="s"
+                    name="yearStart"
                     options={yearStartOptions}
                     getOptionLabel={getItemLabel}
                     onCreate={(option): void => {

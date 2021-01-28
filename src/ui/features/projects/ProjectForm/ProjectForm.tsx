@@ -86,11 +86,9 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     [onSubmit],
   );
 
-  const handleStepChange =
-    /* istanbul ignore next */
-    (step: number) => {
-      setActiveStepIndex(step);
-    };
+  const handleStepChange = (step: number) => {
+    setActiveStepIndex(step);
+  };
 
   const handleCancel = (formApi: FormApi<FormValues>) => {
     setHasUnsavedChanges(false);
@@ -176,10 +174,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
                     {(props): React.ReactNode => (
                       <button
                         type="button"
-                        onClick={
-                          /* istanbul ignore next */
-                          (): void => setActiveStepIndex(index)
-                        }
+                        onClick={(): void => setActiveStepIndex(index)}
                         className={cnProjectForm('NavigationButton').mix(props.className)}
                       >
                         {title}

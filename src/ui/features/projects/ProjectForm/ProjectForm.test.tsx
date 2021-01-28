@@ -6,7 +6,7 @@ import { merge } from 'ramda';
 
 import { Country, ProjectStatusEnum, Region } from '../../../../__generated__/types';
 
-import { initializeProjectForm } from './__tests__/utils';
+import { getCombobox, initializeProjectForm } from './__tests__/utils';
 import { ProjectForm } from './ProjectForm';
 import { DescriptionStep } from './steps';
 import { FormProps } from './types';
@@ -144,7 +144,6 @@ describe('ProjectForm', () => {
     it('происходит смена статус на Blank, если статус был Unpublished', async () => {
       const onSubmit = jest.fn().mockImplementation((values) => Promise.resolve(values));
       const initialValues = {
-        ...initializeProjectForm(),
         status: ProjectStatusEnum.Unpublished,
       };
 
@@ -155,11 +154,12 @@ describe('ProjectForm', () => {
 
       await act(async () => {
         jest.runAllTimers();
-        expect(onSubmit).toBeCalled();
-        expect(onSubmit.mock.calls[0][0]).toEqual(
-          expect.objectContaining({ status: ProjectStatusEnum.Blank }),
-        );
       });
+
+      expect(onSubmit).toBeCalled();
+      expect(onSubmit.mock.calls[0][0]).toEqual(
+        expect.objectContaining({ status: ProjectStatusEnum.Blank }),
+      );
     });
 
     it('не происходит автосохранение, если форма невалидна', async () => {
@@ -186,9 +186,7 @@ describe('ProjectForm', () => {
     });
   });
 
-  it.todo('скрывает футер для редактирования проекта, если в форме нет изменений');
-
-  describe('валидация полей', () => {
+  describe('регион', () => {
     beforeEach(() => {
       jest.useFakeTimers();
     });
@@ -197,6 +195,84 @@ describe('ProjectForm', () => {
       jest.useRealTimers();
     });
 
+    it('выставляет значение списка регионов по умолчанию', () => {
+      renderComponent();
+      const comboboxElement = screen.getByTestId(DescriptionStep.testId.region);
+      const combobox = getCombobox(comboboxElement);
+
+      combobox.toggle();
+
+      const list = screen.getByRole('listbox');
+
+      expect(list.textContent).toContain('СССР');
+    });
+  });
+
+  describe('год начала планирования', () => {
+    beforeEach(() => {
+      jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    it('не выставляет значение "следующего года", если это форма редактирования ', () => {
+      renderComponent({ mode: 'edit' });
+      const comboboxElement = screen.getByTestId(DescriptionStep.testId.yearStart);
+
+      expect(comboboxElement.textContent).toContain('Выберите год');
+    });
+
+    it('инициализирует значение в форме и добавляет в начало списка, если это форма создания проекта', async () => {
+      renderComponent({ initialValues: { yearStart: 2040 } });
+      const comboboxElement = screen.getByTestId(DescriptionStep.testId.yearStart);
+      const combobox = getCombobox(comboboxElement);
+
+      combobox.toggle();
+
+      const options = await combobox.options();
+
+      expect(options[0].textContent).toContain('2040');
+    });
+
+    it('добавляет год в начало списка, если его нет в списке и он валидный', async () => {
+      renderComponent();
+
+      const comboboxElement = screen.getByTestId(DescriptionStep.testId.yearStart);
+      const combobox = getCombobox(comboboxElement);
+
+      combobox.type('3020');
+
+      await combobox.selectOption(0);
+
+      combobox.toggle();
+
+      const options = await combobox.options();
+
+      expect(await options[0].textContent).toContain('3020');
+    });
+
+    it('не добавляет невалидное значение в список', async () => {
+      renderComponent();
+      const comboboxElement = screen.getByTestId(DescriptionStep.testId.yearStart);
+      const combobox = getCombobox(comboboxElement);
+
+      combobox.type('ff11');
+
+      await combobox.selectOption(0);
+
+      combobox.toggle();
+
+      const options = await combobox.options();
+
+      expect(options[0].textContent).not.toContain('ff11');
+    });
+  });
+
+  it.todo('скрывает футер для редактирования проекта, если в форме нет изменений');
+
+  describe('валидация полей', () => {
     describe('создание проекта', () => {
       it.todo('название проекта');
       it.todo('система координат');

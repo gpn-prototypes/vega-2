@@ -19,7 +19,7 @@ export const initializeProjectForm = (fields?: FormValues): FormValues =>
 type ResultCombobox = {
   buttons(): NodeListOf<HTMLButtonElement>;
   input(): HTMLInputElement | null;
-  options(): HTMLElement[];
+  options(): Promise<HTMLElement[]>;
   type(val: string): void;
   selectOption(opt: number): void;
   awaitAnimation(): void;
@@ -27,13 +27,15 @@ type ResultCombobox = {
   clear(): void;
 };
 
+const ANIMATION_DURATION = 300;
+
 export const getCombobox = (combobox: HTMLElement): ResultCombobox => {
   const buttons = () => combobox.querySelectorAll('button');
   const input = () => combobox.querySelector('input');
-  const options = () => screen.queryAllByRole('option');
+  const options = async () => screen.findAllByRole('option');
   const awaitAnimation = () => {
     act(() => {
-      jest.runAllTimers();
+      jest.advanceTimersByTime(ANIMATION_DURATION);
     });
   };
 
@@ -41,6 +43,7 @@ export const getCombobox = (combobox: HTMLElement): ResultCombobox => {
     buttons,
     input,
     options,
+    awaitAnimation,
     type: (val) => {
       const inpt = input();
       if (inpt) {
@@ -48,12 +51,13 @@ export const getCombobox = (combobox: HTMLElement): ResultCombobox => {
       }
       awaitAnimation();
     },
-    selectOption: (opt: number) => {
-      const opts = options();
-      userEvent.click(opts[opt]);
+    selectOption: async (opt: number) => {
+      const opts = await options();
       awaitAnimation();
+
+      userEvent.click(opts[opt]);
     },
-    awaitAnimation,
+
     toggle: () => {
       const btns = buttons();
       if (btns.length === 2) {
@@ -68,7 +72,6 @@ export const getCombobox = (combobox: HTMLElement): ResultCombobox => {
       if (btns.length === 2) {
         userEvent.click(btns[0]);
       }
-      awaitAnimation();
     },
   };
 };
