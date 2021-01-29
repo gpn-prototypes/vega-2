@@ -19,6 +19,26 @@
     align-items: center;
   }
 
+  &__favorite {
+    opacity: 0;
+
+    transition: opacity 0.2s;
+
+    &_active {
+      opacity: 1;
+    }
+
+    .Table-CellsRow:hover &,
+    .Table-ContentCell_isActive & {
+      opacity: 1;
+    }
+
+    .Table-CellsRow:hover .Table-ContentCell_isDarkned &,
+    .Table-ContentCell_isDarkned &_active {
+      opacity: 0;
+    }
+  }
+
   &__textOverflow {
     display: -webkit-box;
     overflow: hidden;

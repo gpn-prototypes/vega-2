@@ -20,6 +20,8 @@ const styles = {
   nameWrap: `${blockName}__nameWrap`,
   iconFavorite: `${blockName}__iconFavorite`,
   columnName: `${blockName}__columnName`,
+  favorite: `${blockName}__favorite`,
+  favoriteActive: `${blockName}__favorite_active`,
 };
 
 const testId = {
@@ -92,7 +94,6 @@ const COLUMNS: React.ComponentProps<typeof Table>['columns'] = [
 
 export const ProjectsTable: ProjectsTableType = (props) => {
   const placeholder = props.placeholder ?? <Text size="s">Пока нет ни одного проекта :(</Text>;
-  const [idMenuVisible, setIdMenuVisible] = React.useState<string | undefined>(undefined);
   const [idActiveRow, setIdActiveRow] = React.useState<string | undefined>(undefined);
 
   const history = useHistory();
@@ -101,7 +102,6 @@ export const ProjectsTable: ProjectsTableType = (props) => {
     if (isMenuShowed) {
       setIdActiveRow(id);
     } else {
-      setIdMenuVisible(undefined);
       setIdActiveRow(undefined);
     }
   };
@@ -109,7 +109,6 @@ export const ProjectsTable: ProjectsTableType = (props) => {
   const rows =
     props.rows?.map((project) => {
       const icon = project.isFavorite ? IconBookmarkFilled : IconBookmarkStroked;
-      const isVisible = idMenuVisible === project.id;
 
       return {
         ...project,
@@ -131,31 +130,30 @@ export const ProjectsTable: ProjectsTableType = (props) => {
             title={project.name && project.name.length > 40 ? project.name : undefined}
           >
             <div className={styles.iconWrap}>
-              {(isVisible || project.isFavorite) && (
-                <Button
-                  label="Избранное"
-                  iconLeft={icon}
-                  iconSize="s"
-                  onlyIcon
-                  view="clear"
-                  size="xs"
-                  form="round"
-                  data-testid={
-                    project.isFavorite
-                      ? testId.favoriteSelectedButton
-                      : testId.favoriteNotSelectedButton
+              <Button
+                label="Избранное"
+                iconLeft={icon}
+                iconSize="s"
+                onlyIcon
+                view="clear"
+                size="xs"
+                form="round"
+                data-testid={
+                  project.isFavorite
+                    ? testId.favoriteSelectedButton
+                    : testId.favoriteNotSelectedButton
+                }
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (project.id && project.status && project.version) {
+                    props.onFavorite(project.id, {
+                      version: project.version,
+                      isFavorite: !project.isFavorite,
+                    });
                   }
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (project.id && project.status && project.version) {
-                      props.onFavorite(project.id, {
-                        version: project.version,
-                        isFavorite: !project.isFavorite,
-                      });
-                    }
-                  }}
-                />
-              )}
+                }}
+                className={`${styles.favorite} ${project.isFavorite ? styles.favoriteActive : ''}`}
+              />
             </div>
             <div className={styles.textOverflow} data-testid={testId.projectName}>
               {project.name}
@@ -166,7 +164,6 @@ export const ProjectsTable: ProjectsTableType = (props) => {
           <EditedAt
             date={project.editedAt}
             menu={project.menu}
-            isVisible={isVisible}
             onMenuToggle={(isMenuShowed) => handleShowMenu(isMenuShowed, project.id)}
           />
         ),
@@ -185,11 +182,6 @@ export const ProjectsTable: ProjectsTableType = (props) => {
         onChange: ({ id }) => {
           history.push(`/projects/show/${id}`);
         },
-      }}
-      onRowHover={({ id }) => {
-        if (!idActiveRow) {
-          setIdMenuVisible(id);
-        }
       }}
     />
   );
