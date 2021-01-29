@@ -120,7 +120,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
       setState({ active, values });
 
       if (dirty) {
-        submitPromiseRef.current = form.submit();
+        submitPromiseRef.current = onSubmit(values, form);
       }
     } else {
       setState({ ...state, active });
