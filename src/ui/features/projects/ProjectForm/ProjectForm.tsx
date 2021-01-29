@@ -1,11 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { Form, FormSpy } from 'react-final-form';
 import { Form as VegaForm, NavigationList } from '@gpn-prototypes/vega-ui';
-import { FormApi } from 'final-form';
+import { FormApi, SubmissionErrors } from 'final-form';
 import createDecorator from 'final-form-focus';
 
 import { ProjectStatusEnum } from '../../../../__generated__/types';
-import { useDebouncedFunction } from '../../../../hooks/use-debounced-function';
 import { createValidate, validators } from '../../../forms/validation';
 
 import { Banner } from './Banner';
@@ -60,6 +59,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
 
+  const submitPromiseRef = useRef<Promise<SubmissionErrors | void>>();
   const submit = React.useCallback(
     (values: FormValues, formApi: FormApi<FormValues>) => {
       const data = {
@@ -69,7 +69,15 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
         coordinates: values.coordinates?.trim(),
       };
 
-      return onSubmit(data, formApi).then((errors) => {
+      let activePromise = submitPromiseRef.current;
+
+      if (activePromise !== undefined) {
+        activePromise = activePromise.then(() => onSubmit(data, formApi));
+      } else {
+        activePromise = onSubmit(data, formApi);
+      }
+
+      return activePromise.then((errors) => {
         setHasUnsavedChanges(false);
         return errors;
       });
@@ -88,8 +96,17 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     }
   };
 
-  const autoSaveDebounced = useDebouncedFunction(300, (form: FormApi<FormValues>) => {
+  const [state, setState] = useState<{
+    active?: keyof FormValues;
+    values: FormValues | Record<string, unknown>;
+  }>({
+    active: undefined,
+    values: {},
+  });
+
+  const autoSave = (form: FormApi<FormValues>) => {
     const { values, active, dirty, valid, validating, dirtySinceLastSubmit } = form.getState();
+    const isBlurEvent = (state.active && state.active !== active) || !active;
 
     if (values.status === ProjectStatusEnum.Unpublished && active) {
       form.change('status', ProjectStatusEnum.Blank);
@@ -99,10 +116,16 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
       return;
     }
 
-    if (dirty) {
-      form.submit();
+    if (isBlurEvent) {
+      setState({ active, values });
+
+      if (dirty) {
+        submitPromiseRef.current = onSubmit(values, form);
+      }
+    } else {
+      setState({ ...state, active });
     }
-  });
+  };
 
   const Step = steps[activeStepIndex].content;
 
@@ -152,7 +175,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
               onChange={(formState) => {
                 setHasUnsavedChanges(Object.keys(formState.dirtyFields).length > 0);
                 if (mode === 'create') {
-                  autoSaveDebounced(form);
+                  autoSave(form);
                 }
               }}
             />
