@@ -21,9 +21,16 @@ const cnTextField = cn('VegaTextField');
 export const TextField: React.FC<TextFieldProps> = (props) => {
   const { input, meta, name, placeholder, testId, ...rest } = props;
 
-  const submitErrorText =
-    meta.submitError && !meta.dirtySinceLastSubmit ? meta.submitError : undefined;
-  const showError = (Boolean(meta.error || submitErrorText) && meta.submitFailed) || !meta.pristine;
+  const submitErrorText = meta.submitError ? meta.submitError : undefined;
+  const clientErrorValidation =
+    Boolean(meta.error) && meta.touched && (meta.dirty || (!meta.dirty && meta.submitFailed));
+  const serverErrorValidation =
+    Boolean(meta.submitError) &&
+    meta.touched &&
+    (meta.dirty || meta.submitFailed) &&
+    !meta.modifiedSinceLastSubmit;
+
+  const showError = clientErrorValidation || serverErrorValidation;
   const errorText = meta.error || submitErrorText;
 
   return (

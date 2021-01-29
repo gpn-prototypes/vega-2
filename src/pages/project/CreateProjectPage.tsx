@@ -196,9 +196,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       if (updateProjectBlankResult.data?.updateProject?.result?.__typename === 'Error') {
         const inlineUpdateProjectError = updateProjectBlankResult.data?.updateProject?.result;
 
-        if (inlineUpdateProjectError?.code === 'PROJECT_NAME_ALREADY_EXISTS') {
-          errors.name = inlineUpdateProjectError.message;
-        }
+        errors.name = inlineUpdateProjectError.message;
       }
 
       const shouldProjectCreate =
@@ -216,15 +214,6 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
           },
         });
       }
-
-      form.initialize((v) => {
-        if (updateProjectBlankResult.data?.updateProject?.result?.__typename === 'Project') {
-          const initials = getInitialValues(updateProjectBlankResult.data.updateProject.result);
-          return { ...initials, ...v };
-        }
-
-        return v;
-      });
 
       return errors;
     },
