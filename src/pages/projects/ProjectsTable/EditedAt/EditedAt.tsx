@@ -8,7 +8,6 @@ import { cnEditedAt } from './cn-edited-at';
 type EditedAtProps = {
   date?: string | React.ReactElement;
   menu?: MenuItem[];
-  isVisible: boolean;
   onMenuToggle(isMenuShowed: boolean): void;
 };
 
@@ -22,7 +21,7 @@ type EditedAtType = React.FC<EditedAtProps> & {
   testId: typeof testId;
 };
 
-export const EditedAt: EditedAtType = ({ date, menu, isVisible, onMenuToggle }) => {
+export const EditedAt: EditedAtType = ({ date, menu, onMenuToggle }) => {
   const anchorRef = React.createRef<HTMLButtonElement>();
   const [isPopoverVisible, setIsPopoverVisible] = React.useState(false);
 
@@ -38,22 +37,21 @@ export const EditedAt: EditedAtType = ({ date, menu, isVisible, onMenuToggle }) 
       </Text>
       <div className={cnEditedAt('menu')}>
         <div className={cnEditedAt('iconWrap')}>
-          {isVisible && (
-            <Button
-              label="Меню"
-              iconLeft={IconKebab}
-              iconSize="s"
-              onlyIcon
-              view="clear"
-              size="xs"
-              ref={anchorRef}
-              data-testid={testId.buttonMenu}
-              onClick={(e) => {
-                e.stopPropagation();
-                showPopover(!isPopoverVisible);
-              }}
-            />
-          )}
+          <Button
+            label="Меню"
+            iconLeft={IconKebab}
+            iconSize="s"
+            onlyIcon
+            view="clear"
+            size="xs"
+            ref={anchorRef}
+            data-testid={testId.buttonMenu}
+            onClick={(e) => {
+              e.stopPropagation();
+              showPopover(!isPopoverVisible);
+            }}
+            className={cnEditedAt('iconButton').toString()}
+          />
         </div>
 
         {menu && isPopoverVisible && (
