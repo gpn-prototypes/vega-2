@@ -112,6 +112,10 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
       form.change('status', ProjectStatusEnum.Blank);
     }
 
+    if (!valid || validating) {
+      return;
+    }
+
     if ((!valid || validating) && !dirtySinceLastSubmit) {
       return;
     }
