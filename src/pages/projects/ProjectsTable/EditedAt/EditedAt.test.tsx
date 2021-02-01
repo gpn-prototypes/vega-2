@@ -6,10 +6,8 @@ import { EditedAt, EditedAtProps } from './EditedAt';
 const noop = () => {};
 
 function renderComponent(props: EditedAtProps): tl.RenderResult {
-  const { isVisible, onMenuToggle = noop, date, menu } = props;
-  return tl.render(
-    <EditedAt isVisible={isVisible} onMenuToggle={onMenuToggle} date={date} menu={menu} />,
-  );
+  const { onMenuToggle = noop, date, menu } = props;
+  return tl.render(<EditedAt onMenuToggle={onMenuToggle} date={date} menu={menu} />);
 }
 
 const EditButton = ({ close, ...rest }: { close(): void }) => {
@@ -38,21 +36,21 @@ describe('EditedAt', () => {
   test('рендерится без ошибок', () => {
     const func = jest.fn();
 
-    const component = renderComponent({ isVisible: false, onMenuToggle: func, date });
+    const component = renderComponent({ onMenuToggle: func, date });
 
     expect(component.getByText(date.date)).toBeInTheDocument();
   });
 
   test('рендерится кнопка «меню»', () => {
     const func = jest.fn();
-    const component = renderComponent({ isVisible: true, onMenuToggle: func, date });
+    const component = renderComponent({ onMenuToggle: func, date });
 
     expect(component.getByText(date.date)).toBeInTheDocument();
   });
 
   test('рендерится всплывающий блок', () => {
     const func = jest.fn();
-    const component = renderComponent({ isVisible: true, onMenuToggle: func, date, menu });
+    const component = renderComponent({ onMenuToggle: func, date, menu });
 
     tl.fireEvent.click(component.getByTestId(EditedAt.testId.buttonMenu));
 
@@ -61,7 +59,7 @@ describe('EditedAt', () => {
 
   test('всплывающий блок закрывается при клике на пункт меню', () => {
     const func = jest.fn();
-    const component = renderComponent({ isVisible: true, onMenuToggle: func, date, menu });
+    const component = renderComponent({ onMenuToggle: func, date, menu });
 
     tl.fireEvent.click(component.getByTestId(EditedAt.testId.buttonMenu));
 
@@ -76,7 +74,7 @@ describe('EditedAt', () => {
 
   test.skip('всплывающий блок закрывается при клике вне меню', () => {
     const func = jest.fn();
-    const component = renderComponent({ isVisible: true, onMenuToggle: func, date, menu });
+    const component = renderComponent({ onMenuToggle: func, date, menu });
 
     tl.fireEvent.click(component.getByTestId(EditedAt.testId.buttonMenu));
 

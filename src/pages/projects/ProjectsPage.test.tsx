@@ -54,7 +54,7 @@ describe('ProjectsPage', () => {
 
     expect(tl.screen.getByText(projectName)).toBeVisible();
 
-    openModalRemoveProject(projectName);
+    openModalRemoveProject();
 
     expect(nameCells.length).toBe(3);
     expect($.getByTestId(ModalDeleteProject.testId.modal)).toBeVisible();
@@ -81,9 +81,7 @@ describe('ProjectsPage', () => {
 
     await waitRequest();
 
-    const nameProject = deleteProjectMock[0].result.data.projects?.data[0].name as string;
-
-    openModalRemoveProject(nameProject);
+    openModalRemoveProject();
 
     const modal = $.getByTestId(ModalDeleteProject.testId.modal);
 
@@ -102,9 +100,7 @@ describe('ProjectsPage', () => {
 
     await waitRequest();
 
-    const nameProject = deleteProjectMock[0].result.data.projects?.data[0].name as string;
-
-    openModalRemoveProject(nameProject);
+    openModalRemoveProject();
 
     const modal = $.getByTestId(ModalDeleteProject.testId.modal);
 
