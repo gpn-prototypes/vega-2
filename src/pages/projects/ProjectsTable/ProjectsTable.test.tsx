@@ -1,5 +1,6 @@
 import React from 'react';
 import * as tl from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { ProjectStatusEnum } from '../../../__generated__/types';
 
@@ -129,14 +130,16 @@ describe('ProjectsTable', () => {
 
   test('отображается кнопка «меню»', () => {
     const func = jest.fn();
-    const table = renderComponent({ onFavorite: func, rows: projectRowMock });
+    renderComponent({ onFavorite: func, rows: projectRowMock });
 
-    tl.fireEvent.mouseOver(table.getByText(projectRowMock[0].name));
+    expect(tl.screen.queryByTestId(EditedAt.testId.buttonMenu)).not.toBeInTheDocument();
 
-    expect(table.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton)).toBeInTheDocument();
+    userEvent.hover(tl.screen.getByText(projectRowMock[0].name));
+
+    expect(tl.screen.getByTestId(EditedAt.testId.buttonMenu)).toBeInTheDocument();
   });
 
-  test('при наличии меню, строка становится активной', () => {
+  test('при открытом меню, строка становится активной', () => {
     const func = jest.fn();
     const table = renderComponent({ onFavorite: func, rows: projectRowMock });
 

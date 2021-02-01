@@ -51,7 +51,7 @@ describe('ProjectsPageView', () => {
     });
 
     userEvent.hover(pageView.getByText(projectRowMock[0].name));
-    tl.fireEvent.click(pageView.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton));
+    userEvent.click(pageView.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton));
 
     expect(func).toBeCalledTimes(1);
   });

@@ -13,12 +13,12 @@ import { ProjectsTable } from './ProjectsTable';
 
 function openModalRemoveProject(projectName: string) {
   userEvent.hover(tl.screen.getByText(projectName));
-  tl.fireEvent.click(tl.screen.getByTestId(EditedAt.testId.buttonMenu));
-  tl.fireEvent.click(tl.screen.getByTestId(ProjectsPage.testId.projectRemove));
+  userEvent.click(tl.screen.getByTestId(EditedAt.testId.buttonMenu));
+  userEvent.click(tl.screen.getByTestId(ProjectsPage.testId.projectRemove));
 }
 
 describe('ProjectsPage', () => {
-  test('Отрисовывается индикатор загрузки', async () => {
+  test('отрисовывается индикатор загрузки', async () => {
     const defaultMock = mocks.default;
     const { $ } = await mountApp(<ProjectsPage />, {
       mocks: defaultMock,
@@ -27,7 +27,7 @@ describe('ProjectsPage', () => {
     expect($.getByTestId(ProjectsPageView.testId.loader)).toBeVisible();
   });
 
-  test('Отрисовывается страница c данными', async () => {
+  test('отрисовывается страница c данными', async () => {
     const defaultMock = mocks.default;
     const { $, waitRequest } = await mountApp(<ProjectsPage />, {
       mocks: defaultMock,
@@ -40,9 +40,9 @@ describe('ProjectsPage', () => {
     expect($.getByText(defaultMock[0].result.data.projects.data[2].name)).toBeVisible();
   });
 
-  test.todo('Проект помечается избранным');
+  test.todo('проект помечается избранным');
 
-  test.skip('Проект удаляется', async () => {
+  test.skip('проект удаляется', async () => {
     const deleteProjectMock = mocks.deleteProject;
     const { $, waitRequest } = await mountApp(<ProjectsPage />, {
       mocks: deleteProjectMock,
@@ -50,17 +50,17 @@ describe('ProjectsPage', () => {
 
     await waitRequest();
 
-    const nameProject = deleteProjectMock[0].result.data.projects?.data[0].name as string;
+    const projectName = deleteProjectMock[0].result.data.projects?.data[0].name as string;
     const nameCells = await tl.waitFor(() => $.getAllByTestId(ProjectsTable.testId.projectName));
 
-    openModalRemoveProject(nameProject);
+    expect(tl.screen.getByText(projectName)).toBeVisible();
+
+    openModalRemoveProject(projectName);
 
     expect(nameCells.length).toBe(3);
     expect($.getByTestId(ModalDeleteProject.testId.modal)).toBeVisible();
 
-    tl.act(() => {
-      tl.fireEvent.click($.getByTestId(ModalDeleteProject.testId.modalConfirm));
-    });
+    userEvent.click($.getByTestId(ModalDeleteProject.testId.modalConfirm));
 
     await waitRequest();
 
@@ -74,7 +74,7 @@ describe('ProjectsPage', () => {
     expect(newNameCells.length).toBe(2);
   });
 
-  test('Модальное окно закрывается при отмене удаления', async () => {
+  test('модальное окно закрывается при отмене удаления', async () => {
     const deleteProjectMock = mocks.deleteProject;
     const { $, waitRequest } = await mountApp(<ProjectsPage />, {
       mocks: deleteProjectMock,
@@ -90,12 +90,12 @@ describe('ProjectsPage', () => {
 
     expect(modal).toBeInTheDocument();
 
-    tl.fireEvent.click($.getByTestId(ModalDeleteProject.testId.modalCancel));
+    userEvent.click($.getByTestId(ModalDeleteProject.testId.modalCancel));
 
     expect(modal).not.toBeInTheDocument();
   });
 
-  test('Модальное окно закрывается', async () => {
+  test('модальное окно закрывается', async () => {
     const deleteProjectMock = mocks.deleteProject;
     const { $, waitRequest } = await mountApp(<ProjectsPage />, {
       mocks: deleteProjectMock,
@@ -111,7 +111,7 @@ describe('ProjectsPage', () => {
 
     expect(modal).toBeInTheDocument();
 
-    tl.fireEvent.click($.getByLabelText('Кнопка закрытия модального окна'));
+    userEvent.click($.getByLabelText('Кнопка закрытия модального окна'));
 
     expect(modal).not.toBeInTheDocument();
   });
