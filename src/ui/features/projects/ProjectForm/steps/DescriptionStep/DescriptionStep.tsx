@@ -238,7 +238,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                       ({ value }) => value.toString() === input.value.toString(),
                     )}
                     onChange={(option: SelectOption | null): void => {
-                      input.onChange(option?.value);
+                      input.onChange(Number(option?.value));
                     }}
                     onBlur={input.onBlur}
                     onFocus={input.onFocus}
