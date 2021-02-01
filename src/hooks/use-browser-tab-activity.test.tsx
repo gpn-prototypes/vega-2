@@ -18,7 +18,7 @@ const TestComponent = (props: ComponentProps): React.ReactElement | null => {
   return <div>test-component</div>;
 };
 
-const changeVisibilityState = (state: VisibilityState): void => {
+export const changeVisibilityState = (state: VisibilityState): void => {
   Object.defineProperty(global.document, 'visibilityState', {
     value: state,
     configurable: true,

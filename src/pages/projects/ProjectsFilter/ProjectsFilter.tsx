@@ -37,12 +37,12 @@ type TextFieldOnChangeArgs = {
   id?: string | number;
 };
 
-type ProjectFilterType = {
+export type ProjectFilterProps = {
   onInputSearch(value: string | null): void;
   onChangeFilter(value: Item | null): void;
 };
 
-export const ProjectsFilter: React.FC<ProjectFilterType> = ({ onInputSearch, onChangeFilter }) => {
+export const ProjectsFilter: React.FC<ProjectFilterProps> = ({ onInputSearch, onChangeFilter }) => {
   const [searchValue, setSearchValue] = React.useState<string | null>(null);
   const [filterValue, setFilterValue] = React.useState<Item | null>(null);
 

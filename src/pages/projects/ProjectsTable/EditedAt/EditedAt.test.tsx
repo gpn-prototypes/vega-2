@@ -1,13 +1,14 @@
 import React from 'react';
-import * as tl from '@testing-library/react';
+import { render, RenderResult, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import { EditedAt, EditedAtProps } from './EditedAt';
 
 const noop = () => {};
 
-function renderComponent(props: EditedAtProps): tl.RenderResult {
+function renderComponent(props: EditedAtProps): RenderResult {
   const { onMenuToggle = noop, date, menu } = props;
-  return tl.render(<EditedAt onMenuToggle={onMenuToggle} date={date} menu={menu} />);
+  return render(<EditedAt onMenuToggle={onMenuToggle} date={date} menu={menu} />);
 }
 
 const EditButton = ({ close, ...rest }: { close(): void }) => {
@@ -36,53 +37,53 @@ describe('EditedAt', () => {
   test('рендерится без ошибок', () => {
     const func = jest.fn();
 
-    const component = renderComponent({ onMenuToggle: func, date });
+    renderComponent({ onMenuToggle: func, date });
 
-    expect(component.getByText(date.date)).toBeInTheDocument();
+    expect(screen.getByText(date.date)).toBeVisible();
   });
 
   test('рендерится кнопка «меню»', () => {
     const func = jest.fn();
-    const component = renderComponent({ onMenuToggle: func, date });
+    renderComponent({ onMenuToggle: func, date });
 
-    expect(component.getByText(date.date)).toBeInTheDocument();
+    expect(screen.getByText(date.date)).toBeVisible();
   });
 
   test('рендерится всплывающий блок', () => {
     const func = jest.fn();
-    const component = renderComponent({ onMenuToggle: func, date, menu });
+    renderComponent({ onMenuToggle: func, date, menu });
 
-    tl.fireEvent.click(component.getByTestId(EditedAt.testId.buttonMenu));
+    userEvent.click(screen.getByTestId(EditedAt.testId.buttonMenu));
 
-    expect(component.getByTestId(EditedAt.testId.menuList)).toBeInTheDocument();
+    expect(screen.getByTestId(EditedAt.testId.menuList)).toBeVisible();
   });
 
   test('всплывающий блок закрывается при клике на пункт меню', () => {
     const func = jest.fn();
-    const component = renderComponent({ onMenuToggle: func, date, menu });
+    renderComponent({ onMenuToggle: func, date, menu });
 
-    tl.fireEvent.click(component.getByTestId(EditedAt.testId.buttonMenu));
+    userEvent.click(screen.getByTestId(EditedAt.testId.buttonMenu));
 
-    const menuList = component.getByTestId(EditedAt.testId.menuList);
+    const menuList = screen.getByTestId(EditedAt.testId.menuList);
 
-    expect(menuList).toBeInTheDocument();
+    expect(menuList).toBeVisible();
 
-    tl.fireEvent.click(component.getByTestId(`${EditedAt.testId.menuList}:edit`));
+    userEvent.click(screen.getByTestId(`${EditedAt.testId.menuList}:edit`));
 
     expect(menuList).not.toBeInTheDocument();
   });
 
-  test.skip('всплывающий блок закрывается при клике вне меню', () => {
+  test('всплывающий блок закрывается при клике вне меню', () => {
     const func = jest.fn();
-    const component = renderComponent({ onMenuToggle: func, date, menu });
+    renderComponent({ onMenuToggle: func, date, menu });
 
-    tl.fireEvent.click(component.getByTestId(EditedAt.testId.buttonMenu));
+    userEvent.click(screen.getByTestId(EditedAt.testId.buttonMenu));
 
-    const menuList = component.getByTestId(EditedAt.testId.menuList);
+    const menuList = screen.getByTestId(EditedAt.testId.menuList);
 
-    expect(menuList).toBeInTheDocument();
+    expect(menuList).toBeVisible();
 
-    tl.fireEvent.click(component.getByTestId(EditedAt.testId.buttonMenu));
+    userEvent.click(screen.getByText(date.date));
 
     expect(func).toBeCalled();
   });
