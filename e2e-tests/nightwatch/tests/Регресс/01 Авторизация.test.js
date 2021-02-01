@@ -7,19 +7,19 @@ testcase('Успешная авторизация', () => {
   });
 
   expected('перешли на страницу авторизации', () => {
-    browser.waitForElementPresent('[data-testid="AuthForm:form"]', 2000).expect.url().to.equal(`${browser.launch_url}/auth`);
+    browser.waitForElementPresent('[data-testid="AuthForm:form"]', 2000).expect.url().to.equal(`${browser.launch_url}/login?redirectTo=%2F`);
   });
 
   step('вводим логин', () => {
-    browser.setValue('[data-testid="AuthForm:loginInput"] > input', admin.login);
+    browser.setValue('[data-testid="AuthForm:field:login"] > input', admin.login);
   });
 
   step('вводим пароль', () => {
-    browser.setValue('[data-testid="AuthForm:passwordInput"] > input', admin.password);
+    browser.setValue('[data-testid="AuthForm:field:password"] > input', admin.password);
   });
 
   step('нажимаем на кнопку Войти', () => {
-    browser.click('[data-testid="AuthForm:submit"]');
+    browser.click('[data-testid="AuthForm:button:submit"]');
   });
 
   expected('отобразилась страница проектов', () => {
@@ -33,23 +33,23 @@ testcase('Ошибки при валидации', () => {
   });
 
   expected('перешли на страницу авторизации', () => {
-    browser.waitForElementPresent('[data-testid="AuthForm:form"]', 2000).expect.url().to.equal(`${browser.launch_url}/auth`);
+    browser.waitForElementPresent('[data-testid="AuthForm:form"]', 2000).expect.url().to.equal(`${browser.launch_url}/login?redirectTo=%2F`);
   });
 
   step('вводим некорректный логин', () => {
-    browser.setValue('[data-testid="AuthForm:loginInput"] > input', 'test@m..');
+    browser.setValue('[data-testid="AuthForm:field:login"] > input', 'test@m..');
   });
 
   step('вводим корректный пароль', () => {
-    browser.setValue('[data-testid="AuthForm:passwordInput"] > input', 'password');
+    browser.setValue('[data-testid="AuthForm:field:password"] > input', 'password');
   });
 
   step('нажимаем на кнопку Войти', () => {
-    browser.click('[data-testid="AuthForm:submit"]');
+    browser.click('[data-testid="AuthForm:button:submit"]');
   });
 
   expected('отобразилась ошибка для логина', () => {
-    browser.waitForElementPresent('[data-testid="AuthForm:loginInput"].TextField_state_alert', 2000);
+    browser.waitForElementPresent('[data-testid="AuthForm:field:login"].TextField_state_alert', 2000);
     browser.assert.screenshotElement(
       '[data-test-id="AuthPage:form"]',
       'ошибка авторизации при некорректном email'
@@ -61,12 +61,12 @@ testcase('Ошибки при валидации', () => {
   });
 
   step('нажимаем на кнопку Войти', () => {
-    browser.click('[data-testid="AuthForm:submit"]');
+    browser.click('[data-testid="AuthForm:button:submit"]');
   });
 
   expected('отобразилась ошибка о том, что данные отсутствуют', () => {
-    browser.waitForElementPresent('[data-testid="AuthForm:loginInput"].TextField_state_alert', 2000);
-    browser.waitForElementPresent('[data-testid="AuthForm:passwordInput"].TextField_state_alert', 2000);
+    browser.waitForElementPresent('[data-testid="AuthForm:field:login"].TextField_state_alert', 2000);
+    browser.waitForElementPresent('[data-testid="AuthForm:field:password"].TextField_state_alert', 2000);
     browser.assert.screenshotElement(
       '[data-test-id="AuthPage:form"]',
       'ошибка авторизации при отсутствии данных'
