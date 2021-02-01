@@ -99,7 +99,6 @@ export const ProjectsTable: ProjectsTableType = (props) => {
       Пока нет ни одного проекта :(
     </Text>
   );
-  const [idMenuVisible, setIdMenuVisible] = React.useState<string | undefined>(undefined);
   const [idActiveRow, setIdActiveRow] = React.useState<string | undefined>(undefined);
 
   const history = useHistory();

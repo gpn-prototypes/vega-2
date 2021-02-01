@@ -53,6 +53,8 @@ describe('ProjectsPageView', () => {
     userEvent.hover(pageView.getByText(projectRowMock[0].name));
     userEvent.click(pageView.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton));
 
-    expect(func).toBeCalledTimes(1);
+    tl.waitFor(() => {
+      expect(func).toBeCalledTimes(1);
+    });
   });
 });

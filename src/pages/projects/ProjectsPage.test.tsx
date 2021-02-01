@@ -11,9 +11,8 @@ import { ProjectsPage } from './ProjectsPage';
 import { ProjectsPageView } from './ProjectsPageView';
 import { ProjectsTable } from './ProjectsTable';
 
-function openModalRemoveProject(projectName: string) {
-  userEvent.hover(tl.screen.getByText(projectName));
-  userEvent.click(tl.screen.getByTestId(EditedAt.testId.buttonMenu));
+function openModalRemoveProject() {
+  userEvent.click(tl.screen.getAllByTestId(EditedAt.testId.buttonMenu)[0]);
   userEvent.click(tl.screen.getByTestId(ProjectsPage.testId.projectRemove));
 }
 

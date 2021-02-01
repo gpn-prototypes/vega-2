@@ -96,60 +96,67 @@ describe('ProjectsTable', () => {
 
   test('отображается кнопка «избранное»', () => {
     const func = jest.fn();
-    const table = renderComponent({ onFavorite: func, rows: projectRowMock });
+    renderComponent({ onFavorite: func, rows: projectRowMock });
 
-    tl.fireEvent.mouseOver(table.getByText(projectRowMock[0].name));
+    userEvent.hover(tl.screen.getByText(projectRowMock[0].name));
 
-    expect(table.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton)).toBeInTheDocument();
+    tl.waitFor(() => {
+      expect(
+        tl.screen.getAllByTestId(ProjectsTable.testId.favoriteNotSelectedButton)[0],
+      ).toBeVisible();
+    });
   });
 
   test('отображается кнопка «избранное» в активном состоянии', () => {
     const func = jest.fn();
-    const table = renderComponent({
+    renderComponent({
       onFavorite: func,
       rows: [{ ...projectRowMock[0], isFavorite: true }],
     });
 
-    tl.fireEvent.mouseOver(table.getByText(projectRowMock[0].name));
+    userEvent.hover(tl.screen.getByText(projectRowMock[0].name));
 
-    expect(table.getByTestId(ProjectsTable.testId.favoriteSelectedButton)).toBeInTheDocument();
+    expect(tl.screen.getByTestId(ProjectsTable.testId.favoriteSelectedButton)).toBeVisible();
   });
 
   test('вызывается onFavorite', () => {
     const func = jest.fn();
-    const table = renderComponent({
+    renderComponent({
       onFavorite: func,
       rows: projectRowMock,
     });
 
-    tl.fireEvent.mouseOver(table.getByText(projectRowMock[0].name));
-    tl.fireEvent.click(table.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton));
+    userEvent.click(tl.screen.getAllByTestId(ProjectsTable.testId.favoriteNotSelectedButton)[0]);
 
-    expect(func).toBeCalled();
+    tl.waitFor(() => {
+      expect(func).toBeCalled();
+    });
   });
 
   test('отображается кнопка «меню»', () => {
     const func = jest.fn();
     renderComponent({ onFavorite: func, rows: projectRowMock });
 
-    expect(tl.screen.queryByTestId(EditedAt.testId.buttonMenu)).not.toBeInTheDocument();
+    tl.waitFor(() => {
+      expect(tl.screen.getAllByTestId(EditedAt.testId.buttonMenu)[0]).not.toBeVisible();
+    });
 
     userEvent.hover(tl.screen.getByText(projectRowMock[0].name));
 
-    expect(tl.screen.getByTestId(EditedAt.testId.buttonMenu)).toBeInTheDocument();
+    tl.waitFor(() => {
+      expect(tl.screen.getAllByTestId(EditedAt.testId.buttonMenu)[0]).toBeVisible();
+    });
   });
 
   test('при открытом меню, строка становится активной', () => {
     const func = jest.fn();
     const table = renderComponent({ onFavorite: func, rows: projectRowMock });
 
-    tl.fireEvent.mouseOver(table.getByText(projectRowMock[0].name));
-
-    tl.fireEvent.click(table.getByTestId(EditedAt.testId.buttonMenu));
+    userEvent.click(table.getAllByTestId(EditedAt.testId.buttonMenu)[0]);
 
     expect(table.container.querySelectorAll('.Table-ContentCell_isActive').length).toBe(6);
 
-    tl.fireEvent.click(table.getByTestId(EditedAt.testId.buttonMenu));
+    userEvent.click(table.getAllByTestId(EditedAt.testId.buttonMenu)[0]);
 
     expect(table.container.querySelectorAll('.Table-ContentCell_isActive').length).toBe(0);
   });
