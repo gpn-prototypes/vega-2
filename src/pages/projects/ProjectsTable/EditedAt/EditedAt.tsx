@@ -1,12 +1,12 @@
 import React from 'react';
 import { Button, IconKebab, NavigationList, Popover, Text } from '@gpn-prototypes/vega-ui';
 
-import { MenuItem } from '../types';
+import { DateEditedAt, MenuItem } from '../types';
 
 import { cnEditedAt } from './cn-edited-at';
 
-type EditedAtProps = {
-  date?: string | React.ReactElement;
+export type EditedAtProps = {
+  date?: DateEditedAt;
   menu?: MenuItem[];
   onMenuToggle(isMenuShowed: boolean): void;
 };
@@ -32,8 +32,15 @@ export const EditedAt: EditedAtType = ({ date, menu, onMenuToggle }) => {
 
   return (
     <div className={cnEditedAt('root')}>
-      <Text size="s" className={cnEditedAt('editedTime')} data-testid={testId.dateEdit}>
-        {date}
+      <Text size="s" className={cnEditedAt('editedTime').toString()} data-testid={testId.dateEdit}>
+        {date && (
+          <>
+            <Text size="s">{date.date}</Text>
+            <Text size="s" view="secondary">
+              {date.time}
+            </Text>
+          </>
+        )}
       </Text>
       <div className={cnEditedAt('menu')}>
         <div className={cnEditedAt('iconWrap')}>
@@ -76,7 +83,7 @@ export const EditedAt: EditedAtType = ({ date, menu, onMenuToggle }) => {
                             showPopover(false);
                           }}
                           className={cnEditedAt('navigationItem').mix([className])}
-                          data-testid="ds"
+                          data-testid={`${testId.menuList}:${key}`}
                         />
                       );
                     }}

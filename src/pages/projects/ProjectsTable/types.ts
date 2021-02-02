@@ -10,6 +10,11 @@ export type MenuItem = {
   Element: React.FC<MenuItemProps>;
 };
 
+export type DateEditedAt = {
+  date: string;
+  time: string;
+};
+
 export type TableRow = {
   id: string;
   isFavorite?: boolean;
@@ -19,7 +24,7 @@ export type TableRow = {
   createdBy?: string;
   createdAt?: string;
   description?: string;
-  editedAt?: string | React.ReactElement;
+  editedAt?: DateEditedAt;
   menu?: MenuItem[];
   version?: number;
   status?: ProjectStatusEnum;

@@ -28,3 +28,6 @@ yarn-error.log*
 
 # graphql-codegen files
 __generated__
+
+# test covergae
+coverage

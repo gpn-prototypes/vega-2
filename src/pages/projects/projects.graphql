@@ -36,11 +36,7 @@ query ProjectsTableList {
   }
 }
 
-mutation ProjectToggleFavorite(
-  $vid: UUID!
-  $isFavorite: Boolean!
-  $version: Int!
-) {
+mutation ProjectToggleFavorite($vid: UUID!, $isFavorite: Boolean!, $version: Int!) {
   updateProject(data: { isFavorite: $isFavorite, version: $version }, vid: $vid) {
     result {
       ... on Project {

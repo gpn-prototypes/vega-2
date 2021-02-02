@@ -6,6 +6,8 @@
 
   &__editedTime {
     flex-grow: 1;
+
+    display: flex;
   }
 
   &__menu {

@@ -83,10 +83,6 @@
     margin-top: var(--space-m);
   }
 
-  &__EditedAt {
-    display: flex;
-  }
-
   &__SnackBar {
     width: 400px;
   }
