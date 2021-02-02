@@ -4,7 +4,7 @@ import { render, RenderResult, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { merge } from 'ramda';
 
-import { ProjectStatusEnum, ProjectStatusEnum } from '../../__generated__/types';
+import { ProjectStatusEnum } from '../../__generated__/types';
 
 import { ProjectsPageView, ProjectsPageViewProps } from './ProjectsPageView';
 import { ProjectsTable } from './ProjectsTable';
@@ -78,6 +78,7 @@ describe('ProjectsPageView', () => {
     userEvent.click(screen.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton));
 
     expect(func).toBeCalled();
+    expect(func).toBeCalledTimes(1);
   });
 
   describe('пагинация', () => {
@@ -109,26 +110,5 @@ describe('ProjectsPageView', () => {
 
       expect(loadButton).not.toBeInTheDocument();
     });
-  });
-
-  test('отображается индикатор загрузки', () => {
-    const component = renderComponent({ isLoading: true, onFavorite: noop, projects: [] });
-    const loader = component.getByTestId(ProjectsPageView.testId.loader);
-    expect(loader).toBeInTheDocument();
-    expect(component.queryByTestId(ProjectsPageView.testId.table)).toBeNull();
-  });
-
-  test('отображается индикатор загрузки', () => {
-    const func = jest.fn();
-    const pageView = renderComponent({
-      isLoading: false,
-      onFavorite: func,
-      projects: projectRowMock,
-    });
-
-    tl.fireEvent.mouseOver(pageView.getByText(projectRowMock[0].name));
-    tl.fireEvent.click(pageView.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton));
-
-    expect(func).toBeCalledTimes(1);
   });
 });

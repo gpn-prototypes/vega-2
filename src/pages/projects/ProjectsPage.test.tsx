@@ -15,14 +15,12 @@ import { ProjectsPage } from './ProjectsPage';
 import { ProjectsPageView } from './ProjectsPageView';
 import { ProjectsTable } from './ProjectsTable';
 
-function openMenuProject(projectName: string) {
-  userEvent.hover(screen.getByText(projectName));
-  userEvent.click(screen.getByTestId(EditedAt.testId.buttonMenu));
+function openMenuProject() {
+  userEvent.click(screen.getAllByTestId(EditedAt.testId.buttonMenu)[0]);
 }
 
-function openModalRemoveProject(projectName: string) {
-  userEvent.hover(screen.getByText(projectName));
-  userEvent.click(screen.getByTestId(EditedAt.testId.buttonMenu));
+function openModalRemoveProject() {
+  userEvent.click(screen.getAllByTestId(EditedAt.testId.buttonMenu)[0]);
   userEvent.click(screen.getByTestId(ProjectsPage.testId.projectRemove));
 }
 
@@ -44,7 +42,7 @@ describe('ProjectsPage', () => {
     jest.clearAllMocks();
   });
 
-  test('Отрисовывается индикатор загрузки', async () => {
+  test('отрисовывается индикатор загрузки', async () => {
     const defaultMock = mocks.default;
     await mountApp(<ProjectsPage />, {
       mocks: defaultMock,
@@ -66,7 +64,7 @@ describe('ProjectsPage', () => {
     expect(screen.getByText(defaultMock[0].result.data.projects.data[2].name)).toBeVisible();
   });
 
-  test('Проект помечается избранным', async () => {
+  test('проект помечается избранным', async () => {
     const favoriteProjectMock = mocks.favoriteProject;
     const notifications = new MockNotifications({ addMock, removeMock });
 
@@ -81,14 +79,14 @@ describe('ProjectsPage', () => {
 
     userEvent.hover(screen.getByText(nameProject));
 
-    userEvent.click(screen.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton));
+    userEvent.click(screen.getAllByTestId(ProjectsTable.testId.favoriteNotSelectedButton)[0]);
 
     await waitRequest();
 
     expect(screen.getByTestId(ProjectsTable.testId.favoriteSelectedButton)).toBeVisible();
   });
 
-  test('Обрабатывается ошибка при добавление в избранное', async () => {
+  test('обрабатывается ошибка при добавление в избранное', async () => {
     const favoriteErrorProjectMock = mocks.favoriteErrorProject;
     const notifications = new MockNotifications({ addMock, removeMock });
 
@@ -102,7 +100,7 @@ describe('ProjectsPage', () => {
     const nameProject = favoriteErrorProjectMock[0].result.data.projects?.data[0].name as string;
     userEvent.hover(screen.getByText(nameProject));
 
-    userEvent.click(screen.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton));
+    userEvent.click(screen.getAllByTestId(ProjectsTable.testId.favoriteNotSelectedButton)[0]);
 
     await waitRequest();
 
@@ -113,10 +111,10 @@ describe('ProjectsPage', () => {
     expect(notifications.getAll().length).toBe(0);
     expect(removeMock).toBeCalled();
 
-    expect(screen.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton)).toBeVisible();
+    expect(screen.getAllByTestId(ProjectsTable.testId.favoriteNotSelectedButton)[0]).toBeVisible();
   });
 
-  test('Проект удаляется', async () => {
+  test('проект удаляется', async () => {
     const deleteProjectMock = mocks.deleteProject;
     const notifications = new MockNotifications({ addMock, removeMock });
     const { waitRequest } = await mountApp(<ProjectsPage />, {
@@ -229,10 +227,9 @@ describe('ProjectsPage', () => {
 
     expect(history.location.pathname).toBe('/projects');
 
-    const nameProject = defaultMock[0].result.data.projects?.data[0].name ?? '';
     const urlProjectForEdit = `/projects/show/${defaultMock[0].result.data.projects.data[0].vid}`;
 
-    openMenuProject(nameProject);
+    openMenuProject();
 
     userEvent.click(screen.getByTestId(ProjectsPage.testId.projectEdit));
 
