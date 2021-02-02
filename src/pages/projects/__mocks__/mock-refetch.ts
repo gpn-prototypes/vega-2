@@ -1,8 +1,6 @@
 import { ProjectsTableListDocument } from '../__generated__/projects';
 import { ProjectStatusEnum } from '../../../__generated__/types';
 
-const queryCalled = false;
-
 const project = {
   vid: 'a3333333-b111-c111-d111-e00000000000',
   isFavorite: false,
@@ -51,38 +49,6 @@ export const refetchMock = [
         __typename: 'Query',
       },
     },
-    // newData: () => {
-    //   if (queryCalled) {
-    //     return {
-    //       data: {
-    //         projects: {
-    //           data: [
-    //             {
-    //               ...project,
-    //             },
-    //           ],
-    //           __typename: 'ProjectList',
-    //         },
-    //         __typename: 'Query',
-    //       },
-    //     };
-    //   }
-    //   queryCalled = true;
-    //   return {
-    //     data: {
-    //       projects: {
-    //         data: [
-    //           {
-    //             ...project,
-    //             name: 'FEM Example Project 01',
-    //           },
-    //         ],
-    //         __typename: 'ProjectList',
-    //       },
-    //       __typename: 'Query',
-    //     },
-    //   };
-    // },
   },
   {
     request: {
