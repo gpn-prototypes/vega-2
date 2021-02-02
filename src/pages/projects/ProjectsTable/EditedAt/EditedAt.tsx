@@ -53,8 +53,7 @@ export const EditedAt: EditedAtType = ({ date, menu, onMenuToggle }) => {
             size="xs"
             ref={anchorRef}
             data-testid={testId.buttonMenu}
-            onClick={(e) => {
-              e.stopPropagation();
+            onClick={() => {
               showPopover(!isPopoverVisible);
             }}
             className={cnEditedAt('iconButton').toString()}
