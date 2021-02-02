@@ -130,6 +130,27 @@ describe('ProjectForm', () => {
     expect(onCancel).toBeCalled();
   });
 
+  it.skip('происходит смена статус на Blank, если статус был Unpublished', async () => {
+    const onSubmit = jest.fn().mockImplementation((values) => Promise.resolve(values));
+    const initialValues = {
+      status: ProjectStatusEnum.Unpublished,
+    };
+
+    renderComponent({ initialValues, onSubmit });
+
+    const nameInput = getInput(DescriptionStep.testId.name);
+    userEvent.type(nameInput, 'projectName');
+
+    await act(async () => {
+      jest.runAllTimers();
+    });
+
+    expect(onSubmit).toBeCalled();
+    expect(onSubmit.mock.calls[0][0]).toEqual(
+      expect.objectContaining({ status: ProjectStatusEnum.Blank }),
+    );
+  });
+
   it.todo('происходит смена шага');
 
   describe('автосохранение', () => {
@@ -139,27 +160,6 @@ describe('ProjectForm', () => {
 
     afterEach(() => {
       jest.useRealTimers();
-    });
-
-    it('происходит смена статус на Blank, если статус был Unpublished', async () => {
-      const onSubmit = jest.fn().mockImplementation((values) => Promise.resolve(values));
-      const initialValues = {
-        status: ProjectStatusEnum.Unpublished,
-      };
-
-      renderComponent({ initialValues, onSubmit });
-
-      const nameInput = getInput(DescriptionStep.testId.name);
-      userEvent.type(nameInput, 'projectName');
-
-      await act(async () => {
-        jest.runAllTimers();
-      });
-
-      expect(onSubmit).toBeCalled();
-      expect(onSubmit.mock.calls[0][0]).toEqual(
-        expect.objectContaining({ status: ProjectStatusEnum.Blank }),
-      );
     });
 
     it('не происходит автосохранение, если форма невалидна', async () => {

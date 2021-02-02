@@ -48,8 +48,8 @@ describe('Footer', () => {
       const [cancel, next] = buttons;
 
       expect(buttons.length).toEqual(2);
-      expect(cancel.textContent).toEqual('Отмена');
-      expect(next.textContent).toEqual('Далее');
+      expect(cancel).toHaveTextContent('Отмена');
+      expect(next).toHaveTextContent('Далее');
     });
 
     it('показывает футер для редактирования проекта', () => {
@@ -60,8 +60,8 @@ describe('Footer', () => {
       const [cancel, save] = buttons;
 
       expect(buttons.length).toEqual(2);
-      expect(cancel.textContent).toEqual('Отменить');
-      expect(save.textContent).toEqual('Сохранить изменения');
+      expect(cancel).toHaveTextContent('Отменить');
+      expect(save).toHaveTextContent('Сохранить изменения');
 
       rerender(<Footer {...defaultProps} mode="edit" isVisibleEdit={false} />);
 

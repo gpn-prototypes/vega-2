@@ -15,9 +15,9 @@ export type FooterProps = {
 };
 
 const testId = {
-  footerCreate: 'ProjectForm:footerCreate',
-  footerEdit: 'ProjectForm:footerEdit',
-  cancelCreate: 'ProjectForm:button:cancelCreate',
+  footerCreate: 'ProjectForm:footer.create',
+  footerEdit: 'ProjectForm:footer.edit',
+  cancelCreate: 'ProjectForm:button:cancel.create',
   cancelEdit: 'ProjectForm:button:cancel.edit',
   saveEdit: 'ProjectForm:button:save.edit',
   nextStep: 'ProjectForm:button:nextStep',
