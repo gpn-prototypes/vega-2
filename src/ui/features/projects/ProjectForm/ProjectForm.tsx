@@ -3,6 +3,7 @@ import { Form, FormSpy } from 'react-final-form';
 import { Form as VegaForm, NavigationList } from '@gpn-prototypes/vega-ui';
 import { FormApi, SubmissionErrors } from 'final-form';
 import createDecorator from 'final-form-focus';
+import { intersection } from 'ramda';
 
 import { ProjectStatusEnum } from '../../../../__generated__/types';
 import { createValidate, validators } from '../../../forms/validation';
@@ -105,8 +106,20 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
   });
 
   const autoSave = (form: FormApi<FormValues>) => {
-    const { values, active, dirty, valid, validating, dirtySinceLastSubmit } = form.getState();
+    const {
+      values,
+      active,
+      dirty,
+      validating,
+      dirtySinceLastSubmit,
+      dirtyFields,
+      errors,
+    } = form.getState();
     const isBlurEvent = (state.active && state.active !== active) || !active;
+
+    const fieldsWithErrors = Object.keys(errors);
+    const fieldsDirty = Object.keys(dirtyFields);
+    const valid = intersection(fieldsWithErrors, fieldsDirty).length === 0;
 
     if (values.status === ProjectStatusEnum.Unpublished && active) {
       form.change('status', ProjectStatusEnum.Blank);
