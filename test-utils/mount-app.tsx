@@ -2,7 +2,7 @@ import React from 'react';
 import { Router } from 'react-router-dom';
 import { ApolloLink, InMemoryCache } from '@apollo/client';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
-import * as tl from '@testing-library/react';
+import { act, render, RenderResult } from '@testing-library/react';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { NotificationsProvider } from '../src/providers';
@@ -17,7 +17,7 @@ type MountAppOptions = {
 };
 
 type MountAppResult = {
-  $: tl.RenderResult;
+  $: RenderResult;
   cache: InMemoryCache;
   waitRequest(amount?: number): Promise<void>;
   history: MemoryHistory;
@@ -51,18 +51,11 @@ export const mountApp = (
             <>{props.children}</>
           </NotificationsProvider>
         </MockedProvider>
-        {/* <Route
-          path="*"
-          render={({ history: routeHistory }) => {
-            testHistory = routeHistory as MemoryHistory;
-            return null;
-          }}
-        /> */}
       </Router>
     );
   };
 
-  const renderResult = tl.render(node, {
+  const renderResult = render(node, {
     wrapper: TestApp,
     baseElement: document.body,
   });
@@ -73,7 +66,7 @@ export const mountApp = (
   }
 
   async function actWait(amount = 0) {
-    await tl.act(async () => {
+    await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, amount));
     });
   }
