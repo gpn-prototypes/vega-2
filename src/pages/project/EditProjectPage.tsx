@@ -4,11 +4,13 @@ import { Loader } from '@gpn-prototypes/vega-ui';
 import { FormApi, getIn, setIn } from 'final-form';
 
 import {
+  ErrorInterface,
   ProjectStatusEnum,
   ProjectTypeEnum,
   ProjectUpdateType,
   UpdateProject,
   UpdateProjectDiff,
+  ValidationError,
 } from '../../__generated__/types';
 import { useBrowserTabActivity } from '../../hooks';
 import { useNotifications } from '../../providers/notifications';
@@ -22,6 +24,7 @@ import {
   useUpdateProjectForm,
 } from './__generated__/project';
 import { cnPage } from './cn-page';
+import { extractProjectValidationErrors } from './extract-project-validation-errors';
 import { ReferenceDataType } from './types';
 
 import './ProjectPage.css';
@@ -34,6 +37,7 @@ type PageProps = Record<string, unknown>;
 
 type ProjectFormFields = projectFormFields;
 
+type FormKeys = keyof FormValues;
 interface UpdateProjectDiffResult extends UpdateProject {
   result: Required<UpdateProjectDiff>;
 }
@@ -95,7 +99,6 @@ export const EditProjectPage: React.FC<PageProps> = () => {
   const handleFormSubmit = React.useCallback(
     async (values: FormValues, form: FormApi<FormValues>) => {
       const state = form.getState();
-      const errors: Record<string, string> = {};
 
       const changes = Object.keys(state.dirtyFields)
         .map((key) => ({ key, value: getIn(values, key) }))
@@ -133,44 +136,65 @@ export const EditProjectPage: React.FC<PageProps> = () => {
         },
       });
 
-      if (updateProjectResult.data?.updateProject?.result?.__typename === 'Error') {
-        const updatedUnsavedChanges = { ...unsavedChanges, ...changes };
-        const actual = await refetchProjectFormFields();
-
-        if (actual.data.project?.__typename === 'Project') {
-          form.initialize(getInitialValues(actual.data.project));
-        }
-
-        const inlineUpdateProjectError = updateProjectResult.data?.updateProject?.result;
-
-        if (inlineUpdateProjectError?.code === 'PROJECT_NAME_ALREADY_EXISTS') {
-          if (updatedUnsavedChanges.name !== undefined) {
-            delete updatedUnsavedChanges.name;
+      switch (updateProjectResult.data?.updateProject?.result?.__typename) {
+        case 'Project':
+          if (Object.keys(unsavedChanges).length > 0) {
+            setUnsavedChanges({});
           }
-          errors.name = inlineUpdateProjectError.message;
+          notifications.add({
+            key: `${projectId}-create`,
+            status: 'success',
+            autoClose: 3,
+            message: 'Изменения успешно сохранены',
+            onClose(item) {
+              notifications.remove(item.key);
+            },
+          });
+
+          form.initialize(getInitialValues(updateProjectResult.data.updateProject.result));
+          break;
+        case 'ValidationError': {
+          const updatedUnsavedChanges = { ...unsavedChanges, ...changes };
+          const actual = await refetchProjectFormFields();
+
+          if (actual.data.project?.__typename === 'Project') {
+            form.initialize(getInitialValues(actual.data.project));
+          }
+          const validationErrors = extractProjectValidationErrors(
+            updateProjectResult.data?.updateProject?.result as ValidationError,
+          );
+
+          const formKeys: FormKeys[] = Object.keys(updatedUnsavedChanges) as FormKeys[];
+
+          formKeys.forEach((name) => {
+            if (validationErrors[name] !== undefined && updatedUnsavedChanges[name] !== undefined) {
+              delete updatedUnsavedChanges[name];
+            }
+          });
+
+          setUnsavedChanges(updatedUnsavedChanges);
+          return validationErrors;
         }
-
-        setUnsavedChanges(updatedUnsavedChanges);
-      }
-
-      if (updateProjectResult.data?.updateProject?.result?.__typename === 'Project') {
-        if (Object.keys(unsavedChanges).length > 0) {
-          setUnsavedChanges({});
+        case 'UpdateProjectDiff':
+          console.warn(
+            'UpdateProjectDiff mutation result should be processed at graphql interceptor level',
+          );
+          break;
+        default: {
+          const commonError = updateProjectResult.data?.updateProject?.result as ErrorInterface;
+          setUnsavedChanges({ ...unsavedChanges, ...changes });
+          notifications.add({
+            key: `${commonError.code}-create`,
+            status: 'alert',
+            message: commonError.message,
+            onClose(item) {
+              notifications.remove(item.key);
+            },
+          });
+          break;
         }
-        notifications.add({
-          key: `${projectId}-create`,
-          status: 'success',
-          autoClose: 3,
-          message: 'Изменения успешно сохранены',
-          onClose(item) {
-            notifications.remove(item.key);
-          },
-        });
-
-        form.initialize(getInitialValues(updateProjectResult.data.updateProject.result));
       }
-
-      return errors;
+      return {};
     },
     [
       notifications,

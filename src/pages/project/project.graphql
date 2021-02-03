@@ -27,7 +27,14 @@ mutation CreateBlankProject {
       ... on Project {
         ...projectFormFields
       }
-      ... on Error {
+      ... on ValidationError {
+        items {
+          path
+          code
+          message
+        }
+      }
+      ... on ErrorInterface {
         ...commonError
       }
     }
@@ -40,8 +47,15 @@ mutation UpdateProjectForm($vid: UUID, $data: ProjectUpdateType) {
       ... on Project {
         ...projectFormFields
       }
-      ... on Error {
+      ... on ErrorInterface {
         ...commonError
+      }
+      ... on ValidationError {
+        items {
+          path
+          code
+          message
+        }
       }
       ... on UpdateProjectDiff {
         remoteProject {

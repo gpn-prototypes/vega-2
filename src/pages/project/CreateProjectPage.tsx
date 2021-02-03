@@ -4,11 +4,13 @@ import { Loader, useMount } from '@gpn-prototypes/vega-ui';
 import { FormApi, getIn, setIn } from 'final-form';
 
 import {
+  ErrorInterface,
   ProjectStatusEnum,
   ProjectTypeEnum,
   ProjectUpdateType,
   UpdateProject,
   UpdateProjectDiff,
+  ValidationError,
 } from '../../__generated__/types';
 import { useBrowserTabActivity } from '../../hooks';
 import { useBus } from '../../providers/bus';
@@ -25,6 +27,7 @@ import {
   useUpdateProjectForm,
 } from './__generated__/project';
 import { cnPage } from './cn-page';
+import { extractProjectValidationErrors } from './extract-project-validation-errors';
 import { RouteLeavingGuard } from './RouteLeavingGuard';
 import { ReferenceDataType } from './types';
 
@@ -150,7 +153,6 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   const handleFormSubmit = React.useCallback(
     async (values: FormValues, form: FormApi<FormValues>) => {
       const state = form.getState();
-      const errors: Record<string, unknown> = {};
 
       const changes = Object.keys(state.dirtyFields)
         .map((key) => ({ key, value: getIn(values, key) }))
@@ -193,29 +195,45 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
         },
       });
 
-      if (updateProjectBlankResult.data?.updateProject?.result?.__typename === 'Error') {
-        const inlineUpdateProjectError = updateProjectBlankResult.data?.updateProject?.result;
-
-        errors.name = inlineUpdateProjectError.message;
+      switch (updateProjectBlankResult.data?.updateProject?.result?.__typename) {
+        case 'Project': {
+          if (values.status === ProjectStatusEnum.Unpublished) {
+            notifications.add({
+              key: `${blankProjectId}-create`,
+              status: 'success',
+              autoClose: 3,
+              message: 'Проект успешно создан',
+              onClose(item) {
+                notifications.remove(item.key);
+              },
+            });
+          }
+          break;
+        }
+        case 'ValidationError':
+          return extractProjectValidationErrors(
+            updateProjectBlankResult.data?.updateProject?.result as ValidationError,
+          );
+        case 'UpdateProjectDiff':
+          console.warn(
+            'UpdateProjectDiff mutation result should be processed at graphql interceptor level',
+          );
+          break;
+        default: {
+          const commonError = updateProjectBlankResult.data?.updateProject
+            ?.result as ErrorInterface;
+          notifications.add({
+            key: `${commonError.code}-create`,
+            status: 'alert',
+            message: commonError.message,
+            onClose(item) {
+              notifications.remove(item.key);
+            },
+          });
+          break;
+        }
       }
-
-      const shouldProjectCreate =
-        updateProjectBlankResult.data?.updateProject?.result?.__typename === 'Project' &&
-        values.status === ProjectStatusEnum.Unpublished;
-
-      if (shouldProjectCreate) {
-        notifications.add({
-          key: `${blankProjectId}-create`,
-          status: 'success',
-          autoClose: 3,
-          message: 'Проект успешно создан',
-          onClose(item) {
-            notifications.remove(item.key);
-          },
-        });
-      }
-
-      return errors;
+      return {};
     },
     [blankProjectId, notifications, queryProjectData, updateProjectBlank],
   );
