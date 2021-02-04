@@ -150,7 +150,7 @@ export const ProjectsTable: ProjectsTableType = (props) => {
                 }
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (project.id && project.status && project.version) {
+                  if (project.id && project.status && project.version !== undefined) {
                     props.onFavorite(project.id, {
                       version: project.version,
                       isFavorite: !project.isFavorite,
