@@ -110,4 +110,10 @@ describe('ProjectsPage', () => {
 
     expect(modal).not.toBeInTheDocument();
   });
+
+  describe('пагинация', () => {
+    it.todo('происходит смена url');
+    it.todo('загружает проекты');
+    it.todo('не загружает проекты, если небыло смены нужных параметров в url');
+  });
 });
