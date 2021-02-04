@@ -19,6 +19,8 @@ const testId = {
 export type ProjectsPageViewProps = {
   projects: TableRow[];
   isLoading: boolean;
+  counterProjects: number[];
+  onLoadMore: VoidFunction;
   onFavorite(id: string, payload: { isFavorite: boolean; version: number }): void;
 };
 
@@ -27,8 +29,8 @@ type ProjectsPageViewType = React.FC<ProjectsPageViewProps> & {
 };
 
 export const ProjectsPageView: ProjectsPageViewType = (props) => {
-  // TODO: Поправить условие, когда можно будет получить общее количество проектов и сделают пагинацию
-  // const visibleLoadMore = props.projects.length > 20;
+  const [current, total] = props.counterProjects;
+  const visibleLoadMore = current < total;
 
   const table = (
     <div className={cn('Table')} data-testid={testId.table}>
@@ -38,11 +40,17 @@ export const ProjectsPageView: ProjectsPageViewType = (props) => {
           props.onFavorite(id, payload);
         }}
       />
-      {/* {visibleLoadMore && (
+      {visibleLoadMore && (
         <div className={cn('LoadMore')}>
-          <Button view="ghost" width="full" label="Загрузить ещё" size="l" />
+          <Button
+            view="ghost"
+            width="full"
+            label="Загрузить ещё"
+            size="l"
+            onClick={props.onLoadMore}
+          />
         </div>
-      )} */}
+      )}
     </div>
   );
 
@@ -60,9 +68,9 @@ export const ProjectsPageView: ProjectsPageViewType = (props) => {
             >
               Проекты
             </Text>
-            {/* <Text as="span" size="s" view="secondary" className={cn('SearchResult').toString()}>
-              6 из 12
-            </Text> */}
+            <Text as="span" size="s" view="secondary" className={cn('SearchResult').toString()}>
+              {current} из {total}
+            </Text>
           </div>
           <Link to="/projects/create" data-testid={testId.create}>
             <Button label="Создать новый проект" size="s" />

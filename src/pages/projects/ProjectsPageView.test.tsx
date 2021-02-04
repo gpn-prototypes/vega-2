@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import * as tl from '@testing-library/react';
+import { render, RenderResult, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { merge } from 'ramda';
 
 import { ProjectStatusEnum } from '../../__generated__/types';
 
@@ -9,15 +10,6 @@ import { ProjectsPageView, ProjectsPageViewProps } from './ProjectsPageView';
 import { ProjectsTable } from './ProjectsTable';
 
 const noop = () => {};
-
-function renderComponent(props: ProjectsPageViewProps): tl.RenderResult {
-  const { isLoading = false, onFavorite, projects = [] } = props;
-  return tl.render(
-    <Router>
-      <ProjectsPageView projects={projects} isLoading={isLoading} onFavorite={onFavorite} />
-    </Router>,
-  );
-}
 
 const projectRowMock = [
   {
@@ -29,39 +21,84 @@ const projectRowMock = [
   },
 ];
 
+const defaultProps: ProjectsPageViewProps = {
+  isLoading: false,
+  counterProjects: [20, 100],
+  projects: projectRowMock,
+  onFavorite: noop,
+  onLoadMore: noop,
+};
+
+function renderComponent(props?: Partial<ProjectsPageViewProps>): RenderResult {
+  const withDefault = merge(defaultProps);
+  const { isLoading, onFavorite, projects, counterProjects, onLoadMore } = withDefault(props ?? {});
+  return render(
+    <Router>
+      <ProjectsPageView
+        projects={projects}
+        isLoading={isLoading}
+        counterProjects={counterProjects}
+        onFavorite={onFavorite}
+        onLoadMore={onLoadMore}
+      />
+    </Router>,
+  );
+}
+
 describe('ProjectsPageView', () => {
   test('рендерится без ошибок', () => {
-    const component = renderComponent({ isLoading: false, onFavorite: noop, projects: [] });
+    const component = renderComponent();
     expect(component.getByText('Название')).toBeVisible();
   });
 
   test('отображается индикатор загрузки', () => {
-    const component = renderComponent({ isLoading: true, onFavorite: noop, projects: [] });
+    const component = renderComponent({ isLoading: true });
     const loader = component.getByTestId(ProjectsPageView.testId.loader);
+
     expect(loader).toBeVisible();
     expect(component.queryByTestId(ProjectsPageView.testId.table)).not.toBeInTheDocument();
   });
 
   test('срабатывает функция для добавления в избранное', () => {
     const func = jest.fn();
-    const pageView = renderComponent({
-      isLoading: false,
+    renderComponent({
       onFavorite: func,
-      projects: projectRowMock,
     });
 
-    userEvent.hover(pageView.getByText(projectRowMock[0].name));
-    userEvent.click(pageView.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton));
+    userEvent.hover(screen.getByText(projectRowMock[0].name));
+    userEvent.click(screen.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton));
 
-    tl.waitFor(() => {
-      expect(func).toBeCalledTimes(1);
-    });
+    expect(func).toBeCalled();
   });
 
   describe('пагинация', () => {
-    it.todo('выводит счётчики проектов');
-    it.todo('срабатывает обработчик загрузки проектов');
-    it.todo('показывает кнопку загрузки, если есть проекты');
-    it.todo('не показывает кнопку, если показаны все проекты');
+    it('выводит счётчики проектов', () => {
+      renderComponent({ counterProjects: [40, 201] });
+      expect(screen.getByText('40 из 201')).toBeInTheDocument();
+    });
+
+    it('срабатывает обработчик загрузки проектов', () => {
+      const onLoadMore = jest.fn();
+      renderComponent({ onLoadMore });
+
+      const loadButton = screen.getByText('Загрузить ещё');
+      userEvent.click(loadButton);
+
+      expect(onLoadMore).toBeCalled();
+    });
+
+    it('показывает кнопку загрузки, если есть проекты', () => {
+      renderComponent({ counterProjects: [40, 99] });
+      const loadButton = screen.getByText('Загрузить ещё');
+
+      expect(loadButton).toBeInTheDocument();
+    });
+
+    it('не показывает кнопку, если показаны все проекты', () => {
+      renderComponent({ counterProjects: [100, 100] });
+      const loadButton = screen.queryByText('Загрузить ещё');
+
+      expect(loadButton).not.toBeInTheDocument();
+    });
   });
 });
