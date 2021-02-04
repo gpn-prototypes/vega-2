@@ -1,24 +1,23 @@
 import React from 'react';
-import { useForm } from 'react-final-form';
 import { Button, IconBackward, IconForward, PageFooter } from '@gpn-prototypes/vega-ui';
-
-import { ProjectStatusEnum } from '../../../../__generated__/types';
 
 import { cnProjectForm } from './cn-form';
 import { FormMode } from './types';
 
 export type FooterProps = {
   mode: FormMode;
-  isFormDirty: boolean;
+  isVisibleEdit: boolean;
   activeStep: number;
   stepsAmount: number;
   onStepChange: (step: number) => void;
   onCancel: () => void;
+  onCreate: () => void;
 };
 
 const testId = {
-  footer: 'ProjectForm:footer',
-  cancel: 'ProjectForm:button:cancel',
+  footerCreate: 'ProjectForm:footer.create',
+  footerEdit: 'ProjectForm:footer.edit',
+  cancelCreate: 'ProjectForm:button:cancel.create',
   cancelEdit: 'ProjectForm:button:cancel.edit',
   saveEdit: 'ProjectForm:button:save.edit',
   nextStep: 'ProjectForm:button:nextStep',
@@ -31,8 +30,7 @@ type FooterType = React.FC<FooterProps> & {
 };
 
 export const Footer: FooterType = (props) => {
-  const { mode, isFormDirty, activeStep, stepsAmount, onStepChange, onCancel } = props;
-  const form = useForm();
+  const { mode, activeStep, stepsAmount, onStepChange, onCancel, onCreate, isVisibleEdit } = props;
 
   const isCreateMode = mode === 'create';
   const isEditMode = mode === 'edit';
@@ -47,12 +45,10 @@ export const Footer: FooterType = (props) => {
     onStepChange(activeStep - 1);
   };
 
-  const { valid, dirtySinceLastSubmit, hasSubmitErrors, dirty } = form.getState();
-
   const createProjectFormFooter = (
     <PageFooter
       className={cnProjectForm('Footer', { content: 'space-between' })}
-      data-testid={testId.footer}
+      data-testid={testId.footerCreate}
     >
       <Button
         size="s"
@@ -60,7 +56,7 @@ export const Footer: FooterType = (props) => {
         label="Отмена"
         type="button"
         onClick={onCancel}
-        data-testid={testId.cancel}
+        data-testid={testId.cancelCreate}
       />
       <div className={cnProjectForm('Footer-buttons-block')}>
         {!isFirstStep && (
@@ -72,7 +68,7 @@ export const Footer: FooterType = (props) => {
             type="button"
             className={cnProjectForm('Footer-button-back').toString()}
             onClick={handlePrevStep}
-            data-testId={testId.prevStep}
+            data-testid={testId.prevStep}
           />
         )}
         {!isLastStep && (
@@ -83,7 +79,7 @@ export const Footer: FooterType = (props) => {
             iconRight={IconForward}
             type="button"
             onClick={handleNextStep}
-            data-testId={testId.nextStep}
+            data-testid={testId.nextStep}
           />
         )}
         {isLastStep && (
@@ -92,10 +88,8 @@ export const Footer: FooterType = (props) => {
             view="primary"
             label="Создать проект"
             type="submit"
-            onClick={() => {
-              form.change('status', ProjectStatusEnum.Unpublished);
-            }}
-            data-testId={testId.createButton}
+            onClick={onCreate}
+            data-testid={testId.createButton}
           />
         )}
       </div>
@@ -103,7 +97,10 @@ export const Footer: FooterType = (props) => {
   );
 
   const editProjectFromFooter = (
-    <PageFooter className={cnProjectForm('Footer', { content: 'end' })}>
+    <PageFooter
+      className={cnProjectForm('Footer', { content: 'end' })}
+      data-testid={testId.footerEdit}
+    >
       <Button
         size="s"
         view="ghost"
@@ -123,13 +120,10 @@ export const Footer: FooterType = (props) => {
     </PageFooter>
   );
 
-  const isEditFormDirty =
-    isFormDirty || (!valid && !dirtySinceLastSubmit) || (hasSubmitErrors && dirty);
-
   return (
     <>
       {isCreateMode && createProjectFormFooter}
-      {isEditMode && isEditFormDirty && editProjectFromFooter}
+      {isEditMode && isVisibleEdit && editProjectFromFooter}
     </>
   );
 };

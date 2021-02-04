@@ -21,7 +21,7 @@ const focusOnErrors = createDecorator<FormValues>();
 const currentYear = new Date().getFullYear();
 const minYearStart = currentYear - 1;
 
-const validator = createValidate<Partial<FormValues>>({
+export const validator = createValidate<Partial<FormValues>>({
   name: [
     validators.required(undefined, () => 'Заполните обязательное поле'),
     validators.minLength(
@@ -97,13 +97,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     }
   };
 
-  const [state, setState] = useState<{
-    active?: keyof FormValues;
-    values: FormValues | Record<string, unknown>;
-  }>({
-    active: undefined,
-    values: {},
-  });
+  const prevActive = useRef<string | undefined>(undefined);
 
   const autoSave = (form: FormApi<FormValues>) => {
     const {
@@ -115,7 +109,9 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
       dirtyFields,
       errors,
     } = form.getState();
-    const isBlurEvent = (state.active && state.active !== active) || !active;
+    const isBlurEvent =
+      (prevActive.current !== undefined && active === undefined) ||
+      (prevActive.current !== undefined && active !== undefined && prevActive.current !== active);
 
     const fieldsWithErrors = Object.keys(errors);
     const fieldsDirty = Object.keys(dirtyFields);
@@ -133,14 +129,8 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
       return;
     }
 
-    if (isBlurEvent) {
-      setState({ active, values });
-
-      if (dirty) {
-        submitPromiseRef.current = onSubmit(values, form);
-      }
-    } else {
-      setState({ ...state, active });
+    if (isBlurEvent && dirty) {
+      submitPromiseRef.current = onSubmit(values, form);
     }
   };
 
@@ -155,12 +145,20 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
       validate={validator}
       decorators={decorators}
       onSubmit={submit}
-      render={({ form, handleSubmit, dirty }): React.ReactNode => (
+      render={({
+        form,
+        handleSubmit,
+        dirty,
+        values,
+        valid,
+        dirtySinceLastSubmit,
+        hasSubmitErrors,
+      }): React.ReactNode => (
         <>
-          <Banner referenceData={referenceData} />
-          <VegaForm onSubmit={handleSubmit} className={cnProjectForm()} data-testId={testId.form}>
+          <Banner regions={referenceData.regionList} title={values.name} regionId={values.region} />
+          <VegaForm onSubmit={handleSubmit} className={cnProjectForm()} data-testid={testId.form}>
             <div className={cnProjectForm('Content')}>
-              <NavigationList className={cnProjectForm('Navigation')} data-testId={testId.stepList}>
+              <NavigationList className={cnProjectForm('Navigation')} data-testid={testId.stepList}>
                 {steps.map(({ title }, index) => (
                   <NavigationList.Item key={title}>
                     {(props): React.ReactNode => (
@@ -179,9 +177,14 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
             </div>
             <Footer
               mode={mode}
-              isFormDirty={dirty}
+              onCreate={() => {
+                form.change('status', ProjectStatusEnum.Unpublished);
+              }}
               activeStep={activeStepIndex}
               stepsAmount={steps.length}
+              isVisibleEdit={
+                dirty || (!valid && !dirtySinceLastSubmit) || (hasSubmitErrors && dirty)
+              }
               onStepChange={handleStepChange}
               onCancel={() => {
                 handleCancel(form);
@@ -191,9 +194,11 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
               subscription={{ dirtyFields: true, values: true, active: true }}
               onChange={(formState) => {
                 setHasUnsavedChanges(Object.keys(formState.dirtyFields).length > 0);
+
                 if (mode === 'create') {
                   autoSave(form);
                 }
+                prevActive.current = formState.active;
               }}
             />
           </VegaForm>

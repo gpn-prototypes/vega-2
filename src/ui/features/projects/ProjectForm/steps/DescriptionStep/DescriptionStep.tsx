@@ -15,7 +15,7 @@ type SelectOption = {
   value: string | number;
 };
 
-type StepProps = {
+export type StepProps = {
   mode: FormMode;
   referenceData: ReferenceDataType;
   form: FormApi<FormValues>;
@@ -24,7 +24,7 @@ type StepProps = {
 const typeOptions = [{ label: 'Геологоразведочный', value: ProjectTypeEnum.Geo }];
 const typeInitialValue = typeOptions[0].value;
 
-const getYearStartOptions = (): SelectOption[] => {
+export const getYearStartOptions = (): SelectOption[] => {
   const currentYear = new Date().getFullYear();
   const options = [];
 
@@ -41,7 +41,7 @@ const getYearStartOptions = (): SelectOption[] => {
   return options;
 };
 
-const isValidYear = (str: string): boolean => /^\d{4}$/.test(str);
+export const isValidYear = (str: string): boolean => /^\d{4}$/.test(str);
 
 const testId = {
   name: 'ProjectForm:field:name',
@@ -56,17 +56,21 @@ const testId = {
   yearStartLabel: 'ProjectForm:label:yearStart',
   description: 'ProjectForm:field:description',
   descriptionLabel: 'ProjectForm:label:description',
+} as const;
+
+type DescriptionStepType = React.FC<StepProps> & {
+  testId: typeof testId;
 };
 
-export const DescriptionStep: React.FC<StepProps> = (props) => {
+export const DescriptionStep: DescriptionStepType = (props) => {
   const { mode, referenceData, form } = props;
   const { regionList } = referenceData;
 
   const regionOptions =
     regionList?.map((region) => ({
-      label: region?.name || '',
-      value: region?.vid || '',
-    })) || [];
+      label: region?.name || /* istanbul ignore next */ '',
+      value: region?.vid || /* istanbul ignore next */ '',
+    })) || /* istanbul ignore next */ [];
 
   const [yearStartOptions, setYearStartOptions] = useState(getYearStartOptions());
   const yearStartInitialValue = mode === 'create' ? yearStartOptions[2].value : undefined;
@@ -131,13 +135,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                 placeholder="Выберите регион"
                 value={regionOptions.find(({ value }) => value === input.value)}
                 onChange={(option: SelectOption | null): void => {
-                  let value = null;
-
-                  if (option !== null) {
-                    value = option.value;
-                  }
-
-                  input.onChange(value);
+                  input.onChange(option?.value);
                 }}
                 onBlur={input.onBlur}
                 onFocus={input.onFocus}
@@ -215,13 +213,14 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
               const errorText = meta.error || submitErrorText;
 
               return (
-                <>
+                <div data-testid={`${testId.yearStart}:wrapper`}>
                   <Combobox
                     id="yearStart"
                     className={
                       showError ? cnDescriptionStep('ComboboxError').toString() : undefined
                     }
                     size="s"
+                    name="yearStart"
                     options={yearStartOptions}
                     getOptionLabel={getItemLabel}
                     onCreate={(option): void => {
@@ -255,7 +254,7 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
                       {errorText}
                     </Text>
                   )}
-                </>
+                </div>
               );
             }}
           />
@@ -269,7 +268,10 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
           <Field
             name="description"
             allowNull
-            parse={(v) => v}
+            parse={
+              /* istanbul ignore next */
+              (v) => v
+            }
             render={({ input, meta }): React.ReactNode => (
               <TextField
                 id="description"
@@ -291,3 +293,5 @@ export const DescriptionStep: React.FC<StepProps> = (props) => {
     </div>
   );
 };
+
+DescriptionStep.testId = testId;
