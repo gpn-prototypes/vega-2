@@ -97,13 +97,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     }
   };
 
-  const [state, setState] = useState<{
-    active?: keyof FormValues;
-    values: FormValues | Record<string, unknown>;
-  }>({
-    active: undefined,
-    values: {},
-  });
+  const prevActive = useRef<string | undefined>(undefined);
 
   const autoSave = (form: FormApi<FormValues>) => {
     const {
@@ -115,7 +109,9 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
       dirtyFields,
       errors,
     } = form.getState();
-    const isBlurEvent = (state.active && state.active !== active) || !active;
+    const isBlurEvent =
+      (prevActive.current !== undefined && active === undefined) ||
+      (prevActive.current !== undefined && active !== undefined && prevActive.current !== active);
 
     const fieldsWithErrors = Object.keys(errors);
     const fieldsDirty = Object.keys(dirtyFields);
@@ -133,14 +129,8 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
       return;
     }
 
-    if (isBlurEvent) {
-      setState({ active, values });
-
-      if (dirty) {
-        submitPromiseRef.current = onSubmit(values, form);
-      }
-    } else {
-      setState({ ...state, active });
+    if (isBlurEvent && dirty) {
+      submitPromiseRef.current = onSubmit(values, form);
     }
   };
 
@@ -204,9 +194,11 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
               subscription={{ dirtyFields: true, values: true, active: true }}
               onChange={(formState) => {
                 setHasUnsavedChanges(Object.keys(formState.dirtyFields).length > 0);
+
                 if (mode === 'create') {
                   autoSave(form);
                 }
+                prevActive.current = formState.active;
               }}
             />
           </VegaForm>
