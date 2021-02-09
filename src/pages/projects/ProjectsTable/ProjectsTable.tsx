@@ -8,7 +8,7 @@ import {
   Text,
 } from '@gpn-prototypes/vega-ui';
 
-import { checkClickableElementInBubble } from '../../../utils/check-clickable-element-in-bubble';
+import { hasNestedInteractiveTarget } from '../../../utils/has-nested-interactive-target';
 
 import { EditedAt } from './EditedAt';
 import { TableRow } from './types';
@@ -189,7 +189,7 @@ export const ProjectsTable: ProjectsTableType = (props) => {
       activeRow={{
         id: idActiveRow,
         onChange: ({ id, e }) => {
-          const hasEl = checkClickableElementInBubble(e);
+          const hasEl = hasNestedInteractiveTarget(e);
           if (!hasEl) {
             history.push(`/projects/show/${id}`);
           }
