@@ -338,12 +338,18 @@ describe('CreateProjectPage', () => {
       result: {
         data: {
           updateProject: {
-            result: {
-              code: ErrorCodesEnum.ProjectNameAlreadyExists,
-              message: errorMessage,
-              __typename: 'Error',
-            },
             __typename: 'UpdateProject',
+            result: {
+              __typename: 'ValidationError',
+              items: [
+                {
+                  __typename: 'ValidationErrorItemType',
+                  code: 'NOT_UNIQUE',
+                  message: errorMessage,
+                  path: ['data', 'name'],
+                },
+              ],
+            },
           },
         },
       },
