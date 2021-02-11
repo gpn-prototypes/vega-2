@@ -53,8 +53,8 @@ export function createProject(data?: Partial<Project>): Project {
     description: null,
     yearStart: 2022,
     version: 1,
-    editedAt: faker.date.past(),
-    createdAt: faker.date.future(),
+    editedAt: faker.date.future(),
+    createdAt: faker.date.past(),
     createdBy: createUser(),
     status: ProjectStatusEnum.Blank,
   });

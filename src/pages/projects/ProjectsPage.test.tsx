@@ -175,13 +175,14 @@ describe('ProjectsPage', () => {
       const { waitRequest } = await mountApp(<ProjectsPage />, {
         mocks: paginationMocks,
       });
+
       await waitRequest();
 
       const loadMoreButton = tl.screen.getByText('Загрузить ещё');
       const lastProjectName = secondPart[secondPart.length - 1].name as string;
 
       expect(tl.screen.getByText('20 из 40')).toBeInTheDocument();
-      expect(tl.screen.queryByText(lastProjectName)).not.toBeInTheDocument();
+      expect(tl.screen.queryByText(secondPart[0].name as string)).not.toBeInTheDocument();
 
       userEvent.click(loadMoreButton);
 
