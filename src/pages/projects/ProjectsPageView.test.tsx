@@ -23,7 +23,8 @@ const projectRowMock = [
 
 const defaultProps: ProjectsPageViewProps = {
   isLoading: false,
-  counterProjects: [20, 100],
+  isLoadingMore: false,
+  counterProjects: { current: 20, total: 100 },
   projects: projectRowMock,
   onFavorite: noop,
   onLoadMore: noop,
@@ -31,12 +32,20 @@ const defaultProps: ProjectsPageViewProps = {
 
 function renderComponent(props?: Partial<ProjectsPageViewProps>): RenderResult {
   const withDefault = merge(defaultProps);
-  const { isLoading, onFavorite, projects, counterProjects, onLoadMore } = withDefault(props ?? {});
+  const {
+    isLoading,
+    onFavorite,
+    projects,
+    counterProjects,
+    onLoadMore,
+    isLoadingMore,
+  } = withDefault(props ?? {});
   return render(
     <Router>
       <ProjectsPageView
         projects={projects}
         isLoading={isLoading}
+        isLoadingMore={isLoadingMore}
         counterProjects={counterProjects}
         onFavorite={onFavorite}
         onLoadMore={onLoadMore}
@@ -73,7 +82,7 @@ describe('ProjectsPageView', () => {
 
   describe('пагинация', () => {
     it('выводит счётчики проектов', () => {
-      renderComponent({ counterProjects: [40, 201] });
+      renderComponent({ counterProjects: { current: 40, total: 201 } });
       expect(screen.getByText('40 из 201')).toBeInTheDocument();
     });
 
@@ -88,14 +97,14 @@ describe('ProjectsPageView', () => {
     });
 
     it('показывает кнопку загрузки, если есть проекты', () => {
-      renderComponent({ counterProjects: [40, 99] });
+      renderComponent({ counterProjects: { current: 40, total: 99 } });
       const loadButton = screen.getByText('Загрузить ещё');
 
       expect(loadButton).toBeInTheDocument();
     });
 
     it('не показывает кнопку, если показаны все проекты', () => {
-      renderComponent({ counterProjects: [100, 100] });
+      renderComponent({ counterProjects: { current: 100, total: 100 } });
       const loadButton = screen.queryByText('Загрузить ещё');
 
       expect(loadButton).not.toBeInTheDocument();

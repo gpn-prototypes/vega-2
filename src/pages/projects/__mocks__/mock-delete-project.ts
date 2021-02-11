@@ -105,6 +105,11 @@ export const deleteProjectMock = [
   {
     request: {
       query: ProjectsTableListDocument,
+      variables: {
+        pageNumber: 1,
+        pageSize: 20,
+        includeBlank: false,
+      },
     },
     result: {
       data: {
@@ -147,6 +152,7 @@ export const deleteProjectMock = [
               __typename: 'Project',
             },
           ],
+          itemsTotal: 2,
           __typename: 'ProjectList',
         },
         __typename: 'Query',

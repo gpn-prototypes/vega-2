@@ -1,5 +1,5 @@
-query ProjectsTableList {
-  projects: projectList {
+query ProjectsTableList($includeBlank: Boolean!, $pageNumber: Int!, $pageSize: Int!) {
+  projects: projectList(includeBlank: $includeBlank, pageNumber: $pageNumber, pageSize: $pageSize) {
     ... on ProjectList {
       data: projectList {
         vid
@@ -27,6 +27,7 @@ query ProjectsTableList {
           vid
         }
       }
+      itemsTotal,
     }
     ... on Error {
       code

@@ -2,8 +2,11 @@ import React from 'react';
 import * as tl from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { ProjectStatusEnum } from '../../__generated__/types';
 import { mountApp } from '../../../test-utils';
+import { createProject } from '../../../test-utils/data-generators';
 
+import { ProjectsTableListDocument } from './__generated__/projects';
 import { mocks } from './__mocks__/mocks';
 import { EditedAt } from './ProjectsTable/EditedAt';
 import { ModalDeleteProject } from './ModalDeleteProject';
@@ -15,6 +18,16 @@ function openModalRemoveProject() {
   userEvent.click(tl.screen.getAllByTestId(EditedAt.testId.buttonMenu)[0]);
   userEvent.click(tl.screen.getByTestId(ProjectsPage.testId.projectRemove));
 }
+
+const generateProjects = (number: number) => {
+  const projects = [];
+
+  for (let i = 1; i <= number; i += 1) {
+    projects.push(createProject({ status: ProjectStatusEnum.Unpublished }));
+  }
+
+  return projects;
+};
 
 describe('ProjectsPage', () => {
   test('отрисовывается индикатор загрузки', async () => {
@@ -75,6 +88,7 @@ describe('ProjectsPage', () => {
 
   test('модальное окно закрывается при отмене удаления', async () => {
     const deleteProjectMock = mocks.deleteProject;
+
     const { $, waitRequest } = await mountApp(<ProjectsPage />, {
       mocks: deleteProjectMock,
     });
@@ -112,8 +126,70 @@ describe('ProjectsPage', () => {
   });
 
   describe('пагинация', () => {
-    it.todo('происходит смена url');
-    it.todo('загружает проекты');
-    it.todo('не загружает проекты, если небыло смены нужных параметров в url');
+    const [firstPart, secondPart] = [generateProjects(20), generateProjects(20)];
+
+    const paginationMocks = [
+      {
+        request: {
+          query: ProjectsTableListDocument,
+          variables: {
+            pageNumber: 1,
+            pageSize: 20,
+            includeBlank: false,
+          },
+        },
+        result: {
+          data: {
+            projects: {
+              data: firstPart,
+              itemsTotal: 40,
+              __typename: 'ProjectList',
+            },
+            __typename: 'Query',
+          },
+        },
+      },
+      {
+        request: {
+          query: ProjectsTableListDocument,
+          variables: {
+            pageNumber: 2,
+            pageSize: 20,
+            includeBlank: false,
+          },
+        },
+        result: {
+          data: {
+            projects: {
+              data: secondPart,
+              itemsTotal: 40,
+              __typename: 'ProjectList',
+            },
+            __typename: 'Query',
+          },
+        },
+      },
+    ];
+
+    it('загружает проекты', async () => {
+      const { waitRequest } = await mountApp(<ProjectsPage />, {
+        mocks: paginationMocks,
+      });
+      await waitRequest();
+
+      const loadMoreButton = tl.screen.getByText('Загрузить ещё');
+      const lastProjectName = secondPart[secondPart.length - 1].name as string;
+
+      expect(tl.screen.getByText('20 из 40')).toBeInTheDocument();
+      expect(tl.screen.queryByText(lastProjectName)).not.toBeInTheDocument();
+
+      userEvent.click(loadMoreButton);
+
+      await waitRequest();
+
+      expect(tl.screen.getByText('40 из 40')).toBeInTheDocument();
+      expect(tl.screen.queryByText(lastProjectName)).toBeInTheDocument();
+      expect(loadMoreButton).not.toBeInTheDocument();
+    });
   });
 });
