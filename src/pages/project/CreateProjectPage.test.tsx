@@ -154,7 +154,7 @@ const renderComponent = (props?: Partial<Props>): RenderComponentResult => {
 
   const bus = {
     send: jest.fn(),
-    subscribe: jest.fn().mockImplementation((params, cb) => {
+    subscribe: jest.fn().mockImplementation(() => {
       return unsub;
     }),
   } as Bus;
@@ -202,11 +202,6 @@ describe('CreateProjectPage', () => {
     const loader = await screen.findByLabelText('Загрузка');
 
     expect(loader).toBeInTheDocument();
-    await waitRequests();
-  });
-
-  it('вызывает нотификацию с ошибкой, если запрос упал', async () => {
-    renderComponent();
     await waitRequests();
   });
 
