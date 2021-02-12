@@ -111,7 +111,7 @@ export const DescriptionStep: DescriptionStepType = (props) => {
                   input={input}
                   meta={meta}
                   name="name"
-                  placeholder="Придумайте название проекта"
+                  placeholder="Введите название проекта"
                   testId={testId.name}
                 />
               );
