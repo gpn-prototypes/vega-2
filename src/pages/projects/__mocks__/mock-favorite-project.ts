@@ -8,6 +8,11 @@ export const favoriteProjectMock = [
   {
     request: {
       query: ProjectsTableListDocument,
+      variables: {
+        pageNumber: 1,
+        pageSize: 20,
+        includeBlank: false,
+      },
     },
     result: {
       data: {
@@ -83,6 +88,7 @@ export const favoriteProjectMock = [
               __typename: 'Project',
             },
           ],
+          itemsTotal: 3,
           __typename: 'ProjectList',
         },
         __typename: 'Query',
@@ -115,6 +121,11 @@ export const favoriteProjectMock = [
   {
     request: {
       query: ProjectsTableListDocument,
+      variables: {
+        pageNumber: 1,
+        pageSize: 20,
+        includeBlank: false,
+      },
     },
     result: {
       data: {
@@ -190,6 +201,7 @@ export const favoriteProjectMock = [
               __typename: 'Project',
             },
           ],
+          itemsTotal: 3,
           __typename: 'ProjectList',
         },
         __typename: 'Query',

@@ -5,6 +5,11 @@ export const defaultMock = [
   {
     request: {
       query: ProjectsTableListDocument,
+      variables: {
+        pageNumber: 1,
+        pageSize: 20,
+        includeBlank: false,
+      },
     },
     result: {
       data: {
@@ -80,6 +85,7 @@ export const defaultMock = [
               __typename: 'Project',
             },
           ],
+          itemsTotal: 3,
           __typename: 'ProjectList',
         },
         __typename: 'Query',
