@@ -4,9 +4,9 @@ import React from 'react';
 
 import { Bus } from '../../../types/bus';
 
-type ContextValues = Bus | null;
+export type ContextValues = Bus | null;
 
-const BusContext = React.createContext<ContextValues>(null);
+export const BusContext = React.createContext<ContextValues>(null);
 
 export const useBus = (): Bus => {
   const ctx = React.useContext(BusContext);

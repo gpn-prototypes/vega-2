@@ -123,9 +123,7 @@ describe('ProjectForm', () => {
     const nameInput = getInput(DescriptionStep.testId.name);
     userEvent.type(nameInput, 'projectName');
 
-    act(() => {
-      userEvent.click(cancelButton);
-    });
+    userEvent.click(cancelButton);
 
     expect(onCancel).toBeCalled();
   });

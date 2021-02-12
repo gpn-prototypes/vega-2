@@ -287,9 +287,10 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   }
 
   if (queryProjectLoading || createBlankProjectLoading || queryRegionListLoading) {
-    return <Loader />;
+    return <Loader aria-label="Загрузка" />;
   }
 
+  // TODO: Решится в задаче VEGA-820
   if (queryProjectData?.project?.__typename === 'Error') {
     const inlineQueryProjectError = queryProjectData.project;
 
