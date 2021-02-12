@@ -153,10 +153,14 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   const handleFormSubmit = React.useCallback(
     async (values: FormValues, form: FormApi<FormValues>) => {
       const state = form.getState();
-
       const changes = Object.keys(state.dirtyFields)
         .map((key) => ({ key, value: getIn(values, key) }))
-        .reduce((acc, { key, value }) => setIn(acc, key, value), {});
+        .reduce(
+          (acc, { key, value }) =>
+            // formatOnBlur может не сработать при сабмите
+            setIn(acc, key, typeof value === 'string' ? value.trim() : value),
+          {},
+        );
 
       const version =
         queryProjectData?.project?.__typename === 'Project'

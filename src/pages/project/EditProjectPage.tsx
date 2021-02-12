@@ -102,7 +102,11 @@ export const EditProjectPage: React.FC<PageProps> = () => {
 
       const changes = Object.keys(state.dirtyFields)
         .map((key) => ({ key, value: getIn(values, key) }))
-        .reduce((acc, { key, value }) => setIn(acc, key, value), {});
+        .reduce(
+          (acc, { key, value }) =>
+            setIn(acc, key, typeof value === 'string' ? value.trim() : value),
+          {},
+        );
 
       const version =
         queryProjectData?.project?.__typename === 'Project'

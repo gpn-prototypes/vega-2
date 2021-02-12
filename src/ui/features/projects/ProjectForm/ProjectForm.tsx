@@ -135,7 +135,6 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
   };
 
   const Step = steps[activeStepIndex].content;
-
   const decorators = useMemo(() => [focusOnErrors], []);
 
   return (

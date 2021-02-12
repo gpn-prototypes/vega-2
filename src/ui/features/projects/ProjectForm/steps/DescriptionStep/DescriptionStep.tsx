@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from 'react';
 import { Field } from 'react-final-form';
 import { Combobox, Form as VegaForm, Text } from '@gpn-prototypes/vega-ui';
@@ -23,6 +22,8 @@ export type StepProps = {
 
 const typeOptions = [{ label: 'Геологоразведочный', value: ProjectTypeEnum.Geo }];
 const typeInitialValue = typeOptions[0].value;
+
+const trimFormat = (value?: string) => value?.trim();
 
 export const getYearStartOptions = (): SelectOption[] => {
   const currentYear = new Date().getFullYear();
@@ -104,7 +105,9 @@ export const DescriptionStep: DescriptionStepType = (props) => {
             Название проекта
           </VegaForm.Label>
           <Field
+            format={trimFormat}
             name="name"
+            formatOnBlur
             render={({ input, meta }): React.ReactNode => {
               return (
                 <TextField
@@ -182,6 +185,8 @@ export const DescriptionStep: DescriptionStepType = (props) => {
             allowNull
             parse={(v) => v}
             name="coordinates"
+            format={trimFormat}
+            formatOnBlur
             render={({ input, meta }): React.ReactNode => {
               return (
                 <TextField
@@ -268,6 +273,8 @@ export const DescriptionStep: DescriptionStepType = (props) => {
           <Field
             name="description"
             allowNull
+            format={trimFormat}
+            formatOnBlur
             parse={
               /* istanbul ignore next */
               (v) => v
