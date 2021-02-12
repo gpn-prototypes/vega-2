@@ -1,6 +1,5 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { NetworkStatus } from '@apollo/client';
 import { IconEdit, IconTrash, Text } from '@gpn-prototypes/vega-ui';
 
 import { UpdateProject, UpdateProjectDiff } from '../../__generated__/types';
@@ -34,23 +33,15 @@ export const ProjectsPage = (): React.ReactElement => {
   const [isOpenModal, setIsOpenModal] = React.useState<boolean>(false);
   const [dataDeleteProject, setDataDeleteProject] = React.useState<TableRow | null>(null);
   const [nextPageNumber, setNextPageNumber] = React.useState<number>(2);
+  const [isLoadingMore, setIsLoadingMore] = React.useState<boolean>(false);
 
   const notifications = useNotifications();
   const history = useHistory();
 
-  const {
-    data,
-    loading,
-    startPolling,
-    stopPolling,
-    refetch,
-    fetchMore,
-    networkStatus,
-  } = useProjectsTableList({
+  const { data, loading, startPolling, stopPolling, refetch, fetchMore } = useProjectsTableList({
     fetchPolicy: 'network-only',
     pollInterval: TABLE_POLLING_INTERVAL_MS,
     nextFetchPolicy: 'cache-first',
-    notifyOnNetworkStatusChange: true,
     variables: {
       pageNumber: 1,
       pageSize: PAGE_SIZE,
@@ -223,10 +214,11 @@ export const ProjectsPage = (): React.ReactElement => {
       <ProjectsPageView
         projects={projects}
         isLoading={isLoading}
-        isLoadingMore={networkStatus === NetworkStatus.fetchMore}
+        isLoadingMore={isLoadingMore}
         onFavorite={handleToggleFavorite}
         counterProjects={{ current: currentQuantityProjects, total: totalQuantityProjects }}
         onLoadMore={() => {
+          setIsLoadingMore(true);
           fetchMore({
             variables: { pageNumber: nextPageNumber, pageSize: PAGE_SIZE },
             updateQuery: (prev, { fetchMoreResult }) => {
@@ -262,6 +254,7 @@ export const ProjectsPage = (): React.ReactElement => {
               };
             },
           }).then(() => {
+            setIsLoadingMore(false);
             setNextPageNumber(nextPageNumber + 1);
           });
         }}
