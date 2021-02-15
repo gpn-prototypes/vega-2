@@ -10,7 +10,7 @@ import { merge } from 'ramda';
 import { ErrorCodesEnum, ProjectStatusEnum, ProjectTypeEnum } from '../../__generated__/types';
 import { Bus } from '../../../types/bus';
 import { Notifications } from '../../../types/notifications';
-import { BusProvider, NotificationsProvider } from '../../providers';
+import { BusProvider, IdentityProvider, NotificationsProvider } from '../../providers';
 import { DescriptionStep } from '../../ui/features/projects/ProjectForm/steps';
 
 import {
@@ -173,13 +173,19 @@ const renderComponent = (props?: Partial<Props>): RenderComponentResult => {
     },
   });
 
+  const identity = {
+    logout: jest.fn(),
+  };
+
   const component = render(
     <Router history={history}>
       <MockedProvider mocks={mocks} cache={cache}>
         <BusProvider bus={bus}>
-          <NotificationsProvider notifications={notifications}>
-            <CreateProjectPage />
-          </NotificationsProvider>
+          <IdentityProvider identity={identity}>
+            <NotificationsProvider notifications={notifications}>
+              <CreateProjectPage />
+            </NotificationsProvider>
+          </IdentityProvider>
         </BusProvider>
       </MockedProvider>
     </Router>,
