@@ -8,18 +8,15 @@ import { cnPage } from './cn-page';
 type Props = {
   when: boolean;
   navigate: (path: string | null) => Promise<void>;
+  onLogout: VoidFunction;
 };
 
-export const RouteLeavingGuard: React.FC<Props> = ({ when, navigate }) => {
+export const RouteLeavingGuard: React.FC<Props> = ({ when, navigate, onLogout }) => {
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [lastLocation, setLastLocation] = useState<Location | null>(null);
 
   const handleBlockedNavigation = (nextLocation: Location): boolean => {
-    if (nextLocation.pathname === '/login') {
-      return true;
-    }
-
     setIsModalOpen(true);
     setLastLocation(nextLocation);
 
@@ -34,7 +31,11 @@ export const RouteLeavingGuard: React.FC<Props> = ({ when, navigate }) => {
     setIsLoading(true);
 
     const path = lastLocation ? lastLocation.pathname : null;
-    navigate(path);
+    if (path === '/login') {
+      onLogout();
+    } else {
+      navigate(path);
+    }
   };
 
   return (

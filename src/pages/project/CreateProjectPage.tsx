@@ -13,6 +13,7 @@ import {
   ValidationError,
 } from '../../__generated__/types';
 import { useBrowserTabActivity } from '../../hooks';
+import { useIdentity } from '../../providers';
 import { useBus } from '../../providers/bus';
 import { useNotifications } from '../../providers/notifications';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
@@ -58,6 +59,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   const history = useHistory();
   const notifications = useNotifications();
   const bus = useBus();
+  const identity = useIdentity();
 
   const [blankProjectId, setBlankProjectId] = useState<string | undefined>(undefined);
   const [isNavigationBlocked, setIsNavigationBlocked] = React.useState<boolean>(true);
@@ -318,6 +320,11 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       ? undefined
       : getInitialValues(queryProjectData?.project);
 
+  const handleLogout = (): void => {
+    setIsNavigationBlocked(false);
+    identity.logout();
+  };
+
   return (
     <div className={cnPage()}>
       <ProjectForm
@@ -327,7 +334,11 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
         onSubmit={handleFormSubmit}
         onCancel={handleCancel}
       />
-      <RouteLeavingGuard when={isNavigationBlocked} navigate={handleNavigation} />
+      <RouteLeavingGuard
+        onLogout={handleLogout}
+        when={isNavigationBlocked}
+        navigate={handleNavigation}
+      />
     </div>
   );
 };

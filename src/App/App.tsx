@@ -4,7 +4,7 @@ import { History } from 'history';
 
 import { Bus } from '../../types/bus';
 import { Notifications } from '../../types/notifications';
-import { BusProvider, NotificationsProvider } from '../providers';
+import { BusProvider, Identity, IdentityProvider, NotificationsProvider } from '../providers';
 
 import { AppView } from './AppView';
 
@@ -15,16 +15,19 @@ type AppProps = {
   history: History;
   notifications?: Notifications;
   bus: Bus;
+  identity: Identity;
 };
 
 export const App = (props: AppProps): React.ReactElement => {
-  const { graphqlClient, notifications, history, bus } = props;
+  const { graphqlClient, notifications, history, bus, identity } = props;
 
   return (
     <ApolloProvider client={graphqlClient}>
       <NotificationsProvider notifications={notifications}>
         <BusProvider bus={bus}>
-          <AppView history={history} />
+          <IdentityProvider identity={identity}>
+            <AppView history={history} />
+          </IdentityProvider>
         </BusProvider>
       </NotificationsProvider>
     </ApolloProvider>

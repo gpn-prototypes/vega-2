@@ -46,6 +46,6 @@ const client = new ApolloClient({
 });
 
 ReactDOM.render(
-  <App history={history} graphqlClient={client} bus={bus} />,
+  <App history={history} graphqlClient={client} bus={bus} identity={{ logout: () => {} }} />,
   document.getElementById('root'),
 );
