@@ -50,7 +50,7 @@ export const validator = createValidate<Partial<FormValues>>({
 
 const steps = [{ title: 'Описание проекта', content: DescriptionStep }];
 
-const testId = {
+export const testId = {
   form: 'ProjectForm:form',
   stepList: 'ProjectForm:stepList',
 };
