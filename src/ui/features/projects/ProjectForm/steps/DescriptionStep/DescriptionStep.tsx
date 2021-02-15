@@ -138,7 +138,7 @@ export const DescriptionStep: DescriptionStepType = (props) => {
                 placeholder="Выберите регион"
                 value={regionOptions.find(({ value }) => value === input.value)}
                 onChange={(option: SelectOption | null): void => {
-                  input.onChange(option?.value);
+                  input.onChange(option?.value ?? null);
                 }}
                 onBlur={input.onBlur}
                 onFocus={input.onFocus}

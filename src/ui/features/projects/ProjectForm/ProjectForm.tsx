@@ -129,7 +129,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
       return;
     }
 
-    if (isBlurEvent && dirty) {
+    if ((isBlurEvent && dirty) || (dirtyFields.region && values.region === null)) {
       submitPromiseRef.current = onSubmit(values, form);
     }
   };
