@@ -50,7 +50,7 @@ export const validator = createValidate<Partial<FormValues>>({
 
 const steps = [{ title: 'Описание проекта', content: DescriptionStep }];
 
-const testId = {
+export const testId = {
   form: 'ProjectForm:form',
   stepList: 'ProjectForm:stepList',
 };
@@ -129,7 +129,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
       return;
     }
 
-    if (isBlurEvent && dirty) {
+    if ((isBlurEvent && dirty) || (dirtyFields.region && values.region === null)) {
       submitPromiseRef.current = onSubmit(values, form);
     }
   };

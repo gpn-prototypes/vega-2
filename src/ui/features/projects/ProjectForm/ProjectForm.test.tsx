@@ -71,10 +71,8 @@ const getInput = (testid: string): HTMLInputElement => {
 
   return input;
 };
-
 const submitForm = () => {
   const submitElement = screen.getByText('Создать проект');
-
   userEvent.click(submitElement);
 };
 
@@ -139,13 +137,9 @@ describe('ProjectForm', () => {
     const nameInput = getInput(DescriptionStep.testId.name);
     userEvent.type(nameInput, 'projectName');
 
-    await act(async () => {
-      jest.runAllTimers();
-    });
-
-    expect(onSubmit).toBeCalled();
-    expect(onSubmit.mock.calls[0][0]).toEqual(
+    expect(onSubmit).toBeCalledWith(
       expect.objectContaining({ status: ProjectStatusEnum.Blank }),
+      expect.any(Object),
     );
   });
 
@@ -178,8 +172,27 @@ describe('ProjectForm', () => {
       });
 
       await act(async () => {
-        jest.runAllTimers();
         expect(onSubmit).not.toBeCalled();
+      });
+    });
+
+    test('при очищении региона происходит автосохранение', async () => {
+      const onSubmit = jest.fn().mockImplementation((values) => Promise.resolve(values));
+
+      const initialValues = {
+        ...initializeProjectForm(),
+        status: ProjectStatusEnum.Unpublished,
+        region: 'region-1',
+      };
+
+      renderComponent({ initialValues, onSubmit });
+
+      const combobox = getCombobox(screen.getByTestId(DescriptionStep.testId.region));
+
+      await combobox.clear();
+
+      await act(async () => {
+        expect(onSubmit).toBeCalled();
       });
     });
   });
@@ -203,6 +216,28 @@ describe('ProjectForm', () => {
       const list = screen.getByRole('listbox');
 
       expect(list.textContent).toContain('СССР');
+    });
+
+    it('очищает поле при редактировании', async () => {
+      const onSubmit = jest.fn().mockImplementation((values) => Promise.resolve(values));
+
+      const initialValues = {
+        ...initializeProjectForm(),
+        region: 'region-1',
+      };
+
+      renderComponent({ initialValues, onSubmit });
+
+      const comboboxElement = screen.getByTestId(DescriptionStep.testId.region);
+
+      const combobox = getCombobox(comboboxElement);
+
+      await combobox.clear();
+
+      expect(onSubmit).toBeCalledWith(
+        expect.objectContaining({ region: null }),
+        expect.any(Object),
+      );
     });
   });
 
