@@ -66,6 +66,7 @@ export const ProjectsPage = (): React.ReactElement => {
       ? totalQuantityProjects - (totalQuantityProjects - (nextPageNumber - 1) * PAGE_SIZE)
       : undefined;
 
+    /* istanbul ignore else */
     if (pageSize !== undefined) {
       refetch({ pageNumber: 1, pageSize });
     }

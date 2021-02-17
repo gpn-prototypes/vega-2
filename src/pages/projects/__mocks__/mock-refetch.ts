@@ -1,49 +1,27 @@
 import { ProjectsTableListDocument } from '../__generated__/projects';
 import { ProjectStatusEnum } from '../../../__generated__/types';
-
-const project = {
-  vid: 'a3333333-b111-c111-d111-e00000000000',
-  isFavorite: false,
-  name: 'FEM Example Project',
-  version: 1,
-  description: null,
-  status: ProjectStatusEnum.Unpublished,
-  attendees: [
-    {
-      user: {
-        name: 'Николай',
-        role: 'main test user',
-        __typename: 'User',
-      },
-      roles: [
-        {
-          name: 'Менеджер',
-          __typename: 'ProjectRole',
-        },
-      ],
-      __typename: 'Attendee',
-    },
-  ],
-  region: null,
-  editedAt: '2020-11-12T00:00:00',
-  createdAt: '2020-11-12T00:00:00',
-  createdBy: {
-    name: 'Николай',
-    vid: 'a1111123-b111-c111-d111-e00000000000',
-    __typename: 'User',
-  },
-  __typename: 'Project',
-};
+import { createProject } from '../../../../test-utils/data-generators';
 
 export const refetchMock = [
   {
     request: {
       query: ProjectsTableListDocument,
+      variables: {
+        pageNumber: 1,
+        pageSize: 20,
+        includeBlank: false,
+      },
     },
     result: {
       data: {
         projects: {
-          data: [project],
+          data: [
+            createProject({
+              vid: 'a3333333-b111-c111-d111-e00000000000',
+              status: ProjectStatusEnum.Unpublished,
+            }),
+          ],
+          itemsTotal: 1,
           __typename: 'ProjectList',
         },
         __typename: 'Query',
@@ -57,7 +35,16 @@ export const refetchMock = [
     result: {
       data: {
         projects: {
-          data: [{ ...project, name: 'FEM Example Project 01' }],
+          data: [
+            {
+              ...createProject({
+                vid: 'a3333333-b111-c111-d111-e00000000000',
+                status: ProjectStatusEnum.Unpublished,
+              }),
+              name: 'Example Project 01',
+            },
+          ],
+          itemsTotal: 1,
           __typename: 'ProjectList',
         },
         __typename: 'Query',
@@ -71,7 +58,16 @@ export const refetchMock = [
     result: {
       data: {
         projects: {
-          data: [{ ...project, name: 'FEM Example Project 02' }],
+          data: [
+            {
+              ...createProject({
+                vid: 'a3333333-b111-c111-d111-e00000000000',
+                status: ProjectStatusEnum.Unpublished,
+              }),
+              name: 'Example Project 02',
+            },
+          ],
+          itemsTotal: 1,
           __typename: 'ProjectList',
         },
         __typename: 'Query',
