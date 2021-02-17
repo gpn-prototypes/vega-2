@@ -137,10 +137,6 @@ describe('ProjectForm', () => {
     const nameInput = getInput(DescriptionStep.testId.name);
     userEvent.type(nameInput, 'projectName');
 
-    await act(async () => {
-      jest.runAllTimers();
-    });
-
     expect(onSubmit).toBeCalledWith(
       expect.objectContaining({ status: ProjectStatusEnum.Blank }),
       expect.any(Object),
@@ -176,7 +172,6 @@ describe('ProjectForm', () => {
       });
 
       await act(async () => {
-        jest.runAllTimers();
         expect(onSubmit).not.toBeCalled();
       });
     });
@@ -197,7 +192,6 @@ describe('ProjectForm', () => {
       await combobox.clear();
 
       await act(async () => {
-        jest.runAllTimers();
         expect(onSubmit).toBeCalled();
       });
     });
@@ -239,10 +233,6 @@ describe('ProjectForm', () => {
       const combobox = getCombobox(comboboxElement);
 
       await combobox.clear();
-
-      await act(async () => {
-        await submitForm();
-      });
 
       expect(onSubmit).toBeCalledWith(
         expect.objectContaining({ region: null }),
