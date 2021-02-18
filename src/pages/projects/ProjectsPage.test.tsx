@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { mountApp } from '../../../test-utils';
 import { MockNotifications } from '../../../test-utils/notificationsMock';
 
-import { secondPart } from './__mocks__/mock-pagination';
+import { secondPart } from './__mocks__/mock-paginations';
 import { mocks } from './__mocks__/mocks';
 import { EditedAt } from './ProjectsTable/EditedAt';
 import { ModalDeleteProject } from './ModalDeleteProject';

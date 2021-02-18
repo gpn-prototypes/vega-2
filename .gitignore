@@ -31,6 +31,3 @@ __generated__
 
 # test covergae
 coverage
-
-# mocks for test
-__mocks__
