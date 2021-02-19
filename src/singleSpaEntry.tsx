@@ -6,6 +6,8 @@ import './set-public-path';
 
 import { App } from './App/App';
 
+export default App;
+
 const lifecycles = singleSpaReact({
   React,
   ReactDOM,
