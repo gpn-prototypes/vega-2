@@ -219,6 +219,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
             updateProjectBlankResult.data?.updateProject?.result as ValidationError,
           );
         case 'UpdateProjectDiff':
+          // eslint-disable-next-line no-console
           console.warn(
             'UpdateProjectDiff mutation result should be processed at graphql interceptor level',
           );

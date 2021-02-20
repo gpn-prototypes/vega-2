@@ -1,5 +1,5 @@
 import React from 'react';
-import * as tl from '@testing-library/react';
+import { render, RenderResult, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ProjectStatusEnum } from '../../../__generated__/types';
@@ -26,9 +26,9 @@ const projectRowMock = [
   },
 ];
 
-function renderComponent(props: ProjectsTableProps): tl.RenderResult {
+function renderComponent(props: ProjectsTableProps): RenderResult {
   const { placeholder, onFavorite = noop, rows = [] } = props;
-  return tl.render(
+  return render(
     <>
       <ProjectsTable rows={rows} placeholder={placeholder} onFavorite={onFavorite} />
     </>,
@@ -44,65 +44,65 @@ describe('ProjectsTable', () => {
 
   test('рендерится placeholder по умолчанию', () => {
     const func = jest.fn();
-    const table = renderComponent({ onFavorite: func });
+    renderComponent({ onFavorite: func });
 
-    expect(table.getByText('Пока нет ни одного проекта :(')).toBeInTheDocument();
+    expect(screen.getByText('Пока нет ни одного проекта :(')).toBeInTheDocument();
   });
 
   test('рендерится строка placeholder', () => {
     const func = jest.fn();
     const placeholder = 'Нет данных';
-    const table = renderComponent({ onFavorite: func, placeholder });
+    renderComponent({ onFavorite: func, placeholder });
 
-    expect(table.getByText(placeholder)).toBeInTheDocument();
+    expect(screen.getByText(placeholder)).toBeInTheDocument();
   });
 
   test('рендерится компонент placeholder', () => {
     const func = jest.fn();
     const placeholder = <div data-testid="placeholder">Нет данных</div>;
-    const table = renderComponent({ onFavorite: func, placeholder });
+    renderComponent({ onFavorite: func, placeholder });
 
-    expect(table.getByTestId('placeholder')).toBeInTheDocument();
+    expect(screen.getByTestId('placeholder')).toBeInTheDocument();
   });
 
   test('рендерится строка с данными', () => {
     const func = jest.fn();
-    const table = renderComponent({ onFavorite: func, rows: projectRowMock });
+    renderComponent({ onFavorite: func, rows: projectRowMock });
 
-    expect(table.getByText(projectRowMock[0].name)).toBeInTheDocument();
+    expect(screen.getByText(projectRowMock[0].name)).toBeInTheDocument();
   });
 
   test('добавляется аттрибут title для названия строки', () => {
     const func = jest.fn();
     const name = 'Lorem ipsum dolor sit amet consectetur adipisicing elit.';
-    const table = renderComponent({
+    renderComponent({
       onFavorite: func,
       rows: [{ ...projectRowMock[0], name }],
     });
 
-    expect(table.getByTitle(name)).toBeInTheDocument();
+    expect(screen.getByTitle(name)).toBeInTheDocument();
   });
 
   test('рендерится описание проекта', () => {
     const func = jest.fn();
     const description = 'Lorem ipsum dolor sit amet consectetur adipisicing elit.';
-    const table = renderComponent({
+    renderComponent({
       onFavorite: func,
       rows: [{ ...projectRowMock[0], description }],
     });
 
-    expect(table.getByText(description)).toBeInTheDocument();
+    expect(screen.getByText(description)).toBeInTheDocument();
   });
 
   test('отображается кнопка «избранное»', () => {
     const func = jest.fn();
     renderComponent({ onFavorite: func, rows: projectRowMock });
 
-    userEvent.hover(tl.screen.getByText(projectRowMock[0].name));
+    userEvent.hover(screen.getByText(projectRowMock[0].name));
 
-    tl.waitFor(() => {
+    waitFor(() => {
       expect(
-        tl.screen.getAllByTestId(ProjectsTable.testId.favoriteNotSelectedButton)[0],
+        screen.getAllByTestId(ProjectsTable.testId.favoriteNotSelectedButton)[0],
       ).toBeVisible();
     });
   });
@@ -114,9 +114,9 @@ describe('ProjectsTable', () => {
       rows: [{ ...projectRowMock[0], isFavorite: true }],
     });
 
-    userEvent.hover(tl.screen.getByText(projectRowMock[0].name));
+    userEvent.hover(screen.getByText(projectRowMock[0].name));
 
-    expect(tl.screen.getByTestId(ProjectsTable.testId.favoriteSelectedButton)).toBeVisible();
+    expect(screen.getByTestId(ProjectsTable.testId.favoriteSelectedButton)).toBeVisible();
   });
 
   test('вызывается onFavorite', () => {
@@ -126,9 +126,9 @@ describe('ProjectsTable', () => {
       rows: projectRowMock,
     });
 
-    userEvent.click(tl.screen.getAllByTestId(ProjectsTable.testId.favoriteNotSelectedButton)[0]);
+    userEvent.click(screen.getAllByTestId(ProjectsTable.testId.favoriteNotSelectedButton)[0]);
 
-    tl.waitFor(() => {
+    waitFor(() => {
       expect(func).toBeCalled();
     });
   });
@@ -137,14 +137,14 @@ describe('ProjectsTable', () => {
     const func = jest.fn();
     renderComponent({ onFavorite: func, rows: projectRowMock });
 
-    tl.waitFor(() => {
-      expect(tl.screen.getAllByTestId(EditedAt.testId.buttonMenu)[0]).not.toBeVisible();
+    waitFor(() => {
+      expect(screen.getAllByTestId(EditedAt.testId.buttonMenu)[0]).not.toBeVisible();
     });
 
-    userEvent.hover(tl.screen.getByText(projectRowMock[0].name));
+    userEvent.hover(screen.getByText(projectRowMock[0].name));
 
-    tl.waitFor(() => {
-      expect(tl.screen.getAllByTestId(EditedAt.testId.buttonMenu)[0]).toBeVisible();
+    waitFor(() => {
+      expect(screen.getAllByTestId(EditedAt.testId.buttonMenu)[0]).toBeVisible();
     });
   });
 

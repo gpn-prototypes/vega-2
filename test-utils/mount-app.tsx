@@ -1,28 +1,36 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import { ApolloLink, InMemoryCache } from '@apollo/client';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
-import * as tl from '@testing-library/react';
+import { act, render, RenderResult } from '@testing-library/react';
+import { createMemoryHistory, MemoryHistory } from 'history';
+
+import { NotificationsProvider } from '../src/providers';
+import { Notifications } from '../types/notifications';
 
 type MountAppOptions = {
   shouldAddToBody?: boolean;
   mocks?: MockedResponse[];
   link?: ApolloLink;
-  route?: string;
+  url?: string;
+  notifications?: Notifications;
 };
 
 type MountAppResult = {
-  $: tl.RenderResult;
+  $: RenderResult;
   cache: InMemoryCache;
   waitRequest(amount?: number): Promise<void>;
+  history: MemoryHistory;
 };
 
 export const mountApp = (
   node: React.ReactElement,
   options: MountAppOptions = {},
 ): MountAppResult => {
-  if (options.route) {
-    window.history.pushState({}, '', options.route);
+  const history = createMemoryHistory();
+
+  if (options.url) {
+    history.push(options.url);
   }
 
   const mocks = options.mocks ? options.mocks : [];
@@ -37,15 +45,17 @@ export const mountApp = (
 
   const TestApp: React.FC = (props) => {
     return (
-      <BrowserRouter>
+      <Router history={history}>
         <MockedProvider mocks={mocks} addTypename cache={cache}>
-          <>{props.children}</>
+          <NotificationsProvider notifications={options.notifications}>
+            <>{props.children}</>
+          </NotificationsProvider>
         </MockedProvider>
-      </BrowserRouter>
+      </Router>
     );
   };
 
-  const renderResult = tl.render(node, {
+  const renderResult = render(node, {
     wrapper: TestApp,
     baseElement: document.body,
   });
@@ -56,7 +66,7 @@ export const mountApp = (
   }
 
   async function actWait(amount = 0) {
-    await tl.act(async () => {
+    await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, amount));
     });
   }
@@ -65,5 +75,6 @@ export const mountApp = (
     $: renderResult,
     waitRequest: actWait,
     cache,
+    history,
   };
 };

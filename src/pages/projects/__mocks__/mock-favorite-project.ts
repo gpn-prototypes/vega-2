@@ -100,7 +100,7 @@ export const favoriteProjectMock = [
       query: ProjectToggleFavoriteDocument,
       variables: {
         vid: 'a3333333-b111-c111-d111-e00000000000',
-        isFavorite: false,
+        isFavorite: true,
         version: 1,
       },
     },

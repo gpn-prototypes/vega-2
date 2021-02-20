@@ -163,6 +163,7 @@ const renderComponent = (props?: Partial<Props>): RenderComponentResult => {
     add: jest.fn(),
     remove: jest.fn(),
     subscribe: jest.fn(),
+    getAll: jest.fn(),
   } as Notifications;
 
   const cache = new InMemoryCache({

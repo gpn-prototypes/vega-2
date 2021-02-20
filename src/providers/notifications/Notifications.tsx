@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
@@ -15,6 +17,7 @@ const NotificationsContext = React.createContext<ContextValues>({
   add: noop,
   remove: noop,
   subscribe,
+  getAll: () => [],
 });
 
 type NotificationsProps = {
@@ -45,6 +48,13 @@ export const NotificationsProvider: React.FC<NotificationsProps> = ({
         return notifications.subscribe(topic, payload);
       }
       return subscribe;
+    },
+    getAll: () => {
+      if (notifications?.getAll) {
+        return notifications.getAll();
+      }
+
+      return [];
     },
   };
 

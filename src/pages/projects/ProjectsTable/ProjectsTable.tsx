@@ -173,7 +173,9 @@ export const ProjectsTable: ProjectsTableType = (props) => {
           />
         ),
       };
-    }) || [];
+    }) ||
+    /* istanbul ignore next */
+    [];
 
   return (
     <Table

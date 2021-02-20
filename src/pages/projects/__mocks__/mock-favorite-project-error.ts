@@ -1,8 +1,11 @@
-import { DeleteProjectDocument, ProjectsTableListDocument } from '../__generated__/projects';
+import {
+  ProjectsTableListDocument,
+  ProjectToggleFavoriteDocument,
+} from '../__generated__/projects';
 import { ProjectStatusEnum } from '../../../__generated__/types';
 import { createProject } from '../../../../test-utils/data-generators';
 
-export const deleteProjectMock = [
+export const favoriteProjectErrorMock = [
   {
     request: {
       query: ProjectsTableListDocument,
@@ -41,16 +44,22 @@ export const deleteProjectMock = [
   },
   {
     request: {
-      query: DeleteProjectDocument,
+      query: ProjectToggleFavoriteDocument,
       variables: {
         vid: 'a3333333-b111-c111-d111-e00000000000',
+        isFavorite: true,
+        version: 1,
       },
     },
     result: {
       data: {
-        deleteProject: {
-          result: { vid: 'a3333333-b111-c111-d111-e00000000000', __typename: 'Result' },
-          __typename: 'DeleteProject',
+        updateProject: {
+          result: {
+            code: 200,
+            message: 'ошибка',
+            __typename: 'Error',
+          },
+          __typename: 'UpdateProject',
         },
       },
     },
@@ -58,16 +67,16 @@ export const deleteProjectMock = [
   {
     request: {
       query: ProjectsTableListDocument,
-      variables: {
-        pageNumber: 1,
-        pageSize: 20,
-        includeBlank: false,
-      },
     },
     result: {
       data: {
         projects: {
           data: [
+            createProject({
+              vid: 'a3333333-b111-c111-d111-e00000000000',
+              name: 'Test project 01',
+              status: ProjectStatusEnum.Unpublished,
+            }),
             createProject({
               vid: 'a3333333-b111-c111-d111-e00000000011',
               name: 'Test project 11',
@@ -79,7 +88,7 @@ export const deleteProjectMock = [
               status: ProjectStatusEnum.Unpublished,
             }),
           ],
-          itemsTotal: 2,
+          itemsTotal: 3,
           __typename: 'ProjectList',
         },
         __typename: 'Query',
