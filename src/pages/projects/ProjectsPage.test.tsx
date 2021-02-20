@@ -128,9 +128,7 @@ describe('ProjectsPage', () => {
 
     await waitRequest();
 
-    const newNameCells = await waitFor(() =>
-      screen.getAllByTestId(ProjectsTable.testId.projectName),
-    );
+    const newNameCells = await screen.findAllByTestId(ProjectsTable.testId.projectName);
 
     const firstProjectName = newNameCells[0].textContent;
 

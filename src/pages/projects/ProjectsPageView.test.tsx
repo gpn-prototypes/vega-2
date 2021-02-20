@@ -77,7 +77,6 @@ describe('ProjectsPageView', () => {
     userEvent.hover(screen.getByText(projectRowMock[0].name));
     userEvent.click(screen.getByTestId(ProjectsTable.testId.favoriteNotSelectedButton));
 
-    expect(func).toBeCalled();
     expect(func).toBeCalledTimes(1);
   });
 

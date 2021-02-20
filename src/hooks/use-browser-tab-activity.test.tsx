@@ -1,6 +1,8 @@
 import React from 'react';
 import { render, RenderResult } from '@testing-library/react';
 
+import { changeVisibilityState } from '../../test-utils/change-visibility-state';
+
 import { InputObserver, useBrowserTabActivity } from './use-browser-tab-activity';
 
 type ComponentProps = {
@@ -16,14 +18,6 @@ const TestComponent = (props: ComponentProps): React.ReactElement | null => {
   useBrowserTabActivity(props.observer);
 
   return <div>test-component</div>;
-};
-
-export const changeVisibilityState = (state: VisibilityState): void => {
-  Object.defineProperty(global.document, 'visibilityState', {
-    value: state,
-    configurable: true,
-  });
-  global.document.dispatchEvent(new Event('visibilitychange'));
 };
 
 afterEach(() => {
