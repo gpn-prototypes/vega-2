@@ -12,8 +12,8 @@ export type EditedAtProps = {
 };
 
 const testId = {
-  buttonMenu: 'ProjectsPage:button:menu.trigger',
   menuList: 'ProjectsPage:menu',
+  buttonMenu: 'ProjectsPage:button:menu.trigger',
   dateEdit: 'ProjectsPage:text:edited',
 } as const;
 
@@ -53,8 +53,7 @@ export const EditedAt: EditedAtType = ({ date, menu, onMenuToggle }) => {
             size="xs"
             ref={anchorRef}
             data-testid={testId.buttonMenu}
-            onClick={(e) => {
-              e.stopPropagation();
+            onClick={() => {
               showPopover(!isPopoverVisible);
             }}
             className={cnEditedAt('iconButton').toString()}

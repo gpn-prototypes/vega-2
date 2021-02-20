@@ -8,6 +8,8 @@ import {
   Text,
 } from '@gpn-prototypes/vega-ui';
 
+import { hasNestedInteractiveTarget } from '../../../utils/has-nested-interactive-target';
+
 import { EditedAt } from './EditedAt';
 import { TableRow } from './types';
 
@@ -186,8 +188,11 @@ export const ProjectsTable: ProjectsTableType = (props) => {
       emptyRowsPlaceholder={placeholder}
       activeRow={{
         id: idActiveRow,
-        onChange: ({ id }) => {
-          history.push(`/projects/show/${id}`);
+        onChange: ({ id, e }) => {
+          const hasEl = hasNestedInteractiveTarget(e);
+          if (!hasEl) {
+            history.push(`/projects/show/${id}`);
+          }
         },
       }}
     />
