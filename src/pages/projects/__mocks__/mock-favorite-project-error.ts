@@ -46,20 +46,16 @@ export const favoriteProjectErrorMock = [
     request: {
       query: ProjectToggleFavoriteDocument,
       variables: {
-        vid: 'a3333333-b111-c111-d111-e00000000000',
+        projectId: 'a3333333-b111-c111-d111-e00000000000',
         isFavorite: true,
-        version: 1,
       },
     },
     result: {
       data: {
-        updateProject: {
-          result: {
-            code: 200,
-            message: 'ошибка',
-            __typename: 'Error',
-          },
-          __typename: 'UpdateProject',
+        setFavoriteProject: {
+          code: 200,
+          message: 'ошибка',
+          __typename: 'Error',
         },
       },
     },

@@ -2,7 +2,6 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { IconEdit, IconTrash, Text } from '@gpn-prototypes/vega-ui';
 
-import { UpdateProject, UpdateProjectDiff } from '../../__generated__/types';
 import { useBrowserTabActivity } from '../../hooks';
 import { useNotifications } from '../../providers/notifications';
 import { projectsMapper } from '../../utils/projects-mapper';
@@ -16,10 +15,6 @@ import { MenuItemProps, TableRow } from './ProjectsTable/types';
 import { cnProjectsPage as cn } from './cn-projects-page';
 import { ModalDeleteProject } from './ModalDeleteProject';
 import { ProjectsPageView } from './ProjectsPageView';
-
-interface UpdateProjectDiffResult extends UpdateProject {
-  result: Required<UpdateProjectDiff>;
-}
 
 const testId = {
   projectRemove: 'ProjectsPage:button:remove',
@@ -93,27 +88,15 @@ export const ProjectsPage = (): React.ReactElement => {
   const handleToggleFavorite = React.useCallback(
     async (id: string, payload: { isFavorite: boolean; version: number }) => {
       const addToFavoriteResult = await toggleFavorite({
-        context: {
-          projectDiffResolving: {
-            maxAttempts: 5,
-            projectAccessor: {
-              fromDiffError: (mutationData: UpdateProjectDiffResult) => ({
-                local: { vid: id, isFavorite: !payload.isFavorite, version: payload.version },
-                remote: mutationData.result.remoteProject,
-              }),
-            },
-          },
-        },
         variables: {
-          vid: id,
+          projectId: id,
           isFavorite: payload.isFavorite,
-          version: payload.version,
         },
       });
 
       /* istanbul ignore else */
-      if (addToFavoriteResult.data?.updateProject?.result?.__typename === 'Error') {
-        const addToFavoriteError = addToFavoriteResult.data?.updateProject?.result;
+      if (addToFavoriteResult.data?.setFavoriteProject?.__typename === 'Error') {
+        const addToFavoriteError = addToFavoriteResult.data?.setFavoriteProject;
 
         notifications.add({
           key: `${addToFavoriteError.code}-add-to-favorite`,

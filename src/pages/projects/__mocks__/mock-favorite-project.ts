@@ -99,21 +99,17 @@ export const favoriteProjectMock = [
     request: {
       query: ProjectToggleFavoriteDocument,
       variables: {
-        vid: 'a3333333-b111-c111-d111-e00000000000',
+        projectId: 'a3333333-b111-c111-d111-e00000000000',
         isFavorite: true,
-        version: 1,
       },
     },
     result: {
       data: {
-        updateProject: {
-          result: {
-            vid: 'a3333333-b111-c111-d111-e00000000000',
-            isFavorite: true,
-            version: 2,
-            __typename: 'Project',
-          },
-          __typename: 'UpdateProject',
+        setFavoriteProject: {
+          vid: 'a3333333-b111-c111-d111-e00000000000',
+          isFavorite: true,
+          version: 2,
+          __typename: 'Project',
         },
       },
     },
