@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Loader, useMount } from '@gpn-prototypes/vega-ui';
 import { FormApi, getIn, setIn } from 'final-form';
@@ -25,6 +25,7 @@ import {
   useProjectFormFields,
   useProjectFormRegionList,
   useUpdateProjectForm,
+  useUpdateProjectStatus,
 } from './__generated__/project';
 import { cnPage } from './cn-page';
 import { extractProjectValidationErrors } from './extract-project-validation-errors';
@@ -39,6 +40,10 @@ type ProjectType = projectFormFields;
 interface UpdateProjectDiffResult extends UpdateProject {
   result: Required<UpdateProjectDiff>;
 }
+
+type ErrorResult = { __typename: string } | ({ __typename: 'Error' } & ErrorInterface);
+
+type ErrorMap = Record<string, string | undefined>;
 
 const getInitialValues = (project: ProjectType): FormValues => {
   return {
@@ -61,6 +66,8 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
   const [blankProjectId, setBlankProjectId] = useState<string | undefined>(undefined);
   const [isNavigationBlocked, setIsNavigationBlocked] = React.useState<boolean>(true);
+
+  const version = useRef(1);
 
   const [
     createBlankProject,
@@ -118,6 +125,11 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       vid: blankProjectId as string,
     },
     skip: blankProjectId === undefined,
+    onCompleted: (data) => {
+      if (data.project?.__typename === 'Project' && data.project.version) {
+        version.current = data.project.version;
+      }
+    },
   });
 
   useBrowserTabActivity({
@@ -135,13 +147,23 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       queryProjectData?.project?.__typename === 'Project' &&
       queryProjectData.project.status === ProjectStatusEnum.Unpublished
     ) {
+      notifications.add({
+        key: `${blankProjectId}-create`,
+        status: 'success',
+        autoClose: 3,
+        message: 'Проект успешно создан',
+        onClose(item) {
+          notifications.remove(item.key);
+        },
+      });
       setIsNavigationBlocked(false);
       history.push(`/projects/show/${blankProjectId}`);
     }
-  }, [queryProjectData, history, blankProjectId, isNavigationBlocked]);
+  }, [queryProjectData, history, blankProjectId, isNavigationBlocked, notifications]);
 
   const [updateProjectBlank, { error: updateProjectBlankError }] = useUpdateProjectForm();
 
+  const [updateProjectStatus, { error: updateProjectStatusError }] = useUpdateProjectStatus();
   const {
     data: queryRegionListData,
     loading: queryRegionListLoading,
@@ -150,74 +172,11 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
   const referenceData: ReferenceDataType = { regionList: queryRegionListData?.regionList };
 
-  const handleFormSubmit = React.useCallback(
-    async (values: FormValues, form: FormApi<FormValues>) => {
-      const state = form.getState();
-      const changes = Object.keys(state.dirtyFields)
-        .map((key) => ({ key, value: getIn(values, key) }))
-        .reduce(
-          (acc, { key, value }) =>
-            // formatOnBlur может не сработать при сабмите
-            setIn(acc, key, typeof value === 'string' ? value.trim() : value),
-          {},
-        );
-
-      const version =
-        queryProjectData?.project?.__typename === 'Project'
-          ? queryProjectData?.project?.version
-          : 1;
-
-      const status =
-        values.status === ProjectStatusEnum.Unpublished
-          ? { status: ProjectStatusEnum.Unpublished }
-          : {};
-
-      const updateProjectBlankResult = await updateProjectBlank({
-        context: {
-          projectDiffResolving: {
-            maxAttempts: 5,
-            projectAccessor: {
-              fromDiffError: (data: UpdateProjectDiffResult) => ({
-                remote: data.result.remoteProject,
-                local: queryProjectData?.project,
-              }),
-              fromVariables: (vars: UpdateProjectFormVariables) => vars.data,
-              toVariables: (vars: UpdateProjectFormVariables, patch: ProjectUpdateType) => ({
-                ...vars,
-                data: { ...vars.data, ...patch },
-              }),
-            },
-          },
-        },
-        variables: {
-          vid: blankProjectId,
-          data: {
-            ...changes,
-            ...status,
-            version: version || 1,
-          },
-        },
-      });
-
-      switch (updateProjectBlankResult.data?.updateProject?.result?.__typename) {
-        case 'Project': {
-          if (values.status === ProjectStatusEnum.Unpublished) {
-            notifications.add({
-              key: `${blankProjectId}-create`,
-              status: 'success',
-              autoClose: 3,
-              message: 'Проект успешно создан',
-              onClose(item) {
-                notifications.remove(item.key);
-              },
-            });
-          }
-          break;
-        }
+  const handleResponseError = useCallback(
+    (result: ErrorResult): ErrorMap => {
+      switch (result.__typename) {
         case 'ValidationError':
-          return extractProjectValidationErrors(
-            updateProjectBlankResult.data?.updateProject?.result as ValidationError,
-          );
+          return extractProjectValidationErrors(result as ValidationError);
         case 'UpdateProjectDiff':
           // eslint-disable-next-line no-console
           console.warn(
@@ -225,8 +184,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
           );
           break;
         default: {
-          const commonError = updateProjectBlankResult.data?.updateProject
-            ?.result as ErrorInterface;
+          const commonError = result as ErrorInterface;
           notifications.add({
             key: `${commonError.code}-create`,
             status: 'alert',
@@ -238,9 +196,100 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
           break;
         }
       }
+
       return {};
     },
-    [blankProjectId, notifications, queryProjectData, updateProjectBlank],
+    [notifications],
+  );
+
+  const handleFormSubmit = useCallback(
+    async (values: FormValues, form: FormApi<FormValues>) => {
+      const projectDiffResolvingContext = {
+        projectDiffResolving: {
+          maxAttempts: 5,
+          projectAccessor: {
+            fromDiffError: (data: UpdateProjectDiffResult) => ({
+              remote: data.result.remoteProject,
+              local: queryProjectData?.project,
+            }),
+            fromVariables: (vars: UpdateProjectFormVariables) => vars.data,
+            toVariables: (vars: UpdateProjectFormVariables, patch: ProjectUpdateType) => ({
+              ...vars,
+              data: { ...vars.data, ...patch },
+            }),
+          },
+        },
+      };
+      const state = form.getState();
+      const changes = Object.keys(state.dirtyFields)
+        .map((key) => ({ key, value: getIn(values, key) }))
+        .reduce(
+          (acc, { key, value }) =>
+            // formatOnBlur может не сработать при сабмите
+            setIn(acc, key, typeof value === 'string' ? value.trim() : value),
+          {},
+        );
+
+      if (Object.keys(changes).length > 0) {
+        const updateProjectBlankResult = await updateProjectBlank({
+          context: {
+            ...projectDiffResolvingContext,
+          },
+          variables: {
+            vid: blankProjectId,
+            data: {
+              ...changes,
+              version: version.current,
+            },
+          },
+        });
+        if (updateProjectBlankResult?.data?.updateProject?.result) {
+          const { result } = updateProjectBlankResult.data.updateProject;
+
+          if (result.__typename === 'Project') {
+            if (result.version) {
+              version.current = result.version;
+            }
+          }
+          if (result.__typename !== 'Project') {
+            const errors = handleResponseError(result);
+
+            if (Object.keys(errors).length > 0) {
+              return errors;
+            }
+          }
+        }
+      }
+
+      if (values.status && values.status === ProjectStatusEnum.Unpublished && blankProjectId) {
+        const result = await updateProjectStatus({
+          context: {
+            ...projectDiffResolvingContext,
+          },
+          variables: {
+            vid: blankProjectId,
+            data: {
+              version: version.current,
+              status: values.status,
+            },
+          },
+        });
+
+        if (
+          result.data?.updateProjectStatus?.result &&
+          result.data.updateProjectStatus.result.__typename !== 'Project'
+        ) {
+          const { result: updateProjectStatusResult } = result.data.updateProjectStatus;
+          const errors = handleResponseError(updateProjectStatusResult);
+          if (Object.keys(errors).length > 0) {
+            return errors;
+          }
+        }
+      }
+      return {};
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [updateProjectBlank, blankProjectId, updateProjectStatus, handleResponseError, notifications],
   );
 
   const handleCancel = () => {
@@ -276,6 +325,7 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     deleteProjectError ||
     queryRegionListError ||
     updateProjectBlankError ||
+    updateProjectStatusError ||
     queryProjectError;
 
   if (apolloError) {
