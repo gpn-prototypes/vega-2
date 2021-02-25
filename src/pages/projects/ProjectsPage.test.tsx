@@ -3,7 +3,7 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { mountApp } from '../../../test-utils';
-import { MockNotifications } from '../../../test-utils/notificationsMock';
+import { Notifications } from '../../../types/notifications';
 
 import { secondPart } from './__mocks__/mock-paginations';
 import { mocks } from './__mocks__/mocks';
@@ -23,8 +23,13 @@ function openModalRemoveProject() {
 }
 
 describe('ProjectsPage', () => {
-  const addMock = jest.fn();
-  const removeMock = jest.fn();
+  const notifications = {
+    add: jest.fn(),
+    remove: jest.fn(),
+    subscribe: jest.fn(),
+    getAll: jest.fn(),
+    on: jest.fn(),
+  } as Notifications;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -56,7 +61,6 @@ describe('ProjectsPage', () => {
 
   test('проект помечается избранным', async () => {
     const favoriteProjectMock = mocks.favoriteProject;
-    const notifications = new MockNotifications({ addMock, removeMock });
 
     const { waitRequest } = await mountApp(<ProjectsPage />, {
       mocks: favoriteProjectMock,
@@ -78,7 +82,6 @@ describe('ProjectsPage', () => {
 
   test('обрабатывается ошибка при добавление в избранное', async () => {
     const favoriteErrorProjectMock = mocks.favoriteErrorProject;
-    const notifications = new MockNotifications({ addMock, removeMock });
 
     const { waitRequest } = await mountApp(<ProjectsPage />, {
       mocks: favoriteErrorProjectMock,
@@ -94,19 +97,14 @@ describe('ProjectsPage', () => {
 
     await waitRequest();
 
-    const call = addMock.mock.calls[0][0];
-
-    call.onClose(call);
-
-    expect(notifications.getAll().length).toBe(0);
-    expect(removeMock).toBeCalled();
-
+    expect(notifications.add).toBeCalledWith(
+      expect.objectContaining({ body: 'Ошибка в избранном' }),
+    );
     expect(screen.getAllByTestId(ProjectsTable.testId.favoriteNotSelectedButton)[0]).toBeVisible();
   });
 
   test('проект удаляется', async () => {
     const deleteProjectMock = mocks.deleteProject;
-    const notifications = new MockNotifications({ addMock, removeMock });
     const { waitRequest } = await mountApp(<ProjectsPage />, {
       mocks: deleteProjectMock,
       notifications,
@@ -137,15 +135,9 @@ describe('ProjectsPage', () => {
     expect(firstProjectName).toBe(nextProjectName);
     expect(newNameCells.length).toBe(2);
 
-    expect(addMock).toBeCalled();
-    expect(notifications.getAll().length).toBe(1);
-
-    const call = addMock.mock.calls[0][0];
-
-    call.onClose(call);
-
-    expect(notifications.getAll().length).toBe(0);
-    expect(removeMock).toBeCalled();
+    expect(notifications.add).toBeCalledWith(
+      expect.objectContaining({ body: `Проект «${projectName}» успешно удален.` }),
+    );
   });
 
   test('модальное окно закрывается при отмене удаления', async () => {

@@ -10,6 +10,9 @@ const noop = (): void => {};
 const subscribe = (): Unsubscribe => {
   return (): void => {};
 };
+const on = (): Unsubscribe => {
+  return (): void => {};
+};
 
 type ContextValues = Notifications;
 
@@ -18,6 +21,7 @@ const NotificationsContext = React.createContext<ContextValues>({
   remove: noop,
   subscribe,
   getAll: () => [],
+  on,
 });
 
 type NotificationsProps = {
@@ -46,6 +50,12 @@ export const NotificationsProvider: React.FC<NotificationsProps> = ({
     subscribe: (topic, payload) => {
       if (notifications?.subscribe) {
         return notifications.subscribe(topic, payload);
+      }
+      return subscribe;
+    },
+    on: (action, payload) => {
+      if (notifications?.on) {
+        return notifications.on(action, payload);
       }
       return subscribe;
     },

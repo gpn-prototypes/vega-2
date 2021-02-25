@@ -1,15 +1,30 @@
-import { SnackBarProps } from '@gpn-prototypes/vega-ui/dist/components/snack-bar/SnackBar';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export type View = 'normal' | 'system' | 'success' | 'warning' | 'alert';
+
+export type OnCloseAction = { action: string; payload: any };
+
+export type NotificationProps = {
+  id: string;
+  body: string;
+  view?: View;
+  closable?: boolean;
+  shared?: boolean;
+  actions?: Action[];
+  onCloseAction?: OnCloseAction;
+  icon?: string;
+  withShowMore?: boolean;
+  truncatedLength?: number;
+  autoClose?: number;
+};
 
 export interface Unsubscribe {
   (): void;
 }
 
-export type SnackBarItem = Pick<SnackBarProps, 'items'>['items'][number];
-
 export declare type Notifications = {
-  add(item: SnackBarItem): void;
-  remove(key: string | number): void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  add(item: { id?: string } & Omit<NotificationProps, 'id'>): void;
+  remove(key: string): void;
   subscribe(topic: string, payload: any): Unsubscribe;
-  getAll(): SnackBarItem[];
+  getAll(): any[];
+  on(action: string, payload: any): Unsubscribe;
 };

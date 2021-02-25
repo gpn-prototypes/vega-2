@@ -99,12 +99,8 @@ export const ProjectsPage = (): React.ReactElement => {
         const addToFavoriteError = addToFavoriteResult.data?.setFavoriteProject;
 
         notifications.add({
-          key: `${addToFavoriteError.code}-add-to-favorite`,
-          status: 'alert',
-          message: addToFavoriteError.message,
-          onClose(item) {
-            notifications.remove(item.key);
-          },
+          view: 'alert',
+          body: addToFavoriteError.message,
         });
       }
     },
@@ -182,12 +178,8 @@ export const ProjectsPage = (): React.ReactElement => {
         setIsOpenModal(false);
         notifications.add({
           autoClose: 3,
-          key: `${dataDeleteProject.id}-system`,
-          status: 'success',
-          message: `Проект «${dataDeleteProject.name}» успешно удален.`,
-          onClose(item) {
-            notifications.remove(item.key);
-          },
+          view: 'success',
+          body: `Проект «${dataDeleteProject.name}» успешно удален.`,
         });
         setDataDeleteProject(null);
       });
