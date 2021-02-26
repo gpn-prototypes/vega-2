@@ -4,69 +4,31 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 
-import { Notifications, Unsubscribe } from '../../../types/notifications';
+import { Notifications } from '../../../types/notifications';
 
-const noop = (): void => {};
-const subscribe = (): Unsubscribe => {
-  return (): void => {};
-};
-const on = (): Unsubscribe => {
-  return (): void => {};
-};
+type ContextValues = Notifications | null;
 
-type ContextValues = Notifications;
-
-const NotificationsContext = React.createContext<ContextValues>({
-  add: noop,
-  remove: noop,
-  subscribe,
-  getAll: () => [],
-  on,
-});
+const NotificationsContext = React.createContext<ContextValues>(null);
 
 type NotificationsProps = {
-  notifications?: Notifications;
+  notifications: Notifications;
 };
 
 export const useNotifications = (): Notifications => {
-  return React.useContext(NotificationsContext);
+  const notifications = React.useContext(NotificationsContext);
+
+  if (notifications === null) {
+    throw new Error('useNotifications called outside from NotificationsProvider');
+  }
+
+  return notifications;
 };
 
 export const NotificationsProvider: React.FC<NotificationsProps> = ({
   notifications,
   children,
 }) => {
-  const value: ContextValues = {
-    add: (item) => {
-      if (notifications?.add) {
-        notifications.add(item);
-      }
-    },
-    remove: (key) => {
-      if (notifications?.remove) {
-        notifications.remove(key);
-      }
-    },
-    subscribe: (topic, payload) => {
-      if (notifications?.subscribe) {
-        return notifications.subscribe(topic, payload);
-      }
-      return subscribe;
-    },
-    on: (action, payload) => {
-      if (notifications?.on) {
-        return notifications.on(action, payload);
-      }
-      return subscribe;
-    },
-    getAll: () => {
-      if (notifications?.getAll) {
-        return notifications.getAll();
-      }
-
-      return [];
-    },
-  };
-
-  return <NotificationsContext.Provider value={value}>{children}</NotificationsContext.Provider>;
+  return (
+    <NotificationsContext.Provider value={notifications}>{children}</NotificationsContext.Provider>
+  );
 };
