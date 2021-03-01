@@ -362,7 +362,11 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
         onSubmit={handleFormSubmit}
         onCancel={handleCancel}
       />
-      <RouteLeavingGuard when={isNavigationBlocked} navigate={handleNavigation} />
+      <RouteLeavingGuard
+        when={isNavigationBlocked}
+        whiteRoutes={['/projects/show/:projectId', '/login']}
+        navigate={handleNavigation}
+      />
     </div>
   );
 };

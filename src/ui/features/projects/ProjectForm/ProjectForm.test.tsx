@@ -1,5 +1,5 @@
 import React from 'react';
-import { act, fireEvent, render, RenderResult, screen } from '@testing-library/react';
+import { act, fireEvent, render, RenderResult, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SubmissionErrors } from 'final-form';
 import { merge } from 'ramda';
@@ -152,6 +152,72 @@ describe('ProjectForm', () => {
 
     afterEach(() => {
       jest.useRealTimers();
+    });
+
+    /*
+      Добавил тесты в саму форму, так как кажется, что лучше тестировать уже на реальном использовании.
+      Тем более, что ProjectForm покрывает все кейсы использования AutosaveFormSpy
+    */
+    test('происходит автосохрание на форме создания проекта', async () => {
+      const onSubmit = jest.fn().mockImplementation((values) => Promise.resolve(values));
+      const initialValues = {
+        ...initializeProjectForm(),
+      };
+
+      renderComponent({ initialValues, onSubmit });
+
+      const nameInput = getInput(DescriptionStep.testId.name);
+      userEvent.type(nameInput, 'Lorem');
+
+      fireEvent.blur(nameInput);
+
+      await waitFor(() => {
+        expect(onSubmit).toBeCalled();
+      });
+    });
+
+    test('не происходит автосохранение на форме редактирования проекта', async () => {
+      const onSubmit = jest.fn().mockImplementation((values) => Promise.resolve(values));
+      const initialValues = {
+        ...initializeProjectForm(),
+      };
+
+      renderComponent({ initialValues, onSubmit, mode: 'edit' });
+
+      const nameInput = getInput(DescriptionStep.testId.name);
+      userEvent.type(nameInput, 'Lorem');
+
+      fireEvent.blur(nameInput);
+
+      await act(async () => {
+        expect(onSubmit).not.toBeCalled();
+      });
+    });
+
+    test('срабатывает повторное автосохранение', async () => {
+      const onSubmit = jest.fn().mockImplementation((values) => Promise.resolve(values));
+      renderComponent({
+        onSubmit,
+        initialValues: { ...initializeProjectForm, region: 'region-1' },
+        mode: 'create',
+      });
+
+      const nameInput = getInput(DescriptionStep.testId.name);
+      userEvent.type(nameInput, 'Lorem');
+
+      fireEvent.blur(nameInput);
+
+      await waitFor(() => {
+        expect(onSubmit).toBeCalledTimes(1);
+      });
+
+      const combobox = getCombobox(screen.getByTestId(DescriptionStep.testId.region));
+
+      await combobox.clear();
+
+      await waitFor(() => {
+        expect(onSubmit).toBeCalledTimes(2);
+      });
     });
 
     it('не происходит автосохранение, если форма невалидна', async () => {
