@@ -235,7 +235,7 @@ export const DescriptionStep: DescriptionStepType = (props) => {
                         return;
                       }
                       updateYearStartOptions(option);
-                      input.onChange(option);
+                      input.onChange(Number(option));
                     }}
                     placeholder="Выберите год"
                     value={yearStartOptions.find(
