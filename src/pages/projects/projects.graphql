@@ -37,25 +37,16 @@ query ProjectsTableList($includeBlank: Boolean!, $pageNumber: Int!, $pageSize: I
   }
 }
 
-mutation ProjectToggleFavorite($vid: UUID!, $isFavorite: Boolean!, $version: Int!) {
-  updateProject(data: { isFavorite: $isFavorite, version: $version }, vid: $vid) {
-    result {
-      ... on Project {
-        vid
-        isFavorite
-        version
-      }
-      ... on Error {
-        code
-        message
-      }
-      ... on UpdateProjectDiff {
-        remoteProject {
-          vid
-          isFavorite
-          version
-        }
-      }
+mutation ProjectToggleFavorite($projectId: UUID!, $isFavorite: Boolean!) {
+  setFavoriteProject(isFavorite: $isFavorite, projectId: $projectId) {
+    ... on Project {
+      vid
+      isFavorite
+      version
+    }
+    ... on Error {
+      code
+      message
     }
   }
 }

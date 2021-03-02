@@ -115,9 +115,9 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
   } = useProjectFormFields({
     pollInterval: FORM_FIELDS_POLLING_MS,
     variables: {
-      vid: blankProjectId,
+      vid: blankProjectId as string,
     },
-    skip: !blankProjectId,
+    skip: blankProjectId === undefined,
   });
 
   useBrowserTabActivity({
