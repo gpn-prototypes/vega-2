@@ -54,7 +54,7 @@ export const favoriteProjectErrorMock = [
       data: {
         setFavoriteProject: {
           code: 200,
-          message: 'ошибка',
+          message: 'Ошибка в избранном',
           __typename: 'Error',
         },
       },
