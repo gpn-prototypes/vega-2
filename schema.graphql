@@ -412,6 +412,7 @@ type Mutation {
   createProject(data: ProjectInputType): CreateProject
   deleteProject(vid: UUID): DeleteProject
   updateProject(data: ProjectUpdateType, vid: UUID): UpdateProject
+  updateProjectStatus(data: ProjectStatusUpdateType, vid: UUID!): UpdateProjectStatus
   setFavoriteProject(isFavorite: Boolean!, projectId: UUID!): ProjectOrError
   addAttendees(attendees: [AttendeeInputType]!, projectId: UUID!, version: Int!): AddAttendees
   removeAttendees(attendees: [UUID]!, projectId: UUID!, version: Int!): RemoveAttendees
@@ -536,6 +537,10 @@ enum ProjectStatusEnum {
   BLANK
   UNPUBLISHED
 }
+input ProjectStatusUpdateType {
+  status: ProjectStatusEnum!
+  version: Int!
+}
 enum ProjectTypeEnum {
   GEO
 }
@@ -545,7 +550,6 @@ input ProjectUpdateType {
   coordinateSystem: String
   coordinates: String
   description: String
-  status: ProjectStatusEnum
   resourceId: String
   yearStart: Int
   yearEnd: Int
@@ -704,6 +708,9 @@ type UpdateProjectLibraryCategories {
 }
 type UpdateProjectRole {
   result: ProjectRole
+}
+type UpdateProjectStatus {
+  result: ProjectDiffOrError
 }
 type UpdateRegion {
   result: Region

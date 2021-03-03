@@ -21,6 +21,31 @@ fragment commonError on Error {
   payload
 }
 
+mutation UpdateProjectStatus($vid: UUID!, $data: ProjectStatusUpdateType!) {
+  updateProjectStatus(vid: $vid, data: $data) {
+    result {
+      ... on Project {
+        ...projectFormFields
+      }
+      ... on ErrorInterface {
+        ...commonError
+      }
+      ... on ValidationError {
+        items {
+          path
+          code
+          message
+        }
+      }
+      ... on UpdateProjectDiff {
+        remoteProject {
+          ...projectFormFields
+        }
+      }
+    }
+  }
+}
+
 mutation CreateBlankProject {
   createProject(data: {}) {
     result {
@@ -45,7 +70,7 @@ mutation UpdateProjectForm($vid: UUID, $data: ProjectUpdateType) {
   updateProject(vid: $vid, data: $data) {
     result {
       ... on Project {
-        ...projectFormFields
+      ...projectFormFields
       }
       ... on ErrorInterface {
         ...commonError

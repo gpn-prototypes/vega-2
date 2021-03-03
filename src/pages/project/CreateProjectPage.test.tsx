@@ -19,6 +19,7 @@ import {
   ProjectFormFieldsDocument,
   ProjectFormRegionListDocument,
   UpdateProjectFormDocument,
+  UpdateProjectStatusDocument,
 } from './__generated__/project';
 import { createCountry, createID, createProject, createRegion } from './__mocks__/schemas';
 import { CreateProjectPage } from './CreateProjectPage';
@@ -57,6 +58,35 @@ const MockProjectFormFields: MockedResponse = {
       project: {
         ...createProject({ vid: PROJECT_ID, name: '' }),
         __typename: 'Project',
+      },
+    },
+  },
+};
+
+const MockUpdateProjectStatus = {
+  request: {
+    query: UpdateProjectStatusDocument,
+    variables: {
+      vid: PROJECT_ID,
+      data: {
+        status: ProjectStatusEnum.Unpublished,
+        version: 1,
+      },
+    },
+  },
+  result: {
+    data: {
+      updateProjectStatus: {
+        result: {
+          ...createProject({
+            vid: PROJECT_ID,
+            name: '',
+            version: 1,
+            status: ProjectStatusEnum.Unpublished,
+          }),
+          __typename: 'Project',
+        },
+        __typename: 'UpdateProjectStatus',
       },
     },
   },
@@ -210,29 +240,31 @@ describe('CreateProjectPage', () => {
     let providers: RenderComponentResult['providers'];
 
     beforeEach(async () => {
+      const project = createProject({
+        vid: PROJECT_ID,
+        name: 'something',
+        type: ProjectTypeEnum.Geo,
+        region: null,
+        coordinates: null,
+        description: null,
+        yearStart: 2022,
+        version: 1,
+        status: ProjectStatusEnum.Unpublished,
+      });
+
       const MockUpdateProject = {
         request: {
           query: UpdateProjectFormDocument,
           variables: {
             vid: PROJECT_ID,
-            data: { status: ProjectStatusEnum.Unpublished, version: 1 },
+            data: { version: 1 },
           },
         },
         result: {
           data: {
             updateProject: {
               result: {
-                ...createProject({
-                  vid: PROJECT_ID,
-                  name: 'something',
-                  type: ProjectTypeEnum.Geo,
-                  region: null,
-                  coordinates: null,
-                  description: null,
-                  yearStart: 2022,
-                  version: 1,
-                  status: ProjectStatusEnum.Unpublished,
-                }),
+                ...project,
                 __typename: 'Project',
               },
               __typename: 'UpdateProject',
@@ -247,6 +279,7 @@ describe('CreateProjectPage', () => {
           MockProjectFormRegionList,
           MockProjectFormFields,
           MockUpdateProjectForm,
+          MockUpdateProjectStatus,
           MockUpdateProject,
         ],
       });
@@ -323,18 +356,19 @@ describe('CreateProjectPage', () => {
 
   it('показывает ошибку валидации с сервера при обновлении проекта', async () => {
     const errorMessage = 'Такой проект уже существует';
+    // Заменил  здесь мок, так как только так тесты проходили и не ругались на отсутствие моков. Надо завести MockedProvider сюда
     const MockWithError = {
       request: {
-        query: UpdateProjectFormDocument,
+        query: UpdateProjectStatusDocument,
         variables: {
           vid: PROJECT_ID,
-          data: { status: ProjectStatusEnum.Unpublished, version: 1 },
+          data: { version: 1, status: ProjectStatusEnum.Unpublished },
         },
       },
       result: {
         data: {
-          updateProject: {
-            __typename: 'UpdateProject',
+          updateProjectStatus: {
+            __typename: 'UpdateProjectStatus',
             result: {
               __typename: 'ValidationError',
               items: [
