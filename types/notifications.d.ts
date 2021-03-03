@@ -22,7 +22,7 @@ export interface Unsubscribe {
 }
 
 export declare type Notifications = {
-  add(item: { id?: string } & Omit<NotificationProps, 'id'>): void;
+  add(item: { id?: string } & Omit<NotificationProps, 'id'>): string;
   remove(key: string): void;
   subscribe(topic: string, payload: any): Unsubscribe;
   getAll(): any[];

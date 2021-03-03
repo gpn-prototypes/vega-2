@@ -5,7 +5,7 @@ import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { act, render, RenderResult } from '@testing-library/react';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
-import { NotificationsProvider } from '../src/providers';
+import { notificationsMock, NotificationsProvider } from '../src/providers';
 import { Notifications } from '../types/notifications';
 
 type MountAppOptions = {
@@ -28,6 +28,7 @@ export const mountApp = (
   options: MountAppOptions = {},
 ): MountAppResult => {
   const history = createMemoryHistory();
+  const notifications = options.notifications ?? notificationsMock;
 
   if (options.url) {
     history.push(options.url);
@@ -47,7 +48,7 @@ export const mountApp = (
     return (
       <Router history={history}>
         <MockedProvider mocks={mocks} addTypename cache={cache}>
-          <NotificationsProvider notifications={options.notifications}>
+          <NotificationsProvider notifications={notifications}>
             <>{props.children}</>
           </NotificationsProvider>
         </MockedProvider>
