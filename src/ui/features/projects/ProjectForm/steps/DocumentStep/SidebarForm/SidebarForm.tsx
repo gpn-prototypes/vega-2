@@ -16,8 +16,8 @@ import { SidebarItem } from './SidebarItem';
 import { getUploadStatistics } from './utils';
 
 type SidebarFormProps = {
-  isOpen: boolean;
-  isMinimized: boolean;
+  isOpen?: boolean;
+  isMinimized?: boolean;
   onOpenSidebar: () => void;
   onCloseSidebar: () => void;
   onMaximizeSidebar: () => void;

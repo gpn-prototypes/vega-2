@@ -1535,10 +1535,10 @@
     resolve-from "^5.0.0"
     resolve-global "^1.0.0"
 
-"@consta/uikit@^1.11.1":
-  version "1.11.1"
-  resolved "https://registry.yarnpkg.com/@consta/uikit/-/uikit-1.11.1.tgz#3572d516f73f152a48fb3740cdbdb7b332ef9887"
-  integrity sha512-bqtAivFHTPw65oLegjZnpNkWRS7UYIxFrj+pDuVIiN984wujmSxnTMPBnQUImhPw6lAD2H1hJeFkrA/lSsVHBw==
+"@consta/uikit@^1.11.2":
+  version "1.11.6"
+  resolved "https://registry.yarnpkg.com/@consta/uikit/-/uikit-1.11.6.tgz#13679e9bdb976ecc6c4ad30a4e8b2f23b2d20795"
+  integrity sha512-aIScgo8Ib9/agHY5a6snpWEBpIB+1JPo18hlEj/zkQhufQYeFNh/+D7Bv9mY7i/2U0RW5KgLrjIzcDNYsIdq/Q==
   dependencies:
     "@bem-react/classname" "^1.5.8"
     "@bem-react/classnames" "^1.3.9"
@@ -1613,12 +1613,12 @@
     webpack "^4.42.1"
     webpack-bundle-analyzer "^3.9.0"
 
-"@gpn-prototypes/vega-ui@^3.0.5":
-  version "3.0.5"
-  resolved "https://npm.pkg.github.com/download/@gpn-prototypes/vega-ui/3.0.5/f35c6fb1ed3b609b59448fce3b000ec515ed3a53ed1f61ed0a151b55beeaa317#c0ead1329768663037db9a84410e4234a90a610e"
-  integrity sha512-52F05cU7Li2J4y7OlvDOpKNswohQPO3U6fNxB5IL4apXeVHntxR6e0tkIr5XYEKS0BU24ByzV0KGIGGsY4QJjw==
+"@gpn-prototypes/vega-ui@^3.1.2-alpha.3":
+  version "3.1.2-alpha.3"
+  resolved "https://npm.pkg.github.com/download/@gpn-prototypes/vega-ui/3.1.2-alpha.3/f543d996fff08483c950c88a346ce77b0878e9131f97667b9154f43fdc509d53#89d3f5a49140002af3d9617df9d65c0117055b41"
+  integrity sha512-qHnrcwJ6rNcvhUy2+0cMKgtnjLkCrZxQ4ocVufSCO/8m13gRfzMcU2Xn5Qma98szHlvcnA7HyS6/PxEWeXu7DA==
   dependencies:
-    "@consta/uikit" "^1.11.1"
+    "@consta/uikit" "^1.11.2"
     "@popperjs/core" "^2.6.0"
     bem-cn "^3.0.1"
     konva "^7.0.6"
