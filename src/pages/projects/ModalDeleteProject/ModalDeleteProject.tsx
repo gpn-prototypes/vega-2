@@ -30,7 +30,7 @@ export const ModalDeleteProject: ModalDeleteProjectType = (props) => {
       isOpen={isOpen}
       onClose={onClose}
       className={cn('Modal').toString()}
-      data-testid={testId.modal}
+      testId={testId.modal}
     >
       <Modal.Header>
         <Text size="xs">Удаление проекта</Text>
