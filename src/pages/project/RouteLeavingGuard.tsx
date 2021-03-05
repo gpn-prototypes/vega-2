@@ -45,6 +45,7 @@ export const RouteLeavingGuard: React.FC<Props> = ({ when, navigate }) => {
         hasCloseButton
         isOpen={isModalOpen}
         onClose={handleClose}
+        testId="RouteLeavingGuardModal"
         className={cnPage('Modal').toString()}
       >
         <Modal.Header>
@@ -59,6 +60,7 @@ export const RouteLeavingGuard: React.FC<Props> = ({ when, navigate }) => {
             view="primary"
             label="Нет, продолжить заполнение"
             type="button"
+            data-testid="RouteLeavingGuardModal:button:close"
             className={cnPage('ButtonClose').toString()}
             onClick={handleClose}
           />
@@ -67,6 +69,7 @@ export const RouteLeavingGuard: React.FC<Props> = ({ when, navigate }) => {
             view="ghost"
             loading={isLoading}
             label="Да, прервать"
+            data-testid="RouteLeavingGuardModal:button:abort"
             type="button"
             onClick={handleAbort}
           />

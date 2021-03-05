@@ -122,7 +122,7 @@ describe('ProjectsPage', () => {
     openModalRemoveProject();
 
     expect(nameCells.length).toBe(3);
-    expect(screen.getByTestId(ModalDeleteProject.testId.modal)).toBeVisible();
+    expect(screen.getByTestId(`${ModalDeleteProject.testId.modal}:root`)).toBeVisible();
 
     userEvent.click(screen.getByTestId(ModalDeleteProject.testId.modalConfirm));
 
@@ -158,7 +158,7 @@ describe('ProjectsPage', () => {
 
     openModalRemoveProject();
 
-    const modal = screen.getByTestId(ModalDeleteProject.testId.modal);
+    const modal = screen.getByTestId(`${ModalDeleteProject.testId.modal}:root`);
 
     expect(modal).toBeVisible();
 
@@ -177,7 +177,7 @@ describe('ProjectsPage', () => {
 
     openModalRemoveProject();
 
-    const modal = screen.getByTestId(ModalDeleteProject.testId.modal);
+    const modal = screen.getByTestId(`${ModalDeleteProject.testId.modal}:root`);
 
     expect(modal).toBeVisible();
 
