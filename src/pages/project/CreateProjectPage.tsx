@@ -143,15 +143,10 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       queryProjectData?.project?.__typename === 'Project' &&
       queryProjectData.project.status === ProjectStatusEnum.Unpublished
     ) {
-      notifications.add({
-        view: 'success',
-        autoClose: 3,
-        body: 'Проект успешно создан',
-      });
       setIsNavigationBlocked(false);
       history.push(`/projects/show/${blankProjectId}`);
     }
-  }, [queryProjectData, history, blankProjectId, isNavigationBlocked, notifications]);
+  }, [queryProjectData, history, blankProjectId, isNavigationBlocked]);
 
   const [updateProjectBlank, { error: updateProjectBlankError }] = useUpdateProjectForm();
 
@@ -274,6 +269,12 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
             return errors;
           }
         }
+
+        notifications.add({
+          view: 'success',
+          autoClose: 3,
+          body: 'Проект успешно создан',
+        });
       }
       return {};
     },
