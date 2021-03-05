@@ -67,9 +67,7 @@ export function Autosave<T>(props: AutosaveFormSpyProps<T>): null {
     [onSave, triggerFields],
   );
 
-  if (saveRef.current === null) {
-    saveRef.current = save;
-  }
+  saveRef.current = save;
 
   return null;
 }
