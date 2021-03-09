@@ -20,7 +20,6 @@ export function createProject(data: Partial<Project> = {}): Partial<Project> {
     region: null,
     coordinates: null,
     description: null,
-    yearStart: 2022,
     version: 1,
     status: ProjectStatusEnum.Blank,
   });

@@ -18,9 +18,6 @@ import './ProjectForm.css';
 
 const focusOnErrors = createDecorator<FormValues>();
 
-const currentYear = new Date().getFullYear();
-export const minYearStart = currentYear - 1;
-
 type FormApi = FinalFormApi<FormValues, Partial<FormValues>>;
 
 export const validator = createValidate<Partial<FormValues>>({
@@ -36,15 +33,6 @@ export const validator = createValidate<Partial<FormValues>>({
     ),
   ],
   coordinates: [validators.maxLength(2000, () => 'Координаты не могут быть более 2000 символов')],
-  yearStart: [
-    validators.required(undefined, () => 'Заполните обязательное поле'),
-    validators.isNumber(undefined, () => 'Значение должно быть годом'),
-    validators.minLength(4, () => 'Год начала планирования проекта должен быть четырехзначным'),
-    validators.min(
-      minYearStart,
-      () => `Год начала планирования не может быть раньше ${minYearStart} г.`,
-    ),
-  ],
   description: [
     validators.maxLength(2000, () => 'Описание проекта не может быть более 2000 символов'),
   ],
@@ -151,7 +139,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
                   </NavigationList.Item>
                 ))}
               </NavigationList>
-              <Step mode={mode} referenceData={referenceData} form={form} />
+              <Step referenceData={referenceData} />
             </div>
             <Footer
               mode={mode}

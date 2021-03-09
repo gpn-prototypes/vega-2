@@ -12,7 +12,6 @@ export const initializeProjectForm = (fields?: FormValues): FormValues =>
     region: null,
     status: ProjectStatusEnum.Blank,
     coordinates: '',
-    yearStart: undefined,
     type: ProjectTypeEnum.Geo,
   };
 
