@@ -176,6 +176,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
           return validationErrors;
         }
         case 'UpdateProjectDiff':
+          // eslint-disable-next-line no-console
           console.warn(
             'UpdateProjectDiff mutation result should be processed at graphql interceptor level',
           );
