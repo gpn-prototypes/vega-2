@@ -194,6 +194,7 @@ const renderComponent = (props?: Partial<Props>): RenderComponentResult => {
     remove: jest.fn(),
     subscribe: jest.fn(),
     getAll: jest.fn(),
+    on: jest.fn(),
   } as Notifications;
 
   const cache = new InMemoryCache({
@@ -304,7 +305,7 @@ describe('CreateProjectPage', () => {
       await waitRequests();
 
       expect(providers.notifications.add).toBeCalledWith(
-        expect.objectContaining({ message: 'Проект успешно создан' }),
+        expect.objectContaining({ body: 'Проект успешно создан' }),
       );
 
       await waitRequests();
@@ -348,7 +349,7 @@ describe('CreateProjectPage', () => {
       await waitRequests();
 
       expect(providers.notifications.add).toBeCalledWith(
-        expect.objectContaining({ message: errorMessage }),
+        expect.objectContaining({ body: errorMessage }),
       );
       await waitRequests();
     });

@@ -13,7 +13,7 @@ import './App.css';
 type AppProps = {
   graphqlClient: ApolloClient<NormalizedCacheObject>;
   history: History;
-  notifications?: Notifications;
+  notifications: Notifications;
   bus: Bus;
 };
 

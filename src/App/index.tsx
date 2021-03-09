@@ -4,6 +4,7 @@ import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
 import { createBrowserHistory } from 'history';
 
 import { Bus } from '../../types/bus';
+import { notificationsMock } from '../providers/notifications';
 
 import { App } from './App';
 
@@ -46,6 +47,6 @@ const client = new ApolloClient({
 });
 
 ReactDOM.render(
-  <App history={history} graphqlClient={client} bus={bus} />,
+  <App history={history} graphqlClient={client} bus={bus} notifications={notificationsMock} />,
   document.getElementById('root'),
 );

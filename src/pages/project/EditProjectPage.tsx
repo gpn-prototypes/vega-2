@@ -146,13 +146,9 @@ export const EditProjectPage: React.FC<PageProps> = () => {
             setUnsavedChanges({});
           }
           notifications.add({
-            key: `${projectId}-create`,
-            status: 'success',
+            view: 'success',
             autoClose: 3,
-            message: 'Изменения успешно сохранены',
-            onClose(item) {
-              notifications.remove(item.key);
-            },
+            body: 'Изменения успешно сохранены',
           });
 
           form.initialize(getInitialValues(updateProjectResult.data.updateProject.result));
@@ -188,12 +184,8 @@ export const EditProjectPage: React.FC<PageProps> = () => {
           const commonError = updateProjectResult.data?.updateProject?.result as ErrorInterface;
           setUnsavedChanges({ ...unsavedChanges, ...changes });
           notifications.add({
-            key: `${commonError.code}-create`,
-            status: 'alert',
-            message: commonError.message,
-            onClose(item) {
-              notifications.remove(item.key);
-            },
+            view: 'alert',
+            body: commonError.message,
           });
           break;
         }
@@ -214,12 +206,8 @@ export const EditProjectPage: React.FC<PageProps> = () => {
 
   if (apolloError) {
     notifications.add({
-      key: `${apolloError.name}-apollo-error`,
-      status: 'alert',
-      message: apolloError.message,
-      onClose: (item) => {
-        notifications.remove(item.key);
-      },
+      view: 'alert',
+      body: apolloError.message,
     });
 
     return null;
@@ -235,9 +223,8 @@ export const EditProjectPage: React.FC<PageProps> = () => {
     }
 
     notifications.add({
-      key: `${inlineQueryProjectError.code}-query-error`,
-      status: 'alert',
-      message: inlineQueryProjectError.message,
+      view: 'alert',
+      body: inlineQueryProjectError.message,
     });
 
     return null;

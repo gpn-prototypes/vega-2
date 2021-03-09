@@ -89,12 +89,8 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       const inlineCreateProjectError = createBlankProjectResult.data?.createProject?.result;
 
       notifications.add({
-        key: `${inlineCreateProjectError.code}-create-error`,
-        status: 'alert',
-        message: inlineCreateProjectError.message,
-        onClose(item) {
-          notifications.remove(item.key);
-        },
+        view: 'alert',
+        body: inlineCreateProjectError.message,
       });
     }
   };
@@ -147,23 +143,15 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       queryProjectData?.project?.__typename === 'Project' &&
       queryProjectData.project.status === ProjectStatusEnum.Unpublished
     ) {
-      notifications.add({
-        key: `${blankProjectId}-create`,
-        status: 'success',
-        autoClose: 3,
-        message: 'Проект успешно создан',
-        onClose(item) {
-          notifications.remove(item.key);
-        },
-      });
       setIsNavigationBlocked(false);
       history.push(`/projects/show/${blankProjectId}`);
     }
-  }, [queryProjectData, history, blankProjectId, isNavigationBlocked, notifications]);
+  }, [queryProjectData, history, blankProjectId, isNavigationBlocked]);
 
   const [updateProjectBlank, { error: updateProjectBlankError }] = useUpdateProjectForm();
 
   const [updateProjectStatus, { error: updateProjectStatusError }] = useUpdateProjectStatus();
+
   const {
     data: queryRegionListData,
     loading: queryRegionListLoading,
@@ -186,12 +174,8 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
         default: {
           const commonError = result as ErrorInterface;
           notifications.add({
-            key: `${commonError.code}-create`,
-            status: 'alert',
-            message: commonError.message,
-            onClose(item) {
-              notifications.remove(item.key);
-            },
+            view: 'alert',
+            body: commonError.message,
           });
           break;
         }
@@ -285,6 +269,12 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
             return errors;
           }
         }
+
+        notifications.add({
+          view: 'success',
+          autoClose: 3,
+          body: 'Проект успешно создан',
+        });
       }
       return {};
     },
@@ -303,9 +293,8 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
       const inlineDeleteProjectError = deleteProjectResult.data?.deleteProject?.result;
 
       notifications.add({
-        key: `${inlineDeleteProjectError.code}-delete-error`,
-        status: 'alert',
-        message: inlineDeleteProjectError.message,
+        view: 'alert',
+        body: inlineDeleteProjectError.message,
       });
     }
 
@@ -330,12 +319,8 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
 
   if (apolloError) {
     notifications.add({
-      key: `${apolloError.name}-apollo-error`,
-      status: 'alert',
-      message: apolloError.message,
-      onClose: (item) => {
-        notifications.remove(item.key);
-      },
+      view: 'alert',
+      body: apolloError.message,
     });
 
     return null;
@@ -356,9 +341,8 @@ export const CreateProjectPage: React.FC<PageProps> = () => {
     }
 
     notifications.add({
-      key: `${inlineQueryProjectError.code}-query-error`,
-      status: 'alert',
-      message: inlineQueryProjectError.message,
+      view: 'alert',
+      body: inlineQueryProjectError.message,
     });
 
     return null;
