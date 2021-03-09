@@ -1555,15 +1555,9 @@
     resolve-global "^1.0.0"
 
 "@consta/uikit@^1.11.2":
-<<<<<<< HEAD
-  version "1.11.6"
-  resolved "https://registry.yarnpkg.com/@consta/uikit/-/uikit-1.11.6.tgz#13679e9bdb976ecc6c4ad30a4e8b2f23b2d20795"
-  integrity sha512-aIScgo8Ib9/agHY5a6snpWEBpIB+1JPo18hlEj/zkQhufQYeFNh/+D7Bv9mY7i/2U0RW5KgLrjIzcDNYsIdq/Q==
-=======
   version "1.11.5"
   resolved "https://registry.yarnpkg.com/@consta/uikit/-/uikit-1.11.5.tgz#4d55b2b8c6698cc401d3cd4527592b598d12193b"
   integrity sha512-h9mqyTGtf8EHXojsk/rlbXzVMjKVvzPXPnvx+IdbVziAJvOBixM8tCfax8LWOTm5ArSrKRHm50XQoI8x2k8u0g==
->>>>>>> chore(global): разделил зависимости на build + test и остальные
   dependencies:
     "@bem-react/classname" "^1.5.8"
     "@bem-react/classnames" "^1.3.9"
@@ -1635,17 +1629,10 @@
     webpack "^4.42.1"
     webpack-bundle-analyzer "^3.9.0"
 
-<<<<<<< HEAD
 "@gpn-prototypes/vega-ui@^3.1.4":
   version "3.1.4"
   resolved "https://npm.pkg.github.com/download/@gpn-prototypes/vega-ui/3.1.4/e63d24c6b9132e13dc12fe5637c44e9f17235d904da8d0969a922c572617f224#2bc1cdc54926def777c1c195e1e5890379464e05"
   integrity sha512-u9zS7VWhLk6pISQfzFrFYRoelliCBnVez5tIMQoQpewkmf1Kaa9DoUh9w1ChyzBKHRvzBQMQuUnIAjpCUmj5sg==
-=======
-"@gpn-prototypes/vega-ui@^3.1.1":
-  version "3.1.1"
-  resolved "https://npm.pkg.github.com/download/@gpn-prototypes/vega-ui/3.1.1/811e4d16d351acf00e0a65a2bc9590ef989c08d7abf3058a15ff6c1e7a8ded9a#82b4567ac5225b25ccbf8383d6e68dcb837430de"
-  integrity sha1-grRWesUiWyXMv4OD1uaNy4N0MN4=
->>>>>>> chore(global): разделил зависимости на build + test и остальные
   dependencies:
     "@consta/uikit" "^1.11.2"
     "@popperjs/core" "^2.6.0"
