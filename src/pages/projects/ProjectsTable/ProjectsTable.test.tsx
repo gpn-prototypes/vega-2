@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, RenderResult, screen, waitFor } from '@testing-library/react';
+import { render, RenderResult, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ProjectStatusEnum } from '../../../__generated__/types';
@@ -8,6 +8,8 @@ import { EditedAt } from './EditedAt';
 import { ProjectsTable, ProjectsTableProps } from './ProjectsTable';
 
 const noop = () => {};
+
+const CELLS_NUMBER = 6;
 
 const projectRowMock = [
   {
@@ -94,32 +96,7 @@ describe('ProjectsTable', () => {
     expect(screen.getByText(description)).toBeInTheDocument();
   });
 
-  test('отображается кнопка «избранное»', () => {
-    const func = jest.fn();
-    renderComponent({ onFavorite: func, rows: projectRowMock });
-
-    userEvent.hover(screen.getByText(projectRowMock[0].name));
-
-    waitFor(() => {
-      expect(
-        screen.getAllByTestId(ProjectsTable.testId.favoriteNotSelectedButton)[0],
-      ).toBeVisible();
-    });
-  });
-
-  test('отображается кнопка «избранное» в активном состоянии', () => {
-    const func = jest.fn();
-    renderComponent({
-      onFavorite: func,
-      rows: [{ ...projectRowMock[0], isFavorite: true }],
-    });
-
-    userEvent.hover(screen.getByText(projectRowMock[0].name));
-
-    expect(screen.getByTestId(ProjectsTable.testId.favoriteSelectedButton)).toBeVisible();
-  });
-
-  test('вызывается onFavorite', () => {
+  test('вызывается onFavorite', async () => {
     const func = jest.fn();
     renderComponent({
       onFavorite: func,
@@ -128,24 +105,25 @@ describe('ProjectsTable', () => {
 
     userEvent.click(screen.getAllByTestId(ProjectsTable.testId.favoriteNotSelectedButton)[0]);
 
-    waitFor(() => {
-      expect(func).toBeCalled();
-    });
+    expect(func).toBeCalled();
   });
 
-  test('отображается кнопка «меню»', () => {
-    const func = jest.fn();
-    renderComponent({ onFavorite: func, rows: projectRowMock });
+  it('не затемняет всю таблицу, если активный элемент был удалён', () => {
+    const { rerender, container } = render(
+      <ProjectsTable rows={projectRowMock} onFavorite={() => {}} />,
+    );
 
-    waitFor(() => {
-      expect(screen.getAllByTestId(EditedAt.testId.buttonMenu)[0]).not.toBeVisible();
-    });
+    const rows = container.querySelectorAll('.Table-CellsRow');
 
-    userEvent.hover(screen.getByText(projectRowMock[0].name));
+    const buttonsEdit = screen.getAllByTestId(EditedAt.testId.buttonMenu);
 
-    waitFor(() => {
-      expect(screen.getAllByTestId(EditedAt.testId.buttonMenu)[0]).toBeVisible();
-    });
+    userEvent.click(buttonsEdit[0]);
+
+    expect(rows[1].querySelectorAll('.Table-ContentCell_isDarkned').length).toBe(CELLS_NUMBER);
+
+    rerender(<ProjectsTable rows={projectRowMock.slice(1)} onFavorite={() => {}} />);
+
+    expect(rows[1].querySelectorAll('.Table-ContentCell_isDarkned').length).toBe(0);
   });
 
   test('при открытом меню, строка становится активной', () => {
@@ -154,7 +132,9 @@ describe('ProjectsTable', () => {
 
     userEvent.click(table.getAllByTestId(EditedAt.testId.buttonMenu)[0]);
 
-    expect(table.container.querySelectorAll('.Table-ContentCell_isActive').length).toBe(6);
+    expect(table.container.querySelectorAll('.Table-ContentCell_isActive').length).toBe(
+      CELLS_NUMBER,
+    );
 
     userEvent.click(table.getAllByTestId(EditedAt.testId.buttonMenu)[0]);
 

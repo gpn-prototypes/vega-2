@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import {
   Button,
@@ -112,6 +112,16 @@ export const ProjectsTable: ProjectsTableType = (props) => {
       setIdActiveRow(undefined);
     }
   };
+
+  useEffect(() => {
+    const isProjectExist = props.rows?.some((r) => {
+      return r.id === idActiveRow;
+    });
+
+    if (!isProjectExist) {
+      setIdActiveRow(undefined);
+    }
+  }, [props.rows, idActiveRow]);
 
   const rows =
     props.rows?.map((project) => {
