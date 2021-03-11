@@ -2,8 +2,8 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { IconEdit, IconTrash, Text } from '@gpn-prototypes/vega-ui';
 
+import { useApp } from '../../App/app-context';
 import { useBrowserTabActivity } from '../../hooks';
-import { useNotifications } from '../../providers/notifications';
 import { projectsMapper } from '../../utils/projects-mapper';
 
 import {
@@ -30,7 +30,7 @@ export const ProjectsPage = (): React.ReactElement => {
   const [nextPageNumber, setNextPageNumber] = React.useState<number>(2);
   const [isLoadingMore, setIsLoadingMore] = React.useState<boolean>(false);
 
-  const notifications = useNotifications();
+  const { notifications } = useApp();
   const history = useHistory();
 
   const { data, loading, startPolling, stopPolling, refetch, fetchMore } = useProjectsTableList({

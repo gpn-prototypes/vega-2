@@ -12,9 +12,8 @@ import {
   UpdateProjectDiff,
   ValidationError,
 } from '../../__generated__/types';
+import { useApp } from '../../App/app-context';
 import { useBrowserTabActivity } from '../../hooks';
-import { useBus } from '../../providers/bus';
-import { useNotifications } from '../../providers/notifications';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
 import {
@@ -61,8 +60,8 @@ const FORM_FIELDS_POLLING_MS = 1000 * 30;
 
 export const CreateProjectPage: React.FC<PageProps> = () => {
   const history = useHistory();
-  const notifications = useNotifications();
-  const bus = useBus();
+
+  const { bus, notifications } = useApp();
 
   const [blankProjectId, setBlankProjectId] = useState<string | undefined>(undefined);
   const [isNavigationBlocked, setIsNavigationBlocked] = React.useState<boolean>(true);

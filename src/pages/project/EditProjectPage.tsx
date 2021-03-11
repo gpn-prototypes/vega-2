@@ -12,8 +12,8 @@ import {
   UpdateProjectDiff,
   ValidationError,
 } from '../../__generated__/types';
+import { useApp } from '../../App/app-context';
 import { useBrowserTabActivity } from '../../hooks';
-import { useNotifications } from '../../providers/notifications';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
 import {
@@ -58,7 +58,7 @@ const FORM_FIELDS_POLLING_MS = 1000 * 30;
 
 export const EditProjectPage: React.FC<PageProps> = () => {
   const { projectId } = useParams<ParamsType>();
-  const notifications = useNotifications();
+  const { notifications } = useApp();
 
   const [unsavedChanges, setUnsavedChanges] = useState<Partial<FormValues>>({});
 
