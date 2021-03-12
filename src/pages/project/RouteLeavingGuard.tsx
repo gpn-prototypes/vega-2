@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Prompt } from 'react-router-dom';
+import { matchPath, Prompt } from 'react-router-dom';
 import { Button, Modal, Text } from '@gpn-prototypes/vega-ui';
 import { Location } from 'history';
 
@@ -8,15 +8,26 @@ import { cnPage } from './cn-page';
 type Props = {
   when: boolean;
   navigate: (path: string | null) => Promise<void>;
+  whiteRoutes?: string[];
 };
 
-export const RouteLeavingGuard: React.FC<Props> = ({ when, navigate }) => {
+export const RouteLeavingGuard: React.FC<Props> = ({ when, navigate, whiteRoutes }) => {
   const [isModalOpen, setIsModalOpen] = React.useState<boolean>(false);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [lastLocation, setLastLocation] = useState<Location | null>(null);
 
   const handleBlockedNavigation = (nextLocation: Location): boolean => {
-    if (nextLocation.pathname === '/login') {
+    // В другой вкладке было мерцание модалки. Добавил доп.проверку, чтобы его избежать
+    const isWhiteRoute = whiteRoutes?.some((route) => {
+      return (
+        matchPath(nextLocation.pathname, {
+          path: route,
+          exact: true,
+        }) !== null || route === nextLocation.pathname
+      );
+    });
+
+    if (isWhiteRoute) {
       return true;
     }
 

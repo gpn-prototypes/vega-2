@@ -1,13 +1,13 @@
 import React, { useMemo, useRef, useState } from 'react';
-import { Form, FormSpy } from 'react-final-form';
+import { Form } from 'react-final-form';
 import { Form as VegaForm, NavigationList } from '@gpn-prototypes/vega-ui';
-import { FormApi, SubmissionErrors } from 'final-form';
+import { FormApi as FinalFormApi, SubmissionErrors } from 'final-form';
 import createDecorator from 'final-form-focus';
-import { intersection } from 'ramda';
 
 import { ProjectStatusEnum } from '../../../../__generated__/types';
 import { createValidate, validators } from '../../../forms/validation';
 
+import { Autosave, SaveOptions } from './Autosave';
 import { Banner } from './Banner';
 import { cnProjectForm } from './cn-form';
 import { Footer } from './Footer';
@@ -20,6 +20,8 @@ const focusOnErrors = createDecorator<FormValues>();
 
 const currentYear = new Date().getFullYear();
 const minYearStart = currentYear - 1;
+
+type FormApi = FinalFormApi<FormValues, Partial<FormValues>>;
 
 export const validator = createValidate<Partial<FormValues>>({
   name: [
@@ -62,7 +64,7 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
 
   const submitPromiseRef = useRef<Promise<SubmissionErrors | void>>();
   const submit = React.useCallback(
-    (values: FormValues, formApi: FormApi<FormValues>) => {
+    (values: FormValues, formApi: FormApi) => {
       const data = {
         ...values,
         name: values.name?.trim(),
@@ -90,47 +92,24 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
     setActiveStepIndex(step);
   };
 
-  const handleCancel = (formApi: FormApi<FormValues>) => {
+  const handleCancel = (formApi: FormApi) => {
     setHasUnsavedChanges(false);
     if (typeof onCancel === 'function') {
       onCancel(formApi);
     }
   };
 
-  const prevActive = useRef<string | undefined>(undefined);
+  const handleAutosave = (values: FormValues, formApi: FormApi, options: SaveOptions): void => {
+    const state = formApi.getState();
 
-  const autoSave = (form: FormApi<FormValues>) => {
-    const {
-      values,
-      active,
-      dirty,
-      validating,
-      dirtySinceLastSubmit,
-      dirtyFields,
-      errors,
-    } = form.getState();
-    const isBlurEvent =
-      (prevActive.current !== undefined && active === undefined) ||
-      (prevActive.current !== undefined && active !== undefined && prevActive.current !== active);
-
-    const fieldsWithErrors = Object.keys(errors);
-    const fieldsDirty = Object.keys(dirtyFields);
-    const valid = intersection(fieldsWithErrors, fieldsDirty).length === 0;
+    const { active } = state;
 
     if (values.status === ProjectStatusEnum.Unpublished && active) {
-      form.change('status', ProjectStatusEnum.Blank);
+      formApi.change('status', ProjectStatusEnum.Blank);
     }
 
-    if (!valid || validating) {
-      return;
-    }
-
-    if ((!valid || validating) && !dirtySinceLastSubmit) {
-      return;
-    }
-
-    if ((isBlurEvent && dirty) || (dirtyFields.region && values.region === null)) {
-      submitPromiseRef.current = onSubmit(values, form);
+    if (options.valid) {
+      submitPromiseRef.current = onSubmit(values, formApi);
     }
   };
 
@@ -189,15 +168,14 @@ export const ProjectForm: React.FC<FormProps> = (formProps) => {
                 handleCancel(form);
               }}
             />
-            <FormSpy
-              subscription={{ dirtyFields: true, values: true, active: true }}
+            <Autosave<FormValues>
+              enabled={mode === 'create'}
+              onSave={(formValues, options) => {
+                handleAutosave(formValues, form, options);
+              }}
+              triggerFields={['region']}
               onChange={(formState) => {
                 setHasUnsavedChanges(Object.keys(formState.dirtyFields).length > 0);
-
-                if (mode === 'create') {
-                  autoSave(form);
-                }
-                prevActive.current = formState.active;
               }}
             />
           </VegaForm>
