@@ -3,6 +3,7 @@ import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/cli
 import { History } from 'history';
 
 import { Bus } from '../../types/bus';
+import { CurrentProject } from '../../types/current-project';
 import { Notifications } from '../../types/notifications';
 import { ServerError } from '../../types/shell';
 
@@ -12,6 +13,7 @@ import { AppView } from './AppView';
 import './App.css';
 
 type AppProps = {
+  currentProject: CurrentProject;
   graphqlClient: ApolloClient<NormalizedCacheObject>;
   history: History;
   notifications: Notifications;

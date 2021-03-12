@@ -80,6 +80,13 @@ const MockUpdateProjectForm = (
 
 const URL = `/projects/show/${PROJECT_ID}`;
 
+const currentProject = {
+  get: () => ({
+    vid: PROJECT_ID,
+    version: 1,
+  }),
+};
+
 const render = ({
   mocks = [],
   notifications,
@@ -96,6 +103,7 @@ const render = ({
   return mountApp(component, {
     mocks,
     notifications,
+    currentProject,
     url: URL,
   });
 };
