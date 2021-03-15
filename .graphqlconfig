@@ -1,4 +1,4 @@
 {
   "name": "Default Schema",
-  "schemaPath": "graphql.schema.json"
+  "schemaPath": "schema.graphql"
 }
