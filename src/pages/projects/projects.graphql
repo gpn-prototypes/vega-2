@@ -1,4 +1,5 @@
 query ProjectsTableList($includeBlank: Boolean!, $pageNumber: Int!, $pageSize: Int!) {
+  __typename
   projects: projectList(includeBlank: $includeBlank, pageNumber: $pageNumber, pageSize: $pageSize) {
     ... on ProjectList {
       data: projectList {
@@ -38,6 +39,7 @@ query ProjectsTableList($includeBlank: Boolean!, $pageNumber: Int!, $pageSize: I
 }
 
 mutation ProjectToggleFavorite($projectId: UUID!, $isFavorite: Boolean!) {
+  __typename
   setFavoriteProject(isFavorite: $isFavorite, projectId: $projectId) {
     ... on Project {
       vid
@@ -52,6 +54,7 @@ mutation ProjectToggleFavorite($projectId: UUID!, $isFavorite: Boolean!) {
 }
 
 mutation DeleteProject($vid: UUID) {
+  __typename
   deleteProject(vid: $vid) {
     result {
       ... on Result {
