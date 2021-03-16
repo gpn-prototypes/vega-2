@@ -1,6 +1,6 @@
 import { ProjectsTableListDocument } from '../__generated__/projects';
 import { ProjectStatusEnum } from '../../../__generated__/types';
-import { createProject } from '../../../../test-utils/data-generators';
+import { createProject } from '../../../testing/data-generators';
 
 export const defaultMock = [
   {

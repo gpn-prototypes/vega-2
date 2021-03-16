@@ -1,4 +1,4 @@
-import { Notifications } from '../../types/notifications';
+import { Notifications } from '../../../types/notifications';
 
 export const notificationsMock: Notifications = {
   // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars

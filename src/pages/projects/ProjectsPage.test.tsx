@@ -1,9 +1,7 @@
 import React from 'react';
-import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { mountApp } from '../../../test-utils';
-import { Notifications } from '../../../types/notifications';
+import { render, screen, waitFor, waitRequests } from '../../testing';
 
 import { secondPart } from './__mocks__/mock-paginations';
 import { mocks } from './__mocks__/mocks';
@@ -23,21 +21,13 @@ function openModalRemoveProject() {
 }
 
 describe('ProjectsPage', () => {
-  const notifications = {
-    add: jest.fn(),
-    remove: jest.fn(),
-    subscribe: jest.fn(),
-    getAll: jest.fn(),
-    on: jest.fn(),
-  } as Notifications;
-
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   test('отрисовывается индикатор загрузки', async () => {
     const defaultMock = mocks.default;
-    await mountApp(<ProjectsPage />, {
+    await render(<ProjectsPage />, {
       mocks: defaultMock,
     });
 
@@ -46,11 +36,11 @@ describe('ProjectsPage', () => {
 
   test('отрисовывается страница c данными', async () => {
     const defaultMock = mocks.default;
-    const { waitRequest } = await mountApp(<ProjectsPage />, {
+    await render(<ProjectsPage />, {
       mocks: defaultMock,
     });
 
-    await waitRequest();
+    await waitRequests();
 
     expect(screen.getByTestId(ProjectsPageView.testId.rootTitle)).toBeVisible();
     expect(screen.getByTestId(ProjectsPageView.testId.table)).toBeVisible();
@@ -62,12 +52,11 @@ describe('ProjectsPage', () => {
   test('проект помечается избранным', async () => {
     const favoriteProjectMock = mocks.favoriteProject;
 
-    const { waitRequest } = await mountApp(<ProjectsPage />, {
+    await render(<ProjectsPage />, {
       mocks: favoriteProjectMock,
-      notifications,
     });
 
-    await waitRequest();
+    await waitRequests();
 
     const nameProject = favoriteProjectMock[0].result.data.projects?.data[0].name as string;
 
@@ -75,7 +64,7 @@ describe('ProjectsPage', () => {
 
     userEvent.click(screen.getAllByTestId(ProjectsTable.testId.favoriteNotSelectedButton)[0]);
 
-    await waitRequest();
+    await waitRequests();
 
     expect(screen.getByTestId(ProjectsTable.testId.favoriteSelectedButton)).toBeVisible();
   });
@@ -83,34 +72,34 @@ describe('ProjectsPage', () => {
   test('обрабатывается ошибка при добавление в избранное', async () => {
     const favoriteErrorProjectMock = mocks.favoriteErrorProject;
 
-    const { waitRequest } = await mountApp(<ProjectsPage />, {
+    const { app } = await render(<ProjectsPage />, {
       mocks: favoriteErrorProjectMock,
-      notifications,
     });
 
-    await waitRequest();
+    const spy = jest.spyOn(app.notifications, 'add');
+
+    await waitRequests();
 
     const nameProject = favoriteErrorProjectMock[0].result.data.projects?.data[0].name as string;
     userEvent.hover(screen.getByText(nameProject));
 
     userEvent.click(screen.getAllByTestId(ProjectsTable.testId.favoriteNotSelectedButton)[0]);
 
-    await waitRequest();
+    await waitRequests();
 
-    expect(notifications.add).toBeCalledWith(
-      expect.objectContaining({ body: 'Ошибка в избранном' }),
-    );
+    expect(spy).toBeCalledWith(expect.objectContaining({ body: 'Ошибка в избранном' }));
     expect(screen.getAllByTestId(ProjectsTable.testId.favoriteNotSelectedButton)[0]).toBeVisible();
   });
 
   test('проект удаляется', async () => {
     const deleteProjectMock = mocks.deleteProject;
-    const { waitRequest } = await mountApp(<ProjectsPage />, {
+    const { app } = await render(<ProjectsPage />, {
       mocks: deleteProjectMock,
-      notifications,
     });
 
-    await waitRequest();
+    const spy = jest.spyOn(app.notifications, 'add');
+
+    await waitRequests();
 
     const projectName = deleteProjectMock[0].result.data.projects?.data[0].name as string;
     const nameCells = await waitFor(() => screen.getAllByTestId(ProjectsTable.testId.projectName));
@@ -124,7 +113,7 @@ describe('ProjectsPage', () => {
 
     userEvent.click(screen.getByTestId(ModalDeleteProject.testId.modalConfirm));
 
-    await waitRequest();
+    await waitRequests();
 
     const newNameCells = await screen.findAllByTestId(ProjectsTable.testId.projectName);
 
@@ -135,18 +124,18 @@ describe('ProjectsPage', () => {
     expect(firstProjectName).toBe(nextProjectName);
     expect(newNameCells.length).toBe(2);
 
-    expect(notifications.add).toBeCalledWith(
+    expect(spy).toBeCalledWith(
       expect.objectContaining({ body: `Проект «${projectName}» успешно удален.` }),
     );
   });
 
   test('модальное окно закрывается при отмене удаления', async () => {
     const deleteProjectMock = mocks.deleteProject;
-    const { waitRequest } = await mountApp(<ProjectsPage />, {
+    await render(<ProjectsPage />, {
       mocks: deleteProjectMock,
     });
 
-    await waitRequest();
+    await waitRequests();
 
     openModalRemoveProject();
 
@@ -161,11 +150,11 @@ describe('ProjectsPage', () => {
 
   test('модальное окно закрывается', async () => {
     const deleteProjectMock = mocks.deleteProject;
-    const { waitRequest } = await mountApp(<ProjectsPage />, {
+    await render(<ProjectsPage />, {
       mocks: deleteProjectMock,
     });
 
-    await waitRequest();
+    await waitRequests();
 
     openModalRemoveProject();
 
@@ -180,32 +169,32 @@ describe('ProjectsPage', () => {
 
   test('происходит переход после клика на строку', async () => {
     const defaultMock = mocks.default;
-    const { waitRequest, history } = await mountApp(<ProjectsPage />, {
+    const { app } = await render(<ProjectsPage />, {
       mocks: defaultMock,
-      url: '/projects',
+      route: '/projects',
     });
 
-    await waitRequest();
+    await waitRequests();
 
-    expect(history.location.pathname).toBe('/projects');
+    expect(app.history.location.pathname).toBe('/projects');
 
     userEvent.click(screen.getByText(defaultMock[0].result.data.projects.data[2].name as string));
 
     const newUrl = `/projects/show/${defaultMock[0].result.data.projects.data[2].vid}`;
 
-    expect(history.location.pathname).toBe(newUrl);
+    expect(app.history.location.pathname).toBe(newUrl);
   });
 
   test('происходит переход на страницу редактирования', async () => {
     const defaultMock = mocks.default;
-    const { waitRequest, history } = await mountApp(<ProjectsPage />, {
+    const { app } = await render(<ProjectsPage />, {
       mocks: defaultMock,
-      url: '/projects',
+      route: '/projects',
     });
 
-    await waitRequest();
+    await waitRequests();
 
-    expect(history.location.pathname).toBe('/projects');
+    expect(app.history.location.pathname).toBe('/projects');
 
     const urlProjectForEdit = `/projects/show/${defaultMock[0].result.data.projects.data[0].vid}`;
 
@@ -213,16 +202,16 @@ describe('ProjectsPage', () => {
 
     userEvent.click(screen.getByTestId(ProjectsPage.testId.projectEdit));
 
-    expect(history.location.pathname).toBe(urlProjectForEdit);
+    expect(app.history.location.pathname).toBe(urlProjectForEdit);
   });
 
   test.skip('происходит перезапрос данных при активации таба', async () => {
     const refetchMock = mocks.refetch;
-    const { waitRequest } = await mountApp(<ProjectsPage />, {
+    await render(<ProjectsPage />, {
       mocks: refetchMock,
     });
 
-    await waitRequest();
+    await waitRequests();
 
     expect(
       screen.getByText(refetchMock[0].result.data.projects.data[0].name as string),
@@ -232,7 +221,7 @@ describe('ProjectsPage', () => {
     jest.runTimersToTime(4005);
     jest.useRealTimers();
 
-    await waitRequest();
+    await waitRequests();
 
     expect(
       screen.getByText(refetchMock[1].result.data.projects.data[0].name as string),
@@ -242,7 +231,7 @@ describe('ProjectsPage', () => {
     jest.runTimersToTime(3005);
     jest.useRealTimers();
 
-    await waitRequest();
+    await waitRequests();
 
     expect(
       screen.getByText(refetchMock[2].result.data.projects.data[0].name as string),
@@ -254,11 +243,11 @@ describe('ProjectsPage', () => {
   describe('пагинация', () => {
     it('загружает проекты', async () => {
       const paginationMock = mocks.pagination;
-      const { waitRequest } = await mountApp(<ProjectsPage />, {
+      await render(<ProjectsPage />, {
         mocks: paginationMock,
       });
 
-      await waitRequest();
+      await waitRequests();
 
       const loadMoreButton = await waitFor(() => screen.getByText('Загрузить ещё'));
       const lastProjectName = secondPart[secondPart.length - 1].name as string;
@@ -268,7 +257,7 @@ describe('ProjectsPage', () => {
 
       userEvent.click(loadMoreButton);
 
-      await waitRequest();
+      await waitRequests();
 
       expect(screen.getByText('40 из 40')).toBeInTheDocument();
       expect(screen.queryByText(lastProjectName)).toBeInTheDocument();

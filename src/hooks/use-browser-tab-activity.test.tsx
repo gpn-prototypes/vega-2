@@ -1,7 +1,6 @@
 import React from 'react';
-import { render, RenderResult } from '@testing-library/react';
 
-import { changeVisibilityState } from '../../test-utils/change-visibility-state';
+import { changeVisibilityState, render, RenderResult } from '../testing';
 
 import { InputObserver, useBrowserTabActivity } from './use-browser-tab-activity';
 

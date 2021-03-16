@@ -1,5 +1,6 @@
 import React from 'react';
-import * as tl from '@testing-library/react';
+
+import * as tl from '../../testing';
 
 import { useDebouncedFunction } from './use-debounced-function';
 

@@ -8,12 +8,12 @@ const config = require('@gpn-prototypes/frontend-configs/jest/jest.config')({
 
 module.exports = {
   ...config,
-  modulePathIgnorePatterns: [...config.modulePathIgnorePatterns, '/e2e-tests/', '/test-utils/'],
+  modulePathIgnorePatterns: [...config.modulePathIgnorePatterns, '/e2e-tests/', '/src/testing/'],
   coveragePathIgnorePatterns: [
     ...config.coveragePathIgnorePatterns,
     '/e2e-tests/',
     '/__generated__/',
-    '/test-utils/',
+    '/src/testing/',
   ],
   coverageReporters: ['lcov', 'json-summary', 'text', 'text-summary'],
   transformIgnorePatterns: ['node_modules/?!(@gpn-prototypes)/'],

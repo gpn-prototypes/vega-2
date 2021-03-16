@@ -1,14 +1,10 @@
 import React from 'react';
 import { MockedResponse } from '@apollo/client/testing';
-import { act, fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryHistory } from 'history';
 import { merge } from 'ramda';
 
 import { ErrorCodesEnum, ProjectStatusEnum, ProjectTypeEnum } from '../../__generated__/types';
-import { mountApp } from '../../../test-utils/mount-app';
-import { Bus } from '../../../types/bus';
-import { Notifications } from '../../../types/notifications';
+import { fireEvent, render, RenderResult, screen, waitRequests } from '../../testing';
 import { DescriptionStep } from '../../ui/features/projects/ProjectForm/steps';
 
 import {
@@ -22,24 +18,9 @@ import {
 import { createCountry, createID, createProject, createRegion } from './__mocks__/schemas';
 import { CreateProjectPage } from './CreateProjectPage';
 
-type RenderComponentResult = {
-  bus: Bus;
-  history: MemoryHistory;
-  notifications: Notifications;
-};
-
 type Props = {
   mocks: MockedResponse[];
 };
-
-// https://trojanowski.dev/apollo-hooks-testing-without-act-warnings/
-async function waitRequests(ms = 0) {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 const PROJECT_ID = createID();
 
@@ -169,34 +150,11 @@ const getInput = async (testid: string): Promise<HTMLInputElement> => {
   return input;
 };
 
-const renderComponent = (props?: Partial<Props>): RenderComponentResult => {
+const renderComponent = (props?: Partial<Props>): RenderResult => {
   const withDefaults = merge(defaultProps);
   const { mocks } = props ? withDefaults(props) : defaultProps;
 
-  const unsub = jest.fn();
-
-  const bus = {
-    send: jest.fn(),
-    subscribe: jest.fn().mockImplementation(() => {
-      return unsub;
-    }),
-  } as Bus;
-
-  const notifications = {
-    add: jest.fn(),
-    remove: jest.fn(),
-    subscribe: jest.fn(),
-    getAll: jest.fn(),
-    on: jest.fn(),
-  } as Notifications;
-
-  const { history } = mountApp(<CreateProjectPage />, { mocks, bus, notifications });
-
-  return {
-    bus,
-    history,
-    notifications,
-  };
+  return render(<CreateProjectPage />, { mocks });
 };
 
 describe('CreateProjectPage', () => {
@@ -213,7 +171,7 @@ describe('CreateProjectPage', () => {
   });
 
   describe('успешное создание проекта', () => {
-    let providers: RenderComponentResult;
+    let providers: RenderResult;
 
     beforeEach(async () => {
       const project = createProject({
@@ -274,11 +232,10 @@ describe('CreateProjectPage', () => {
     });
 
     it('вызывает нотификацию', async () => {
+      const spy = jest.spyOn(providers.app.notifications, 'add');
       await waitRequests();
 
-      expect(providers.notifications.add).toBeCalledWith(
-        expect.objectContaining({ body: 'Проект успешно создан' }),
-      );
+      expect(spy).toBeCalledWith(expect.objectContaining({ body: 'Проект успешно создан' }));
 
       await waitRequests();
     });
@@ -286,7 +243,7 @@ describe('CreateProjectPage', () => {
     it('редиректит на страницу проекта', async () => {
       await waitRequests();
 
-      expect(providers.history.location.pathname).toEqual(`/projects/show/${PROJECT_ID}`);
+      expect(providers.app.history.location.pathname).toEqual(`/projects/show/${PROJECT_ID}`);
 
       await waitRequests();
     });
@@ -314,13 +271,15 @@ describe('CreateProjectPage', () => {
         },
       };
 
-      const { notifications } = renderComponent({
+      const { app } = renderComponent({
         mocks: [MockWithError, MockProjectFormRegionList, MockProjectFormFields],
       });
 
+      const spy = jest.spyOn(app.notifications, 'add');
+
       await waitRequests();
 
-      expect(notifications.add).toBeCalledWith(expect.objectContaining({ body: errorMessage }));
+      expect(spy).toBeCalledWith(expect.objectContaining({ body: errorMessage }));
       await waitRequests();
     });
   });
@@ -387,7 +346,7 @@ describe('CreateProjectPage', () => {
   });
 
   describe('отмена проекта', () => {
-    let providers: RenderComponentResult;
+    let providers: RenderResult;
 
     beforeEach(async () => {
       const MockDeleteProjectBlank = {
@@ -439,18 +398,19 @@ describe('CreateProjectPage', () => {
 
       await waitRequests();
 
-      expect(providers.history.location.pathname).toEqual('/projects');
+      expect(providers.app.history.location.pathname).toEqual('/projects');
       await waitRequests();
     });
 
     it('вызывает событие удаление проекта по шине', async () => {
+      const spy = jest.spyOn(providers.app.bus, 'send');
       const accept = await screen.findByText('Да, прервать');
 
       userEvent.click(accept);
 
       await waitRequests();
 
-      expect(providers.bus.send).toBeCalled();
+      expect(spy).toBeCalled();
       await waitRequests();
     });
   });
