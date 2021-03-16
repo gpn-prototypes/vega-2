@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import '@testing-library/jest-dom';
 
+import { cleanup } from './src/testing';
 import { AppConfig } from './app-config';
 
 declare global {
@@ -40,3 +41,5 @@ beforeAll(() => {
 afterAll(() => {
   delete global.ResizeObserver;
 });
+
+afterEach(cleanup);

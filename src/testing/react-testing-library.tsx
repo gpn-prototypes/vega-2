@@ -10,6 +10,7 @@ import { createBrowserHistory } from 'history';
 
 import { App, AppProvider } from '../App/app-context';
 
+import { addCleanupTask } from './cleanup';
 import { busMock, notificationsMock } from './mocks';
 
 export * from '@testing-library/react';
@@ -60,9 +61,18 @@ export const render = (ui: React.ReactElement, options: Options = {}): RenderRes
     beforeRender({ app });
   }
 
+  const dispose = () => {
+    app.graphqlClient.clearStore();
+    app.graphqlClient.stop();
+  };
+
   const TestProviders: React.FC = ({ children }) => {
     return <AppProvider app={app}>{children}</AppProvider>;
   };
+
+  addCleanupTask(() => {
+    dispose();
+  });
 
   return {
     app,
