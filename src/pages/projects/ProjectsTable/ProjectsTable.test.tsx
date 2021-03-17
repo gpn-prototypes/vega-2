@@ -2,7 +2,7 @@ import React from 'react';
 import userEvent from '@testing-library/user-event';
 
 import { ProjectStatusEnum } from '../../../__generated__/types';
-import { render, RenderResult, screen, waitFor } from '../../../testing';
+import { render, RenderResult, screen } from '../../../testing';
 
 import { EditedAt } from './EditedAt';
 import { ProjectsTable, ProjectsTableProps } from './ProjectsTable';

@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { merge } from 'ramda';
 
 import { ErrorCodesEnum, ProjectStatusEnum, ProjectTypeEnum } from '../../__generated__/types';
-import { fireEvent, render, RenderResult, screen, waitRequests } from '../../testing';
+import { act, fireEvent, render, RenderResult, screen, waitRequests } from '../../testing';
 import { DescriptionStep } from '../../ui/features/projects/ProjectForm/steps';
 
 import {

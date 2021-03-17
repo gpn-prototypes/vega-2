@@ -32,9 +32,11 @@ export interface RenderResult extends RTLRenderResult, RenderContext {
 }
 
 export const render = (ui: React.ReactElement, options: Options = {}): RenderResult => {
-  const { route = '/projects', beforeRender, mocks, ...rtlOptions } = options;
+  const { route, beforeRender, mocks, ...rtlOptions } = options;
 
-  window.history.pushState({}, 'Test page', route);
+  if (route !== undefined) {
+    window.history.pushState({}, 'Test page', route);
+  }
 
   const cache = new InMemoryCache({
     typePolicies: {
