@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Field } from 'react-final-form';
-import { Combobox, Form as VegaForm, Text } from '@gpn-prototypes/vega-ui';
-import { FormApi } from 'final-form';
+import { Combobox, Form as VegaForm } from '@gpn-prototypes/vega-ui';
 
 import { ProjectTypeEnum } from '../../../../../../__generated__/types';
 import { ReferenceDataType } from '../../../../../../pages/project/types';
 import { TextField } from '../../../../../core';
 import { cnDescriptionStep, cnProjectForm } from '../../cn-form';
-import { FormMode, FormValues } from '../../types';
 
 type SelectOption = {
   label: string;
@@ -15,34 +13,13 @@ type SelectOption = {
 };
 
 export type StepProps = {
-  mode: FormMode;
   referenceData: ReferenceDataType;
-  form: FormApi<FormValues>;
 };
 
 const typeOptions = [{ label: 'Геологоразведочный', value: ProjectTypeEnum.Geo }];
 const typeInitialValue = typeOptions[0].value;
 
 const trimFormat = (value?: string) => value?.trim();
-
-export const getYearStartOptions = (): SelectOption[] => {
-  const currentYear = new Date().getFullYear();
-  const options = [];
-
-  for (let i = -1; i < 11; i += 1) {
-    const year = currentYear + i;
-    const option = {
-      label: `${year}`,
-      value: year.toString(),
-    };
-
-    options.push(option);
-  }
-
-  return options;
-};
-
-export const isValidYear = (str: string): boolean => /^\d{4}$/.test(str);
 
 const testId = {
   name: 'ProjectForm:field:name',
@@ -53,8 +30,6 @@ const testId = {
   coordinatesLabel: 'ProjectForm:label:coordinates',
   type: 'ProjectForm:field:type',
   typeLabel: 'ProjectForm:label:type',
-  yearStart: 'ProjectForm:field:yearStart',
-  yearStartLabel: 'ProjectForm:label:yearStart',
   description: 'ProjectForm:field:description',
   descriptionLabel: 'ProjectForm:label:description',
 } as const;
@@ -64,7 +39,7 @@ type DescriptionStepType = React.FC<StepProps> & {
 };
 
 export const DescriptionStep: DescriptionStepType = (props) => {
-  const { mode, referenceData, form } = props;
+  const { referenceData } = props;
   const { regionList } = referenceData;
 
   const regionOptions =
@@ -73,29 +48,7 @@ export const DescriptionStep: DescriptionStepType = (props) => {
       value: region?.vid || /* istanbul ignore next */ '',
     })) || /* istanbul ignore next */ [];
 
-  const [yearStartOptions, setYearStartOptions] = useState(getYearStartOptions());
-  const yearStartInitialValue = mode === 'create' ? yearStartOptions[2].value : undefined;
-
   const getItemLabel = (option: SelectOption): string => option.label;
-
-  const updateYearStartOptions = (option: string): void => {
-    setYearStartOptions([{ label: option, value: option }, ...yearStartOptions]);
-  };
-
-  React.useEffect(() => {
-    const year = form.getFieldState('yearStart');
-    const inList = yearStartOptions.find(
-      ({ value }) => value.toString() === year?.initial?.toString(),
-    );
-
-    if (year?.initial && !inList) {
-      setYearStartOptions([
-        { label: year.initial.toString(), value: year.initial.toString() },
-        ...yearStartOptions,
-      ]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <div className={cnProjectForm('Step').mix(cnDescriptionStep())}>
@@ -196,70 +149,6 @@ export const DescriptionStep: DescriptionStepType = (props) => {
                   placeholder="Укажите систему координат"
                   testId={testId.coordinates}
                 />
-              );
-            }}
-          />
-        </VegaForm.Field>
-      </VegaForm.Row>
-      <VegaForm.Row space="m">
-        <VegaForm.Field>
-          <VegaForm.Label htmlFor="yearStart" space="2xs" data-testid={testId.yearStartLabel}>
-            Год начала планирования
-          </VegaForm.Label>
-          <Field
-            name="yearStart"
-            initialValue={yearStartInitialValue}
-            render={({ input, meta }): React.ReactNode => {
-              const submitErrorText =
-                meta.submitError && !meta.dirtySinceLastSubmit ? meta.submitError : undefined;
-              const showError =
-                Boolean(meta.error || submitErrorText) &&
-                (meta.touched || meta.submitFailed || meta.dirty);
-              const errorText = meta.error || submitErrorText;
-
-              return (
-                <div data-testid={`${testId.yearStart}:wrapper`}>
-                  <Combobox
-                    id="yearStart"
-                    className={
-                      showError ? cnDescriptionStep('ComboboxError').toString() : undefined
-                    }
-                    size="s"
-                    name="yearStart"
-                    options={yearStartOptions}
-                    getOptionLabel={getItemLabel}
-                    onCreate={(option): void => {
-                      if (!isValidYear(option)) {
-                        input.onChange(option);
-                        input.onBlur();
-                        return;
-                      }
-                      updateYearStartOptions(option);
-                      input.onChange(option);
-                    }}
-                    placeholder="Выберите год"
-                    value={yearStartOptions.find(
-                      ({ value }) => value.toString() === input.value.toString(),
-                    )}
-                    onChange={(option: SelectOption | null): void => {
-                      input.onChange(Number(option?.value));
-                    }}
-                    onBlur={input.onBlur}
-                    onFocus={input.onFocus}
-                    data-testid={testId.yearStart}
-                  />
-                  {showError && (
-                    <Text
-                      size="xs"
-                      lineHeight="xs"
-                      view="alert"
-                      className={cnDescriptionStep('ErrorText').toString()}
-                      data-testid={`${testId.yearStart}:error`}
-                    >
-                      {errorText}
-                    </Text>
-                  )}
-                </div>
               );
             }}
           />

@@ -7,7 +7,7 @@ import { merge } from 'ramda';
 import { Country, ProjectStatusEnum, Region } from '../../../../__generated__/types';
 
 import { getCombobox, initializeProjectForm } from './__tests__/utils';
-import { minYearStart, ProjectForm } from './ProjectForm';
+import { ProjectForm } from './ProjectForm';
 import { DescriptionStep } from './steps';
 import { FormProps } from './types';
 
@@ -311,68 +311,6 @@ describe('ProjectForm', () => {
     });
   });
 
-  describe('год начала планирования', () => {
-    beforeEach(() => {
-      jest.useFakeTimers();
-    });
-
-    afterEach(() => {
-      jest.useRealTimers();
-    });
-
-    it('не выставляет значение "следующего года", если это форма редактирования ', () => {
-      renderComponent({ mode: 'edit' });
-      const comboboxElement = screen.getByTestId(DescriptionStep.testId.yearStart);
-
-      expect(comboboxElement.textContent).toContain('Выберите год');
-    });
-
-    it('инициализирует значение в форме и добавляет в начало списка, если это форма создания проекта', async () => {
-      renderComponent({ initialValues: { yearStart: 2040 } });
-      const comboboxElement = screen.getByTestId(DescriptionStep.testId.yearStart);
-      const combobox = getCombobox(comboboxElement);
-
-      combobox.toggle();
-
-      const options = await combobox.options();
-
-      expect(options[0].textContent).toContain('2040');
-    });
-
-    it('добавляет год в начало списка, если его нет в списке и он валидный', async () => {
-      renderComponent();
-
-      const comboboxElement = screen.getByTestId(DescriptionStep.testId.yearStart);
-      const combobox = getCombobox(comboboxElement);
-
-      combobox.type('3020');
-
-      await combobox.selectOption(0);
-
-      combobox.toggle();
-
-      const options = await combobox.options();
-
-      expect(await options[0].textContent).toContain('3020');
-    });
-
-    it('не добавляет невалидное значение в список', async () => {
-      renderComponent();
-      const comboboxElement = screen.getByTestId(DescriptionStep.testId.yearStart);
-      const combobox = getCombobox(comboboxElement);
-
-      combobox.type('ff11');
-
-      await combobox.selectOption(0);
-
-      combobox.toggle();
-
-      const options = await combobox.options();
-
-      expect(options[0].textContent).not.toContain('ff11');
-    });
-  });
-
   it.todo('скрывает футер для редактирования проекта, если в форме нет изменений');
 
   describe('валидация полей', () => {
@@ -419,57 +357,6 @@ describe('ProjectForm', () => {
         });
 
         const error = await screen.findByText('Координаты не могут быть более 2000 символов');
-
-        expect(error).toBeInTheDocument();
-      });
-    });
-
-    describe('год начала планирования', () => {
-      beforeEach(() => {
-        jest.useFakeTimers();
-      });
-
-      afterEach(() => {
-        jest.useRealTimers();
-      });
-
-      it('показывает ошибку обязательного поля', async () => {
-        renderComponent();
-
-        const comboboxElement = screen.getByTestId(DescriptionStep.testId.yearStart);
-        const combobox = getCombobox(comboboxElement);
-
-        combobox.clear();
-
-        act(() => {
-          submitForm();
-        });
-
-        const [, yearError] = await screen.findAllByText('Заполните обязательное поле');
-
-        expect(yearError).toBeInTheDocument();
-      });
-
-      it.each`
-        value     | errorText                                                            | description
-        ${'asd'}  | ${'Значение должно быть годом'}                                      | ${'если значение не год'}
-        ${'123'}  | ${'Год начала планирования проекта должен быть четырехзначным'}      | ${'если значение не четырехзначное'}
-        ${'2010'} | ${`Год начала планирования не может быть раньше ${minYearStart} г.`} | ${'если значение меньше минимального года планирование'}
-      `('показывает ошибку $description', async ({ value, errorText }) => {
-        renderComponent();
-
-        const comboboxElement = screen.getByTestId(DescriptionStep.testId.yearStart);
-        const combobox = getCombobox(comboboxElement);
-
-        combobox.type(value);
-
-        await combobox.selectOption(0);
-
-        act(() => {
-          submitForm();
-        });
-
-        const error = await screen.findByText(errorText);
 
         expect(error).toBeInTheDocument();
       });

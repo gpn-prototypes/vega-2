@@ -49,7 +49,6 @@ const getInitialValues = (project: ProjectFormFields): FormValues => {
     region: project.region?.vid ?? null,
     coordinates: project.coordinates ?? '',
     description: project.description ?? '',
-    yearStart: project.yearStart ?? undefined,
     status: project.status ?? ProjectStatusEnum.Unpublished,
   };
 };

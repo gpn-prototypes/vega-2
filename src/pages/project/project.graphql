@@ -9,7 +9,6 @@ fragment projectFormFields on Project {
   }
   coordinates
   description
-  yearStart
   version
   status
 }

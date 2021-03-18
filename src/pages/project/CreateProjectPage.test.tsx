@@ -143,7 +143,6 @@ const MockUpdateProjectForm: MockedResponse = {
             region: null,
             coordinates: null,
             description: null,
-            yearStart: 2022,
             version: 1,
             status: ProjectStatusEnum.Unpublished,
           }),
@@ -224,7 +223,6 @@ describe('CreateProjectPage', () => {
         region: null,
         coordinates: null,
         description: null,
-        yearStart: 2022,
         version: 1,
         status: ProjectStatusEnum.Unpublished,
       });
