@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Проект VEGA расчётная платформа",
   "repository": "git@github.com:gpn-prototypes/vega-sp.git",
-  "author": "csssr",
+  "author": "gpn-prototypes",
   "license": "UNLICENSED",
   "engines": {
     "node": "^12.16.2",
