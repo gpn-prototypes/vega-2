@@ -48,6 +48,7 @@
     "@graphql-codegen/typescript-react-apollo": "2.0.7",
     "@testing-library/jest-dom": "^5.5.0",
     "@testing-library/react": "^10.0.3",
+    "@testing-library/react-hooks": "^5.1.0",
     "@testing-library/user-event": "^12.6.2",
     "@types/faker": "^5.1.6",
     "@types/final-form-focus": "^1.1.1",
@@ -95,7 +96,6 @@
     "webpack-merge": "^4.2.2"
   },
   "devDependencies": {
-    "@testing-library/react-hooks": "^5.1.0",
     "commitizen": "^4.1.2",
     "cz-customizable": "^6.2.0",
     "husky": "^4.2.5",

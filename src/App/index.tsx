@@ -5,6 +5,7 @@ import { createBrowserHistory } from 'history';
 
 import { busMock } from '../../test-utils/mocks/busMock';
 import { notificationsMock } from '../../test-utils/mocks/notificationsMock';
+import { CurrentProject } from '../../types/current-project';
 
 import { App } from './App';
 
@@ -22,6 +23,12 @@ const authToken = localStorage.getItem('auth-token');
 */
 
 const history = createBrowserHistory();
+
+const currentProject: CurrentProject = {
+  get() {
+    return null;
+  },
+};
 
 const client = new ApolloClient({
   cache: new InMemoryCache({
@@ -46,6 +53,7 @@ ReactDOM.render(
     bus={busMock}
     notifications={notificationsMock}
     setServerError={() => {}}
+    currentProject={currentProject}
   />,
   document.getElementById('root'),
 );
