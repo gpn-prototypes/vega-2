@@ -7,7 +7,7 @@ import { merge } from 'ramda';
 import { Country, ProjectStatusEnum, Region } from '../../../../__generated__/types';
 
 import { getCombobox, initializeProjectForm } from './__tests__/utils';
-import { ProjectForm } from './ProjectForm';
+import { minYearStart, ProjectForm } from './ProjectForm';
 import { DescriptionStep } from './steps';
 import { FormProps } from './types';
 
@@ -62,15 +62,19 @@ const defaultProps: Props = {
   },
 };
 
-const getInput = (testid: string): HTMLInputElement => {
+const getTextInput = (
+  testid: string,
+  tag?: 'input' | 'textarea',
+): HTMLInputElement | HTMLTextAreaElement => {
   const field = screen.getByTestId(testid);
-  const input = field.querySelector('input');
+  const input = field.querySelector(tag ?? 'input');
   if (input === null) {
     throw new Error('input not found');
   }
 
   return input;
 };
+
 const submitForm = () => {
   const submitElement = screen.getByText('Создать проект');
   userEvent.click(submitElement);
@@ -102,7 +106,7 @@ describe('ProjectForm', () => {
     const onSubmit = jest.fn().mockImplementation((values) => Promise.resolve(values));
     renderComponent({ onSubmit });
 
-    const nameInput = getInput(DescriptionStep.testId.name);
+    const nameInput = getTextInput(DescriptionStep.testId.name);
     userEvent.type(nameInput, 'projectName');
 
     await act(async () => {
@@ -118,7 +122,7 @@ describe('ProjectForm', () => {
 
     const cancelButton = screen.getByText('Отмена');
 
-    const nameInput = getInput(DescriptionStep.testId.name);
+    const nameInput = getTextInput(DescriptionStep.testId.name);
     userEvent.type(nameInput, 'projectName');
 
     userEvent.click(cancelButton);
@@ -134,7 +138,7 @@ describe('ProjectForm', () => {
 
     renderComponent({ initialValues, onSubmit });
 
-    const nameInput = getInput(DescriptionStep.testId.name);
+    const nameInput = getTextInput(DescriptionStep.testId.name);
     userEvent.type(nameInput, 'projectName');
 
     expect(onSubmit).toBeCalledWith(
@@ -166,7 +170,7 @@ describe('ProjectForm', () => {
 
       renderComponent({ initialValues, onSubmit });
 
-      const nameInput = getInput(DescriptionStep.testId.name);
+      const nameInput = getTextInput(DescriptionStep.testId.name);
       userEvent.type(nameInput, 'Lorem');
 
       fireEvent.blur(nameInput);
@@ -184,7 +188,7 @@ describe('ProjectForm', () => {
 
       renderComponent({ initialValues, onSubmit, mode: 'edit' });
 
-      const nameInput = getInput(DescriptionStep.testId.name);
+      const nameInput = getTextInput(DescriptionStep.testId.name);
       userEvent.type(nameInput, 'Lorem');
 
       fireEvent.blur(nameInput);
@@ -202,7 +206,7 @@ describe('ProjectForm', () => {
         mode: 'create',
       });
 
-      const nameInput = getInput(DescriptionStep.testId.name);
+      const nameInput = getTextInput(DescriptionStep.testId.name);
       userEvent.type(nameInput, 'Lorem');
 
       fireEvent.blur(nameInput);
@@ -229,7 +233,7 @@ describe('ProjectForm', () => {
 
       renderComponent({ initialValues, onSubmit });
 
-      const nameInput = getInput(DescriptionStep.testId.name);
+      const nameInput = getTextInput(DescriptionStep.testId.name);
       fireEvent.change(nameInput, {
         target: {
           value:
@@ -372,18 +376,121 @@ describe('ProjectForm', () => {
   it.todo('скрывает футер для редактирования проекта, если в форме нет изменений');
 
   describe('валидация полей', () => {
-    describe('создание проекта', () => {
-      it.todo('название проекта');
-      it.todo('система координат');
-      it.todo('год начала планирования');
-      it.todo('описание проекта');
+    describe('название проекта', () => {
+      it.each`
+        value              | errorText                                                                 | description
+        ${''}              | ${'Заполните обязательное поле'}                                          | ${'обязательного поля'}
+        ${'a'.repeat(257)} | ${'Название проекта не может быть менее 2 символов и более 256 символов'} | ${'если символов больше 256'}
+        ${'a'}             | ${'Название проекта не может быть менее 2 символов и более 256 символов'} | ${'если символов меньше 2'}
+      `('показывает ошибку $description', async ({ value, errorText }) => {
+        renderComponent();
+
+        const nameInput = getTextInput(DescriptionStep.testId.name);
+        userEvent.type(nameInput, value);
+
+        act(() => {
+          submitForm();
+        });
+
+        const error = await screen.findByText(errorText);
+
+        expect(error).toBeInTheDocument();
+      });
     });
 
-    describe('редактирование проекта', () => {
-      it.todo('название проекта');
-      it.todo('система координат');
-      it.todo('год начала планирования');
-      it.todo('описание проекта');
+    describe('система координат', () => {
+      it('показывает ошибку, если символов больше 2000', async () => {
+        renderComponent();
+
+        const value = 'a'.repeat(2001);
+
+        const comboboxElement = screen.getByTestId(DescriptionStep.testId.coordinates);
+        const combobox = getCombobox(comboboxElement);
+        const input = combobox.input();
+
+        fireEvent.change(input, {
+          target: {
+            value,
+          },
+        });
+
+        act(() => {
+          submitForm();
+        });
+
+        const error = await screen.findByText('Координаты не могут быть более 2000 символов');
+
+        expect(error).toBeInTheDocument();
+      });
+    });
+
+    describe('год начала планирования', () => {
+      beforeEach(() => {
+        jest.useFakeTimers();
+      });
+
+      afterEach(() => {
+        jest.useRealTimers();
+      });
+
+      it('показывает ошибку обязательного поля', async () => {
+        renderComponent();
+
+        const comboboxElement = screen.getByTestId(DescriptionStep.testId.yearStart);
+        const combobox = getCombobox(comboboxElement);
+
+        combobox.clear();
+
+        act(() => {
+          submitForm();
+        });
+
+        const [, yearError] = await screen.findAllByText('Заполните обязательное поле');
+
+        expect(yearError).toBeInTheDocument();
+      });
+
+      it.each`
+        value     | errorText                                                            | description
+        ${'asd'}  | ${'Значение должно быть годом'}                                      | ${'если значение не год'}
+        ${'123'}  | ${'Год начала планирования проекта должен быть четырехзначным'}      | ${'если значение не четырехзначное'}
+        ${'2010'} | ${`Год начала планирования не может быть раньше ${minYearStart} г.`} | ${'если значение меньше минимального года планирование'}
+      `('показывает ошибку $description', async ({ value, errorText }) => {
+        renderComponent();
+
+        const comboboxElement = screen.getByTestId(DescriptionStep.testId.yearStart);
+        const combobox = getCombobox(comboboxElement);
+
+        combobox.type(value);
+
+        await combobox.selectOption(0);
+
+        act(() => {
+          submitForm();
+        });
+
+        const error = await screen.findByText(errorText);
+
+        expect(error).toBeInTheDocument();
+      });
+    });
+
+    describe('описание проекта', () => {
+      it('показывает ошибку если более 2000 символов', async () => {
+        renderComponent();
+
+        const input = getTextInput(DescriptionStep.testId.description, 'textarea');
+
+        fireEvent.change(input, { target: { value: 'a'.repeat(2001) } });
+
+        act(() => {
+          submitForm();
+        });
+
+        const error = await screen.findByText('Описание проекта не может быть более 2000 символов');
+
+        expect(error).toBeInTheDocument();
+      });
     });
   });
 });

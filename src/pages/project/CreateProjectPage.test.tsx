@@ -231,9 +231,12 @@ describe('CreateProjectPage', () => {
   it('показывает loader при запросах', async () => {
     renderComponent();
 
-    const loader = await screen.findByLabelText('Загрузка');
+    await act(async () => {
+      const loader = await screen.findByLabelText('Загрузка');
 
-    expect(loader).toBeInTheDocument();
+      expect(loader).toBeInTheDocument();
+    });
+
     await waitRequests();
   });
 

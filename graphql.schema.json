@@ -918,6 +918,16 @@
                   "ofType": null
                 },
                 "defaultValue": null
+              },
+              {
+                "name": "useWhole",
+                "description": null,
+                "type": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                },
+                "defaultValue": "false"
               }
             ],
             "type": {
@@ -3772,18 +3782,6 @@
             "deprecationReason": null
           },
           {
-            "name": "name",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "createdAt",
             "description": null,
             "args": [],
@@ -3802,6 +3800,18 @@
             "type": {
               "kind": "SCALAR",
               "name": "DateTime",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "name",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -3916,36 +3926,12 @@
             "deprecationReason": null
           },
           {
-            "name": "rootEntity",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
             "name": "status",
             "description": null,
             "args": [],
             "type": {
               "kind": "ENUM",
               "name": "ProjectStatusEnum",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "resourceId",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -3982,6 +3968,30 @@
             "type": {
               "kind": "SCALAR",
               "name": "Int",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "rootEntity",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "resourceId",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
               "ofType": null
             },
             "isDeprecated": false,
@@ -4590,6 +4600,12 @@
           {
             "name": "VALIDATION",
             "description": "Ошибка валидации",
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "INVALID_PAGE_SIZE",
+            "description": "Неверный размер страницы",
             "isDeprecated": false,
             "deprecationReason": null
           }
@@ -10217,6 +10233,16 @@
             "defaultValue": null
           },
           {
+            "name": "description",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "region",
             "description": null,
             "type": {
@@ -10248,16 +10274,6 @@
           },
           {
             "name": "coordinates",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "description",
             "description": null,
             "type": {
               "kind": "SCALAR",
@@ -10486,6 +10502,16 @@
             "defaultValue": null
           },
           {
+            "name": "description",
+            "description": null,
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "defaultValue": null
+          },
+          {
             "name": "region",
             "description": null,
             "type": {
@@ -10507,16 +10533,6 @@
           },
           {
             "name": "coordinates",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "description",
             "description": null,
             "type": {
               "kind": "SCALAR",

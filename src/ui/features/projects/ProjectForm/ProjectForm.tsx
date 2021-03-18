@@ -19,7 +19,7 @@ import './ProjectForm.css';
 const focusOnErrors = createDecorator<FormValues>();
 
 const currentYear = new Date().getFullYear();
-const minYearStart = currentYear - 1;
+export const minYearStart = currentYear - 1;
 
 type FormApi = FinalFormApi<FormValues, Partial<FormValues>>;
 

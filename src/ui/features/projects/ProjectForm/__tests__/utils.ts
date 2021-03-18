@@ -18,7 +18,7 @@ export const initializeProjectForm = (fields?: FormValues): FormValues =>
 
 type ResultCombobox = {
   buttons(): NodeListOf<HTMLButtonElement>;
-  input(): HTMLInputElement | null;
+  input(): HTMLInputElement;
   options(): Promise<HTMLElement[]>;
   type(val: string): void;
   selectOption(opt: number): void;
@@ -31,7 +31,15 @@ const ANIMATION_DURATION = 300;
 
 export const getCombobox = (combobox: HTMLElement): ResultCombobox => {
   const buttons = () => combobox.querySelectorAll('button');
-  const input = () => combobox.querySelector('input');
+  const input = () => {
+    const element = combobox.querySelector('input');
+    if (!element) {
+      throw new Error('combobox input not found');
+    }
+
+    return element;
+  };
+
   const options = async () => screen.findAllByRole('option');
   const awaitAnimation = () => {
     act(() => {
@@ -53,9 +61,12 @@ export const getCombobox = (combobox: HTMLElement): ResultCombobox => {
     },
     selectOption: async (opt: number) => {
       const opts = await options();
+
       awaitAnimation();
 
       userEvent.click(opts[opt]);
+
+      awaitAnimation();
     },
 
     toggle: () => {
