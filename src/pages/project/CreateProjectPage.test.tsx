@@ -1,16 +1,14 @@
 import React from 'react';
-import { Router } from 'react-router-dom';
-import { InMemoryCache } from '@apollo/client';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
-import { act, fireEvent, render, RenderResult, screen } from '@testing-library/react';
+import { MockedResponse } from '@apollo/client/testing';
+import { act, fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { createMemoryHistory, MemoryHistory } from 'history';
+import { MemoryHistory } from 'history';
 import { merge } from 'ramda';
 
 import { ErrorCodesEnum, ProjectStatusEnum, ProjectTypeEnum } from '../../__generated__/types';
+import { mountApp } from '../../../test-utils/mount-app';
 import { Bus } from '../../../types/bus';
 import { Notifications } from '../../../types/notifications';
-import { BusProvider, NotificationsProvider } from '../../providers';
 import { DescriptionStep } from '../../ui/features/projects/ProjectForm/steps';
 
 import {
@@ -25,12 +23,9 @@ import { createCountry, createID, createProject, createRegion } from './__mocks_
 import { CreateProjectPage } from './CreateProjectPage';
 
 type RenderComponentResult = {
-  component: RenderResult;
-  providers: {
-    bus: Bus;
-    history: MemoryHistory;
-    notifications: Notifications;
-  };
+  bus: Bus;
+  history: MemoryHistory;
+  notifications: Notifications;
 };
 
 type Props = {
@@ -179,7 +174,6 @@ const renderComponent = (props?: Partial<Props>): RenderComponentResult => {
   const withDefaults = merge(defaultProps);
   const { mocks } = props ? withDefaults(props) : defaultProps;
 
-  const history = createMemoryHistory();
   const unsub = jest.fn();
 
   const bus = {
@@ -197,33 +191,12 @@ const renderComponent = (props?: Partial<Props>): RenderComponentResult => {
     on: jest.fn(),
   } as Notifications;
 
-  const cache = new InMemoryCache({
-    typePolicies: {
-      Project: {
-        keyFields: ['vid'],
-      },
-    },
-  });
-
-  const component = render(
-    <Router history={history}>
-      <MockedProvider mocks={mocks} cache={cache}>
-        <BusProvider bus={bus}>
-          <NotificationsProvider notifications={notifications}>
-            <CreateProjectPage />
-          </NotificationsProvider>
-        </BusProvider>
-      </MockedProvider>
-    </Router>,
-  );
+  const { history } = mountApp(<CreateProjectPage />, { mocks, bus, notifications });
 
   return {
-    component,
-    providers: {
-      bus,
-      history,
-      notifications,
-    },
+    bus,
+    history,
+    notifications,
   };
 };
 
@@ -241,7 +214,7 @@ describe('CreateProjectPage', () => {
   });
 
   describe('успешное создание проекта', () => {
-    let providers: RenderComponentResult['providers'];
+    let providers: RenderComponentResult;
 
     beforeEach(async () => {
       const project = createProject({
@@ -277,7 +250,7 @@ describe('CreateProjectPage', () => {
         },
       };
 
-      const result = renderComponent({
+      providers = renderComponent({
         mocks: [
           MockCreateBlankProject,
           MockProjectFormRegionList,
@@ -287,8 +260,6 @@ describe('CreateProjectPage', () => {
           MockUpdateProject,
         ],
       });
-
-      providers = result.providers;
 
       await waitRequests();
 
@@ -345,15 +316,13 @@ describe('CreateProjectPage', () => {
         },
       };
 
-      const { providers } = renderComponent({
+      const { notifications } = renderComponent({
         mocks: [MockWithError, MockProjectFormRegionList, MockProjectFormFields],
       });
 
       await waitRequests();
 
-      expect(providers.notifications.add).toBeCalledWith(
-        expect.objectContaining({ body: errorMessage }),
-      );
+      expect(notifications.add).toBeCalledWith(expect.objectContaining({ body: errorMessage }));
       await waitRequests();
     });
   });
@@ -420,7 +389,7 @@ describe('CreateProjectPage', () => {
   });
 
   describe('отмена проекта', () => {
-    let providers: RenderComponentResult['providers'];
+    let providers: RenderComponentResult;
 
     beforeEach(async () => {
       const MockDeleteProjectBlank = {
@@ -441,7 +410,7 @@ describe('CreateProjectPage', () => {
         },
       };
 
-      const result = renderComponent({
+      providers = renderComponent({
         mocks: [
           MockCreateBlankProject,
           MockProjectFormRegionList,
@@ -449,8 +418,6 @@ describe('CreateProjectPage', () => {
           MockDeleteProjectBlank,
         ],
       });
-
-      providers = result.providers;
 
       await waitRequests();
 

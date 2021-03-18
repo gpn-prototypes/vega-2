@@ -4,8 +4,9 @@ import { History } from 'history';
 
 import { Bus } from '../../types/bus';
 import { Notifications } from '../../types/notifications';
-import { BusProvider, NotificationsProvider } from '../providers';
+import { ServerError } from '../../types/shell';
 
+import { AppProvider } from './app-context';
 import { AppView } from './AppView';
 
 import './App.css';
@@ -15,18 +16,17 @@ type AppProps = {
   history: History;
   notifications: Notifications;
   bus: Bus;
+  setServerError: (serverError: ServerError | null) => void;
 };
 
 export const App = (props: AppProps): React.ReactElement => {
-  const { graphqlClient, notifications, history, bus } = props;
+  const { history, graphqlClient, ...shell } = props;
 
   return (
     <ApolloProvider client={graphqlClient}>
-      <NotificationsProvider notifications={notifications}>
-        <BusProvider bus={bus}>
-          <AppView history={history} />
-        </BusProvider>
-      </NotificationsProvider>
+      <AppProvider {...shell}>
+        <AppView history={history} />
+      </AppProvider>
     </ApolloProvider>
   );
 };

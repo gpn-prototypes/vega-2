@@ -12,8 +12,8 @@ import {
   UpdateProjectDiff,
   ValidationError,
 } from '../../__generated__/types';
+import { useApp } from '../../App/app-context';
 import { useBrowserTabActivity } from '../../hooks';
-import { useNotifications } from '../../providers/notifications';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
 import {
@@ -58,7 +58,7 @@ const FORM_FIELDS_POLLING_MS = 1000 * 30;
 
 export const EditProjectPage: React.FC<PageProps> = () => {
   const { projectId } = useParams<ParamsType>();
-  const notifications = useNotifications();
+  const { notifications, setServerError } = useApp();
 
   const [unsavedChanges, setUnsavedChanges] = useState<Partial<FormValues>>({});
 
@@ -220,6 +220,12 @@ export const EditProjectPage: React.FC<PageProps> = () => {
     const is404 = inlineQueryProjectError.code === 'PROJECT_NOT_FOUND';
 
     if (is404) {
+      setServerError({
+        code: 404,
+        message: inlineQueryProjectError.code,
+        userMessage: 'Ошибка 404. Страница не найдена. Обратитесь в службу технической поддержки',
+      });
+
       return null;
     }
 

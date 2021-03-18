@@ -5,8 +5,12 @@ import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { act, render, RenderResult } from '@testing-library/react';
 import { createMemoryHistory, MemoryHistory } from 'history';
 
-import { notificationsMock, NotificationsProvider } from '../src/providers';
+import { AppProvider } from '../src/App/app-context';
+import { Bus } from '../types/bus';
 import { Notifications } from '../types/notifications';
+
+import { busMock } from './mocks/busMock';
+import { notificationsMock } from './mocks/notificationsMock';
 
 type MountAppOptions = {
   shouldAddToBody?: boolean;
@@ -14,6 +18,7 @@ type MountAppOptions = {
   link?: ApolloLink;
   url?: string;
   notifications?: Notifications;
+  bus?: Bus;
 };
 
 type MountAppResult = {
@@ -21,6 +26,7 @@ type MountAppResult = {
   cache: InMemoryCache;
   waitRequest(amount?: number): Promise<void>;
   history: MemoryHistory;
+  notifications: Notifications;
 };
 
 export const mountApp = (
@@ -29,6 +35,7 @@ export const mountApp = (
 ): MountAppResult => {
   const history = createMemoryHistory();
   const notifications = options.notifications ?? notificationsMock;
+  const bus = options.bus ?? busMock;
 
   if (options.url) {
     history.push(options.url);
@@ -48,9 +55,9 @@ export const mountApp = (
     return (
       <Router history={history}>
         <MockedProvider mocks={mocks} addTypename cache={cache}>
-          <NotificationsProvider notifications={notifications}>
+          <AppProvider notifications={notifications} bus={bus} setServerError={() => {}}>
             <>{props.children}</>
-          </NotificationsProvider>
+          </AppProvider>
         </MockedProvider>
       </Router>
     );
@@ -76,6 +83,7 @@ export const mountApp = (
     $: renderResult,
     waitRequest: actWait,
     cache,
+    notifications,
     history,
   };
 };
