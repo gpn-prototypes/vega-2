@@ -1,5 +1,5 @@
 import React from 'react';
-import { ApolloClient, InMemoryCache } from '@apollo/client';
+import { ApolloClient, createHttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
 import { MockedResponse, MockLink } from '@apollo/client/testing';
 import {
   render as defaultRender,
@@ -31,6 +31,16 @@ export interface RenderResult extends RTLRenderResult, RenderContext {
   cache: InMemoryCache;
 }
 
+export const createClient = (
+  cache: InMemoryCache,
+  mocks?: ReadonlyArray<MockedResponse>,
+): ApolloClient<NormalizedCacheObject> => {
+  return new ApolloClient({
+    cache,
+    link: mocks ? new MockLink(mocks) : createHttpLink({ uri: '/graphql' }),
+  });
+};
+
 export const render = (ui: React.ReactElement, options: Options = {}): RenderResult => {
   const { route, beforeRender, mocks, ...rtlOptions } = options;
 
@@ -46,10 +56,7 @@ export const render = (ui: React.ReactElement, options: Options = {}): RenderRes
     },
   });
 
-  const client = new ApolloClient({
-    cache,
-    link: new MockLink(mocks ?? []),
-  });
+  const client = createClient(cache, mocks);
 
   const app: App = {
     graphqlClient: client,

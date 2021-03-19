@@ -1,4 +1,6 @@
 /* eslint-disable class-methods-use-this */
+import fetch from 'cross-fetch';
+
 import '@testing-library/jest-dom';
 
 import { cleanup } from './src/testing';
@@ -43,3 +45,5 @@ afterAll(() => {
 });
 
 afterEach(cleanup);
+
+global.fetch = fetch;

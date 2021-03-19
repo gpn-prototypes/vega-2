@@ -62,6 +62,7 @@
     "babel-loader": "^8.1.0",
     "bem-cn": "^3.0.1",
     "cross-env": "^7.0.2",
+    "cross-fetch": "^3.0.5",
     "dayjs": "^1.9.3",
     "dotenv": "^8.2.0",
     "eslint-import-resolver-alias": "^1.1.2",

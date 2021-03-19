@@ -15,7 +15,7 @@ export const AppView = (): React.ReactElement => {
       path={['/projects', '/projects/create', '/projects/show/:projectId']}
       render={() => (
         <VegaRoot className="SP-App-Wrapper" defaultTheme="dark">
-          <div className="SP-App">
+          <div aria-label="Расчётная платформа" className="SP-App">
             <PageLayout>
               <Switch>
                 <Route exact path="/projects" component={ProjectsPage} />
