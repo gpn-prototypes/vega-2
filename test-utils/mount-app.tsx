@@ -7,6 +7,7 @@ import { createMemoryHistory, MemoryHistory } from 'history';
 
 import { AppProvider } from '../src/App/app-context';
 import { Bus } from '../types/bus';
+import { CurrentProject } from '../types/current-project';
 import { Notifications } from '../types/notifications';
 
 import { busMock } from './mocks/busMock';
@@ -19,6 +20,7 @@ type MountAppOptions = {
   url?: string;
   notifications?: Notifications;
   bus?: Bus;
+  currentProject?: CurrentProject;
 };
 
 export type MountAppResult = {
@@ -27,6 +29,7 @@ export type MountAppResult = {
   waitRequest(amount?: number): Promise<void>;
   history: MemoryHistory;
   notifications: Notifications;
+  currentProject: CurrentProject;
 };
 
 export const mountApp = (
@@ -36,6 +39,9 @@ export const mountApp = (
   const history = createMemoryHistory();
   const notifications = options.notifications ?? notificationsMock;
   const bus = options.bus ?? busMock;
+  const currentProject = options.currentProject ?? {
+    get: () => null,
+  };
 
   if (options.url) {
     history.push(options.url);
@@ -55,7 +61,12 @@ export const mountApp = (
     return (
       <Router history={history}>
         <MockedProvider mocks={mocks} addTypename cache={cache}>
-          <AppProvider notifications={notifications} bus={bus} setServerError={() => {}}>
+          <AppProvider
+            currentProject={currentProject}
+            notifications={notifications}
+            bus={bus}
+            setServerError={() => {}}
+          >
             <>{props.children}</>
           </AppProvider>
         </MockedProvider>
@@ -85,5 +96,6 @@ export const mountApp = (
     cache,
     notifications,
     history,
+    currentProject,
   };
 };

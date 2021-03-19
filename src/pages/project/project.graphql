@@ -21,6 +21,7 @@ fragment commonError on Error {
 }
 
 mutation UpdateProjectStatus($vid: UUID!, $data: ProjectStatusUpdateType!) {
+  __typename,
   updateProjectStatus(vid: $vid, data: $data) {
     result {
       ... on Project {
@@ -46,6 +47,7 @@ mutation UpdateProjectStatus($vid: UUID!, $data: ProjectStatusUpdateType!) {
 }
 
 mutation CreateBlankProject {
+  __typename
   createProject(data: {}) {
     result {
       ... on Project {
@@ -66,6 +68,7 @@ mutation CreateBlankProject {
 }
 
 mutation UpdateProjectForm($vid: UUID, $data: ProjectUpdateType) {
+  __typename
   updateProject(vid: $vid, data: $data) {
     result {
       ... on Project {
@@ -91,6 +94,7 @@ mutation UpdateProjectForm($vid: UUID, $data: ProjectUpdateType) {
 }
 
 query ProjectFormFields($vid: UUID!) {
+  __typename
   project(vid: $vid) {
     ... on Project {
       ...projectFormFields
@@ -114,6 +118,7 @@ query ProjectFormRegionList {
 }
 
 mutation DeleteBlankProject($vid: UUID) {
+  __typename
   deleteProject(vid: $vid) {
     result {
       ... on Result {

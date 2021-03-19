@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { Loader } from '@gpn-prototypes/vega-ui';
 import { FormApi, getIn, setIn } from 'final-form';
 
@@ -12,7 +11,7 @@ import {
   UpdateProjectDiff,
   ValidationError,
 } from '../../__generated__/types';
-import { useApp } from '../../App/app-context';
+import { useApp, useCurrentProjectParams } from '../../App/app-context';
 import { useBrowserTabActivity } from '../../hooks';
 import { FormValues, ProjectForm } from '../../ui/features/projects';
 
@@ -28,10 +27,6 @@ import { extractProjectValidationErrors } from './extract-project-validation-err
 import { ReferenceDataType } from './types';
 
 import './ProjectPage.css';
-
-type ParamsType = {
-  projectId: string;
-};
 
 type PageProps = Record<string, unknown>;
 
@@ -56,8 +51,8 @@ const getInitialValues = (project: ProjectFormFields): FormValues => {
 const FORM_FIELDS_POLLING_MS = 1000 * 30;
 
 export const EditProjectPage: React.FC<PageProps> = () => {
-  const { projectId } = useParams<ParamsType>();
   const { notifications, setServerError } = useApp();
+  const { vid, version } = useCurrentProjectParams();
 
   const [unsavedChanges, setUnsavedChanges] = useState<Partial<FormValues>>({});
 
@@ -71,7 +66,7 @@ export const EditProjectPage: React.FC<PageProps> = () => {
   } = useProjectFormFields({
     pollInterval: FORM_FIELDS_POLLING_MS,
     variables: {
-      vid: projectId,
+      vid,
     },
   });
 
@@ -107,11 +102,6 @@ export const EditProjectPage: React.FC<PageProps> = () => {
           {},
         );
 
-      const version =
-        queryProjectData?.project?.__typename === 'Project'
-          ? queryProjectData?.project?.version
-          : 1;
-
       const updateProjectResult = await updateProject({
         context: {
           projectDiffResolving: {
@@ -130,11 +120,11 @@ export const EditProjectPage: React.FC<PageProps> = () => {
           },
         },
         variables: {
-          vid: projectId,
+          vid,
           data: {
             ...unsavedChanges,
             ...changes,
-            version: version || 1,
+            version,
           },
         },
       });
@@ -193,8 +183,9 @@ export const EditProjectPage: React.FC<PageProps> = () => {
       return {};
     },
     [
+      vid,
+      version,
       notifications,
-      projectId,
       unsavedChanges,
       queryProjectData,
       updateProject,
