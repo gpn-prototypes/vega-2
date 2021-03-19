@@ -21,7 +21,7 @@ jobs:
 
       - run: yarn generate:types
         env:
-          VEGA_SCHEMA_PATH: graphql.schema.json
+          VEGA_SCHEMA_PATH: schema.graphql
 
       - run: yarn coverage
         if: always()
