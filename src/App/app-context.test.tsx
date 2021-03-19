@@ -1,8 +1,10 @@
 import React from 'react';
+import { InMemoryCache } from '@apollo/client';
 import { act, renderHook } from '@testing-library/react-hooks';
 import faker from 'faker';
+import { createBrowserHistory } from 'history';
 
-import { notificationsMock } from '../../test-utils/mocks/notificationsMock';
+import { createClient, notificationsMock } from '../testing';
 
 import { AppProvider, useApp, useCurrentProjectParams } from './app-context';
 
@@ -39,6 +41,8 @@ describe('AppProvider', () => {
 
   const wrapper: React.FC = ({ children }) => (
     <AppProvider
+      graphqlClient={createClient(new InMemoryCache())}
+      history={createBrowserHistory()}
       bus={busSpy}
       currentProject={currentProjectMock}
       notifications={notificationsMock}

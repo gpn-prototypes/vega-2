@@ -8,6 +8,7 @@ import {
 } from '@testing-library/react';
 import { createBrowserHistory } from 'history';
 
+import { CurrentProject } from '../../types/current-project';
 import { App, AppProvider } from '../App/app-context';
 
 import { addCleanupTask } from './cleanup';
@@ -25,6 +26,7 @@ export interface Options extends RenderOptions {
   route?: string;
   beforeRender?: BeforeRenderFn;
   mocks?: ReadonlyArray<MockedResponse>;
+  currentProject?: CurrentProject;
 }
 
 export interface RenderResult extends RTLRenderResult, RenderContext {
@@ -42,7 +44,7 @@ export const createClient = (
 };
 
 export const render = (ui: React.ReactElement, options: Options = {}): RenderResult => {
-  const { route, beforeRender, mocks, ...rtlOptions } = options;
+  const { route, beforeRender, mocks, currentProject, ...rtlOptions } = options;
 
   if (route !== undefined) {
     window.history.pushState({}, 'Test page', route);
@@ -64,6 +66,9 @@ export const render = (ui: React.ReactElement, options: Options = {}): RenderRes
     notifications: notificationsMock,
     bus: busMock,
     history: createBrowserHistory(),
+    currentProject: currentProject ?? {
+      get: () => null,
+    },
   };
 
   if (beforeRender) {
@@ -76,7 +81,7 @@ export const render = (ui: React.ReactElement, options: Options = {}): RenderRes
   };
 
   const TestProviders: React.FC = ({ children }) => {
-    return <AppProvider app={app}>{children}</AppProvider>;
+    return <AppProvider {...app}>{children}</AppProvider>;
   };
 
   addCleanupTask(() => {

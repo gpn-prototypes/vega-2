@@ -4,10 +4,9 @@ import { MockedResponse } from '@apollo/client/testing';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import * as dataGenerators from '../../../test-utils/data-generators';
-import { notificationsMock } from '../../../test-utils/mocks/notificationsMock';
-import { mountApp, MountAppResult } from '../../../test-utils/mount-app';
 import { Notifications } from '../../../types/notifications';
+import { render as utilsRender, RenderResult, waitRequests } from '../../testing';
+import * as dataGenerators from '../../testing/data-generators';
 
 import {
   ProjectFormFieldsDocument,
@@ -89,22 +88,20 @@ const currentProject = {
 
 const render = ({
   mocks = [],
-  notifications,
 }: {
   mocks?: MockedResponse[];
   notifications?: Notifications;
-}): MountAppResult => {
+}): RenderResult => {
   const component = (
     <Route path="/projects/show/:projectId">
       <EditProjectPage />
     </Route>
   );
 
-  return mountApp(component, {
+  return utilsRender(component, {
     mocks,
-    notifications,
     currentProject,
-    url: URL,
+    route: URL,
   });
 };
 
@@ -130,11 +127,11 @@ describe('EditProjectPage', () => {
   });
 
   it('инициализирует значения в форме на начальные после сброса', async () => {
-    const { waitRequest } = render({
+    render({
       mocks: [MockProjectFormFields(), MockProjectFormRegionList(), MockProjectFormFields()],
     });
 
-    await waitRequest();
+    await waitRequests();
 
     const inputName = await findNameInput();
 
@@ -145,28 +142,25 @@ describe('EditProjectPage', () => {
 
     userEvent.click(buttonReset);
 
-    await waitRequest();
+    await waitRequests();
 
     expect(inputName.value).toEqual(PROJECT.name);
   });
 
   it('выводит сообщение об успешном обновлении', async () => {
     const valueName = 'Пышки плюшки';
-    const spyAdd = jest.fn();
 
-    const { waitRequest } = render({
+    const { app } = render({
       mocks: [
         MockProjectFormFields(),
         MockProjectFormRegionList(),
         MockUpdateProjectForm({ ...PROJECT, name: valueName }, { name: valueName, version: 1 }),
       ],
-      notifications: {
-        ...notificationsMock,
-        add: spyAdd,
-      },
     });
 
-    await waitRequest();
+    const spy = jest.spyOn(app.notifications, 'add');
+
+    await waitRequests();
 
     const inputName = await findNameInput();
 
@@ -177,9 +171,9 @@ describe('EditProjectPage', () => {
 
     userEvent.click(buttonSubmit);
 
-    await waitRequest();
+    await waitRequests();
 
-    expect(spyAdd).toBeCalledWith(expect.objectContaining({ body: 'Изменения успешно сохранены' }));
+    expect(spy).toBeCalledWith(expect.objectContaining({ body: 'Изменения успешно сохранены' }));
   });
 
   it('показывает ошибки валидации с сервера', async () => {
@@ -216,7 +210,7 @@ describe('EditProjectPage', () => {
       };
     };
 
-    const { waitRequest } = render({
+    render({
       mocks: [
         MockProjectFormFields(),
         MockProjectFormRegionList(),
@@ -225,7 +219,7 @@ describe('EditProjectPage', () => {
       ],
     });
 
-    await waitRequest();
+    await waitRequests();
 
     const inputName = await findNameInput();
 
@@ -236,7 +230,7 @@ describe('EditProjectPage', () => {
 
     userEvent.click(buttonSubmit);
 
-    await waitRequest();
+    await waitRequests();
 
     const error = await screen.findByText(errorMessage);
 
@@ -245,11 +239,11 @@ describe('EditProjectPage', () => {
 
   describe('Footer', () => {
     it('переключает состояние при изменениях в форме', async () => {
-      const { waitRequest } = render({
+      render({
         mocks: [MockProjectFormFields(), MockProjectFormRegionList()],
       });
 
-      await waitRequest();
+      await waitRequests();
 
       const inputName = await findNameInput();
 
