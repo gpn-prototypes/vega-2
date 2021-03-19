@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { render, RenderResult, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { merge } from 'ramda';
 
 import { ProjectStatusEnum } from '../../__generated__/types';
+import { render, RenderResult, screen } from '../../testing';
 
 import { ProjectsPageView, ProjectsPageViewProps } from './ProjectsPageView';
 import { ProjectsTable } from './ProjectsTable';

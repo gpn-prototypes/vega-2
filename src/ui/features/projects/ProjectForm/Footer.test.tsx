@@ -1,7 +1,8 @@
 import React from 'react';
-import { render, RenderResult, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { merge } from 'ramda';
+
+import { render, RenderResult, screen } from '../../../../testing';
 
 import { Footer, FooterProps } from './Footer';
 

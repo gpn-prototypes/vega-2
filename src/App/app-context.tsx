@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from 'react';
+import { Router } from 'react-router';
+import { ApolloClient, ApolloProvider, NormalizedCacheObject } from '@apollo/client';
+import { History } from 'history';
 
 import { Bus } from '../../types/bus';
 import { CurrentProject, Project } from '../../types/current-project';
 import { Notifications } from '../../types/notifications';
 import { ServerError } from '../../types/shell';
 
-type AppProviderProps = {
-  currentProject: CurrentProject;
+export type App = {
   notifications: Notifications;
+  currentProject: CurrentProject;
   bus: Bus;
+  history: History;
+  graphqlClient: ApolloClient<NormalizedCacheObject>;
   setServerError: (serverError: ServerError | null) => void;
 };
 
-type AppContextProps = {
-  currentProject: CurrentProject;
-  notifications: Notifications;
-  bus: Bus;
-  setServerError: (serverError: ServerError | null) => void;
-};
+const AppContext = React.createContext<App | null>(null);
 
-const AppContext = React.createContext<AppContextProps | null>(null);
-
-export const useApp = (): AppContextProps => {
+export const useApp = (): App => {
   const app = React.useContext(AppContext);
 
   if (app === null) {
@@ -50,8 +48,14 @@ export function useCurrentProjectParams(): Project {
   return params;
 }
 
-export const AppProvider: React.FC<AppProviderProps> = (props) => {
-  const { children, ...shell } = props;
+export const AppProvider: React.FC<App> = (props) => {
+  const { children, ...app } = props;
 
-  return <AppContext.Provider value={{ ...shell }}>{children}</AppContext.Provider>;
+  return (
+    <AppContext.Provider value={app}>
+      <ApolloProvider client={app.graphqlClient}>
+        <Router history={app.history}>{children}</Router>
+      </ApolloProvider>
+    </AppContext.Provider>
+  );
 };

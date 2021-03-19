@@ -11,7 +11,7 @@ import {
   ProjectTypeEnum,
   Region,
   User,
-} from '../src/__generated__/types';
+} from '../__generated__/types';
 
 export function createID(): string {
   return uuidv4();

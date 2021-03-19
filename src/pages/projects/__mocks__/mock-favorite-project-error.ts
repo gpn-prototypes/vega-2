@@ -3,7 +3,7 @@ import {
   ProjectToggleFavoriteDocument,
 } from '../__generated__/projects';
 import { ProjectStatusEnum } from '../../../__generated__/types';
-import { createProject } from '../../../../test-utils/data-generators';
+import { createProject } from '../../../testing';
 
 export const favoriteProjectErrorMock = [
   {

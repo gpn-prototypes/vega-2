@@ -1,8 +1,8 @@
 /* istanbul ignore file */
-import { act, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { ProjectStatusEnum, ProjectTypeEnum } from '../../../../../__generated__/types';
+import { act, screen } from '../../../../../testing';
 import { FormValues } from '../types';
 
 export const initializeProjectForm = (fields?: FormValues): FormValues =>

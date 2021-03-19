@@ -1,6 +1,7 @@
 import React from 'react';
-import { render, RenderResult, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+
+import { render, RenderResult, screen } from '../../../testing';
 
 import { ProjectFilterProps, ProjectsFilter } from './ProjectsFilter';
 

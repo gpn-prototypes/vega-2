@@ -1,8 +1,8 @@
 import React from 'react';
-import { render, RenderResult } from '@testing-library/react';
 import { merge } from 'ramda';
 
 import { Country, Region } from '../../../../__generated__/types';
+import { render, RenderResult } from '../../../../testing';
 
 import { Banner, BannerProps, getDescription } from './Banner';
 

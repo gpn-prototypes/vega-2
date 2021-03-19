@@ -1,6 +1,9 @@
 /* eslint-disable class-methods-use-this */
+import fetch from 'cross-fetch';
+
 import '@testing-library/jest-dom';
 
+import { cleanup } from './src/testing';
 import { AppConfig } from './app-config';
 
 declare global {
@@ -25,7 +28,6 @@ global.window.appConfig = {
 };
 
 beforeAll(() => {
-  // @ts-expect-error: TODO https://github.com/gpn-prototypes/vega-ui/blob/e9b832cde379550166dcce920c3a1587a1922469/setup-tests.tsx
   global.ResizeObserver = class ResizeObserver {
     // eslint-disable-next-line class-methods-use-this
     observe(): void {}
@@ -39,6 +41,9 @@ beforeAll(() => {
 });
 
 afterAll(() => {
-  // @ts-expect-error: TODO https://github.com/gpn-prototypes/vega-ui/blob/e9b832cde379550166dcce920c3a1587a1922469/setup-tests.tsx
   delete global.ResizeObserver;
 });
+
+afterEach(cleanup);
+
+global.fetch = fetch;

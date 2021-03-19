@@ -1,8 +1,12 @@
-import { ProjectsTableListDocument } from '../__generated__/projects';
-import { ProjectStatusEnum } from '../../../__generated__/types';
-import { createProject } from '../../../testing/data-generators';
+import React from 'react';
 
-export const defaultMock = [
+import { ProjectStatusEnum } from '../__generated__/types';
+import { ProjectsTableListDocument } from '../pages/projects/__generated__/projects';
+import { createProject, render, screen, waitRequests } from '../testing';
+
+import { AppView } from './AppView';
+
+const defaultMock = [
   {
     request: {
       query: ProjectsTableListDocument,
@@ -40,3 +44,17 @@ export const defaultMock = [
     },
   },
 ];
+
+describe('AppView', () => {
+  test('рендерится без ошибок', () => {
+    expect(() => render(<AppView />)).not.toThrow();
+  });
+
+  test('рендерится приложение', async () => {
+    render(<AppView />, { route: '/projects', mocks: defaultMock });
+
+    await waitRequests();
+
+    expect(await screen.getByLabelText('Расчётная платформа')).toBeInTheDocument();
+  });
+});

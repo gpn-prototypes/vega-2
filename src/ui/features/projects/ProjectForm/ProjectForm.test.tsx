@@ -1,10 +1,10 @@
 import React from 'react';
-import { act, fireEvent, render, RenderResult, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { SubmissionErrors } from 'final-form';
 import { merge } from 'ramda';
 
 import { Country, ProjectStatusEnum, Region } from '../../../../__generated__/types';
+import { act, fireEvent, render, RenderResult, screen, waitFor } from '../../../../testing';
 
 import { getCombobox, initializeProjectForm } from './__tests__/utils';
 import { ProjectForm } from './ProjectForm';
