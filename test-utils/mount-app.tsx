@@ -21,7 +21,7 @@ type MountAppOptions = {
   bus?: Bus;
 };
 
-type MountAppResult = {
+export type MountAppResult = {
   $: RenderResult;
   cache: InMemoryCache;
   waitRequest(amount?: number): Promise<void>;
