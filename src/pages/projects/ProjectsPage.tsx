@@ -45,8 +45,8 @@ export const ProjectsPage = (): React.ReactElement => {
       pageNumber: 1,
       pageSize: PAGE_SIZE,
       includeBlank: false,
-      sortBy: (meData?.me?.customSettings?.projectList?.sortBy as unknown) as SortType,
       orderBy: meData?.me?.customSettings?.projectList?.orderBy,
+      sortBy: (meData?.me?.customSettings?.projectList?.sortBy as unknown) as SortType,
     },
   });
 

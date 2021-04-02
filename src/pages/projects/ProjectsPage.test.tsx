@@ -45,7 +45,7 @@ describe('ProjectsPage', () => {
     expect(screen.getByTestId(ProjectsPageView.testId.rootTitle)).toBeVisible();
     expect(screen.getByTestId(ProjectsPageView.testId.table)).toBeVisible();
     expect(
-      screen.getByText(defaultMock[0].result.data.projects.data[2].name as string),
+      screen.getByText(defaultMock[1].result.data.projects?.data[2].name as string),
     ).toBeVisible();
   });
 
@@ -58,7 +58,7 @@ describe('ProjectsPage', () => {
 
     await waitRequests();
 
-    const nameProject = favoriteProjectMock[0].result.data.projects?.data[0].name as string;
+    const nameProject = favoriteProjectMock[1].result.data.projects?.data[0].name as string;
 
     userEvent.hover(screen.getByText(nameProject));
 
@@ -80,7 +80,7 @@ describe('ProjectsPage', () => {
 
     await waitRequests();
 
-    const nameProject = favoriteErrorProjectMock[0].result.data.projects?.data[0].name as string;
+    const nameProject = favoriteErrorProjectMock[1].result.data.projects?.data[0].name as string;
     userEvent.hover(screen.getByText(nameProject));
 
     userEvent.click(screen.getAllByTestId(ProjectsTable.testId.favoriteNotSelectedButton)[0]);
@@ -101,7 +101,7 @@ describe('ProjectsPage', () => {
 
     await waitRequests();
 
-    const projectName = deleteProjectMock[0].result.data.projects?.data[0].name as string;
+    const projectName = deleteProjectMock[1].result.data.projects?.data[0].name as string;
     const nameCells = await waitFor(() => screen.getAllByTestId(ProjectsTable.testId.projectName));
 
     expect(screen.getByText(projectName)).toBeVisible();
@@ -119,7 +119,7 @@ describe('ProjectsPage', () => {
 
     const firstProjectName = newNameCells[0].textContent;
 
-    const nextProjectName = deleteProjectMock[2].result.data.projects?.data[0].name;
+    const nextProjectName = deleteProjectMock[4].result.data.projects?.data[0].name;
 
     expect(firstProjectName).toBe(nextProjectName);
     expect(newNameCells.length).toBe(2);
@@ -178,9 +178,9 @@ describe('ProjectsPage', () => {
 
     expect(app.history.location.pathname).toBe('/projects');
 
-    userEvent.click(screen.getByText(defaultMock[0].result.data.projects.data[2].name as string));
+    userEvent.click(screen.getByText(defaultMock[1].result.data.projects?.data[2].name as string));
 
-    const newUrl = `/projects/show/${defaultMock[0].result.data.projects.data[2].vid}`;
+    const newUrl = `/projects/show/${defaultMock[1].result.data.projects?.data[2].vid}`;
 
     expect(app.history.location.pathname).toBe(newUrl);
   });
@@ -196,7 +196,7 @@ describe('ProjectsPage', () => {
 
     expect(app.history.location.pathname).toBe('/projects');
 
-    const urlProjectForEdit = `/projects/show/${defaultMock[0].result.data.projects.data[0].vid}`;
+    const urlProjectForEdit = `/projects/show/${defaultMock[1]?.result?.data?.projects?.data[0].vid}`;
 
     openMenuProject();
 
