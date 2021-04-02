@@ -351,8 +351,6 @@ type Project {
   coordinateSystem: String
   description: String
   status: ProjectStatusEnum
-  yearStart: Int
-  yearEnd: Int
   version: Int
   rootEntity: String
   resourceId: String
@@ -820,8 +818,6 @@ input ProjectInputType {
   type: ProjectTypeEnum
   coordinates: String
   resourceId: String
-  yearStart: Int = 2022
-  yearEnd: Int
 }
 type DeleteProject {
   result: UuidOrError
@@ -848,8 +844,6 @@ input ProjectUpdateType {
   coordinates: String
   resourceId: String
   status: ProjectStatusEnum
-  yearStart: Int
-  yearEnd: Int
   """Version of the original project."""
   version: Int!
 }
