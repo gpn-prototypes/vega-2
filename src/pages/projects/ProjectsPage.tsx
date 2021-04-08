@@ -62,11 +62,11 @@ export const ProjectsPage = (): React.ReactElement => {
       ? data.projects.itemsTotal
       : undefined;
 
-  const getSortType = (sortOrder: 'asc' | 'desc'): SortType => {
+  const getOrderBy = (sortOrder: 'asc' | 'desc'): SortType => {
     return sortOrder === 'asc' ? SortType.Asc : SortType.Desc;
   };
 
-  const getSortOrder = (sortingBy: keyof typeof ColumnNames): ProjectOrderByEnum => {
+  const getSortBy = (sortingBy: keyof typeof ColumnNames): ProjectOrderByEnum => {
     const capitalizedColumnName = (sortingBy.charAt(0).toUpperCase() +
       sortingBy.slice(1)) as keyof typeof ProjectOrderByEnum;
 
@@ -78,12 +78,23 @@ export const ProjectsPage = (): React.ReactElement => {
       if (sortOptions) {
         const { sortingBy, sortOrder } = sortOptions;
 
-        const sortBy = getSortType(sortOrder);
-        const orderBy = getSortOrder(sortingBy);
+        const orderBy = getOrderBy(sortOrder);
+        const sortBy = getSortBy(sortingBy);
+
+        // TODO: После правки на бэке, изменить запрос refetch (информация ниже в комментарии)
+
+        // На данный момент на бэкенде перепутаны названия аргументов: sortBy и orderBy
+        // Т.е sortBy принимает 'asc' | 'desc', хотя это относится к порядку сортировки (orderBy)
+        // Поэтому ниже можно увидеть расхождения { sortBy: orderBy, orderBy: sortBy }
 
         /* istanbul ignore else */
         if (totalQuantityProjects !== undefined) {
-          refetch({ sortBy, orderBy, pageNumber: 1, pageSize: totalQuantityProjects });
+          refetch({
+            sortBy: orderBy,
+            orderBy: sortBy,
+            pageNumber: 1,
+            pageSize: totalQuantityProjects,
+          });
         }
 
         return;
