@@ -2,16 +2,18 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { IconEdit, IconTrash, Text } from '@gpn-prototypes/vega-ui';
 
+import { ProjectOrderByEnum, SortType } from '../../__generated__/types';
 import { useApp } from '../../App/app-context';
 import { useBrowserTabActivity } from '../../hooks';
 import { projectsMapper } from '../../utils/projects-mapper';
 
 import {
   useDeleteProject,
+  useMe,
   useProjectsTableList,
   useProjectToggleFavorite,
 } from './__generated__/projects';
-import { MenuItemProps, TableRow } from './ProjectsTable/types';
+import { ColumnNames, MenuItemProps, SortData, TableRow } from './ProjectsTable/types';
 import { cnProjectsPage as cn } from './cn-projects-page';
 import { ModalDeleteProject } from './ModalDeleteProject';
 import { ProjectsPageView } from './ProjectsPageView';
@@ -33,6 +35,8 @@ export const ProjectsPage = (): React.ReactElement => {
   const { notifications } = useApp();
   const history = useHistory();
 
+  const { data: meData } = useMe();
+
   const { data, loading, startPolling, stopPolling, refetch, fetchMore } = useProjectsTableList({
     fetchPolicy: 'network-only',
     pollInterval: TABLE_POLLING_INTERVAL_MS,
@@ -41,6 +45,8 @@ export const ProjectsPage = (): React.ReactElement => {
       pageNumber: 1,
       pageSize: PAGE_SIZE,
       includeBlank: false,
+      orderBy: meData?.me?.customSettings?.projectList?.orderBy,
+      sortBy: (meData?.me?.customSettings?.projectList?.sortBy as unknown) as SortType,
     },
   });
 
@@ -56,9 +62,58 @@ export const ProjectsPage = (): React.ReactElement => {
       ? data.projects.itemsTotal
       : undefined;
 
+  const getOrderBy = (sortOrder: 'asc' | 'desc'): SortType => {
+    return sortOrder === 'asc' ? SortType.Asc : SortType.Desc;
+  };
+
+  const getSortBy = (sortingBy: keyof typeof ColumnNames): ProjectOrderByEnum => {
+    const capitalizedColumnName = (sortingBy.charAt(0).toUpperCase() +
+      sortingBy.slice(1)) as keyof typeof ProjectOrderByEnum;
+
+    return ProjectOrderByEnum[capitalizedColumnName];
+  };
+
+  const handleSortProjects = React.useCallback(
+    (sortOptions: SortData | null) => {
+      if (sortOptions) {
+        const { sortingBy, sortOrder } = sortOptions;
+
+        const orderBy = getOrderBy(sortOrder);
+        const sortBy = getSortBy(sortingBy);
+
+        // TODO: После правки на бэке, изменить запрос refetch (информация ниже в комментарии)
+
+        // На данный момент на бэкенде перепутаны названия аргументов: sortBy и orderBy
+        // Т.е sortBy принимает 'asc' | 'desc', хотя это относится к порядку сортировки (orderBy)
+        // Поэтому ниже можно увидеть расхождения { sortBy: orderBy, orderBy: sortBy }
+
+        /* istanbul ignore else */
+        if (totalQuantityProjects !== undefined) {
+          refetch({
+            sortBy: orderBy,
+            orderBy: sortBy,
+            pageNumber: 1,
+            pageSize: totalQuantityProjects,
+          });
+        }
+
+        return;
+      }
+
+      refetch({
+        sortBy: SortType.Desc,
+        orderBy: ProjectOrderByEnum.EditedAt,
+        pageNumber: 1,
+        pageSize: totalQuantityProjects ?? PAGE_SIZE,
+      });
+    },
+    [refetch, totalQuantityProjects],
+  );
+
   const refetchProjects = () => {
+    const currentPageNumber = nextPageNumber - 1;
     const pageSize = totalQuantityProjects
-      ? totalQuantityProjects - (totalQuantityProjects - (nextPageNumber - 1) * PAGE_SIZE)
+      ? totalQuantityProjects - (totalQuantityProjects - currentPageNumber * PAGE_SIZE)
       : undefined;
 
     /* istanbul ignore else */
@@ -186,6 +241,48 @@ export const ProjectsPage = (): React.ReactElement => {
     }
   };
 
+  const handleLoadMore = () => {
+    setIsLoadingMore(true);
+
+    fetchMore({
+      variables: { pageNumber: nextPageNumber, pageSize: PAGE_SIZE },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+
+        const prevData =
+          prev.projects?.__typename === 'ProjectList' && prev.projects.data
+            ? prev.projects.data
+            : [];
+        const resultData =
+          fetchMoreResult.projects?.__typename === 'ProjectList' && fetchMoreResult.projects.data
+            ? fetchMoreResult.projects.data
+            : [];
+
+        const prevItemsTotal =
+          prev.projects?.__typename === 'ProjectList' ? prev.projects.itemsTotal : undefined;
+
+        const resultItemsTotal =
+          fetchMoreResult.projects?.__typename === 'ProjectList' &&
+          fetchMoreResult.projects.itemsTotal
+            ? fetchMoreResult.projects.itemsTotal
+            : undefined;
+
+        return {
+          ...prev,
+          ...fetchMoreResult,
+          projects: {
+            data: [...prevData, ...resultData],
+            itemsTotal: resultItemsTotal ?? prevItemsTotal,
+            __typename: 'ProjectList',
+          },
+        };
+      },
+    }).then(() => {
+      setIsLoadingMore(false);
+      setNextPageNumber(nextPageNumber + 1);
+    });
+  };
+
   return (
     <>
       <ProjectsPageView
@@ -193,48 +290,9 @@ export const ProjectsPage = (): React.ReactElement => {
         isLoading={isLoading}
         isLoadingMore={isLoadingMore}
         onFavorite={handleToggleFavorite}
+        onSort={handleSortProjects}
         counterProjects={{ current: currentQuantityProjects, total: totalQuantityProjects }}
-        onLoadMore={() => {
-          setIsLoadingMore(true);
-          fetchMore({
-            variables: { pageNumber: nextPageNumber, pageSize: PAGE_SIZE },
-            updateQuery: (prev, { fetchMoreResult }) => {
-              if (!fetchMoreResult) return prev;
-
-              const prevData =
-                prev.projects?.__typename === 'ProjectList' && prev.projects.data
-                  ? prev.projects.data
-                  : [];
-              const resultData =
-                fetchMoreResult.projects?.__typename === 'ProjectList' &&
-                fetchMoreResult.projects.data
-                  ? fetchMoreResult.projects.data
-                  : [];
-
-              const prevItemsTotal =
-                prev.projects?.__typename === 'ProjectList' ? prev.projects.itemsTotal : undefined;
-
-              const resultItemsTotal =
-                fetchMoreResult.projects?.__typename === 'ProjectList' &&
-                fetchMoreResult.projects.itemsTotal
-                  ? fetchMoreResult.projects.itemsTotal
-                  : undefined;
-
-              return {
-                ...prev,
-                ...fetchMoreResult,
-                projects: {
-                  data: [...prevData, ...resultData],
-                  itemsTotal: resultItemsTotal ?? prevItemsTotal,
-                  __typename: 'ProjectList',
-                },
-              };
-            },
-          }).then(() => {
-            setIsLoadingMore(false);
-            setNextPageNumber(nextPageNumber + 1);
-          });
-        }}
+        onLoadMore={handleLoadMore}
       />
       <ModalDeleteProject
         projectName={dataDeleteProject?.name}

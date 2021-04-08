@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Loader, Text } from '@gpn-prototypes/vega-ui';
 
-import { TableRow } from './ProjectsTable/types';
+import { SortData, TableRow } from './ProjectsTable/types';
 import { cnProjectsPage as cn } from './cn-projects-page';
 import { ProjectsTable } from './ProjectsTable';
 
@@ -23,6 +23,7 @@ export type ProjectsPageViewProps = {
   counterProjects: { current?: number; total?: number };
   onLoadMore: VoidFunction;
   onFavorite(id: string, payload: { isFavorite: boolean; version: number }): void;
+  onSort(sortedOptions: SortData | null): void;
 };
 
 type ProjectsPageViewType = React.FC<ProjectsPageViewProps> & {
@@ -37,6 +38,7 @@ export const ProjectsPageView: ProjectsPageViewType = (props) => {
     <div className={cn('Table')} data-testid={testId.table}>
       <ProjectsTable
         rows={props.projects}
+        onSort={props.onSort}
         onFavorite={(id, payload) => {
           props.onFavorite(id, payload);
         }}

@@ -28,6 +28,7 @@ const defaultProps: ProjectsPageViewProps = {
   projects: projectRowMock,
   onFavorite: noop,
   onLoadMore: noop,
+  onSort: noop,
 };
 
 function renderComponent(props?: Partial<ProjectsPageViewProps>): RenderResult {
@@ -35,6 +36,7 @@ function renderComponent(props?: Partial<ProjectsPageViewProps>): RenderResult {
   const {
     isLoading,
     onFavorite,
+    onSort,
     projects,
     counterProjects,
     onLoadMore,
@@ -49,6 +51,7 @@ function renderComponent(props?: Partial<ProjectsPageViewProps>): RenderResult {
         counterProjects={counterProjects}
         onFavorite={onFavorite}
         onLoadMore={onLoadMore}
+        onSort={onSort}
       />
     </Router>,
   );

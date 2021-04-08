@@ -1,6 +1,6 @@
-query ProjectsTableList($includeBlank: Boolean!, $pageNumber: Int!, $pageSize: Int!) {
+query ProjectsTableList($includeBlank: Boolean!, $pageNumber: Int!, $pageSize: Int!, $orderBy: ProjectOrderByEnum, $sortBy: SortType) {
   __typename
-  projects: projectList(includeBlank: $includeBlank, pageNumber: $pageNumber, pageSize: $pageSize) {
+  projects: projectList(includeBlank: $includeBlank, pageNumber: $pageNumber, pageSize: $pageSize, orderBy: $orderBy, sortBy: $sortBy) {
     ... on ProjectList {
       data: projectList {
         vid
@@ -34,6 +34,31 @@ query ProjectsTableList($includeBlank: Boolean!, $pageNumber: Int!, $pageSize: I
       code
       message
       details
+    }
+  }
+}
+
+query Me {
+  me {
+    name
+    vid
+    code
+    isDeleted
+    createdAt
+    editedAt
+    login
+    firstName
+    patronym
+    lastName
+    adId
+    role
+    ...on User {
+      customSettings {
+        projectList {
+          orderBy
+          sortBy
+        }
+      }
     }
   }
 }

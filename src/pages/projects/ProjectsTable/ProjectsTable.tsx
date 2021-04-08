@@ -11,7 +11,7 @@ import {
 import { hasNestedInteractiveTarget } from '../../../utils/has-nested-interactive-target';
 
 import { EditedAt } from './EditedAt';
-import { TableRow } from './types';
+import { ColumnNames, SortByProps, TableRow } from './types';
 
 import './ProjectsTable.css';
 
@@ -37,13 +37,14 @@ export type ProjectsTableProps = {
   rows?: TableRow[];
   placeholder?: string | React.ReactElement;
   onFavorite(id: string, payload: { isFavorite: boolean; version: number }): void;
+  onSort?(sortedOptions: SortByProps<never> | null): void;
 };
 
 type ProjectsTableType = React.FC<ProjectsTableProps> & {
   testId: typeof testId;
 };
 
-const COLUMNS: React.ComponentProps<typeof Table>['columns'] = [
+export const COLUMNS: React.ComponentProps<typeof Table>['columns'] = [
   {
     title: (
       <div className={styles.columnName}>
@@ -53,26 +54,26 @@ const COLUMNS: React.ComponentProps<typeof Table>['columns'] = [
         <>Название</>
       </div>
     ),
-    accessor: 'name',
-    // sortable: true,
+    accessor: ColumnNames.name,
+    sortable: true,
     width: 260,
   },
   {
     title: 'Описание',
-    accessor: 'description',
-    // sortable: true,
+    accessor: ColumnNames.description,
+    sortable: true,
     width: 260,
   },
   {
     title: 'Регион',
-    accessor: 'region',
-    // sortable: true,
+    accessor: ColumnNames.region,
+    sortable: true,
     width: 260,
   },
   {
     title: 'Создан',
-    accessor: 'createdAt',
-    // sortable: true,
+    accessor: ColumnNames.createdAt,
+    sortable: true,
     width: 200,
   },
   // {
@@ -83,14 +84,14 @@ const COLUMNS: React.ComponentProps<typeof Table>['columns'] = [
   // },
   {
     title: 'Автор',
-    accessor: 'createdBy',
-    // sortable: true,
+    accessor: ColumnNames.createdBy,
+    sortable: true,
     width: 260,
   },
   {
     title: 'Изменён',
-    accessor: 'editedAt',
-    // sortable: true,
+    accessor: ColumnNames.editedAt,
+    sortable: true,
     width: 216,
   },
 ];
@@ -101,6 +102,7 @@ export const ProjectsTable: ProjectsTableType = (props) => {
       Пока нет ни одного проекта :(
     </Text>
   );
+
   const [idActiveRow, setIdActiveRow] = React.useState<string | undefined>(undefined);
 
   const history = useHistory();
@@ -194,6 +196,7 @@ export const ProjectsTable: ProjectsTableType = (props) => {
       zebraStriped="odd"
       columns={COLUMNS}
       rows={rows}
+      onSortBy={props.onSort}
       verticalAlign="center"
       emptyRowsPlaceholder={placeholder}
       activeRow={{
