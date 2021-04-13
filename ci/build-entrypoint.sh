@@ -31,6 +31,12 @@ then
   exit 1;
 fi
 
+echo "$NPM_URI"
+echo "$NPM_AUTH_TOKEN"
+echo "$BASE_URL"
+echo "$VEGA_SCHEMA_PATH"
+echo "$AUTH_TOKEN"
+
 NPMRC_TEMP=$(cat .npmrc)
 
 rollback-npmrc() {
