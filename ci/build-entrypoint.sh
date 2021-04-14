@@ -2,14 +2,9 @@
 
 set -e
 
-if [ -z "$NPM_URI" ]
+if [ -z "$AUTH_TOKEN" ]
 then
-  NPM_URI="npm.pkg.github.com"
-fi
-
-if [ -z "$NPM_AUTH_TOKEN" ]
-then
-  echo "NPM_AUTH_TOKEN is required to continue. Abort."
+  echo "AUTH_TOKEN is required to continue. Abort."
   exit 1;
 fi
 
@@ -25,31 +20,8 @@ then
   exit 1;
 fi
 
-if [ -z "$AUTH_TOKEN" ]
-then
-  echo "AUTH_TOKEN is required to continue. Abort."
-  exit 1;
-fi
-
-echo "$NPM_URI"
-echo "$NPM_AUTH_TOKEN"
-echo "$BASE_URL"
-echo "$VEGA_SCHEMA_PATH"
-echo "$AUTH_TOKEN"
-
-NPMRC_TEMP=$(cat .npmrc)
-
-rollback-npmrc() {
-  echo -e "$NPMRC_TEMP" > .npmrc
-}
-
-trap "rollback-npmrc" EXIT SIGINT
-
-sed -e "s/\$NPM_URI/$NPM_URI/" \
-    -e "s/\$NPM_AUTH_TOKEN/$NPM_AUTH_TOKEN/" ./ci/npmrc-template > .npmrc
-
-yarn install --frozen-lockfile
-yarn generate:types
-yarn build
+$YARN install --frozen-lockfile $VERBOSE_KEY
+$YARN generate:types $VERBOSE_KEY
+$YARN build $VERBOSE_KEY
 
 
