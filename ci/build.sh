@@ -18,16 +18,16 @@ export YARN='eval docker run --rm --name yarn-executor -v $(pwd):/app -v /home/v
 #test
 $YARN --version
 
-NPMRC_TEMP=$(cat .npmrc)
+#NPMRC_TEMP=$(cat .npmrc)
 
-rollback-npmrc() {
-  echo -e "$NPMRC_TEMP" > .npmrc
-}
+#rollback-npmrc() {
+#  echo -e "$NPMRC_TEMP" > .npmrc
+#}
 
-trap "rollback-npmrc" EXIT SIGINT
+#trap "rollback-npmrc" EXIT SIGINT
 
-sed -e "s/\$NPM_URI/$NPM_URI/" \
-    -e "s/\$NPM_AUTH_TOKEN/$NPM_AUTH_TOKEN/" ./ci/npmrc-template > .npmrc
+#sed -e "s/\$NPM_URI/$NPM_URI/" \
+#    -e "s/\$NPM_AUTH_TOKEN/$NPM_AUTH_TOKEN/" ./ci/npmrc-template > .npmrc
 
 ./ci/build-entrypoint.sh
 
