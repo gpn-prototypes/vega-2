@@ -27,4 +27,14 @@ module.exports = {
     ...config.moduleNameMapper,
     '^@vega(.*)$': '<rootDir>/src$1',
   },
+  reporters: [
+    'default',
+    [
+      'jest-junit',
+      {
+        outputDirectory: './reports',
+        suiteName: 'SP Tests',
+      },
+    ],
+  ],
 };
