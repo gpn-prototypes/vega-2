@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cbsRequiredParams=(CBS_CACHE_PATH, ENV_TO_BUILD)
+cbsRequiredParams=(CBS_CACHE_PATH ENV_TO_BUILD)
 check-input-params "${cbsRequiredParams[@]}"
 
 BUILD_SYSTEM_PATH="$REPOROOT/ci/container-based-build-system"
