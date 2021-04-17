@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source $(pwd)/common-vars.sh
+source $REPOROOT/ci/common-vars.sh
 
 if [[ -z `docker images -q $JS_BASE` ]]; then
   docker build -t $JS_BASE .
