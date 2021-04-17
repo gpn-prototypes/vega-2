@@ -12,7 +12,7 @@ function check-input-params() {
       echo "$paramName was not specified. FAIL!"
       noContinueFlag="1"
     else
-      echo "$paramName: $paramVal; OK"   
+      echo "$paramName; OK"   
     fi
   done
 
@@ -20,4 +20,18 @@ function check-input-params() {
     echo "ERROR! Check output^"
     exit 1;
   fi
+}
+
+#"--env BASE_API_URL=$BASE_API_URL --env BASE_URL=$BASE_URL 
+
+function generate-env-to-build-sequence {
+  local paramsList=("$@")
+  local result=""
+  for param in ${paramsList[*]}; do
+    local paramName="$param"
+    eval local paramVal="\$$param"
+    result="$result --env $paramName=$paramVal"
+  done
+  echo "$result"
+
 }
