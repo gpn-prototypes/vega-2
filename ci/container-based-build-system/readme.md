@@ -1,4 +1,4 @@
-*Containerized Build "System" with `.npmrc` hook*
+**Containerized Build "System" with `.npmrc` hook**
 
 
 **Abstract**
@@ -11,7 +11,7 @@ Example:
 `$YARN --version` is a containerized call
 
 
-**Motivation 
+**Motivation**
 
 The project requirements assume a few heterogeneous deployment environments(stages) with different package repositories. 
 Which was lead us to 
