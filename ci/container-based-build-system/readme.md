@@ -16,7 +16,7 @@ Example:
 The project requirements assume a few heterogeneous deployment environments(stages) with different package repositories. 
 Which was lead us to 
 - build components inside a one-off container
-- generate `.npmrc` for a current build enviroment on the fly by hook
+- generate `.npmrc` for a current build enviroment on the fly by a hook
 
 
 **Explanation**
