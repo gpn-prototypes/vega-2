@@ -7,7 +7,8 @@ The main goal is to use containerized build utilities as simple as native.
 
 
 Example:
-`yarn --version` is a native call 
+`yarn --version` is a native call
+
 `$YARN --version` is a containerized call
 
 
