@@ -1,4 +1,8 @@
+<<<<<<< HEAD:ci/README.md
 *Containerized Build "System" with `.npmrc` rollout*
+=======
+**Containerized Build "System" with `.npmrc` hook**
+>>>>>>> c4a8ed7e19c44b96248d882243a5d5f693063a8b:ci/container-based-build-system/readme.md
 
 
 **Abstract**
@@ -8,14 +12,15 @@ The main goal is to use containerized build utilities as simple as native.
 
 
 Example:
-`yarn --version` is a native call 
-`$YARN --version` is a containerized call
+- `yarn --version` is a native call
+- `$YARN --version` is a containerized call
 
 
-**Motivation 
+**Motivation**
 
 The project requirements assume a few heterogeneous deployment environments(stages) with different package repositories. 
-Which was lead us to 
+Which was lead us to
+- use universal build system
 - build components inside a one-off container
 - generate `.npmrc` for a current build enviroment on the fly
 
@@ -23,7 +28,7 @@ Which was lead us to
 **Explanation**
 
 Under the hood of the variable `$YARN` was encapsulated a run of one-off container with `yarn` utility call inside them. 
-Mechanism also propages some required resourses from a host to one-off container. E.g. current execution directory mount, a list of env variables, etc.
+Mechanism also propages some required resources from a host to one-off container. E.g. current execution directory mount, a list of env variables, etc.
 So this allow to use containerized utility `$YARN` as simple as native `yarn` utility.
 
 
