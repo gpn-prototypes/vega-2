@@ -1,9 +1,4 @@
-<<<<<<< HEAD:ci/README.md
 *Containerized Build "System" with `.npmrc` rollout*
-=======
-**Containerized Build "System" with `.npmrc` hook**
->>>>>>> c4a8ed7e19c44b96248d882243a5d5f693063a8b:ci/container-based-build-system/readme.md
-
 
 **Abstract**
 
