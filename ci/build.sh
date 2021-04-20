@@ -5,7 +5,7 @@ set -e
 REPOROOT=$(pwd)
 source $REPOROOT/ci/common.sh
 
-requiredBuildParams=(NPM_AUTH_TOKEN BASE_URL BASE_API_URL VEGA_SCHEMA_PATH AUTH_TOKEN) #NPM_URI)
+requiredBuildParams=(NPM_AUTH_TOKEN BASE_URL BASE_API_URL VEGA_SCHEMA_PATH AUTH_TOKEN NPM_URI)
 check-input-params "${requiredBuildParams[@]}"
 
 #required param for container based build system 

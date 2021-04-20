@@ -9,6 +9,4 @@ VERSION="1"
 
 export JS_BASE="${DOCKER_REGISTRY}/${OCP_NAMESPACE}/${IMAGE_NAME}:${VERSION}"
 
-[[ -z $NPM_URI ]] && NPM_URI="npm.pkg.github.com" 
-
 return 0
