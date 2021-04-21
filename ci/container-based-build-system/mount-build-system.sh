@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ $HOST_DEFINED_BUILD_SYSTEM ]]
+then
+  return 0
+fi
+
 if [[ "${BASH_SOURCE[0]}" -ef "$0" ]]
 then
   echo "==="
