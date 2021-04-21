@@ -4,21 +4,10 @@ set -e
 
 REPOROOT=$(pwd)
 
-
-source $REPOROOT/ci/common.sh
-
-requiredBuildParams=(NPM_AUTH_TOKEN BASE_URL BASE_API_URL VEGA_SCHEMA_PATH AUTH_TOKEN NPM_URI)
-
-check-input-params "${requiredBuildParams[@]}"
-
-#required param for container based build system 
-ENV_TO_BUILD=`generate-env-to-build-sequence "${requiredBuildParams[@]}"`
-
-cbsRequiredParams=(CBS_CACHE_PATH ENV_TO_BUILD)
-check-input-params "${cbsRequiredParams[@]}
+export requiredBuildParams=(NPM_AUTH_TOKEN BASE_URL BASE_API_URL VEGA_SCHEMA_PATH AUTH_TOKEN NPM_URI)
 
 ###
-source $REPOROOT/ci/build-system.sh
+source $REPOROOT/ci/container-based-build-system/mount-build-system.sh
 ###
 
 echo ">>>build started for $REPOROOT"

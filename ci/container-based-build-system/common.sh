@@ -18,8 +18,9 @@ function check-input-params() {
 
   if [ ! -z "$noContinueFlag" ]; then
     echo "ERROR! Check output^"
-    exit 1;
+    return 1;
   fi
+  return 0;
 }
 
 #"--env BASE_API_URL=$BASE_API_URL --env BASE_URL=$BASE_URL 
@@ -33,5 +34,4 @@ function generate-env-to-build-sequence {
     result="$result --env $paramName=$paramVal"
   done
   echo "$result"
-
 }
