@@ -3,8 +3,8 @@
 source $BUILD_SYSTEM_PATH/vars.sh
 
 # CBS_CACHE_PATH -- a path of a dir to store a build system cache (may be any)
-export YARN_CACHE_HOST="$CBS_CACHE_PATH/.cache/yarn"
-export NPM_CACHE_HOST="$CBS_CACHE_PATH/.cache/npm"
+export YARN_CACHE_HOST="$CBS_CACHE_PATH/yarn"
+export NPM_CACHE_HOST="$CBS_CACHE_PATH/npm"
 
 # EXAMPLE
 # ENV_TO_BUILD="--env BASE_API_URL=$BASE_API_URL --env BASE_URL=$BASE_URL --env HOST_NAME=$HOST_NAME --env YC_DEPLOYMENT=$YC_DEPLOYMENT --env VEGA_ENV=$VEGA_ENV --env VEGA_SCHEMA_PATH=$VEGA_SCHEMA_PATH --env NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN"
