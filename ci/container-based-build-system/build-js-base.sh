@@ -2,6 +2,8 @@
 
 source $BUILD_SYSTEM_PATH/vars.sh
 
-[[ -z `docker images -q $JS_BASE` ]] && docker build -t $JS_BASE .
+if [[ -z `docker images -q $JS_BASE` ]]
+then 
+ docker build -t $JS_BASE --file=$BUILD_SYSTEM_PATH/Dockerfile $BUILD_SYSTEM_PATH
+fi
 
-return 0

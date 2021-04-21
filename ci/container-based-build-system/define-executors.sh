@@ -13,6 +13,8 @@ export YARN='eval docker run --rm --name yarn-executor -v $(pwd):/app -v $YARN_C
 
 export NPM='eval docker run --rm --name npm-executor -v $(pwd):/app -v $YARN_CACHE_HOST:/usr/local/share/.cache/yarn $ENV_TO_BUILD $JS_BASE npm'
 
+export BASH='eval docker run --rm -ti --name npm-executor -v $(pwd):/app -v $YARN_CACHE_HOST:/usr/local/share/.cache/yarn $ENV_TO_BUILD $JS_BASE bash'
+
 echo "YARN & NPM executors was defined"
 echo "Example:"
 echo '$YARN --version'

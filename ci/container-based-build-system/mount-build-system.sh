@@ -50,7 +50,11 @@ check-input-params "${cbsRequiredParams[@]}"
 $RETURN_ON_ERROR
 
 ###
-source $BUILD_SYSTEM_PATH/build-system.sh
+source $BUILD_SYSTEM_PATH/build-js-base.sh
+$RETURN_ON_ERROR
+source $BUILD_SYSTEM_PATH/define-executors.sh
+$RETURN_ON_ERROR
+source $BUILD_SYSTEM_PATH/npmrc-rollout.sh
 $RETURN_ON_ERROR
 ###
 
