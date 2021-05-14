@@ -2,43 +2,16 @@
 
 set -e
 
-if [ -z "$VEGA_REPOPREFIX" ]
-then
-  VEGA_REPOPREFIX="vega-sp"
-fi
+REPOROOT=$(pwd)
 
-if [ -z "$IMAGE_NAME" ]
-then
-  IMAGE_NAME="frontend-builder"
-fi
+export requiredBuildParams=(NPM_AUTH_TOKEN BASE_URL BASE_API_URL VEGA_SCHEMA_PATH AUTH_TOKEN NPM_URI)
 
-if [ -z "$FE_BUILDER_VERSION" ]
-then
-  FE_BUILDER_VERSION="1"
-fi
+###
+source $REPOROOT/ci/container-based-build-system/mount-build-system.sh
+###
 
-TAG="$VEGA_REPOPREFIX/$IMAGE_NAME:$FE_BUILDER_VERSION"
-NAME="$VEGA_REPOPREFIX.$IMAGE_NAME"
+echo ">>>build started for $REPOROOT"
 
-if [[ -z "$REBUILD" ]];
-then
-  echo "Docker image build."
-  docker build -t $TAG ./ci
-else
-  echo "Docker image force rebuild."
-  docker build -t $TAG --no-cache ./ci
-fi
-
-docker 2>/dev/null 1>&2 rm $NAME || true
-
-docker run \
-  --name "$NAME" \
-  -v "$(pwd):/app" \
-  --env NPM_URI=$NPM_URI \
-  --env NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN \
-  --env BASE_API_URL=$BASE_API_URL \
-  --env BASE_URL=$BASE_URL \
-  --env VEGA_SCHEMA_PATH=$VEGA_SCHEMA_PATH \
-  --env AUTH_TOKEN=$AUTH_TOKEN \
-  $TAG \
-  /app/ci/build-entrypoint.sh
+$YARN install --frozen-lockfile
+$YARN generate:types
+$YARN build
