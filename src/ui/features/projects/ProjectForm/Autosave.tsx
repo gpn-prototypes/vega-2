@@ -52,7 +52,7 @@ export function Autosave<T>(props: AutosaveFormSpyProps<T>): null {
         (prevActive.current !== undefined && active === undefined) ||
         (prevActive.current !== undefined && active !== undefined && prevActive.current !== active);
 
-      const fieldsWithErrors = Object.keys(errors);
+      const fieldsWithErrors = Object.keys((errors as Record<string, unknown>) || {});
       const fieldsDirty = Object.keys(dirtyFields);
       const valid = intersection(fieldsWithErrors, fieldsDirty).length === 0;
 
