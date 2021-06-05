@@ -256,6 +256,7 @@ type UserGroup {
   editedAt: DateTime
   name: String
   project: ID
+  adId: String
 }
 
 type UserCustomSettings {
@@ -383,8 +384,6 @@ type Project {
   coordinateSystem: String
   description: String
   status: ProjectStatusEnum
-  yearStart: Int
-  yearEnd: Int
   version: Int
   rootEntity: String
   resourceId: String
@@ -606,9 +605,9 @@ type Mutation {
   createAttachmentType(code: String, name: String): CreateAttachmentType
   deleteAttachmentType(vid: UUID!): DeleteAttachmentType
   updateAttachmentType(code: String, name: String, vid: UUID!): UpdateAttachmentType
-  createUserGroup(code: String, name: String, project: ID): CreateUserGroup
+  createUserGroup(adId: String, code: String, name: String, project: ID): CreateUserGroup
   deleteUserGroup(vid: UUID!): DeleteUserGroup
-  updateUserGroup(code: String, name: String, project: ID, vid: UUID!): UpdateUserGroup
+  updateUserGroup(adId: String, code: String, name: String, project: ID, vid: UUID!): UpdateUserGroup
   createOrganization(code: String, name: String): CreateOrganization
   deleteOrganization(vid: UUID!): DeleteOrganization
   updateOrganization(code: String, name: String, vid: UUID!): UpdateOrganization
@@ -939,8 +938,6 @@ input ProjectInputType {
   type: ProjectTypeEnum
   coordinates: String
   resourceId: String
-  yearStart: Int = 2022
-  yearEnd: Int
 }
 
 type DeleteProject {
@@ -973,8 +970,6 @@ input ProjectUpdateType {
   coordinates: String
   resourceId: String
   status: ProjectStatusEnum
-  yearStart: Int
-  yearEnd: Int
   """Version of the original project."""
   version: Int!
 }

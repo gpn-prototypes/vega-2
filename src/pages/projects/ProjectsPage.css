@@ -35,6 +35,29 @@
     align-items: center;
   }
 
+  &__RightBlock {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+  }
+
+  &__LinkBlock {
+    margin-left: auto;
+  }
+
+  &__TextFieldBlock {
+    margin-top: 14px !important;
+  }
+
+  .TextField_view_default {
+    padding: 0 var(--input-space);
+    color: var(--color-control-typo-default);
+    background: var(--color-control-bg-default);
+    border: var(--control-border-width) solid var(--color-control-bg-border-default);
+    border-radius: var(--control-radius);
+    width: 360px;
+  }
+
   &__Heading {
     display: flex;
   }

@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="SP Tests" tests="155" failures="0" errors="0" time="26.336">
+  <testsuite name="Валидация полей по схеме" errors="0" failures="0" skipped="0" timestamp="2021-06-05T03:45:24" time="11.185" tests="26">
+    <testcase classname="Валидация полей по схеме createValidate при валидных данных возвращает пустой объект" name="Валидация полей по схеме createValidate при валидных данных возвращает пустой объект" time="0.009">
+    </testcase>
+    <testcase classname="Валидация полей по схеме createValidate если поле не валидно, выводит объект с текстом ошибки" name="Валидация полей по схеме createValidate если поле не валидно, выводит объект с текстом ошибки" time="0.001">
+    </testcase>
+    <testcase classname="Валидация полей по схеме createValidate если поле не обязательное и отсутствует, выводится пустой объект" name="Валидация полей по схеме createValidate если поле не обязательное и отсутствует, выводится пустой объект" time="0.002">
+    </testcase>
+    <testcase classname="Валидация полей по схеме isEmptyInputValue должен считать значения пустыми" name="Валидация полей по схеме isEmptyInputValue должен считать значения пустыми" time="0.002">
+    </testcase>
+    <testcase classname="Валидация полей по схеме isEmptyInputValue не должен считать значения пустыми" name="Валидация полей по схеме isEmptyInputValue не должен считать значения пустыми" time="0.003">
+    </testcase>
+    <testcase classname="Валидация полей по схеме createValidator должен выдать ошибку, если не передан validate и strictValidate" name="Валидация полей по схеме createValidator должен выдать ошибку, если не передан validate и strictValidate" time="0.015">
+    </testcase>
+    <testcase classname="Валидация полей по схеме createValidator должен вызвать функцию сообщения об ошибке" name="Валидация полей по схеме createValidator должен вызвать функцию сообщения об ошибке" time="0.003">
+    </testcase>
+    <testcase classname="Валидация полей по схеме createValidator должен заменить дефолтную функцию сообщения об ошибке" name="Валидация полей по схеме createValidator должен заменить дефолтную функцию сообщения об ошибке" time="0.005">
+    </testcase>
+    <testcase classname="Валидация полей по схеме createValidator должен вызвать strictValidate, если передан validate" name="Валидация полей по схеме createValidator должен вызвать strictValidate, если передан validate" time="0.003">
+    </testcase>
+    <testcase classname="Валидация полей по схеме createValidator не должен вызывать validate, если поле пустое" name="Валидация полей по схеме createValidator не должен вызывать validate, если поле пустое" time="0.002">
+    </testcase>
+    <testcase classname="Валидация полей по схеме createValidator должен вызывать strictValidate, даже если поле пустое" name="Валидация полей по схеме createValidator должен вызывать strictValidate, даже если поле пустое" time="0.002">
+    </testcase>
+    <testcase classname="Валидация полей по схеме validators required" name="Валидация полей по схеме validators required" time="0.002">
+    </testcase>
+    <testcase classname="Валидация полей по схеме validators pattern" name="Валидация полей по схеме validators pattern" time="0">
+    </testcase>
+    <testcase classname="Валидация полей по схеме validators min" name="Валидация полей по схеме validators min" time="0.002">
+    </testcase>
+    <testcase classname="Валидация полей по схеме validators max" name="Валидация полей по схеме validators max" time="0.001">
+    </testcase>
+    <testcase classname="Валидация полей по схеме validators minLength" name="Валидация полей по схеме validators minLength" time="0.002">
+    </testcase>
+    <testcase classname="Валидация полей по схеме validators maxLength" name="Валидация полей по схеме validators maxLength" time="0.001">
+    </testcase>
+    <testcase classname="Валидация полей по схеме validators isNumber" name="Валидация полей по схеме validators isNumber" time="0.002">
+    </testcase>
+    <testcase classname="Регулярные выражения для валидации проверка регулярного выражения для email на корректность" name="Регулярные выражения для валидации проверка регулярного выражения для email на корректность" time="0.001">
+    </testcase>
+    <testcase classname="Регулярные выражения для валидации проверка регулярного выражения для email с плюсом на корректность" name="Регулярные выражения для валидации проверка регулярного выражения для email с плюсом на корректность" time="0.001">
+    </testcase>
+    <testcase classname="Регулярные выражения для валидации проверка регулярного выражения для email с дефисоминусом на корректность" name="Регулярные выражения для валидации проверка регулярного выражения для email с дефисоминусом на корректность" time="0">
+    </testcase>
+    <testcase classname="Регулярные выражения для валидации проверить поле email - некоректное значение" name="Регулярные выражения для валидации проверить поле email - некоректное значение" time="0.001">
+    </testcase>
+    <testcase classname="Регулярные выражения для валидации проверить поле email - символ @" name="Регулярные выражения для валидации проверить поле email - символ @" time="0">
+    </testcase>
+    <testcase classname="Регулярные выражения для валидации проверить поле email - отсутствует домен верхнего уровня" name="Регулярные выражения для валидации проверить поле email - отсутствует домен верхнего уровня" time="0.001">
+    </testcase>
+    <testcase classname="Регулярные выражения для валидации проверить поле email - корректное значение, проверка субдомена" name="Регулярные выражения для валидации проверить поле email - корректное значение, проверка субдомена" time="0">
+    </testcase>
+    <testcase classname="Регулярные выражения для валидации проверить поле email - отсутствует домен верхнего уровня" name="Регулярные выражения для валидации проверить поле email - отсутствует домен верхнего уровня" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="getDescription" errors="0" failures="0" skipped="0" timestamp="2021-06-05T03:45:23" time="16.926" tests="8">
+    <testcase classname="getDescription возвращает описание" name="getDescription возвращает описание" time="0.006">
+    </testcase>
+    <testcase classname="getDescription возвращает полное имя региона, если такое существует" name="getDescription возвращает полное имя региона, если такое существует" time="0.002">
+    </testcase>
+    <testcase classname="getDescription возвращает undefined, если список пустой" name="getDescription возвращает undefined, если список пустой" time="0.001">
+    </testcase>
+    <testcase classname="getDescription возвращает undefined, если нет региона или страны" name="getDescription возвращает undefined, если нет региона или страны" time="0.001">
+    </testcase>
+    <testcase classname="Banner рендерит без ошибок" name="Banner рендерит без ошибок" time="0.045">
+    </testcase>
+    <testcase classname="Banner отображает название" name="Banner отображает название" time="0.036">
+    </testcase>
+    <testcase classname="Banner отображает регион" name="Banner отображает регион" time="0.006">
+    </testcase>
+    <testcase classname="Banner не отображает название и регион, если их нет" name="Banner не отображает название и регион, если их нет" time="0.005">
+    </testcase>
+  </testsuite>
+  <testsuite name="ProjectsFilter" errors="0" failures="0" skipped="0" timestamp="2021-06-05T03:45:23" time="17.416" tests="3">
+    <testcase classname="ProjectsFilter рендерится без ошибок" name="ProjectsFilter рендерится без ошибок" time="0.196">
+    </testcase>
+    <testcase classname="ProjectsFilter срабатывает onInputSearch" name="ProjectsFilter срабатывает onInputSearch" time="0.105">
+    </testcase>
+    <testcase classname="ProjectsFilter срабатывает onChangeFilter" name="ProjectsFilter срабатывает onChangeFilter" time="0.054">
+    </testcase>
+  </testsuite>
+  <testsuite name="EditedAt" errors="0" failures="0" skipped="0" timestamp="2021-06-05T03:45:23" time="17.49" tests="5">
+    <testcase classname="EditedAt рендерится без ошибок" name="EditedAt рендерится без ошибок" time="0.169">
+    </testcase>
+    <testcase classname="EditedAt рендерится кнопка «меню»" name="EditedAt рендерится кнопка «меню»" time="0.072">
+    </testcase>
+    <testcase classname="EditedAt рендерится всплывающий блок" name="EditedAt рендерится всплывающий блок" time="0.081">
+    </testcase>
+    <testcase classname="EditedAt всплывающий блок закрывается при клике на пункт меню" name="EditedAt всплывающий блок закрывается при клике на пункт меню" time="0.05">
+    </testcase>
+    <testcase classname="EditedAt всплывающий блок закрывается при клике вне меню" name="EditedAt всплывающий блок закрывается при клике вне меню" time="0.1">
+    </testcase>
+  </testsuite>
+  <testsuite name="ProjectsPageView" errors="0" failures="0" skipped="0" timestamp="2021-06-05T03:45:23" time="17.954" tests="7">
+    <testcase classname="ProjectsPageView рендерится без ошибок" name="ProjectsPageView рендерится без ошибок" time="0.354">
+    </testcase>
+    <testcase classname="ProjectsPageView отображается индикатор загрузки" name="ProjectsPageView отображается индикатор загрузки" time="0.045">
+    </testcase>
+    <testcase classname="ProjectsPageView срабатывает функция для добавления в избранное" name="ProjectsPageView срабатывает функция для добавления в избранное" time="0.208">
+    </testcase>
+    <testcase classname="ProjectsPageView пагинация выводит счётчики проектов" name="ProjectsPageView пагинация выводит счётчики проектов" time="0.075">
+    </testcase>
+    <testcase classname="ProjectsPageView пагинация срабатывает обработчик загрузки проектов" name="ProjectsPageView пагинация срабатывает обработчик загрузки проектов" time="0.079">
+    </testcase>
+    <testcase classname="ProjectsPageView пагинация показывает кнопку загрузки, если есть проекты" name="ProjectsPageView пагинация показывает кнопку загрузки, если есть проекты" time="0.101">
+    </testcase>
+    <testcase classname="ProjectsPageView пагинация не показывает кнопку, если показаны все проекты" name="ProjectsPageView пагинация не показывает кнопку, если показаны все проекты" time="0.078">
+    </testcase>
+  </testsuite>
+  <testsuite name="ProjectsTable" errors="0" failures="0" skipped="0" timestamp="2021-06-05T03:45:23" time="18.121" tests="10">
+    <testcase classname="ProjectsTable рендерится без ошибок" name="ProjectsTable рендерится без ошибок" time="0.157">
+    </testcase>
+    <testcase classname="ProjectsTable рендерится placeholder по умолчанию" name="ProjectsTable рендерится placeholder по умолчанию" time="0.089">
+    </testcase>
+    <testcase classname="ProjectsTable рендерится строка placeholder" name="ProjectsTable рендерится строка placeholder" time="0.089">
+    </testcase>
+    <testcase classname="ProjectsTable рендерится компонент placeholder" name="ProjectsTable рендерится компонент placeholder" time="0.046">
+    </testcase>
+    <testcase classname="ProjectsTable рендерится строка с данными" name="ProjectsTable рендерится строка с данными" time="0.094">
+    </testcase>
+    <testcase classname="ProjectsTable добавляется аттрибут title для названия строки" name="ProjectsTable добавляется аттрибут title для названия строки" time="0.125">
+    </testcase>
+    <testcase classname="ProjectsTable рендерится описание проекта" name="ProjectsTable рендерится описание проекта" time="0.113">
+    </testcase>
+    <testcase classname="ProjectsTable вызывается onFavorite" name="ProjectsTable вызывается onFavorite" time="0.109">
+    </testcase>
+    <testcase classname="ProjectsTable не затемняет всю таблицу, если активный элемент был удалён" name="ProjectsTable не затемняет всю таблицу, если активный элемент был удалён" time="0.158">
+    </testcase>
+    <testcase classname="ProjectsTable при открытом меню, строка становится активной" name="ProjectsTable при открытом меню, строка становится активной" time="0.189">
+    </testcase>
+  </testsuite>
+  <testsuite name="Footer" errors="0" failures="0" skipped="0" timestamp="2021-06-05T03:45:23" time="18.211" tests="10">
+    <testcase classname="Footer рендерит без ошибок" name="Footer рендерит без ошибок" time="0.085">
+    </testcase>
+    <testcase classname="Footer моды показывает футер для создания проекта" name="Footer моды показывает футер для создания проекта" time="0.307">
+    </testcase>
+    <testcase classname="Footer моды показывает футер для редактирования проекта" name="Footer моды показывает футер для редактирования проекта" time="0.073">
+    </testcase>
+    <testcase classname="Footer моды не показывает футер для редактирования проекта, если isVisibleEdit=false" name="Footer моды не показывает футер для редактирования проекта, если isVisibleEdit=false" time="0.005">
+    </testcase>
+    <testcase classname="Footer создание проекта шаги увеличивает шаг " name="Footer создание проекта шаги увеличивает шаг " time="0.09">
+    </testcase>
+    <testcase classname="Footer создание проекта шаги уменьшает шаг " name="Footer создание проекта шаги уменьшает шаг " time="0.077">
+    </testcase>
+    <testcase classname="Footer создание проекта шаги показывает кнопку создания проекта, если шаг последний" name="Footer создание проекта шаги показывает кнопку создания проекта, если шаг последний" time="0.076">
+    </testcase>
+    <testcase classname="Footer создание проекта вызывает обработчик onCancel" name="Footer создание проекта вызывает обработчик onCancel" time="0.087">
+    </testcase>
+    <testcase classname="Footer создание проекта вызывает обработчик onCreate" name="Footer создание проекта вызывает обработчик onCreate" time="0.127">
+    </testcase>
+    <testcase classname="Footer редактирование проекта вызывает обработчик onCancel" name="Footer редактирование проекта вызывает обработчик onCancel" time="0.066">
+    </testcase>
+  </testsuite>
+  <testsuite name="hasNestedInteractiveTarget" errors="0" failures="0" skipped="0" timestamp="2021-06-05T03:45:41" time="1.678" tests="4">
+    <testcase classname="hasNestedInteractiveTarget возвращает true если клик был по кнопке" name="hasNestedInteractiveTarget возвращает true если клик был по кнопке" time="0.096">
+    </testcase>
+    <testcase classname="hasNestedInteractiveTarget возвращает false если клик был по div" name="hasNestedInteractiveTarget возвращает false если клик был по div" time="0.026">
+    </testcase>
+    <testcase classname="hasNestedInteractiveTarget возвращает false если клик был по header" name="hasNestedInteractiveTarget возвращает false если клик был по header" time="0.012">
+    </testcase>
+    <testcase classname="hasNestedInteractiveTarget возвращает true если клик был по input" name="hasNestedInteractiveTarget возвращает true если клик был по input" time="0.013">
+    </testcase>
+  </testsuite>
+  <testsuite name="useBrowserTabActivity" errors="0" failures="0" skipped="0" timestamp="2021-06-05T03:45:42" time="1.724" tests="9">
+    <testcase classname="useBrowserTabActivity срабатывание слушателей при изменении видимости таба при становлении таба видимым обработчики срабатывают в правильном порядке" name="useBrowserTabActivity срабатывание слушателей при изменении видимости таба при становлении таба видимым обработчики срабатывают в правильном порядке" time="0.046">
+    </testcase>
+    <testcase classname="useBrowserTabActivity срабатывание слушателей при изменении видимости таба при скрытии таба обработчики срабатывают в правильном порядке" name="useBrowserTabActivity срабатывание слушателей при изменении видимости таба при скрытии таба обработчики срабатывают в правильном порядке" time="0.008">
+    </testcase>
+    <testcase classname="useBrowserTabActivity срабатывание слушателей при изменении видимости таба при смене состояния таба вызывается onVisibilityChange с корректными аргументами" name="useBrowserTabActivity срабатывание слушателей при изменении видимости таба при смене состояния таба вызывается onVisibilityChange с корректными аргументами" time="0.007">
+    </testcase>
+    <testcase classname="useBrowserTabActivity срабатывание слушателей при изменении видимости таба при смене состояния таба вызывается onActivityChange с корректными аргументами" name="useBrowserTabActivity срабатывание слушателей при изменении видимости таба при смене состояния таба вызывается onActivityChange с корректными аргументами" time="0.006">
+    </testcase>
+    <testcase classname="useBrowserTabActivity срабатывание слушателей при событии focus при событии focus обработчики вызываются в правильном порядке" name="useBrowserTabActivity срабатывание слушателей при событии focus при событии focus обработчики вызываются в правильном порядке" time="0.007">
+    </testcase>
+    <testcase classname="useBrowserTabActivity срабатывание слушателей при событии focus при событии focus вызывается onActivityChange с корректными аргументами" name="useBrowserTabActivity срабатывание слушателей при событии focus при событии focus вызывается onActivityChange с корректными аргументами" time="0.006">
+    </testcase>
+    <testcase classname="useBrowserTabActivity срабатывание слушателей при событии blur при событии blur обработчики вызываются в правильном порядке" name="useBrowserTabActivity срабатывание слушателей при событии blur при событии blur обработчики вызываются в правильном порядке" time="0.006">
+    </testcase>
+    <testcase classname="useBrowserTabActivity срабатывание слушателей при событии blur при событии blur вызывается onActivityChange с корректными аргументами" name="useBrowserTabActivity срабатывание слушателей при событии blur при событии blur вызывается onActivityChange с корректными аргументами" time="0.005">
+    </testcase>
+    <testcase classname="useBrowserTabActivity функция-обозреватель вызывается при изменении состояния" name="useBrowserTabActivity функция-обозреватель вызывается при изменении состояния" time="0.006">
+    </testcase>
+  </testsuite>
+  <testsuite name="useDebouncedFunction" errors="0" failures="0" skipped="0" timestamp="2021-06-05T03:45:42" time="1.735" tests="3">
+    <testcase classname="useDebouncedFunction функция срабатывает через заданное время" name="useDebouncedFunction функция срабатывает через заданное время" time="0.092">
+    </testcase>
+    <testcase classname="useDebouncedFunction функция не срабатывает после unmount" name="useDebouncedFunction функция не срабатывает после unmount" time="0.013">
+    </testcase>
+    <testcase classname="useDebouncedFunction срабатывает новая переданная функция" name="useDebouncedFunction срабатывает новая переданная функция" time="0.015">
+    </testcase>
+  </testsuite>
+  <testsuite name="projectsMapper" errors="0" failures="0" skipped="1" timestamp="2021-06-05T03:45:42" time="1.75" tests="6">
+    <testcase classname="projectsMapper возвращается массив с верным количеством элементов" name="projectsMapper возвращается массив с верным количеством элементов" time="0.012">
+    </testcase>
+    <testcase classname="projectsMapper возвращается массив с ожидаемыми данными" name="projectsMapper возвращается массив с ожидаемыми данными" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="projectsMapper возвращается пустой массив при отсутствии проектов" name="projectsMapper возвращается пустой массив при отсутствии проектов" time="0.001">
+    </testcase>
+    <testcase classname="projectsMapper возвращается пустой массив при отсутствии проектов (data[null])" name="projectsMapper возвращается пустой массив при отсутствии проектов (data[null])" time="0.001">
+    </testcase>
+    <testcase classname="projectsMapper возвращается пустой массив при отсутствии проектов (нет __typename)" name="projectsMapper возвращается пустой массив при отсутствии проектов (нет __typename)" time="0.001">
+    </testcase>
+    <testcase classname="projectsMapper возвращается массив c элементами по умолчанию" name="projectsMapper возвращается массив c элементами по умолчанию" time="0.004">
+    </testcase>
+  </testsuite>
+  <testsuite name="AppView" errors="0" failures="0" skipped="0" timestamp="2021-06-05T03:45:35" time="9.07" tests="2">
+    <testcase classname="AppView рендерится без ошибок" name="AppView рендерится без ошибок" time="0.043">
+    </testcase>
+    <testcase classname="AppView рендерится приложение" name="AppView рендерится приложение" time="0.86">
+    </testcase>
+  </testsuite>
+  <testsuite name="PageLayout" errors="0" failures="0" skipped="0" timestamp="2021-06-05T03:45:43" time="1.458" tests="2">
+    <testcase classname="PageLayout рендерится без ошибок" name="PageLayout рендерится без ошибок" time="0.031">
+    </testcase>
+    <testcase classname="PageLayout рендерится содержимое body" name="PageLayout рендерится содержимое body" time="0.006">
+    </testcase>
+  </testsuite>
+  <testsuite name="App" errors="0" failures="0" skipped="0" timestamp="2021-06-05T03:45:41" time="3.404" tests="1">
+    <testcase classname="App рендерится без ошибок" name="App рендерится без ошибок" time="0.035">
+    </testcase>
+  </testsuite>
+  <testsuite name="getPluralForm" errors="0" failures="0" skipped="0" timestamp="2021-06-05T03:45:43" time="1.322" tests="14">
+    <testcase classname="getPluralForm параматры по умолчанию первая форма" name="getPluralForm параматры по умолчанию первая форма" time="0.003">
+    </testcase>
+    <testcase classname="getPluralForm параматры по умолчанию вторая форма" name="getPluralForm параматры по умолчанию вторая форма" time="0.001">
+    </testcase>
+    <testcase classname="getPluralForm параматры по умолчанию третья форма" name="getPluralForm параматры по умолчанию третья форма" time="0">
+    </testcase>
+    <testcase classname="getPluralForm параматры по умолчанию дробное значение, меньше 5" name="getPluralForm параматры по умолчанию дробное значение, меньше 5" time="0.001">
+    </testcase>
+    <testcase classname="getPluralForm параматры по умолчанию дробное значение, больше 5" name="getPluralForm параматры по умолчанию дробное значение, больше 5" time="0">
+    </testcase>
+    <testcase classname="getPluralForm параматры по умолчанию ноль" name="getPluralForm параматры по умолчанию ноль" time="0">
+    </testcase>
+    <testcase classname="getPluralForm параматры по умолчанию отрицательное значение" name="getPluralForm параматры по умолчанию отрицательное значение" time="0.001">
+    </testcase>
+    <testcase classname="getPluralForm параматры по умолчанию числовое значение не передано" name="getPluralForm параматры по умолчанию числовое значение не передано" time="0">
+    </testcase>
+    <testcase classname="getPluralForm параметры includeNumber и delimiter includeNumber = false и delimiter = undefined" name="getPluralForm параметры includeNumber и delimiter includeNumber = false и delimiter = undefined" time="0.001">
+    </testcase>
+    <testcase classname="getPluralForm параметры includeNumber и delimiter includeNumber = false и delimiter = &quot;-&quot;" name="getPluralForm параметры includeNumber и delimiter includeNumber = false и delimiter = &quot;-&quot;" time="0">
+    </testcase>
+    <testcase classname="getPluralForm параметры includeNumber и delimiter includeNumber = true и delimiter = undefined" name="getPluralForm параметры includeNumber и delimiter includeNumber = true и delimiter = undefined" time="0">
+    </testcase>
+    <testcase classname="getPluralForm параметры includeNumber и delimiter includeNumber = true и delimiter = &quot;-&quot;" name="getPluralForm параметры includeNumber и delimiter includeNumber = true и delimiter = &quot;-&quot;" time="0.001">
+    </testcase>
+    <testcase classname="getPluralForm параметр discardFractionalPart discardFractionalPart = true" name="getPluralForm параметр discardFractionalPart discardFractionalPart = true" time="0">
+    </testcase>
+    <testcase classname="getPluralForm параметр discardFractionalPart discardFractionalPart = false" name="getPluralForm параметр discardFractionalPart discardFractionalPart = false" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="ProjectsPage" errors="0" failures="0" skipped="1" timestamp="2021-06-05T03:45:23" time="21.48" tests="11">
+    <testcase classname="ProjectsPage отрисовывается индикатор загрузки" name="ProjectsPage отрисовывается индикатор загрузки" time="0.251">
+    </testcase>
+    <testcase classname="ProjectsPage отрисовывается страница c данными" name="ProjectsPage отрисовывается страница c данными" time="0.413">
+    </testcase>
+    <testcase classname="ProjectsPage проект помечается избранным" name="ProjectsPage проект помечается избранным" time="0.521">
+    </testcase>
+    <testcase classname="ProjectsPage обрабатывается ошибка при добавление в избранное" name="ProjectsPage обрабатывается ошибка при добавление в избранное" time="0.338">
+    </testcase>
+    <testcase classname="ProjectsPage проект удаляется" name="ProjectsPage проект удаляется" time="0.524">
+    </testcase>
+    <testcase classname="ProjectsPage модальное окно закрывается при отмене удаления" name="ProjectsPage модальное окно закрывается при отмене удаления" time="0.315">
+    </testcase>
+    <testcase classname="ProjectsPage модальное окно закрывается" name="ProjectsPage модальное окно закрывается" time="0.39">
+    </testcase>
+    <testcase classname="ProjectsPage происходит переход после клика на строку" name="ProjectsPage происходит переход после клика на строку" time="0.176">
+    </testcase>
+    <testcase classname="ProjectsPage происходит переход на страницу редактирования" name="ProjectsPage происходит переход на страницу редактирования" time="0.197">
+    </testcase>
+    <testcase classname="ProjectsPage происходит перезапрос данных при активации таба" name="ProjectsPage происходит перезапрос данных при активации таба" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="ProjectsPage пагинация загружает проекты" name="ProjectsPage пагинация загружает проекты" time="1.065">
+    </testcase>
+  </testsuite>
+  <testsuite name="EditProjectPage" errors="0" failures="0" skipped="0" timestamp="2021-06-05T03:45:23" time="21.688" tests="5">
+    <testcase classname="EditProjectPage рендерит без ошибок" name="EditProjectPage рендерит без ошибок" time="0.145">
+    </testcase>
+    <testcase classname="EditProjectPage инициализирует значения в форме на начальные после сброса" name="EditProjectPage инициализирует значения в форме на начальные после сброса" time="1.087">
+    </testcase>
+    <testcase classname="EditProjectPage выводит сообщение об успешном обновлении" name="EditProjectPage выводит сообщение об успешном обновлении" time="0.957">
+    </testcase>
+    <testcase classname="EditProjectPage показывает ошибки валидации с сервера" name="EditProjectPage показывает ошибки валидации с сервера" time="0.981">
+    </testcase>
+    <testcase classname="EditProjectPage Footer переключает состояние при изменениях в форме" name="EditProjectPage Footer переключает состояние при изменениях в форме" time="1.023">
+    </testcase>
+    <testcase classname="EditProjectPage Footer скрывается, если в год указать кастомное значение" name="EditProjectPage Footer скрывается, если в год указать кастомное значение" time="0">
+    </testcase>
+  </testsuite>
+  <testsuite name="CreateProjectPage" errors="0" failures="0" skipped="1" timestamp="2021-06-05T03:45:23" time="21.866" tests="9">
+    <testcase classname="CreateProjectPage показывает loader при запросах" name="CreateProjectPage показывает loader при запросах" time="0.983">
+    </testcase>
+    <testcase classname="CreateProjectPage успешное создание проекта вызывает нотификацию" name="CreateProjectPage успешное создание проекта вызывает нотификацию" time="1.155">
+    </testcase>
+    <testcase classname="CreateProjectPage успешное создание проекта редиректит на страницу проекта" name="CreateProjectPage успешное создание проекта редиректит на страницу проекта" time="0.979">
+    </testcase>
+    <testcase classname="CreateProjectPage создание бланка проекта с ошибкой вызывает нотификацию" name="CreateProjectPage создание бланка проекта с ошибкой вызывает нотификацию" time="0.098">
+    </testcase>
+    <testcase classname="CreateProjectPage показывает ошибку валидации с сервера при обновлении проекта" name="CreateProjectPage показывает ошибку валидации с сервера при обновлении проекта" time="0.587">
+    </testcase>
+    <testcase classname="CreateProjectPage отмена проекта показывает модалку при отмене проекта" name="CreateProjectPage отмена проекта показывает модалку при отмене проекта" time="0.186">
+    </testcase>
+    <testcase classname="CreateProjectPage отмена проекта редиректит при подтверждении" name="CreateProjectPage отмена проекта редиректит при подтверждении" time="0.17">
+    </testcase>
+    <testcase classname="CreateProjectPage отмена проекта вызывает событие удаление проекта по шине" name="CreateProjectPage отмена проекта вызывает событие удаление проекта по шине" time="0.132">
+    </testcase>
+    <testcase classname="CreateProjectPage принимает событие удаления проекта по шине" name="CreateProjectPage принимает событие удаления проекта по шине" time="0">
+    </testcase>
+    <testcase classname="CreateProjectPage показывает уведомление об ошибки в apollo" name="CreateProjectPage показывает уведомление об ошибки в apollo" time="0">
+    </testcase>
+    <testcase classname="CreateProjectPage происходит пуллинг новых данные каждые 30 сек" name="CreateProjectPage происходит пуллинг новых данные каждые 30 сек" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+  <testsuite name="AppProvider" errors="0" failures="0" skipped="0" timestamp="2021-06-05T03:45:41" time="5.635" tests="4">
+    <testcase classname="AppProvider useApp выкидывает исключение, если хук вызван вне провайдера" name="AppProvider useApp выкидывает исключение, если хук вызван вне провайдера" time="0.361">
+    </testcase>
+    <testcase classname="AppProvider useCurrentProjectParams возвращает текущий проект" name="AppProvider useCurrentProjectParams возвращает текущий проект" time="0.008">
+    </testcase>
+    <testcase classname="AppProvider useCurrentProjectParams данные проекта обновляются" name="AppProvider useCurrentProjectParams данные проекта обновляются" time="0.004">
+    </testcase>
+    <testcase classname="AppProvider useCurrentProjectParams выкидывает исключение, если хук вызван без активного проекта" name="AppProvider useCurrentProjectParams выкидывает исключение, если хук вызван без активного проекта" time="0.002">
+    </testcase>
+  </testsuite>
+  <testsuite name="ProjectForm" errors="0" failures="0" skipped="1" timestamp="2021-06-05T03:45:23" time="24.027" tests="16">
+    <testcase classname="ProjectForm рендерит без ошибок" name="ProjectForm рендерит без ошибок" time="0.291">
+    </testcase>
+    <testcase classname="ProjectForm вызывает onSubmit" name="ProjectForm вызывает onSubmit" time="0.941">
+    </testcase>
+    <testcase classname="ProjectForm вызывает onCancel" name="ProjectForm вызывает onCancel" time="0.668">
+    </testcase>
+    <testcase classname="ProjectForm происходит смена статус на Blank, если статус был Unpublished" name="ProjectForm происходит смена статус на Blank, если статус был Unpublished" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="ProjectForm происходит смена шага" name="ProjectForm происходит смена шага" time="0">
+    </testcase>
+    <testcase classname="ProjectForm автосохранение происходит автосохрание на форме создания проекта" name="ProjectForm автосохранение происходит автосохрание на форме создания проекта" time="0.336">
+    </testcase>
+    <testcase classname="ProjectForm автосохранение не происходит автосохранение на форме редактирования проекта" name="ProjectForm автосохранение не происходит автосохранение на форме редактирования проекта" time="0.436">
+    </testcase>
+    <testcase classname="ProjectForm автосохранение срабатывает повторное автосохранение" name="ProjectForm автосохранение срабатывает повторное автосохранение" time="0.322">
+    </testcase>
+    <testcase classname="ProjectForm автосохранение не происходит автосохранение, если форма невалидна" name="ProjectForm автосохранение не происходит автосохранение, если форма невалидна" time="0.105">
+    </testcase>
+    <testcase classname="ProjectForm автосохранение при очищении региона происходит автосохранение" name="ProjectForm автосохранение при очищении региона происходит автосохранение" time="0.087">
+    </testcase>
+    <testcase classname="ProjectForm регион выставляет значение списка регионов по умолчанию" name="ProjectForm регион выставляет значение списка регионов по умолчанию" time="0.158">
+    </testcase>
+    <testcase classname="ProjectForm регион очищает поле при редактировании" name="ProjectForm регион очищает поле при редактировании" time="0.08">
+    </testcase>
+    <testcase classname="ProjectForm скрывает футер для редактирования проекта, если в форме нет изменений" name="ProjectForm скрывает футер для редактирования проекта, если в форме нет изменений" time="0">
+    </testcase>
+    <testcase classname="ProjectForm валидация полей название проекта показывает ошибку обязательного поля" name="ProjectForm валидация полей название проекта показывает ошибку обязательного поля" time="0.118">
+    </testcase>
+    <testcase classname="ProjectForm валидация полей название проекта показывает ошибку если символов больше 256" name="ProjectForm валидация полей название проекта показывает ошибку если символов больше 256" time="2.768">
+    </testcase>
+    <testcase classname="ProjectForm валидация полей название проекта показывает ошибку если символов меньше 2" name="ProjectForm валидация полей название проекта показывает ошибку если символов меньше 2" time="0.058">
+    </testcase>
+    <testcase classname="ProjectForm валидация полей система координат показывает ошибку, если символов больше 2000" name="ProjectForm валидация полей система координат показывает ошибку, если символов больше 2000" time="0.044">
+    </testcase>
+    <testcase classname="ProjectForm валидация полей описание проекта показывает ошибку если более 2000 символов" name="ProjectForm валидация полей описание проекта показывает ошибку если более 2000 символов" time="0.047">
+    </testcase>
+  </testsuite>
+</testsuites>

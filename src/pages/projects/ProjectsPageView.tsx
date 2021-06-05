@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Loader, Text } from '@gpn-prototypes/vega-ui';
+import { Button, IconSearch, Loader, Text, TextField } from '@gpn-prototypes/vega-ui';
 
 import { SortData, TableRow } from './ProjectsTable/types';
 import { cnProjectsPage as cn } from './cn-projects-page';
@@ -78,9 +78,24 @@ export const ProjectsPageView: ProjectsPageViewType = (props) => {
               </Text>
             )}
           </div>
-          <Link to="/projects/create" data-testid={testId.create}>
-            <Button label="Создать новый проект" size="s" />
-          </Link>
+          <div className={cn('RightBlock')}>
+            <div className={cn('LinkBlock')}>
+              <Link to="/projects/create" data-testid={testId.create}>
+                <Button label="Создать новый проект" size="s" />
+              </Link>
+            </div>
+            <div className={cn('TextFieldBlock')}>
+              <TextField
+                className={cn('TextField')}
+                leftSide={IconSearch}
+                size="s"
+                type="input"
+                // onChange={null}
+                // value={null}
+                placeholder="Введите название проекта или имя автора"
+              />
+            </div>
+          </div>
         </div>
 
         {/* <ProjectsFilter
