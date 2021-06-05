@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { HttpLink } from '@apollo/client';
 import { Button, IconSearch, Loader, Text, TextField } from '@gpn-prototypes/vega-ui';
 
 import { SortData, TableRow } from './ProjectsTable/types';
@@ -29,15 +30,58 @@ export type ProjectsPageViewProps = {
 type ProjectsPageViewType = React.FC<ProjectsPageViewProps> & {
   testId: typeof testId;
 };
+const config = {
+  baseApiUrl: process.env.BASE_API_URL || process.env.VEGA_API_PROXY,
+};
+
+export const getMainLink = (): HttpLink =>
+  new HttpLink({
+    uri: `${config.baseApiUrl}/graphql`,
+    // headers,
+    fetch,
+  });
 
 export const ProjectsPageView: ProjectsPageViewType = (props) => {
   const { current, total } = props.counterProjects;
   const visibleLoadMore = current !== undefined && total !== undefined ? current < total : false;
+  const [PROJECTS, setProjects] = React.useState(props.projects);
+  const [searchString, setSearchString] = React.useState('');
+
+  // function authHeader(defaultToken: string | undefined) {
+  //   const token = logicConstructorService.identity?.getToken() || defaultToken;
+
+  //   return { Authorization: `Bearer ${token}` };
+  // }
+  //   const headers = {
+  //     ...authHeader(config.authToken),
+  //   };
+
+  React.useEffect(() => {
+    setProjects(props.projects);
+  }, [props.projects]);
+
+  const handleSearch = (event) => {
+    // event.value
+    setSearchString(event.value);
+  };
+
+  React.useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    // dispatch()
+    fetch(`${config.baseApiUrl}/ProjectsTableList`, {
+      headers: {},
+      method: 'POST',
+      body: searchString,
+    }).then((res) => res.json());
+    // .then((data) => console.log(data));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchString]);
 
   const table = (
     <div className={cn('Table')} data-testid={testId.table}>
       <ProjectsTable
-        rows={props.projects}
+        rows={PROJECTS}
         onSort={props.onSort}
         onFavorite={(id, payload) => {
           props.onFavorite(id, payload);
@@ -90,8 +134,8 @@ export const ProjectsPageView: ProjectsPageViewType = (props) => {
                 leftSide={IconSearch}
                 size="s"
                 type="input"
-                // onChange={null}
-                // value={null}
+                onChange={handleSearch}
+                value={searchString}
                 placeholder="Введите название проекта или имя автора"
               />
             </div>

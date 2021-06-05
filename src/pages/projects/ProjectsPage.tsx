@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { IconEdit, IconTrash, Text } from '@gpn-prototypes/vega-ui';
 
-import { ProjectOrderByEnum, SortType } from '../../__generated__/types';
+import { namedOperations, ProjectOrderByEnum, SortType } from '../../__generated__/types';
 import { useApp } from '../../App/app-context';
 import { useBrowserTabActivity } from '../../hooks';
 import { projectsMapper } from '../../utils/projects-mapper';
@@ -47,6 +47,7 @@ export const ProjectsPage = (): React.ReactElement => {
       includeBlank: false,
       orderBy: meData?.me?.customSettings?.projectList?.orderBy,
       sortBy: (meData?.me?.customSettings?.projectList?.sortBy as unknown) as SortType,
+      fullTextSearchBy: namedOperations.Query.ProjectsTableList,
     },
   });
 
