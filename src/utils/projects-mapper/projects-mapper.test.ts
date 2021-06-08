@@ -37,7 +37,7 @@ const mockedData: ProjectsTableList = {
           vid: 'a1111123-b111-c111-d111-e00000000000',
           __typename: 'User',
         },
-        __typename: 'Project',
+        __typename: 'ProjectStub',
       },
       {
         vid: 'a3333333-b111-c111-d111-e00000000011',
@@ -55,7 +55,7 @@ const mockedData: ProjectsTableList = {
           vid: 'a1111123-b111-c111-d111-e00000000000',
           __typename: 'User',
         },
-        __typename: 'Project',
+        __typename: 'ProjectStub',
       },
       {
         vid: 'a3333333-b111-c111-d111-e00000000022',
@@ -73,7 +73,7 @@ const mockedData: ProjectsTableList = {
           vid: 'a1111123-b111-c111-d111-e00000000000',
           __typename: 'User',
         },
-        __typename: 'Project',
+        __typename: 'ProjectStub',
       },
     ],
     __typename: 'ProjectList',
@@ -141,7 +141,7 @@ describe('projectsMapper', () => {
     const list = {
       ...mockedData,
       ...{
-        projects: { data: [{ __typename: 'Project' }], __typename: 'ProjectList' },
+        projects: { data: [{ __typename: 'ProjectStub' }], __typename: 'ProjectList' },
       },
     } as ProjectsTableList;
     const mappedProjects = projectsMapper(list);

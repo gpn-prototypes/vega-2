@@ -29,6 +29,8 @@ const defaultProps: ProjectsPageViewProps = {
   onFavorite: noop,
   onLoadMore: noop,
   onSort: noop,
+  searchString: '',
+  setSearchString: noop,
 };
 
 function renderComponent(props?: Partial<ProjectsPageViewProps>): RenderResult {
@@ -41,6 +43,8 @@ function renderComponent(props?: Partial<ProjectsPageViewProps>): RenderResult {
     counterProjects,
     onLoadMore,
     isLoadingMore,
+    searchString,
+    setSearchString,
   } = withDefault(props ?? {});
   return render(
     <Router>
@@ -52,6 +56,8 @@ function renderComponent(props?: Partial<ProjectsPageViewProps>): RenderResult {
         onFavorite={onFavorite}
         onLoadMore={onLoadMore}
         onSort={onSort}
+        searchString={searchString}
+        setSearchString={setSearchString}
       />
     </Router>,
   );
