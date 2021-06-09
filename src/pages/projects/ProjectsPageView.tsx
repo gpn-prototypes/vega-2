@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, IconSearch, Loader, Text, TextField } from '@gpn-prototypes/vega-ui';
@@ -36,6 +37,17 @@ export const ProjectsPageView: ProjectsPageViewType = (props) => {
   const { current, total } = props.counterProjects;
   const visibleLoadMore = current !== undefined && total !== undefined ? current < total : false;
   const [PROJECTS, setProjects] = React.useState(props.projects);
+  // const danger = searchString
+  // const [input, setInput] = React.useState('');
+
+  // const faceSearthInput = (value: string) => {
+  //   setInput(value);
+  //   if (value.length >= 3) {
+  //     props.setSearchString(value);
+  //   } else if (String(props.searchString).length !== 0) {
+  //     props.setSearchString('');
+  //   }
+  // };
 
   React.useEffect(() => {
     setProjects(props.projects);
@@ -93,12 +105,15 @@ export const ProjectsPageView: ProjectsPageViewType = (props) => {
             </div>
             <div className={cn('TextFieldBlock')}>
               <TextField
+                // title={danger}
                 className={cn('TextField')}
                 leftSide={IconSearch}
                 size="s"
                 type="input"
                 onChange={(e) => props.setSearchString(e.value)}
                 value={props.searchString}
+                // onChange={(e) => faceSearthInput(String(e.value))}
+                // value={input}
                 placeholder="Введите название проекта или имя автора"
               />
             </div>

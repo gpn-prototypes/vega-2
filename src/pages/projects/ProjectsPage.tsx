@@ -48,7 +48,8 @@ export const ProjectsPage = (): React.ReactElement => {
       includeBlank: false,
       orderBy: meData?.me?.customSettings?.projectList?.orderBy,
       sortBy: (meData?.me?.customSettings?.projectList?.sortBy as unknown) as SortType,
-      searchQuery: searchString,
+      // searchQuery: searchString,
+      searchQuery: String(searchString).length >= 3 ? searchString : '',
     },
   });
 
