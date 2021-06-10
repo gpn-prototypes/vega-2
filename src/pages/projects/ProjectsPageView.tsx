@@ -8,7 +8,6 @@ import { cnProjectsPage as cn } from './cn-projects-page';
 import { ProjectsTable } from './ProjectsTable';
 
 import './ProjectsPage.css';
-import { FieldInputProps } from 'react-final-form';
 
 const testId = {
   root: 'ProjectsPage:root',
@@ -28,7 +27,6 @@ export type ProjectsPageViewProps = {
   onSort(sortedOptions: SortData | null): void;
   searchString: string | null;
   setSearchString(searchString: string | null): void;
-  input: FieldInputProps<unknown, HTMLElement>;
 };
 
 type ProjectsPageViewType = React.FC<ProjectsPageViewProps> & {
@@ -37,26 +35,17 @@ type ProjectsPageViewType = React.FC<ProjectsPageViewProps> & {
 
 export const ProjectsPageView: ProjectsPageViewType = (props) => {
   const { current, total } = props.counterProjects;
-  const visibleLoadMore = current !== undefined && total !== undefined ? current < total : false;
   const [PROJECTS, setProjects] = React.useState(props.projects);
   let warning;
+  const [visibleLoadMore, setVisibleLoadMore] = React.useState(false);
   if (String(props.searchString).length < 3 && String(props.searchString).length > 0) {
     warning = 'Введите хотя бы 3 символа для поиска';
   }
-  // const [input, setInput] = React.useState('');
-
-  // const faceSearthInput = (value: string) => {
-  //   setInput(value);
-  //   if (value.length >= 3) {
-  //     props.setSearchString(value);
-  //   } else if (String(props.searchString).length !== 0) {
-  //     props.setSearchString('');
-  //   }
-  // };
 
   React.useEffect(() => {
     setProjects(props.projects);
-  }, [props.projects]);
+    setVisibleLoadMore(!!(current && current >= 20));
+  }, [props.projects, current]);
 
   const table = (
     <div className={cn('Table')} data-testid={testId.table}>
