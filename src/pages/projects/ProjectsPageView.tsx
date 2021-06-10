@@ -8,6 +8,7 @@ import { cnProjectsPage as cn } from './cn-projects-page';
 import { ProjectsTable } from './ProjectsTable';
 
 import './ProjectsPage.css';
+import { FieldInputProps } from 'react-final-form';
 
 const testId = {
   root: 'ProjectsPage:root',
@@ -27,6 +28,7 @@ export type ProjectsPageViewProps = {
   onSort(sortedOptions: SortData | null): void;
   searchString: string | null;
   setSearchString(searchString: string | null): void;
+  input: FieldInputProps<unknown, HTMLElement>;
 };
 
 type ProjectsPageViewType = React.FC<ProjectsPageViewProps> & {
@@ -37,7 +39,10 @@ export const ProjectsPageView: ProjectsPageViewType = (props) => {
   const { current, total } = props.counterProjects;
   const visibleLoadMore = current !== undefined && total !== undefined ? current < total : false;
   const [PROJECTS, setProjects] = React.useState(props.projects);
-  // const danger = searchString
+  let warning;
+  if (String(props.searchString).length < 3 && String(props.searchString).length > 0) {
+    warning = 'Введите хотя бы 3 символа для поиска';
+  }
   // const [input, setInput] = React.useState('');
 
   // const faceSearthInput = (value: string) => {
@@ -105,17 +110,15 @@ export const ProjectsPageView: ProjectsPageViewType = (props) => {
             </div>
             <div className={cn('TextFieldBlock')}>
               <TextField
-                // title={danger}
                 className={cn('TextField')}
                 leftSide={IconSearch}
                 size="s"
                 type="input"
                 onChange={(e) => props.setSearchString(e.value)}
                 value={props.searchString}
-                // onChange={(e) => faceSearthInput(String(e.value))}
-                // value={input}
                 placeholder="Введите название проекта или имя автора"
               />
+              <div className={cn('WarningSearch')}>{warning}</div>
             </div>
           </div>
         </div>

@@ -57,6 +57,12 @@
     border-radius: var(--control-radius);
     width: 360px;
   }
+  &__WarningSearch {
+    color: #fff;
+    font-size: 12px;
+    margin-top: 6px;
+    position: absolute;
+  }
 
   &__Heading {
     display: flex;
