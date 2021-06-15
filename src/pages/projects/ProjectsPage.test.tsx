@@ -42,11 +42,15 @@ describe('ProjectsPage', () => {
 
     await waitRequests();
 
-    expect(screen.getByTestId(ProjectsPageView.testId.rootTitle)).toBeVisible();
-    expect(screen.getByTestId(ProjectsPageView.testId.table)).toBeVisible();
-    expect(
-      screen.getByText(defaultMock[1].result.data.projects?.data[2].name as string),
-    ).toBeVisible();
+    await waitFor(() =>
+      expect(screen.getByTestId(ProjectsPageView.testId.rootTitle)).toBeVisible(),
+    );
+    await waitFor(() => expect(screen.getByTestId(ProjectsPageView.testId.table)).toBeVisible());
+    await waitFor(() =>
+      expect(
+        screen.getByText(defaultMock[1].result.data.projects?.data[2].name as string),
+      ).toBeVisible(),
+    );
   });
 
   test('проект помечается избранным', async () => {

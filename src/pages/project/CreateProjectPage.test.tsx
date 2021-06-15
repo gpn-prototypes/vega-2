@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { merge } from 'ramda';
 
 import { ErrorCodesEnum, ProjectStatusEnum, ProjectTypeEnum } from '../../__generated__/types';
-import { act, fireEvent, render, RenderResult, screen, waitRequests } from '../../testing';
+import { act, fireEvent, render, RenderResult, screen, waitFor, waitRequests } from '../../testing';
 import { DescriptionStep } from '../../ui/features/projects/ProjectForm/steps';
 
 import {
@@ -235,7 +235,9 @@ describe('CreateProjectPage', () => {
       const spy = jest.spyOn(providers.app.notifications, 'add');
       await waitRequests();
 
-      expect(spy).toBeCalledWith(expect.objectContaining({ body: 'Проект успешно создан' }));
+      await waitFor(() =>
+        expect(spy).toBeCalledWith(expect.objectContaining({ body: 'Проект успешно создан' })),
+      );
 
       await waitRequests();
     });
