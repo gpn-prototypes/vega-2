@@ -35,6 +35,7 @@ type ProjectsPageViewType = React.FC<ProjectsPageViewProps> & {
 
 export const ProjectsPageView: ProjectsPageViewType = (props) => {
   const { current, total } = props.counterProjects;
+
   const [PROJECTS, setProjects] = React.useState(props.projects);
   let warning;
   const [visibleLoadMore, setVisibleLoadMore] = React.useState(false);
@@ -46,6 +47,10 @@ export const ProjectsPageView: ProjectsPageViewType = (props) => {
     setProjects(props.projects);
     setVisibleLoadMore(!!(current && current >= 20));
   }, [props.projects, current]);
+
+  // React.useEffect(() => {
+  //   props.onSort(props.sortedOptions)
+  // }, [props.project]);
 
   const table = (
     <div className={cn('Table')} data-testid={testId.table}>

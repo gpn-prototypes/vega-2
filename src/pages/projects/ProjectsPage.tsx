@@ -38,6 +38,8 @@ export const ProjectsPage = (): React.ReactElement => {
 
   const { data: meData } = useMe();
 
+  const [currentSort, setCurrentSort] = React.useState(null);
+
   const { data, loading, startPolling, stopPolling, refetch, fetchMore } = useProjectsTableList({
     fetchPolicy: 'network-only',
     pollInterval: TABLE_POLLING_INTERVAL_MS,
@@ -48,7 +50,6 @@ export const ProjectsPage = (): React.ReactElement => {
       includeBlank: false,
       orderBy: meData?.me?.customSettings?.projectList?.orderBy,
       sortBy: (meData?.me?.customSettings?.projectList?.sortBy as unknown) as SortType,
-      // searchQuery: searchString,
       searchQuery: String(searchString).length >= 3 ? searchString : '',
     },
   });
@@ -79,6 +80,8 @@ export const ProjectsPage = (): React.ReactElement => {
   const handleSortProjects = React.useCallback(
     (sortOptions: SortData | null) => {
       if (sortOptions) {
+        setCurrentSort(sortOptions);
+
         const { sortingBy, sortOrder } = sortOptions;
 
         const orderBy = getOrderBy(sortOrder);
@@ -91,7 +94,7 @@ export const ProjectsPage = (): React.ReactElement => {
         // Поэтому ниже можно увидеть расхождения { sortBy: orderBy, orderBy: sortBy }
 
         /* istanbul ignore else */
-        if (totalQuantityProjects !== undefined) {
+        if (totalQuantityProjects !== undefined || currentQuantityProjects) {
           refetch({
             sortBy: orderBy,
             orderBy: sortBy,
@@ -102,15 +105,15 @@ export const ProjectsPage = (): React.ReactElement => {
 
         return;
       }
-
       refetch({
-        sortBy: SortType.Desc,
-        orderBy: ProjectOrderByEnum.EditedAt,
+        // sortBy: SortType.Desc,
+        // orderBy: ProjectOrderByEnum.EditedAt,
+
         pageNumber: 1,
         pageSize: totalQuantityProjects ?? PAGE_SIZE,
       });
     },
-    [refetch, totalQuantityProjects],
+    [refetch, totalQuantityProjects, currentQuantityProjects],
   );
 
   const refetchProjects = () => {
@@ -294,6 +297,7 @@ export const ProjectsPage = (): React.ReactElement => {
         isLoadingMore={isLoadingMore}
         onFavorite={handleToggleFavorite}
         onSort={handleSortProjects}
+        currentSort={currentSort}
         counterProjects={{ current: currentQuantityProjects, total: totalQuantityProjects }}
         onLoadMore={handleLoadMore}
         setSearchString={setSearchString}
