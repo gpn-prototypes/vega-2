@@ -110,9 +110,8 @@ export const ProjectsPage = (): React.ReactElement => {
         return;
       }
       refetch({
-        // sortBy: SortType.Desc,
-        // orderBy: ProjectOrderByEnum.EditedAt,
-
+        sortBy: SortType.Desc,
+        orderBy: ProjectOrderByEnum.EditedAt,
         pageNumber: 1,
         pageSize: totalQuantityProjects ?? PAGE_SIZE,
       });
