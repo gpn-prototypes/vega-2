@@ -4,6 +4,7 @@ import { favoriteProjectMock } from './mock-favorite-project';
 import { favoriteProjectErrorMock } from './mock-favorite-project-error';
 import { paginationMocks } from './mock-paginations';
 import { refetchMock } from './mock-refetch';
+import { searchMock } from './mock-search';
 
 export const mocks = {
   default: defaultMock,
@@ -12,4 +13,5 @@ export const mocks = {
   favoriteErrorProject: favoriteProjectErrorMock,
   refetch: refetchMock,
   pagination: paginationMocks,
+  search: searchMock,
 };

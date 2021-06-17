@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { merge } from 'ramda';
 
 import { ProjectStatusEnum } from '../../__generated__/types';
-import { fireEvent, render, RenderResult, screen, waitFor } from '../../testing';
+import { render, RenderResult, screen, waitFor } from '../../testing';
 
 import { ProjectsPageView, ProjectsPageViewProps } from './ProjectsPageView';
 import { ProjectsTable } from './ProjectsTable';
@@ -129,16 +129,16 @@ describe('ProjectsPageView', () => {
       expect(searchInput).toHaveValue(mockSearchString);
     });
 
-    it('Если в строке поиска меньше 3 букв показывает предупреждение', () => {
+    it('Если в строке поиска меньше 2 букв показывает предупреждение', () => {
       renderComponent();
       const searchInput = screen.getByPlaceholderText('Введите название проекта или имя автора');
       userEvent.type(searchInput, 'wa');
 
-      expect(screen.queryByText('Введите хотя бы 3 символа для поиска')).toBeVisible();
+      expect(screen.queryByText('Введите хотя бы 2 символа для поиска')).toBeVisible();
 
       userEvent.type(searchInput, 'aaaaargh');
 
-      waitFor(() => expect(screen.queryByText('Введите хотя бы 3 символа для поиска')).toBeNull());
+      waitFor(() => expect(screen.queryByText('Введите хотя бы 2 символа для поиска')).toBeNull());
     });
 
     it('вызывает setSearchString', () => {
@@ -152,19 +152,18 @@ describe('ProjectsPageView', () => {
       waitFor(() => expect(mockSetSearchString).toBeCalledWith(mockedSearchString));
     });
 
-    it('После onBlur предупреждение не показывается', () => {
+    it('После очистки строки предупреждение не показывается', () => {
       renderComponent();
       const searchInput = screen.getByPlaceholderText('Введите название проекта или имя автора');
       userEvent.type(searchInput, 'wa');
-      userEvent.type(searchInput, '');
 
       waitFor(() =>
-        expect(screen.queryByText('Введите хотя бы 3 символа для поиска')).toBeVisible(),
+        expect(screen.queryByText('Введите хотя бы 2 символа для поиска')).toBeVisible(),
       );
 
-      fireEvent.blur(searchInput);
+      userEvent.type(searchInput, '');
 
-      waitFor(() => expect(screen.queryByText('Введите хотя бы 3 символа для поиска')).toBeNull());
+      waitFor(() => expect(screen.queryByText('Введите хотя бы 2 символа для поиска')).toBeNull());
     });
   });
 });

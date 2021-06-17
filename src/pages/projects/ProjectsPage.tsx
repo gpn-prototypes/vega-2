@@ -65,7 +65,7 @@ export const ProjectsPage = (): React.ReactElement => {
       sortBy: currentSort?.sortOrder
         ? getOrderBy(currentSort?.sortOrder)
         : ((meData?.me?.customSettings?.projectList?.sortBy as unknown) as SortType),
-      searchQuery: String(searchString).length >= 3 ? searchString : '',
+      searchQuery: String(searchString).length >= 2 ? searchString : '',
     },
   });
 

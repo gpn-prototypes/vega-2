@@ -48,8 +48,8 @@ export const ProjectsPageView: ProjectsPageViewType = (props) => {
 
   function handleSearch(search: string) {
     props.setSearchString(search);
-    if (!search || (search.length < 3 && search.length > 0)) {
-      setWarning('Введите хотя бы 3 символа для поиска');
+    if (search && search.length < 2 && search.length > 0) {
+      setWarning('Введите хотя бы 2 символа для поиска');
     } else {
       setWarning('');
     }
@@ -112,7 +112,6 @@ export const ProjectsPageView: ProjectsPageViewType = (props) => {
                 size="s"
                 type="input"
                 onChange={(e) => handleSearch(e.value as string)}
-                onBlur={() => setWarning('')}
                 state={warning ? 'warning' : undefined}
                 value={props.searchString}
                 placeholder="Введите название проекта или имя автора"
