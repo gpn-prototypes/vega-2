@@ -38,7 +38,18 @@ export const ProjectsPage = (): React.ReactElement => {
 
   const { data: meData } = useMe();
 
-  const [currentSort, setCurrentSort] = React.useState(null);
+  const [currentSort, setCurrentSort] = React.useState(null as SortData | null);
+
+  const getOrderBy = (sortOrder: 'asc' | 'desc'): SortType => {
+    return sortOrder === 'asc' ? SortType.Asc : SortType.Desc;
+  };
+
+  const getSortBy = (sortingBy: keyof typeof ColumnNames): ProjectOrderByEnum => {
+    const capitalizedColumnName = (sortingBy.charAt(0).toUpperCase() +
+      sortingBy.slice(1)) as keyof typeof ProjectOrderByEnum;
+
+    return ProjectOrderByEnum[capitalizedColumnName];
+  };
 
   const { data, loading, startPolling, stopPolling, refetch, fetchMore } = useProjectsTableList({
     fetchPolicy: 'network-only',
@@ -48,8 +59,12 @@ export const ProjectsPage = (): React.ReactElement => {
       pageNumber: 1,
       pageSize: PAGE_SIZE,
       includeBlank: false,
-      orderBy: meData?.me?.customSettings?.projectList?.orderBy,
-      sortBy: (meData?.me?.customSettings?.projectList?.sortBy as unknown) as SortType,
+      orderBy: currentSort?.sortingBy
+        ? getSortBy(currentSort?.sortingBy)
+        : meData?.me?.customSettings?.projectList?.orderBy,
+      sortBy: currentSort?.sortOrder
+        ? getOrderBy(currentSort?.sortOrder)
+        : ((meData?.me?.customSettings?.projectList?.sortBy as unknown) as SortType),
       searchQuery: String(searchString).length >= 3 ? searchString : '',
     },
   });
@@ -65,17 +80,6 @@ export const ProjectsPage = (): React.ReactElement => {
     data?.projects?.__typename === 'ProjectList' && data.projects.itemsTotal
       ? data.projects.itemsTotal
       : undefined;
-
-  const getOrderBy = (sortOrder: 'asc' | 'desc'): SortType => {
-    return sortOrder === 'asc' ? SortType.Asc : SortType.Desc;
-  };
-
-  const getSortBy = (sortingBy: keyof typeof ColumnNames): ProjectOrderByEnum => {
-    const capitalizedColumnName = (sortingBy.charAt(0).toUpperCase() +
-      sortingBy.slice(1)) as keyof typeof ProjectOrderByEnum;
-
-    return ProjectOrderByEnum[capitalizedColumnName];
-  };
 
   const handleSortProjects = React.useCallback(
     (sortOptions: SortData | null) => {
@@ -144,7 +148,11 @@ export const ProjectsPage = (): React.ReactElement => {
     },
   });
 
-  const [toggleFavorite] = useProjectToggleFavorite();
+  const [toggleFavorite] = useProjectToggleFavorite({
+    onCompleted: () => {
+      refetchProjects();
+    },
+  });
 
   const handleToggleFavorite = React.useCallback(
     async (id: string, payload: { isFavorite: boolean; version: number }) => {
@@ -297,7 +305,6 @@ export const ProjectsPage = (): React.ReactElement => {
         isLoadingMore={isLoadingMore}
         onFavorite={handleToggleFavorite}
         onSort={handleSortProjects}
-        currentSort={currentSort}
         counterProjects={{ current: currentQuantityProjects, total: totalQuantityProjects }}
         onLoadMore={handleLoadMore}
         setSearchString={setSearchString}

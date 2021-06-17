@@ -224,16 +224,15 @@ describe('CreateProjectPage', () => {
       userEvent.type(name, 'something');
       fireEvent.blur(name);
 
-      const submit = await screen.findByText('Создать проект');
-
-      userEvent.click(submit);
-
       await waitRequests();
     });
 
     it('вызывает нотификацию', async () => {
       const spy = jest.spyOn(providers.app.notifications, 'add');
-      await waitRequests();
+
+      const submit = await screen.findByText('Создать проект');
+
+      userEvent.click(submit);
 
       await waitFor(() =>
         expect(spy).toBeCalledWith(expect.objectContaining({ body: 'Проект успешно создан' })),
@@ -243,9 +242,13 @@ describe('CreateProjectPage', () => {
     });
 
     it('редиректит на страницу проекта', async () => {
-      await waitRequests();
+      const submit = await screen.findByText('Создать проект');
 
-      expect(providers.app.history.location.pathname).toEqual(`/projects/show/${PROJECT_ID}`);
+      userEvent.click(submit);
+
+      await waitFor(() =>
+        expect(providers.app.history.location.pathname).toEqual(`/projects/show/${PROJECT_ID}`),
+      );
 
       await waitRequests();
     });

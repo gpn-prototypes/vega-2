@@ -35,33 +35,34 @@
     align-items: center;
   }
 
-  &__RightBlock {
+  &__HeaderContent {
+    margin-left: auto;
+
     display: flex;
+
     flex-direction: column;
+  }
+
+  &__LinkWrapper {
     margin-left: auto;
   }
 
-  &__LinkBlock {
-    margin-left: auto;
-  }
-
-  &__TextFieldBlock {
+  &__SearchWrapper {
     margin-top: 14px !important;
   }
 
-  .TextField_view_default {
+  &__SearchWrapper > .TextField {
     padding: 0 var(--input-space);
-    color: var(--color-control-typo-default);
-    background: var(--color-control-bg-default);
-    border: var(--control-border-width) solid var(--color-control-bg-border-default);
-    border-radius: var(--control-radius);
+
     width: 360px;
   }
-  &__WarningSearch {
-    color: #fff;
-    font-size: 12px;
-    margin-top: 6px;
+
+  &__WarningSearchWrapper {
     position: absolute;
+
+    margin-top: var(--space-2xs);
+
+    height: 16px;
   }
 
   &__Heading {

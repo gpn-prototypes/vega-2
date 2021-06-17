@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { merge } from 'ramda';
 
 import { ProjectStatusEnum } from '../../__generated__/types';
-import { render, RenderResult, screen } from '../../testing';
+import { fireEvent, render, RenderResult, screen, waitFor } from '../../testing';
 
 import { ProjectsPageView, ProjectsPageViewProps } from './ProjectsPageView';
 import { ProjectsTable } from './ProjectsTable';
@@ -116,7 +116,55 @@ describe('ProjectsPageView', () => {
       renderComponent({ counterProjects: { current: 100, total: 100 } });
       const loadButton = screen.queryByText('Загрузить ещё');
 
-      expect(loadButton).not.toBeInTheDocument();
+      waitFor(() => expect(loadButton).toBeNull());
+    });
+  });
+
+  describe('Строка поиска', () => {
+    it('Отображает строку поиска с нужными данными', () => {
+      const mockSearchString = 'mocked';
+      renderComponent({ searchString: mockSearchString });
+      const searchInput = screen.queryByPlaceholderText('Введите название проекта или имя автора');
+
+      expect(searchInput).toHaveValue(mockSearchString);
+    });
+
+    it('Если в строке поиска меньше 3 букв показывает предупреждение', () => {
+      renderComponent();
+      const searchInput = screen.getByPlaceholderText('Введите название проекта или имя автора');
+      userEvent.type(searchInput, 'wa');
+
+      expect(screen.queryByText('Введите хотя бы 3 символа для поиска')).toBeVisible();
+
+      userEvent.type(searchInput, 'aaaaargh');
+
+      waitFor(() => expect(screen.queryByText('Введите хотя бы 3 символа для поиска')).toBeNull());
+    });
+
+    it('вызывает setSearchString', () => {
+      const mockSetSearchString = jest.fn();
+      const mockedSearchString = 'mockedSearch';
+      renderComponent({ setSearchString: mockSetSearchString });
+
+      const searchInput = screen.getByPlaceholderText('Введите название проекта или имя автора');
+      userEvent.type(searchInput, mockedSearchString);
+
+      waitFor(() => expect(mockSetSearchString).toBeCalledWith(mockedSearchString));
+    });
+
+    it('После onBlur предупреждение не показывается', () => {
+      renderComponent();
+      const searchInput = screen.getByPlaceholderText('Введите название проекта или имя автора');
+      userEvent.type(searchInput, 'wa');
+      userEvent.type(searchInput, '');
+
+      waitFor(() =>
+        expect(screen.queryByText('Введите хотя бы 3 символа для поиска')).toBeVisible(),
+      );
+
+      fireEvent.blur(searchInput);
+
+      waitFor(() => expect(screen.queryByText('Введите хотя бы 3 символа для поиска')).toBeNull());
     });
   });
 });

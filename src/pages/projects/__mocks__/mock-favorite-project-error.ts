@@ -49,6 +49,7 @@ export const favoriteProjectErrorMock = [
         includeBlank: false,
         sortBy: undefined,
         orderBy: undefined,
+        searchQuery: '',
       },
     },
     result: {
@@ -87,6 +88,7 @@ export const favoriteProjectErrorMock = [
         includeBlank: false,
         orderBy: ProjectOrderByEnum.EditedAt,
         sortBy: SortTypeEnum.Desc,
+        searchQuery: '',
       },
     },
     result: {
@@ -137,6 +139,14 @@ export const favoriteProjectErrorMock = [
   {
     request: {
       query: ProjectsTableListDocument,
+      variables: {
+        pageNumber: 1,
+        pageSize: 20,
+        includeBlank: false,
+        orderBy: ProjectOrderByEnum.EditedAt,
+        sortBy: SortTypeEnum.Desc,
+        searchQuery: '',
+      },
     },
     result: {
       data: {

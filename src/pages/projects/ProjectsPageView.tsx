@@ -36,26 +36,29 @@ type ProjectsPageViewType = React.FC<ProjectsPageViewProps> & {
 export const ProjectsPageView: ProjectsPageViewType = (props) => {
   const { current, total } = props.counterProjects;
 
-  const [PROJECTS, setProjects] = React.useState(props.projects);
-  let warning;
+  const [projects, setProjects] = React.useState(props.projects);
+  const [warning, setWarning] = React.useState('');
+
   const [visibleLoadMore, setVisibleLoadMore] = React.useState(false);
-  if (String(props.searchString).length < 3 && String(props.searchString).length > 0) {
-    warning = 'Введите хотя бы 3 символа для поиска';
-  }
 
   React.useEffect(() => {
     setProjects(props.projects);
-    setVisibleLoadMore(!!(current && current >= 20));
-  }, [props.projects, current]);
+    setVisibleLoadMore(current !== undefined && total !== undefined ? current < total : false);
+  }, [props.projects, current, total]);
 
-  // React.useEffect(() => {
-  //   props.onSort(props.sortedOptions)
-  // }, [props.project]);
+  function handleSearch(search: string) {
+    props.setSearchString(search);
+    if (!search || (search.length < 3 && search.length > 0)) {
+      setWarning('Введите хотя бы 3 символа для поиска');
+    } else {
+      setWarning('');
+    }
+  }
 
   const table = (
     <div className={cn('Table')} data-testid={testId.table}>
       <ProjectsTable
-        rows={PROJECTS}
+        rows={projects}
         onSort={props.onSort}
         onFavorite={(id, payload) => {
           props.onFavorite(id, payload);
@@ -96,23 +99,29 @@ export const ProjectsPageView: ProjectsPageViewType = (props) => {
               </Text>
             )}
           </div>
-          <div className={cn('RightBlock')}>
-            <div className={cn('LinkBlock')}>
+          <div className={cn('HeaderContent')}>
+            <div className={cn('LinkWrapper')}>
               <Link to="/projects/create" data-testid={testId.create}>
                 <Button label="Создать новый проект" size="s" />
               </Link>
             </div>
-            <div className={cn('TextFieldBlock')}>
+            <div className={cn('SearchWrapper')}>
               <TextField
-                className={cn('TextField')}
+                className={cn('Search')}
                 leftSide={IconSearch}
                 size="s"
                 type="input"
-                onChange={(e) => props.setSearchString(e.value)}
+                onChange={(e) => handleSearch(e.value as string)}
+                onBlur={() => setWarning('')}
+                state={warning ? 'warning' : undefined}
                 value={props.searchString}
                 placeholder="Введите название проекта или имя автора"
               />
-              <div className={cn('WarningSearch')}>{warning}</div>
+              <div className={cn('WarningSearchWrapper')}>
+                <Text view="warning" size="xs">
+                  {warning}
+                </Text>
+              </div>
             </div>
           </div>
         </div>
@@ -137,6 +146,3 @@ export const ProjectsPageView: ProjectsPageViewType = (props) => {
 };
 
 ProjectsPageView.testId = testId;
-// function setSearchString(value: any) {
-//   throw new Error('Function not implemented.');
-// }

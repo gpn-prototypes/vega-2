@@ -37,6 +37,7 @@ export const deleteProjectMock = [
           },
           __typename: 'User',
         },
+        __typename: 'Query',
       },
     },
   },
@@ -49,6 +50,7 @@ export const deleteProjectMock = [
         includeBlank: false,
         sortBy: undefined,
         orderBy: undefined,
+        searchQuery: '',
       },
     },
     result: {
@@ -87,6 +89,7 @@ export const deleteProjectMock = [
         includeBlank: false,
         orderBy: ProjectOrderByEnum.EditedAt,
         sortBy: SortTypeEnum.Desc,
+        searchQuery: '',
       },
     },
     result: {
@@ -141,6 +144,7 @@ export const deleteProjectMock = [
         includeBlank: false,
         orderBy: ProjectOrderByEnum.EditedAt,
         sortBy: SortTypeEnum.Desc,
+        searchQuery: '',
       },
     },
     result: {
