@@ -25,9 +25,13 @@ yarn-error.log*
 
 # IDE
 /.idea
+/.vscode
 
 # graphql-codegen files
 __generated__
 
 # test covergae
 coverage
+
+# jest reports
+reports
