@@ -1,12 +1,8 @@
-import {
-  DeleteProjectDocument,
-  MeDocument,
-  ProjectsTableListDocument,
-} from '../__generated__/projects';
+import { MeDocument, ProjectsTableListDocument } from '../__generated__/projects';
 import { ProjectOrderByEnum, ProjectStatusEnum, SortTypeEnum } from '../../../__generated__/types';
-import { createProject } from '../../../testing';
+import { createProject } from '../../../testing/data-generators';
 
-export const deleteProjectMock = [
+export const searchMock = [
   {
     request: {
       query: MeDocument,
@@ -37,7 +33,6 @@ export const deleteProjectMock = [
           },
           __typename: 'User',
         },
-        __typename: 'Query',
       },
     },
   },
@@ -48,8 +43,8 @@ export const deleteProjectMock = [
         pageNumber: 1,
         pageSize: 20,
         includeBlank: false,
-        sortBy: undefined,
         orderBy: undefined,
+        sortBy: undefined,
         searchQuery: '',
       },
     },
@@ -121,22 +116,6 @@ export const deleteProjectMock = [
   },
   {
     request: {
-      query: DeleteProjectDocument,
-      variables: {
-        vid: 'a3333333-b111-c111-d111-e00000000000',
-      },
-    },
-    result: {
-      data: {
-        deleteProject: {
-          result: { vid: 'a3333333-b111-c111-d111-e00000000000', __typename: 'Result' },
-          __typename: 'DeleteProject',
-        },
-      },
-    },
-  },
-  {
-    request: {
       query: ProjectsTableListDocument,
       variables: {
         pageNumber: 1,
@@ -144,7 +123,7 @@ export const deleteProjectMock = [
         includeBlank: false,
         orderBy: ProjectOrderByEnum.EditedAt,
         sortBy: SortTypeEnum.Desc,
-        searchQuery: '',
+        searchQuery: 'mockSearch',
       },
     },
     result: {
@@ -152,13 +131,13 @@ export const deleteProjectMock = [
         projects: {
           data: [
             createProject({
-              vid: 'a3333333-b111-c111-d111-e00000000011',
-              name: 'Test project 11',
+              vid: 'a3333333-b111-c111-d111-e00000000000',
+              name: 'Test project 01 after search',
               status: ProjectStatusEnum.Unpublished,
             }),
             createProject({
-              vid: 'a3333333-b111-c111-d111-e00000000022',
-              name: 'Test project 22',
+              vid: 'a3333333-b111-c111-d111-e00000000011',
+              name: 'Test project 11  after search',
               status: ProjectStatusEnum.Unpublished,
             }),
           ],

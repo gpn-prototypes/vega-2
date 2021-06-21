@@ -40,14 +40,22 @@ type Query {
   country(vid: UUID): Country
   regionList: [Region]
   region(vid: UUID): Region
+  quantityList: [Quantity]
+  quantity(vid: UUID): Quantity
+  measurementUnitList: [MeasurementUnit]
+  measurementUnit(vid: UUID): MeasurementUnit
   attachmentList: [Attachment]
   attachment(vid: UUID): Attachment
   jtiBlackListEntryList: [JtiBlackListEntry]
   jtiBlackListEntry(vid: UUID): JtiBlackListEntry
   domainEntityList: [DomainEntity]
   domainEntity(vid: UUID): DomainEntity
+  geoObjectTypeList: [GeoObjectType]
+  geoObjectType(vid: UUID): GeoObjectType
+  calculatedParameterMetaList: [CalculatedParameterMeta]
+  calculatedParameterMeta(vid: UUID): CalculatedParameterMeta
   project(vid: UUID, version: Int): ProjectOrError
-  projectList(includeBlank: Boolean = false, pageNumber: Int = 1, pageSize: Int = 20, orderBy: ProjectOrderByEnum, sortBy: SortType, useWhole: Boolean = false): ProjectListOrError
+  projectList(includeBlank: Boolean = false, pageNumber: Int = 1, pageSize: Int = 20, orderBy: ProjectOrderByEnum, sortBy: SortType, searchQuery: String): ProjectListOrError
   me: User
 }
 
@@ -256,6 +264,7 @@ type UserGroup {
   editedAt: DateTime
   name: String
   project: ID
+  adId: String
 }
 
 type UserCustomSettings {
@@ -325,6 +334,29 @@ type Region {
   country: Country
 }
 
+type Quantity {
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+  symbol: String
+}
+
+type MeasurementUnit {
+  quantity: Quantity
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+  symbol: String
+  isBase: Boolean
+  multiplier: Float
+}
+
 type Attachment {
   extension: String
   uri: String
@@ -355,17 +387,54 @@ type JtiBlackListEntry {
   exp: Int
 }
 
+type GeoObjectType {
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+}
+
+type CalculatedParameterMeta {
+  unit: MeasurementUnit
+  validation: FloatValidationRules
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+  symbol: String
+  categories: [ReservesCategoryEnum]
+}
+
+type FloatValidationRules {
+  notNone: Boolean
+  gt: Float
+  lt: Float
+  ge: Float
+  le: Float
+}
+
+"""An enumeration."""
+enum ReservesCategoryEnum {
+  OIL
+  GAS
+  MIXTURE
+}
+
 union ProjectOrError = Project | Error | ValidationError
 
 type Project {
   isFavorite: Boolean
   attendeesTotal: Int
+  attendees(orderBy: [AttendeeOrderBy], sortBy: SortType): [Attendee]
+  myRoles: [ProjectRole]
   filesTotal: Int
   files: [Attachment]
-  attendees(orderBy: [AttendeeOrderBy], sortBy: SortType): [Attendee]
   domainSchema: DomainSchema
   versions: [Int]!
-  myRoles: [ProjectRole]
   recentlyEdited: Boolean!
   vid: ID
   code: String
@@ -383,8 +452,6 @@ type Project {
   coordinateSystem: String
   description: String
   status: ProjectStatusEnum
-  yearStart: Int
-  yearEnd: Int
   version: Int
   rootEntity: String
   resourceId: String
@@ -562,8 +629,37 @@ enum ValidationErrorCode {
 union ProjectListOrError = ProjectList | Error
 
 type ProjectList {
-  projectList: [Project]
+  projectList: [ProjectStub]
   itemsTotal: Int
+}
+
+"""
+Ярлык проекта, доступ к заголовочным данным проекта.
+
+    В базу не сохраняется.
+"""
+type ProjectStub {
+  isFavorite: Boolean
+  attendeesTotal: Int
+  attendees(orderBy: [AttendeeOrderBy], sortBy: SortType): [Attendee]
+  myRoles: [ProjectRole]
+  vid: ID
+  code: String
+  isDeleted: Boolean
+  createdAt: DateTime
+  editedAt: DateTime
+  name: String
+  type: ProjectTypeEnum
+  createdBy: User
+  editedBy: User
+  adId: String
+  authorOu: OrganizationUnit
+  region: Region
+  coordinates: String
+  coordinateSystem: String
+  description: String
+  status: ProjectStatusEnum
+  version: Int
 }
 
 type Mutation {
@@ -606,9 +702,9 @@ type Mutation {
   createAttachmentType(code: String, name: String): CreateAttachmentType
   deleteAttachmentType(vid: UUID!): DeleteAttachmentType
   updateAttachmentType(code: String, name: String, vid: UUID!): UpdateAttachmentType
-  createUserGroup(code: String, name: String, project: ID): CreateUserGroup
+  createUserGroup(adId: String, code: String, name: String, project: ID): CreateUserGroup
   deleteUserGroup(vid: UUID!): DeleteUserGroup
-  updateUserGroup(code: String, name: String, project: ID, vid: UUID!): UpdateUserGroup
+  updateUserGroup(adId: String, code: String, name: String, project: ID, vid: UUID!): UpdateUserGroup
   createOrganization(code: String, name: String): CreateOrganization
   deleteOrganization(vid: UUID!): DeleteOrganization
   updateOrganization(code: String, name: String, vid: UUID!): UpdateOrganization
@@ -621,6 +717,12 @@ type Mutation {
   createRegion(code: String, country: UUID, fullName: String, name: String): CreateRegion
   deleteRegion(vid: UUID!): DeleteRegion
   updateRegion(code: String, country: UUID, fullName: String, name: String, vid: UUID!): UpdateRegion
+  createQuantity(code: String, name: String, symbol: String): CreateQuantity
+  deleteQuantity(vid: UUID!): DeleteQuantity
+  updateQuantity(code: String, name: String, symbol: String, vid: UUID!): UpdateQuantity
+  createMeasurementUnit(code: String, isBase: Boolean, multiplier: Float, name: String, quantity: UUID, symbol: String): CreateMeasurementUnit
+  deleteMeasurementUnit(vid: UUID!): DeleteMeasurementUnit
+  updateMeasurementUnit(code: String, isBase: Boolean, multiplier: Float, name: String, quantity: UUID, symbol: String, vid: UUID!): UpdateMeasurementUnit
   createAttachment(category: UUID, code: String, comment: String, contentType: String, name: String, projectId: ID, status: Int): CreateAttachment
   deleteAttachment(vid: UUID!): DeleteAttachment
   updateAttachment(category: UUID, code: String, comment: String, contentType: String, name: String, projectId: ID, status: Int, vid: UUID!): UpdateAttachment
@@ -630,6 +732,12 @@ type Mutation {
   createDomainEntity(code: String, name: String): CreateDomainEntity
   deleteDomainEntity(vid: UUID!): DeleteDomainEntity
   updateDomainEntity(code: String, name: String, vid: UUID!): UpdateDomainEntity
+  createGeoObjectType(code: String, name: String): CreateGeoObjectType
+  deleteGeoObjectType(vid: UUID!): DeleteGeoObjectType
+  updateGeoObjectType(code: String, name: String, vid: UUID!): UpdateGeoObjectType
+  createCalculatedParameterMeta(categories: [ReservesCategoryEnum], code: String, name: String, symbol: String, unit: UUID, validation: FloatValidationRulesInputType): CreateCalculatedParameterMeta
+  deleteCalculatedParameterMeta(vid: UUID!): DeleteCalculatedParameterMeta
+  updateCalculatedParameterMeta(categories: [ReservesCategoryEnum], code: String, name: String, symbol: String, unit: UUID, validation: FloatValidationRulesInputType, vid: UUID!): UpdateCalculatedParameterMeta
   createProject(data: ProjectInputType): CreateProject
   deleteProject(vid: UUID): DeleteProject
   updateProject(data: ProjectUpdateType, vid: UUID): UpdateProject
@@ -891,6 +999,30 @@ type UpdateRegion {
   result: Region
 }
 
+type CreateQuantity {
+  result: Quantity
+}
+
+type DeleteQuantity {
+  result: Boolean
+}
+
+type UpdateQuantity {
+  result: Quantity
+}
+
+type CreateMeasurementUnit {
+  result: MeasurementUnit
+}
+
+type DeleteMeasurementUnit {
+  result: Boolean
+}
+
+type UpdateMeasurementUnit {
+  result: MeasurementUnit
+}
+
 type CreateAttachment {
   result: Attachment
 }
@@ -927,6 +1059,38 @@ type UpdateDomainEntity {
   result: DomainEntity
 }
 
+type CreateGeoObjectType {
+  result: GeoObjectType
+}
+
+type DeleteGeoObjectType {
+  result: Boolean
+}
+
+type UpdateGeoObjectType {
+  result: GeoObjectType
+}
+
+type CreateCalculatedParameterMeta {
+  result: CalculatedParameterMeta
+}
+
+input FloatValidationRulesInputType {
+  notNone: Boolean
+  gt: Float
+  lt: Float
+  ge: Float
+  le: Float
+}
+
+type DeleteCalculatedParameterMeta {
+  result: Boolean
+}
+
+type UpdateCalculatedParameterMeta {
+  result: CalculatedParameterMeta
+}
+
 type CreateProject {
   result: ProjectOrError
 }
@@ -939,8 +1103,6 @@ input ProjectInputType {
   type: ProjectTypeEnum
   coordinates: String
   resourceId: String
-  yearStart: Int = 2022
-  yearEnd: Int
 }
 
 type DeleteProject {
@@ -973,8 +1135,6 @@ input ProjectUpdateType {
   coordinates: String
   resourceId: String
   status: ProjectStatusEnum
-  yearStart: Int
-  yearEnd: Int
   """Version of the original project."""
   version: Int!
 }

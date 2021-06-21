@@ -57,6 +57,7 @@ export const paginationMocks = [
         includeBlank: false,
         orderBy: undefined,
         sortBy: undefined,
+        searchQuery: '',
       },
     },
     result: {
@@ -79,6 +80,7 @@ export const paginationMocks = [
         includeBlank: false,
         orderBy: ProjectOrderByEnum.EditedAt,
         sortBy: SortTypeEnum.Desc,
+        searchQuery: '',
       },
     },
     result: {
@@ -101,6 +103,7 @@ export const paginationMocks = [
         includeBlank: false,
         orderBy: ProjectOrderByEnum.EditedAt,
         sortBy: SortTypeEnum.Desc,
+        searchQuery: '',
       },
     },
     result: {

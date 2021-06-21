@@ -5,9 +5,9 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   Attendee,
   Country,
-  Project,
   ProjectRole,
   ProjectStatusEnum,
+  ProjectStub,
   ProjectTypeEnum,
   Region,
   User,
@@ -39,7 +39,7 @@ export function createAttendee(data: Partial<Attendee> = {}): Partial<Attendee> 
   });
 }
 
-export function createProject(data?: Partial<Project>): Project {
+export function createProject(data?: Partial<ProjectStub>): ProjectStub {
   return mergeLeft(data ?? {}, {
     vid: createID(),
     name: faker.company.companyName(),

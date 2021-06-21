@@ -31,11 +31,25 @@ export const ProjectsPage = (): React.ReactElement => {
   const [dataDeleteProject, setDataDeleteProject] = React.useState<TableRow | null>(null);
   const [nextPageNumber, setNextPageNumber] = React.useState<number>(2);
   const [isLoadingMore, setIsLoadingMore] = React.useState<boolean>(false);
+  const [searchString, setSearchString] = React.useState<string | null>('');
 
   const { notifications } = useApp();
   const history = useHistory();
 
   const { data: meData } = useMe();
+
+  const [currentSort, setCurrentSort] = React.useState(null as SortData | null);
+
+  const getOrderBy = (sortOrder: 'asc' | 'desc'): SortType => {
+    return sortOrder === 'asc' ? SortType.Asc : SortType.Desc;
+  };
+
+  const getSortBy = (sortingBy: keyof typeof ColumnNames): ProjectOrderByEnum => {
+    const capitalizedColumnName = (sortingBy.charAt(0).toUpperCase() +
+      sortingBy.slice(1)) as keyof typeof ProjectOrderByEnum;
+
+    return ProjectOrderByEnum[capitalizedColumnName];
+  };
 
   const { data, loading, startPolling, stopPolling, refetch, fetchMore } = useProjectsTableList({
     fetchPolicy: 'network-only',
@@ -45,8 +59,13 @@ export const ProjectsPage = (): React.ReactElement => {
       pageNumber: 1,
       pageSize: PAGE_SIZE,
       includeBlank: false,
-      orderBy: meData?.me?.customSettings?.projectList?.orderBy,
-      sortBy: (meData?.me?.customSettings?.projectList?.sortBy as unknown) as SortType,
+      orderBy: currentSort?.sortingBy
+        ? getSortBy(currentSort?.sortingBy)
+        : meData?.me?.customSettings?.projectList?.orderBy,
+      sortBy: currentSort?.sortOrder
+        ? getOrderBy(currentSort?.sortOrder)
+        : ((meData?.me?.customSettings?.projectList?.sortBy as unknown) as SortType),
+      searchQuery: String(searchString).length >= 2 ? searchString : '',
     },
   });
 
@@ -62,20 +81,11 @@ export const ProjectsPage = (): React.ReactElement => {
       ? data.projects.itemsTotal
       : undefined;
 
-  const getOrderBy = (sortOrder: 'asc' | 'desc'): SortType => {
-    return sortOrder === 'asc' ? SortType.Asc : SortType.Desc;
-  };
-
-  const getSortBy = (sortingBy: keyof typeof ColumnNames): ProjectOrderByEnum => {
-    const capitalizedColumnName = (sortingBy.charAt(0).toUpperCase() +
-      sortingBy.slice(1)) as keyof typeof ProjectOrderByEnum;
-
-    return ProjectOrderByEnum[capitalizedColumnName];
-  };
-
   const handleSortProjects = React.useCallback(
     (sortOptions: SortData | null) => {
       if (sortOptions) {
+        setCurrentSort(sortOptions);
+
         const { sortingBy, sortOrder } = sortOptions;
 
         const orderBy = getOrderBy(sortOrder);
@@ -88,7 +98,7 @@ export const ProjectsPage = (): React.ReactElement => {
         // Поэтому ниже можно увидеть расхождения { sortBy: orderBy, orderBy: sortBy }
 
         /* istanbul ignore else */
-        if (totalQuantityProjects !== undefined) {
+        if (totalQuantityProjects !== undefined || currentQuantityProjects) {
           refetch({
             sortBy: orderBy,
             orderBy: sortBy,
@@ -99,7 +109,6 @@ export const ProjectsPage = (): React.ReactElement => {
 
         return;
       }
-
       refetch({
         sortBy: SortType.Desc,
         orderBy: ProjectOrderByEnum.EditedAt,
@@ -107,7 +116,7 @@ export const ProjectsPage = (): React.ReactElement => {
         pageSize: totalQuantityProjects ?? PAGE_SIZE,
       });
     },
-    [refetch, totalQuantityProjects],
+    [refetch, totalQuantityProjects, currentQuantityProjects],
   );
 
   const refetchProjects = () => {
@@ -138,7 +147,11 @@ export const ProjectsPage = (): React.ReactElement => {
     },
   });
 
-  const [toggleFavorite] = useProjectToggleFavorite();
+  const [toggleFavorite] = useProjectToggleFavorite({
+    onCompleted: () => {
+      refetchProjects();
+    },
+  });
 
   const handleToggleFavorite = React.useCallback(
     async (id: string, payload: { isFavorite: boolean; version: number }) => {
@@ -293,6 +306,8 @@ export const ProjectsPage = (): React.ReactElement => {
         onSort={handleSortProjects}
         counterProjects={{ current: currentQuantityProjects, total: totalQuantityProjects }}
         onLoadMore={handleLoadMore}
+        setSearchString={setSearchString}
+        searchString={searchString}
       />
       <ModalDeleteProject
         projectName={dataDeleteProject?.name}

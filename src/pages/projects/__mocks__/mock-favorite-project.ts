@@ -48,6 +48,7 @@ export const favoriteProjectMock = [
         includeBlank: false,
         sortBy: undefined,
         orderBy: undefined,
+        searchQuery: '',
       },
     },
     result: {
@@ -140,6 +141,7 @@ export const favoriteProjectMock = [
         includeBlank: false,
         orderBy: ProjectOrderByEnum.EditedAt,
         sortBy: SortTypeEnum.Desc,
+        searchQuery: '',
       },
     },
     result: {
@@ -251,6 +253,7 @@ export const favoriteProjectMock = [
         includeBlank: false,
         orderBy: ProjectOrderByEnum.EditedAt,
         sortBy: SortTypeEnum.Desc,
+        searchQuery: '',
       },
     },
     result: {

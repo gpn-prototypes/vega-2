@@ -1,7 +1,7 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 
-import { render, screen, waitFor, waitRequests } from '../../testing';
+import { fireEvent, render, screen, waitFor, waitRequests } from '../../testing';
 
 import { secondPart } from './__mocks__/mock-paginations';
 import { mocks } from './__mocks__/mocks';
@@ -266,6 +266,36 @@ describe('ProjectsPage', () => {
       expect(screen.getByText('40 из 40')).toBeInTheDocument();
       expect(screen.queryByText(lastProjectName)).toBeInTheDocument();
       expect(loadMoreButton).not.toBeInTheDocument();
+    });
+  });
+
+  describe('поиск', () => {
+    it('отображается результат поиска', async () => {
+      const searchMock = mocks.search;
+      await render(<ProjectsPage />, {
+        mocks: searchMock,
+      });
+
+      await waitRequests();
+
+      await waitFor(() =>
+        expect(screen.getByTestId(ProjectsPageView.testId.rootTitle)).toBeVisible(),
+      );
+      await waitFor(() => expect(screen.getByTestId(ProjectsPageView.testId.table)).toBeVisible());
+      await waitFor(() =>
+        expect(
+          screen.getByText(searchMock[1].result.data.projects?.data[2].name as string),
+        ).toBeVisible(),
+      );
+
+      const searchInput = screen.getByPlaceholderText('Введите название проекта или имя автора');
+      fireEvent.input(searchInput, 'mockSearch');
+
+      await waitFor(() =>
+        expect(
+          screen.getByText(searchMock[2].result.data.projects?.data[2].name as string),
+        ).toBeVisible(),
+      );
     });
   });
 });

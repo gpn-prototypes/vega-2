@@ -35,6 +35,36 @@
     align-items: center;
   }
 
+  &__HeaderContent {
+    margin-left: auto;
+
+    display: flex;
+
+    flex-direction: column;
+  }
+
+  &__LinkWrapper {
+    margin-left: auto;
+  }
+
+  &__SearchWrapper {
+    margin-top: 14px !important;
+  }
+
+  &__SearchWrapper > .TextField {
+    padding: 0 var(--input-space);
+
+    width: 360px;
+  }
+
+  &__WarningSearchWrapper {
+    position: absolute;
+
+    margin-top: var(--space-2xs);
+
+    height: 16px;
+  }
+
   &__Heading {
     display: flex;
   }

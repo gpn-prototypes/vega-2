@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Loader, Text } from '@gpn-prototypes/vega-ui';
+import { Button, IconSearch, Loader, Text, TextField } from '@gpn-prototypes/vega-ui';
 
 import { SortData, TableRow } from './ProjectsTable/types';
 import { cnProjectsPage as cn } from './cn-projects-page';
@@ -24,6 +25,8 @@ export type ProjectsPageViewProps = {
   onLoadMore: VoidFunction;
   onFavorite(id: string, payload: { isFavorite: boolean; version: number }): void;
   onSort(sortedOptions: SortData | null): void;
+  searchString: string | null;
+  setSearchString(searchString: string | null): void;
 };
 
 type ProjectsPageViewType = React.FC<ProjectsPageViewProps> & {
@@ -32,12 +35,30 @@ type ProjectsPageViewType = React.FC<ProjectsPageViewProps> & {
 
 export const ProjectsPageView: ProjectsPageViewType = (props) => {
   const { current, total } = props.counterProjects;
-  const visibleLoadMore = current !== undefined && total !== undefined ? current < total : false;
+
+  const [projects, setProjects] = React.useState(props.projects);
+  const [warning, setWarning] = React.useState('');
+
+  const [visibleLoadMore, setVisibleLoadMore] = React.useState(false);
+
+  React.useEffect(() => {
+    setProjects(props.projects);
+    setVisibleLoadMore(current !== undefined && total !== undefined ? current < total : false);
+  }, [props.projects, current, total]);
+
+  function handleSearch(search: string) {
+    props.setSearchString(search);
+    if (search && search.length < 2 && search.length > 0) {
+      setWarning('Введите хотя бы 2 символа для поиска');
+    } else {
+      setWarning('');
+    }
+  }
 
   const table = (
     <div className={cn('Table')} data-testid={testId.table}>
       <ProjectsTable
-        rows={props.projects}
+        rows={projects}
         onSort={props.onSort}
         onFavorite={(id, payload) => {
           props.onFavorite(id, payload);
@@ -78,9 +99,30 @@ export const ProjectsPageView: ProjectsPageViewType = (props) => {
               </Text>
             )}
           </div>
-          <Link to="/projects/create" data-testid={testId.create}>
-            <Button label="Создать новый проект" size="s" />
-          </Link>
+          <div className={cn('HeaderContent')}>
+            <div className={cn('LinkWrapper')}>
+              <Link to="/projects/create" data-testid={testId.create}>
+                <Button label="Создать новый проект" size="s" />
+              </Link>
+            </div>
+            <div className={cn('SearchWrapper')}>
+              <TextField
+                className={cn('Search')}
+                leftSide={IconSearch}
+                size="s"
+                type="input"
+                onChange={(e) => handleSearch(e.value as string)}
+                state={warning ? 'warning' : undefined}
+                value={props.searchString}
+                placeholder="Введите название проекта или имя автора"
+              />
+              <div className={cn('WarningSearchWrapper')}>
+                <Text view="warning" size="xs">
+                  {warning}
+                </Text>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* <ProjectsFilter
